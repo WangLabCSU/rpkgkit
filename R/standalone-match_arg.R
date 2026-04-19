@@ -3,7 +3,7 @@
 # file: standalone-match_arg.R
 # last-updated: 2026-04-16
 # license: https://unlicense.org
-# imports: [rlang]
+# imports: [rlang, cli]
 # ---
 
 #' @title Argument Matching with Default Fallback

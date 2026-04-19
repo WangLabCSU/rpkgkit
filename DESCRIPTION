@@ -1,8 +1,8 @@
 Package: rpkgkit
-Title: What the Package Does (One Line, Title Case)
+Title: Provides A Set of Tools to Help You Create A Package
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
+    person("Yuxi", "Yang", , "15364051195@163.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Suggests: 
@@ -11,6 +11,14 @@ Suggests:
     gh,
     pedant,
     rmarkdown,
+    scales,
+    stats,
+    dplyr,
+    ggplot2,
+    knitr,
+    purrr,
+    ragg,
+    stringr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Encoding: UTF-8
@@ -18,16 +26,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Imports: 
     cli,
-    dplyr,
-    ggplot2,
-    knitr,
-    purrr,
-    ragg,
     rlang,
     rstudioapi,
-    scales,
-    stats,
-    stringr,
     systemfonts,
     tibble
 Remotes:
