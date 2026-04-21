@@ -10,3 +10,26 @@
 <!-- badges: end -->
 
 The goal of rpkgkit is to collect useful functions and standalone scripts for R package development. use `usethis::use_standalone()` to import the standalone scripts.
+
+## Features
+
+### Code Formatting & Linting
+
+- `air_format()` - Format R code using air
+- `flir_fix()` - Automatically fix linting issues using flir
+
+### Standalone File Management
+
+- `inquire_standalone()` - Check if a standalone file needs updating
+- `create_standalone()` - Create standalone utility files in your package
+
+### NEWS.md Management
+
+- `news_md_add_entry()` - Add new entries to NEWS.md following CRAN guidelines
+- `news_md_check()` - Validate NEWS.md format for CRAN compliance
+- `news_md_show()` - Display NEWS.md content with optional filtering
+
+### Other Utilities
+
+- `make_func_call_explicit()` - Make function calls explicit by adding package prefixes
+- `render_rmd()` - Render R Markdown documents
