@@ -4,12 +4,12 @@
 \name{rpkgkit-package}
 \alias{rpkgkit}
 \alias{rpkgkit-package}
-\title{rpkgkit: What the Package Does (One Line, Title Case)}
+\title{rpkgkit: Provides A Set of Tools to Help You Create A Package}
 \description{
 What the package does (one paragraph).
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com}
+\strong{Maintainer}: Yuxi Yang \email{15364051195@163.com}
 
 }
 \keyword{internal}
