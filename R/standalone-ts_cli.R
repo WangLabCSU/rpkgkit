@@ -1,7 +1,7 @@
 # ---
 # repo: Exceret/rpkgkit
 # file: standalone-ts_cli.R
-# last-updated: 2026-04-16
+# last-updated: 2026-05-20
 # license: https://unlicense.org
 # imports: [cli]
 # ---

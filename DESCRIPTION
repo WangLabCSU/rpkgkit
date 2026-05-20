@@ -1,6 +1,6 @@
 Package: rpkgkit
-Title: Provides A Set of Tools to Help You Create A Package
-Version: 0.0.0.9000
+Title: Provides A Set of Tools to Help You Create An R Package
+Version: 0.0.1
 Authors@R: 
     person("Yuxi", "Yang", , "15364051195@163.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph).

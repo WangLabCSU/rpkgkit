@@ -4,7 +4,7 @@
 \name{rpkgkit-package}
 \alias{rpkgkit}
 \alias{rpkgkit-package}
-\title{rpkgkit: Provides A Set of Tools to Help You Create A Package}
+\title{rpkgkit: Provides A Set of Tools to Help You Create An R Package}
 \description{
 What the package does (one paragraph).
 }
