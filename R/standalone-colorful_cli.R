@@ -1,7 +1,7 @@
 # ---
 # repo: Exceret/rpkgkit
 # file: standalone-colorful_cli.R
-# last-updated: 2026-04-21
+# last-updated: 2026-05-21
 # license: https://unlicense.org
 # imports: [cli]
 # ---
@@ -127,7 +127,8 @@ add_colors_to_cli <- function(
     span.orange = list(color = "orange"),
     span.purple = list(color = "purple"),
     span.green = list(color = "green"),
-    span.magenta = list(color = "magenta")
+    span.magenta = list(color = "magenta"),
+    span.cyan = list(color = "cyan")
   )
 ) {
   function(...) {
@@ -169,7 +170,8 @@ generate_color_code <- function() {
       span.orange = list(color = "orange"),
       span.purple = list(color = "purple"),
       span.green = list(color = "green"),
-      span.magenta = list(color = "magenta")
+      span.magenta = list(color = "magenta"),
+      span.cyan = list(color = "cyan")
     )
     on.exit(cli::cli_end())
   })

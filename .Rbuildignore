@@ -10,3 +10,6 @@
 # flir files
 ^flir$
 ^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

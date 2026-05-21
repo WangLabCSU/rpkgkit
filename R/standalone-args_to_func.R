@@ -1,9 +1,10 @@
 # ---
 # repo: Exceret/rpkgkit
 # file: standalone-args_to_func.R
-# last-updated: 2026-04-16
+# last-updated: 2026-05-21
 # license: https://unlicense.org
-# imports: [cli, data.table, purrr, rlang]
+# imports: [cli, data.table, rlang]
+# dependencies: [import-standalone-purrr]
 # ---
 
 #' @title Keep Wanted Arguments According to A Function from Dots
@@ -188,7 +189,7 @@ match_func_to_args <- function(
   func_formals <- lapply(dots_funcs, formals)
   names(func_formals) <- func_names
 
-  guess <- purrr::imap(
+  guess <- imap(
     .x = func_formals,
     .f = \(lst, func_name) {
       # * This function contains a ... parameter, so it can accept any arguments

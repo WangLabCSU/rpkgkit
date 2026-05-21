@@ -1,0 +1,21 @@
+url: ~
+template:
+  bootstrap: 5
+
+reference:
+  - title: Functions
+    desc: |
+      The following functions help you to create and maintain an R package.
+    contents:
+    - add_changelog_in_standalone
+    - air_format
+    - check_pkgdown_reference
+    - create_standalone
+    - flir_fix
+    - inquire_standalone
+    - make_func_call_explicit
+    - news_md_add_entry
+    - news_md_check
+    - news_md_show
+    - render_rmd
+    - update_time_in_standalone

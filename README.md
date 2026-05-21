@@ -9,6 +9,8 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![CRAN
 status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
 [![R-CMD-check](https://github.com/Exceret/rpkgkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Exceret/rpkgkit/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/Exceret/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/Exceret/rpkgkit)
 <!-- badges: end -->
 
 The goal of rpkgkit is to collect useful functions and standalone
@@ -17,28 +19,47 @@ import the standalone scripts.
 
 ## Features
 
+All functions can detect active file contexts in RStudio and Positron,
+so generally file path can be omitted.
+
 ### Code Formatting & Linting
 
 Require extra installation:
 
 - `air_format()` - Format R code using air
+- 
 - `flir_fix()` - Automatically fix linting issues using flir
+
+### Available Standalone Scripts
+
+Use `usethis::use_standalone("Exceret/rpkgkit", "<name>")` to import:
 
 ### Standalone File Management
 
-- `inquire_standalone()` - Check if a standalone file needs updating
+- `inquire_standalone()` - List standalone files available in a GitHub
+  repository’s `R/` directory
+
 - `create_standalone()` - Create standalone utility files in your
   package
+
+- `update_time_in_standalone()` - Update `last-updated` field in
+  standalone files
+
+- `add_changelog_in_standalone()` - Add changelog entries to standalone
+  files
 
 ### NEWS.md Management
 
 - `news_md_add_entry()` - Add new entries to NEWS.md following CRAN
   guidelines
+- 
 - `news_md_check()` - Validate NEWS.md format for CRAN compliance
+- 
 - `news_md_show()` - Display NEWS.md content with optional filtering
 
 ### Other Utilities
 
 - `make_func_call_explicit()` - Make function calls explicit by adding
   package prefixes
+- 
 - `render_rmd()` - Render R Markdown documents
