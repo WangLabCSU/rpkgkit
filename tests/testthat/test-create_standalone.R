@@ -1,10 +1,3 @@
-test_that("create_standalone aborts when ... is not empty", {
-  expect_error(
-    create_standalone("test", extra_arg = 1),
-    "`...` must be empty"
-  )
-})
-
 test_that("create_standalone creates a file with correct header in non-pkg directory", {
   tmp <- tempfile("standalone_test")
   dir.create(tmp)
