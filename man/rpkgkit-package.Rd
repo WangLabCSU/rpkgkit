@@ -4,9 +4,9 @@
 \name{rpkgkit-package}
 \alias{rpkgkit}
 \alias{rpkgkit-package}
-\title{rpkgkit: Provides A Set of Tools to Help You Create An R Package}
+\title{A Package for R Package Development}
 \description{
-What the package does (one paragraph).
+A Package for R Package Development
 }
 \author{
 \strong{Maintainer}: Yuxi Yang \email{15364051195@163.com}

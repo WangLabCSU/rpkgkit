@@ -24,5 +24,5 @@ Install \href{https://github.com/posit-dev/air}{air}:
 Linux: \verb{curl -LsSf https://github.com/posit-dev/air/releases/latest/download/air-installer.sh | sh}
 Windows: \verb{powershell -ExecutionPolicy Bypass -c "irm https://github.com/posit-dev/air/releases/latest/download/air-installer.ps1 | iex"}
 uv: \verb{uv tool install air-formatter}
-brew: \verb{brew install air}
+brew (MacOS): \verb{brew install air}
 }

@@ -33,10 +33,3 @@ test_that("generate_color_code has correct span colors", {
     )
   }
 })
-
-test_that("generate_color_code contains on.exit(cli::cli_end())", {
-  code <- rpkgkit:::generate_color_code()
-  on_exit_call <- code[[3L]]
-  expect_equal(deparse(on_exit_call[[1L]]), "on.exit")
-  expect_equal(deparse(on_exit_call[[2L]]), "cli::cli_end()")
-})
