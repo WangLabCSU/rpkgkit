@@ -19,8 +19,8 @@
 inquire_standalone <- function(owner, repo, ...) {
   rlang::check_dots_empty0()
   rlang::check_installed(c("gh", "dplyr"))
-  repo_spec <- if (grepl("/", repo)) {
-    repo
+  repo_spec <- if (grepl("/", owner)) {
+    owner
   } else {
     paste0(owner, "/", repo)
   }
@@ -41,6 +41,9 @@ inquire_standalone <- function(owner, repo, ...) {
       }
     }
   )
-
-  dplyr::bind_rows(standalone_response)
+  `_links` <- NULL # suppress note
+  `%>%` <- dplyr::`%>%`
+  dplyr::bind_rows(standalone_response) %>%
+    dplyr::select(-`_links`) %>%
+    dplyr::distinct()
 }

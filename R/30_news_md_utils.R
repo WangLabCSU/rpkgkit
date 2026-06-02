@@ -60,6 +60,10 @@ news_md_add_entry <- function(
   open_section = TRUE
 ) {
   path <- path %||% get_wd()
+  category <- match_arg(
+    category,
+    c("NEW FEATURES", "BUG FIXES", "MINOR IMPROVEMENTS", "DOCUMENTATION")
+  )
 
   # Get version from DESCRIPTION if not provided
   if (is.null(version)) {
@@ -85,14 +89,13 @@ news_md_add_entry <- function(
     ""
   }
 
-  # Ensure entry starts properly
+  # Vectorized entry formatting: ensure each starts with "* " and has contributor
   entry <- trimws(entry)
-  if (!grepl("^\\*", entry)) {
-    entry <- paste0("* ", entry)
-  }
-  # Add contributor at the end if not already present
-  if (!grepl("\\([^)]+\\)\\s*$", entry) && !is.null(contributor)) {
-    entry <- sub("\\s*$", contributor_str, entry)
+  needs_star <- !grepl("^\\*", entry)
+  entry[needs_star] <- paste0("* ", entry[needs_star])
+  if (!is.null(contributor)) {
+    has_attr <- grepl("\\([^)]+\\)\\s*$", entry)
+    entry[!has_attr] <- sub("\\s*$", contributor_str, entry[!has_attr])
   }
 
   news_path <- file.path(path, "NEWS.md")
@@ -108,10 +111,11 @@ news_md_add_entry <- function(
   version_header <- sprintf("# %s %s (%s)", basename(path), version, date)
 
   # Find existing version section
+  # Header format: "# pkgname X.Y.Z (YYYY-MM-DD)", so match version before "("
   version_pattern <- sprintf(
-    "^#\\s+%s\\s+\\(%s\\)",
+    "^#\\s+%s\\s+%s\\s+\\(",
     basename(path),
-    gsub(".", "\\\\.", version)
+    gsub("\\.", "\\\\.", version)
   )
   version_idx <- grep(version_pattern, lines)
 
@@ -233,7 +237,7 @@ news_md_add_entry <- function(
   writeLines(new_lines, news_path)
 
   cli::cli_inform(c(
-    "v" = "Added entry to {.path {news_path}}",
+    "v" = "Added {length(entry)} entr{?y/ies} to {.path {news_path}}",
     ">" = "Version: {.pkg {version}}, Category: {.field {category}}"
   ))
 

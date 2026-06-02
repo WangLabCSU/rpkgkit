@@ -19,3 +19,5 @@ reference:
     - news_md_show
     - render_rmd
     - update_time_in_standalone
+    - use_hexsticker
+    - detect_lost_glue_brace

@@ -86,15 +86,30 @@ use_hexsticker <- function(
     cli::cli_abort(c("x" = "No top-level heading found in README.md."))
   }
 
-  # Append HTML tag to the heading line
-  lines[heading_idx[1L]] <- paste(lines[heading_idx[1L]], html_tag)
+  add_tag_to_readme <- function(file_path) {
+    lines <- readLines(file_path, warn = FALSE)
+    if (length(lines) == 0L) return(invisible(FALSE))
+    heading_idx <- grep("^#\\s", lines)
+    if (length(heading_idx) == 0L) return(invisible(FALSE))
+    lines[heading_idx[1L]] <- paste(lines[heading_idx[1L]], html_tag)
+    writeLines(lines, file_path)
+    invisible(TRUE)
+  }
 
-  writeLines(lines, readme_path)
+  add_tag_to_readme(readme_path)
+
+  readme_rmd_path <- file.path(path, "README.Rmd")
+  if (file.exists(readme_rmd_path)) {
+    add_tag_to_readme(readme_rmd_path)
+  }
 
   cli::cli_inform(c(
     "v" = "Added hex sticker reference to {.path {readme_path}}",
     ">" = "Image: {.file {img_path}}"
   ))
+  if (file.exists(readme_rmd_path)) {
+    cli::cli_inform(c("v" = "Also updated {.path {readme_rmd_path}}"))
+  }
 
   invisible(TRUE)
 }
