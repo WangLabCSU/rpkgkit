@@ -28,3 +28,17 @@ test_that("create_colorful_cli_env with empty character vector returns empty env
   env <- rpkgkit:::create_colorful_cli_env(character(0))
   expect_length(ls(env), 0L)
 })
+
+test_that("create_colorful_cli_env returned functions are callable", {
+  env <- rpkgkit:::create_colorful_cli_env(c("cli_alert_info", "cli_alert_success"))
+
+  expect_type(env$cli_alert_info, "closure")
+  expect_type(env$cli_alert_success, "closure")
+
+  expect_no_error(
+    suppressMessages(env$cli_alert_info("{.blue Hello from the env}"))
+  )
+  expect_no_error(
+    suppressMessages(env$cli_alert_success("{.green Success from the env}"))
+  )
+})

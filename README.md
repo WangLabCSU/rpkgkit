@@ -48,6 +48,17 @@ args <- list(a = 1, b = 2)
 match_func_to_args(args, f1, f2, f3)
 ```
 
+```r
+args <- list(a = 1, b = 2, x = 3, y = 4)
+foo <- function(x , y = 1){x + y}
+filter_args_for_func(args, foo) # Keeps arguments for foo
+# $x
+# [1] 3
+
+# $y
+# [1] 4
+```
+
 - caller\_cli.R: show where the cli function is called from
 
 <!-- -->

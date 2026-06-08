@@ -17,10 +17,12 @@
 #' @export
 air_format <- function(path = NULL, ...) {
   check_air_installed()
-  path <- if (is.null(path) && rlang::is_installed("rstudioapi")) {
-    rstudioapi::getActiveDocumentContext()$path
-  } else {
-    cli::cli_abort(("c" = "{.arg path} is required"))
+  if (is.null(path)) {
+    if (rlang::is_installed("rstudioapi")) {
+      path <- rstudioapi::getActiveDocumentContext()$path
+    } else {
+      cli::cli_abort(c("c" = "{.arg path} is required"))
+    }
   }
   on.exit(cli::cli_alert_success("{.pkg Air} format {.path {path}}"))
 
