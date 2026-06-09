@@ -26,7 +26,9 @@ NULL
 #' @param entry Text of the news entry (without leading "* ").
 #' @param version Package version number. If NULL, uses the version from DESCRIPTION.
 #' @param category Category of the change (e.g., "NEW FEATURES", "BUG FIXES",
-#'   "MINOR IMPROVEMENTS", "DOCUMENTATION"). Default is "NEW FEATURES".
+#'   "MINOR IMPROVEMENTS", "DOCUMENTATION","NEW FEATURES", "BUG FIXES", "MINOR IMPROVEMENTS",
+#'   "DOCUMENTATION", "DEPRECATED", "DEFUNCT", "BREAKING CHANGES", "PERFORMANCE", "TESTING",
+#'   "INTERNAL CHANGES"). Default is "NEW FEATURES".
 #' @param contributor GitHub username or name for attribution (optional).
 #' @param path Path to the package root. If NULL, uses current working directory.
 #' @param date Date of the release. If NULL, uses today's date (YYYY-MM-DD format).
@@ -62,7 +64,18 @@ news_md_add_entry <- function(
   path <- path %||% getwd()
   category <- match_arg(
     category,
-    c("NEW FEATURES", "BUG FIXES", "MINOR IMPROVEMENTS", "DOCUMENTATION")
+    c(
+      "NEW FEATURES",
+      "BUG FIXES",
+      "MINOR IMPROVEMENTS",
+      "DOCUMENTATION",
+      "DEPRECATED",
+      "DEFUNCT",
+      "BREAKING CHANGES",
+      "PERFORMANCE",
+      "TESTING",
+      "INTERNAL CHANGES"
+    )
   )
 
   # Get version from DESCRIPTION if not provided

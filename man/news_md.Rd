@@ -27,7 +27,9 @@ news_md_show(path = NULL, version = NULL, max_versions = NULL)
 \item{version}{Show only entries for a specific version. Use "latest" for most recent.}
 
 \item{category}{Category of the change (e.g., "NEW FEATURES", "BUG FIXES",
-"MINOR IMPROVEMENTS", "DOCUMENTATION"). Default is "NEW FEATURES".}
+"MINOR IMPROVEMENTS", "DOCUMENTATION","NEW FEATURES", "BUG FIXES", "MINOR IMPROVEMENTS",
+"DOCUMENTATION", "DEPRECATED", "DEFUNCT", "BREAKING CHANGES", "PERFORMANCE", "TESTING",
+"INTERNAL CHANGES"). Default is "NEW FEATURES".}
 
 \item{contributor}{GitHub username or name for attribution (optional).}
 

@@ -8,6 +8,7 @@ reference:
       The following functions help you to create and maintain an R package.
     contents:
     - add_changelog_in_standalone
+    - browse_standalone
     - air_format
     - check_pkgdown_reference
     - create_standalone
@@ -21,3 +22,4 @@ reference:
     - update_time_in_standalone
     - use_hexsticker
     - detect_lost_glue_brace
+    - rename_func

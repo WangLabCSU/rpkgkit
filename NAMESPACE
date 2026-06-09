@@ -2,6 +2,7 @@
 
 export(add_changelog_in_standalone)
 export(air_format)
+export(browse_standalone)
 export(check_pkgdown_reference)
 export(create_standalone)
 export(detect_lost_glue_brace)

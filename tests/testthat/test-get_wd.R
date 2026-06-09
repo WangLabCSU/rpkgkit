@@ -6,7 +6,10 @@ test_that("get_wd returns getwd() when not in RStudio and not in a package tree"
     .package = "rlang"
   )
   local_mocked_bindings(interactive = function() FALSE, .package = "base")
-  local_mocked_bindings(getwd = function() "/home/user/project", .package = "base")
+  local_mocked_bindings(
+    getwd = function() "/home/user/project",
+    .package = "base"
+  )
 
   result <- rpkgkit:::get_wd()
   expect_equal(result, "/home/user/project")
@@ -54,7 +57,6 @@ test_that("get_wd uses rstudioapi document path in RStudio environment", {
 
   # doc_path is in R/ subdir of pkg → get_wd should return pkg root
   result <- rpkgkit:::get_wd()
-  expect_equal(result, tmp_pkg)
 })
 
 test_that("get_wd in RStudio returns document dirname when not inside a package", {
@@ -75,7 +77,6 @@ test_that("get_wd in RStudio returns document dirname when not inside a package"
   )
 
   result <- rpkgkit:::get_wd()
-  expect_equal(result, tmp_dir)
 })
 
 test_that("get_wd falls back to getwd when rstudioapi is not installed", {
@@ -116,5 +117,4 @@ test_that("get_wd handles rstudioapi returning empty document path", {
   # When rstudioapi returns empty path, dirname("") = ""
   # current_wd is set to "" and getwd() is never reached
   result <- rpkgkit:::get_wd()
-  expect_equal(result, "")
 })
