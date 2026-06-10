@@ -6,9 +6,9 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
-[![R-CMD-check](https://github.com/Exceret/rpkgkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Exceret/rpkgkit/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/Exceret/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/Exceret/rpkgkit)
+coverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
 <!-- badges: end -->
 
 The goal of rpkgkit is to provide useful functions for R package
@@ -31,7 +31,7 @@ Require extra installation:
 
 ### Available Standalone Scripts
 
-Use `usethis::use_standalone("Exceret/rpkgkit", "<name>")` to import:
+Use `usethis::use_standalone("WangLabCSU/rpkgkit", "<name>")` to import:
 
 - args\_to\_func.R: matching arguments to function calls:
 
@@ -111,7 +111,7 @@ ts_cli$cli_alert_info("Hello, world!")
 ### Standalone File Management
 
 - `inquire_standalone()` - List standalone files available in a GitHub
-  repository’s `R/` directory
+  repository's `R/` directory
 
 - `browse_standalone()` - Fetch all standalone files from GitHub
 
@@ -166,7 +166,7 @@ In `R/standalone-foo.R`
 
 ```r
 # ---
-# repo: Exceret/rpkgkit
+# repo: WangLabCSU/rpkgkit
 # file: standalone-foo.R
 # last-updated: 2026-06-02
 # license: https://unlicense.org
@@ -182,7 +182,7 @@ In `R/standalone-foo.R`
 update_time_in_standalone()
 
 # ---
-# repo: Exceret/rpkgkit
+# repo: WangLabCSU/rpkgkit
 # file: standalone-foo.R
 # last-updated: 2026-06-02
 # license: https://unlicense.org
@@ -199,7 +199,7 @@ add_changelog_in_standalone("R/standalone-foo.R", "Added foo function")
 # ✔ Added changelog entry for "2026-06-02" in 1 file(s).
 
 # ---
-# repo: Exceret/rpkgkit
+# repo: WangLabCSU/rpkgkit
 # file: standalone-foo.R
 # last-updated: 2026-06-02
 # license: https://unlicense.org
