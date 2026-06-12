@@ -28,7 +28,7 @@
 #' use_workflow_version_update(overwrite = TRUE)
 #' }
 use_workflow_version_update <- function(path = NULL, overwrite = FALSE) {
-  path <- path %||% get_wd()
+  path <- path %||% getwd()
 
   if (!is_pkg(path)) {
     cli::cli_abort(c(

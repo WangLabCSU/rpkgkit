@@ -45,6 +45,12 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
+      - name: Pull latest changes
+        if: steps.version_bump.outputs.type != 'none'
+        run: |
+          git fetch origin
+          git pull --rebase origin "${{ github.ref_name }}"
+
       - name: Determine version bump type
         id: version_bump
         run: |
@@ -124,12 +130,6 @@ jobs:
               echo "Updated $f badge"
             fi
           done
-
-      - name: Pull latest changes
-        if: steps.version_bump.outputs.type != 'none'
-        run: |
-          git fetch origin
-          git pull --rebase origin "${{ github.ref_name }}"
 
       - name: Commit and tag
         if: steps.version_bump.outputs.type != 'none'
