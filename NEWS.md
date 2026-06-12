@@ -1,3 +1,10 @@
+# rpkgkit 0.0.6 (2026-06-11)
+
+## NEW FEATURES
+
+* Added use_workflow_version_updater(), providing a github action to auto-update pkg version and tag.
+
+
 # rpkgkit 0.0.5 (2026-06-03)
 
 ## MINOR IMPROVEMENTS

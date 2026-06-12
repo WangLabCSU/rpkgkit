@@ -24,7 +24,7 @@ air_format <- function(path = NULL, ...) {
       cli::cli_abort(c("c" = "{.arg path} is required"))
     }
   }
-  on.exit(cli::cli_alert_success("{.pkg Air} format {.path {path}}"))
+  on.exit(cli::cli_alert_success("{.pkg Air} formatted {.path {path}}"))
 
   system2(
     command = "air",
