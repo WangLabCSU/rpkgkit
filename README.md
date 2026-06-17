@@ -1,14 +1,11 @@
 # rpkgkit
 
 <!-- badges: start -->
-
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
+[![Lifecycle:experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
 [![R-CMD-check](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml)
-[![Codecov test
-coverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
+"[![Devel version](https://img.shields.io/badge/devel%20version-0.0.6-blue.svg)](https://github.com/WangLabCSU/rpkgkit)"
+[![Codecov testcoverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WangLabCSU/rpkgkit)
 <!-- badges: end -->
 
@@ -19,16 +16,6 @@ development.
 
 All functions can detect active file contexts in RStudio and Positron,
 so generally file path can be omitted.
-
-### Code Formatting & Linting
-
-Require extra installation:
-
-- `air_format()` - Format R code using
-  [air](https://github.com/posit-dev/air)
-
-- `flir_fix()` - Automatically fix linting issues using
-  [flir](https://github.com/etiennebacher/flir)
 
 ### Available Standalone Scripts
 
@@ -286,4 +273,30 @@ starwars |>
 use_hexsticker("rpkgkit.logo") # Althought it doesn't exist
 
 # rpkgkit <img src="rpkgkit.logo" alt="package logo" align="right" height="139"/>
+```
+
+- `detect_lost_glue_brace()` - Find all `glue` calls that are missing a
+  closing brace in a file. Supports both `glue` and `cli` expressions.
+
+```r
+# foo.R
+name <- "world"
+msg <- glue::glue("Hello, {name!")
+
+library(cli)
+warning <- ""
+bar <- cli::col_red(cli::cli_alert_warning(
+  "{.field warning}}: This string is missing {.val 2} brace{?s}"
+))
+```
+
+```r
+detect_lost_glue_brace()
+
+# msg <- glue::glue("Hello, {name!")
+#                           ^^^^^^ 
+
+#   "{.field warning}}: This string is missing {.val 2} brace{?s}"
+#    ^^^^^^^^^^^^^^^^^ 
+# ✖ Found 2 lines with mismatched braces: 3 and 8
 ```

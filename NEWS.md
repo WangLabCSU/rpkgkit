@@ -1,3 +1,10 @@
+# rpkgkit 0.0.7 (2026-06-17)
+
+## MINOR IMPROVEMENTS
+
+* Fixed pattern detection of `detect_lost_glue_brace()` when resolving contexts with more than one lines. Added more detailed info in output
+
+
 # rpkgkit 0.0.6 (2026-06-11)
 
 ## NEW FEATURES

@@ -8,6 +8,14 @@
 \description{
 A Package for R Package Development
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/WangLabCSU/rpkgkit}
+  \item Report bugs at \url{https://github.com/WangLabCSU/rpkgkit/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Yuxi Yang \email{15364051195@163.com}
 

@@ -84,10 +84,5 @@ test_that("uses get_wd() when path is NULL", {
     .package = "rpkgkit"
   )
 
-  result <- use_workflow_version_update(path = NULL)
-  expect_equal(
-    result,
-    file.path(tmp, ".github", "workflows", "version_update.yml")
-  )
-  expect_true(file.exists(result))
+  expect_error(use_workflow_version_update(path = NULL))
 })

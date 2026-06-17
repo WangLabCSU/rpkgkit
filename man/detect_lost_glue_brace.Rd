@@ -15,11 +15,12 @@ Invisibly returns \code{TRUE} if all expressions are balanced, \code{FALSE}
 otherwise. Side-effect messages are emitted via \link[cli:cli]{cli::cli}.
 }
 \description{
-Check whether \verb{\{} and \verb{\}} are balanced in all \code{glue::glue()} / \code{glue_data()}
-and \verb{cli::cli_*()} string arguments within an R file. Lines containing these
-function calls are scanned for quoted strings; if the number of opening braces
-does not equal the number of closing braces in any string, the line is reported
-as an error.
+Check whether \verb{\{} and \verb{\}} are balanced in all \code{glue()} / \code{glue_data()}
+and \verb{cli_*()} string arguments within an R file. The file is parsed into
+an AST, then each string literal that is an argument to a target function
+is checked with a stack-based brace matcher. Any mismatches are reported
+with line number and a visual caret (\verb{^^^^}) marker under the problematic
+region.
 }
 \examples{
 \dontrun{
