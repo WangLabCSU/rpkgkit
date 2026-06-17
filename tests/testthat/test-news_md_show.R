@@ -48,6 +48,7 @@ test_that("news_md_show displays latest version only", {
   on.exit(unlink(tmp, recursive = TRUE))
 
   output <- capture.output(
+    type = "message",
     result <- news_md_show(path = tmp, version = "latest")
   )
 
@@ -78,6 +79,7 @@ test_that("news_md_show displays specific version", {
   on.exit(unlink(tmp, recursive = TRUE))
 
   output <- capture.output(
+    type = "message",
     news_md_show(path = tmp, version = "1.0.0")
   )
 
@@ -134,6 +136,7 @@ test_that("news_md_show limits to max_versions", {
   on.exit(unlink(tmp, recursive = TRUE))
 
   output <- capture.output(
+    type = "message",
     news_md_show(path = tmp, max_versions = 2)
   )
 
@@ -164,6 +167,7 @@ test_that("news_md_show shows all versions when no filter", {
   on.exit(unlink(tmp, recursive = TRUE))
 
   output <- capture.output(
+    type = "message",
     news_md_show(path = tmp)
   )
 
@@ -187,6 +191,7 @@ test_that("news_md_show returns content invisibly", {
   on.exit(unlink(tmp, recursive = TRUE))
 
   output <- capture.output(
+    type = "message",
     result <- news_md_show(path = tmp, version = "latest")
   )
 
@@ -211,8 +216,46 @@ test_that("news_md_show handles single version NEWS.md", {
   on.exit(unlink(tmp, recursive = TRUE))
 
   output <- capture.output(
+    type = "message",
     news_md_show(path = tmp, version = "latest")
   )
 
   expect_true(any(grepl("Only version", output)))
+})
+
+test_that("md_colorfully_show formats header lines", {
+  lines <- c("# Version 1.0 (2026-01-01)", "## NEW FEATURES", "Regular line")
+  output <- capture.output(type = "message", md_colorfully_show(lines))
+
+  expect_true(any(grepl("Version 1.0", output)))
+  expect_true(any(grepl("NEW FEATURES", output)))
+  expect_true(any(grepl("Regular line", output)))
+})
+
+test_that("md_colorfully_show formats backtick content preserving backticks", {
+  lines <- c("Use the `foo()` function", "`bar` is deprecated")
+  output <- capture.output(type = "message", md_colorfully_show(lines))
+
+  expect_true(any(grepl("foo\\(\\)", output)))
+  expect_true(any(grepl("`bar`", output)))
+})
+
+test_that("md_colorfully_show combines # and backticks on same line", {
+  lines <- c("# testpkg `2.0.0` (2026-06-01)")
+  output <- capture.output(type = "message", md_colorfully_show(lines))
+
+  # Both the header text and the backtick content should appear
+  expect_true(any(grepl("testpkg", output)))
+  expect_true(any(grepl("2\\.0\\.0", output)))
+  expect_true(any(grepl("`2\\.0\\.0`", output)))
+})
+
+test_that("md_colorfully_show returns invisibly", {
+  lines <- c("some text")
+  expect_invisible(md_colorfully_show(lines))
+})
+
+test_that("md_colorfully_show handles empty content gracefully", {
+  lines <- character(0)
+  expect_no_condition(md_colorfully_show(lines))
 })

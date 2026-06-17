@@ -2,6 +2,10 @@
 
 ## MINOR IMPROVEMENTS
 
+* Added basic color support to `news_md_show()`
+
+* Added dependency, description and nocov tag in `create_standalone()`
+
 * Fixed pattern detection of `detect_lost_glue_brace()` when resolving contexts with more than one lines. Added more detailed info in output
 
 

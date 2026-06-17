@@ -8,7 +8,8 @@ If \code{path} is an R package, the file is created in the \verb{R/} subdirector
 create_standalone(
   standalone_name = NULL,
   path = NULL,
-  standalone_head = list(license = "https://unlicense.org", imports = NULL),
+  standalone_head = list(license = "https://unlicense.org", imports = NULL, dependency =
+    NULL, description = "This file provides..."),
   open = TRUE,
   ...
 )
@@ -26,6 +27,10 @@ Defaults to the current RStudio document directory or ".".}
 Defaults to "https://unlicense.org".
 \item \code{imports}: Character vector. Package dependencies to import.
 Defaults to NULL.
+\item \code{dependency}: Character vector. Hard dependencies for the
+standalone file. Defaults to NULL.
+\item \code{description}: Character. A short description of the standalone
+file. Defaults to "To be filled.".
 }}
 
 \item{open}{Logical. Whether to open the file in RStudio editor.

@@ -47,8 +47,13 @@ test_that("create_standalone creates a file with correct header in non-pkg direc
   expect_match(header[3L], "^# file: standalone-my_utils\\.R")
   expect_match(header[4L], "^# last-updated: \\d{4}-\\d{2}-\\d{2}")
   expect_match(header[5L], "^# license: https://unlicense\\.org")
-  expect_match(header[6L], "^# imports: \\[\\]")
-  expect_match(header[7L], "# ---")
+  expect_match(header[6L], "^# imports: $")
+  expect_match(header[7L], "^# dependency: $")
+  expect_match(header[8L], "# ---")
+  expect_match(header[9L], "^#$")
+  expect_match(header[10L], "^# This file provides\\.\\.\\.$")
+  expect_match(header[11L], "^#$")
+  expect_match(header[12L], "^# nocov start$")
 })
 
 test_that("create_standalone uses custom license and imports", {
@@ -87,14 +92,20 @@ test_that("create_standalone uses custom license and imports", {
     path = tmp,
     standalone_head = list(
       license = "MIT",
-      imports = c("cli", "rlang")
+      imports = c("cli", "rlang"),
+      dependency = "dplyr",
+      description = "Custom description text"
     ),
     open = FALSE
   )
 
   header <- writeLines_calls[[1L]]$text
   expect_match(header[5L], "^# license: MIT")
-  expect_match(header[6L], "^# imports: \\[cli, rlang\\]")
+  expect_match(header[6L], "^# imports: cli, rlang")
+  expect_match(header[7L], "^# dependency: dplyr")
+  expect_match(header[8L], "# ---")
+  expect_match(header[10L], "^# Custom description text$")
+  expect_match(header[12L], "^# nocov start$")
 })
 
 test_that("create_standalone places file in R/ subdirectory when path is a package", {
@@ -327,4 +338,187 @@ test_that("create_standalone handles path as R/ subdirectory of a package", {
 
   expect_match(writeLines_calls[[1L]]$text[2L], "^# repo: ")
   expect_equal(result, file.path(tmp, "R", "standalone-helper.R"))
+})
+
+test_that("create_standalone includes dependency field with multiple values", {
+  tmp <- tempfile("standalone_test")
+  dir.create(tmp)
+  on.exit(unlink(tmp, recursive = TRUE))
+
+  local_mocked_bindings(
+    is_pkg = function(path) FALSE,
+    .package = "rpkgkit"
+  )
+
+  local_mocked_bindings(
+    system2 = function(...) "owner/repo",
+    .package = "base"
+  )
+
+  writeLines_calls <- list()
+  local_mocked_bindings(
+    writeLines = function(text, con) {
+      writeLines_calls <<- append(
+        writeLines_calls,
+        list(list(text = text, con = con))
+      )
+    },
+    .package = "base"
+  )
+
+  local_mocked_bindings(
+    file.exists = function(x) FALSE,
+    .package = "base"
+  )
+
+  create_standalone(
+    standalone_name = "my_utils",
+    path = tmp,
+    standalone_head = list(
+      dependency = c("dplyr", "tidyr", "purrr")
+    ),
+    open = FALSE
+  )
+
+  header <- writeLines_calls[[1L]]$text
+  expect_match(header[7L], "^# dependency: dplyr, tidyr, purrr$")
+})
+
+test_that("create_standalone includes custom description", {
+  tmp <- tempfile("standalone_test")
+  dir.create(tmp)
+  on.exit(unlink(tmp, recursive = TRUE))
+
+  local_mocked_bindings(
+    is_pkg = function(path) FALSE,
+    .package = "rpkgkit"
+  )
+
+  local_mocked_bindings(
+    system2 = function(...) "owner/repo",
+    .package = "base"
+  )
+
+  writeLines_calls <- list()
+  local_mocked_bindings(
+    writeLines = function(text, con) {
+      writeLines_calls <<- append(
+        writeLines_calls,
+        list(list(text = text, con = con))
+      )
+    },
+    .package = "base"
+  )
+
+  local_mocked_bindings(
+    file.exists = function(x) FALSE,
+    .package = "base"
+  )
+
+  create_standalone(
+    standalone_name = "my_utils",
+    path = tmp,
+    standalone_head = list(
+      description = "A helper for data transformation pipelines."
+    ),
+    open = FALSE
+  )
+
+  header <- writeLines_calls[[1L]]$text
+  expect_match(header[10L], "^# A helper for data transformation pipelines\\.$")
+})
+
+test_that("create_standalone includes nocov start marker", {
+  tmp <- tempfile("standalone_test")
+  dir.create(tmp)
+  on.exit(unlink(tmp, recursive = TRUE))
+
+  local_mocked_bindings(
+    is_pkg = function(path) FALSE,
+    .package = "rpkgkit"
+  )
+
+  local_mocked_bindings(
+    system2 = function(...) "owner/repo",
+    .package = "base"
+  )
+
+  writeLines_calls <- list()
+  local_mocked_bindings(
+    writeLines = function(text, con) {
+      writeLines_calls <<- append(
+        writeLines_calls,
+        list(list(text = text, con = con))
+      )
+    },
+    .package = "base"
+  )
+
+  local_mocked_bindings(
+    file.exists = function(x) FALSE,
+    .package = "base"
+  )
+
+  create_standalone("my_utils", path = tmp, open = FALSE)
+
+  header <- writeLines_calls[[1L]]$text
+  expect_match(header[12L], "^# nocov start$")
+  # Also verify it appears after the description and before any code
+  nocov_idx <- grep("^# nocov start$", header)
+  desc_idx <- grep("^# This file provides\\.\\.\\.$", header)
+  expect_true(
+    nocov_idx > desc_idx,
+    info = "nocov start should appear after the description"
+  )
+})
+
+test_that("create_standalone accepts full standalone_head with all new fields", {
+  tmp <- tempfile("standalone_test")
+  dir.create(tmp)
+  on.exit(unlink(tmp, recursive = TRUE))
+
+  local_mocked_bindings(
+    is_pkg = function(path) FALSE,
+    .package = "rpkgkit"
+  )
+
+  local_mocked_bindings(
+    system2 = function(...) "owner/repo",
+    .package = "base"
+  )
+
+  writeLines_calls <- list()
+  local_mocked_bindings(
+    writeLines = function(text, con) {
+      writeLines_calls <<- append(
+        writeLines_calls,
+        list(list(text = text, con = con))
+      )
+    },
+    .package = "base"
+  )
+
+  local_mocked_bindings(
+    file.exists = function(x) FALSE,
+    .package = "base"
+  )
+
+  create_standalone(
+    standalone_name = "advanced",
+    path = tmp,
+    standalone_head = list(
+      license = "MIT",
+      imports = c("rlang", "cli"),
+      dependency = c("R", "methods"),
+      description = "Advanced utility functions."
+    ),
+    open = FALSE
+  )
+
+  header <- writeLines_calls[[1L]]$text
+  expect_match(header[5L], "MIT")
+  expect_match(header[6L], "imports: rlang, cli")
+  expect_match(header[7L], "dependency: R, methods")
+  expect_match(header[10L], "Advanced utility functions\\.")
+  expect_match(header[12L], "nocov start")
 })

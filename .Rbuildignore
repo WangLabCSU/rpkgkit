@@ -1,11 +1,9 @@
 ^[.]?air[.]toml$
-^\.vscode$
 ^LICENSE\.md$
 ^rpkgkit\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
 ^cran-comments\.md$
-
 
 # flir files
 ^flir$
@@ -14,3 +12,19 @@
 ^docs$
 ^pkgdown$
 ^codecov\.yml$
+^\.Rbuildignore$
+^\.Rhistory$
+^\.Rdata$
+^\.Rcheck$
+^\.Rapp\.Rproj$
+^\.Rapp\.Rproj\.user$
+^\.Rapp\.history$
+
+# git
+^\.git$
+^\.gitignore$
+
+# IDE / dev tools
+^\.codebuddy$
+^\.fresh$
+^\.vscode$

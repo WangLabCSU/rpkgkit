@@ -101,7 +101,7 @@ ts_cli$cli_alert_info("Hello, world!")
 - `inquire_standalone()` - List standalone files available in a GitHub
   repository's `R/` directory
 
-- `browse_standalone()` - Fetch all standalone files from GitHub
+- `browse_standalone()` - Look up all available standalone files in GitHub repositories
 
 <!-- -->
 ```r
@@ -143,8 +143,6 @@ browse_standalone()
 - `create_standalone()` - Create standalone utility files in your
   package
 
-<!-- -->
-
 ```r    
 create_standalone("foo")
 # ✔ Created standalone file: /data/home/yyx/Project/rpkgkit/R/standalone-.R
@@ -160,6 +158,10 @@ In `R/standalone-foo.R`
 # license: https://unlicense.org
 # imports: []
 # ---
+# 
+# This file provides...
+#
+# nocov start
 ```
 
 - `update_time_in_standalone()` - Update `last-updated` field in
