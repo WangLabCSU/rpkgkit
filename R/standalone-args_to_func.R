@@ -189,7 +189,7 @@ match_func_to_args <- function(
 
   guess <- imap(
     .x = func_formals,
-    .f = \(lst, func_name) {
+    .f = function(lst, func_name) {
       has_dots <- "..." %in% names(lst)
       has_these_args <- names(lst) %in% names(args_list)
       positions <- which(has_these_args)
@@ -229,7 +229,7 @@ match_func_to_args <- function(
   # handle strict matching: funcs that can exactly match all args
   logical_vec <- vapply(
     X = func_formals,
-    FUN = \(lst) {
+    FUN = function(lst) {
       modified <- utils::modifyList(lst, args_list, keep.null = TRUE)
       if (length(modified) != length(lst)) FALSE else TRUE
     },

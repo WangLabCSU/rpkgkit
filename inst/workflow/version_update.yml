@@ -134,7 +134,11 @@ jobs:
       - name: Commit and tag
         if: steps.version_bump.outputs.type != 'none'
         run: |
-          git add DESCRIPTION README.md README.Rmd 2>/dev/null || true
+          git add DESCRIPTION README.md 2>/dev/null || true
+
+          if [ -f README.Rmd ]; then
+            git add README.Rmd
+          fi
 
           if git diff --staged --quiet; then
             echo "No changes to commit."
