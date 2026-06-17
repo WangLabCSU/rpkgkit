@@ -61,7 +61,8 @@ use_workflow_version_update <- function(path = NULL, overwrite = FALSE) {
 
   cli::cli_inform(c(
     "v" = "Created workflow: {.path {workflow_path}}",
-    ">" = "It triggers on push to {.val main/master} and via {.field workflow_dispatch}. Version bump is inferred from commit messages or manual input."
+    ">" = "It triggers on push to {.val main/master} and via {.field workflow_dispatch}. Version bump is inferred from commit messages or manual input.",
+    "i" = "It is recommended to add a devel version badge to your {.file README.md} via {.code badger::badge_devel(color = \"blue\")}."
   ))
 
   invisible(workflow_path)

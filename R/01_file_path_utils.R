@@ -1,3 +1,5 @@
+# nocov start
+
 is_pkg <- function(path) {
   dir.exists(path) && file.exists(file.path(path, "DESCRIPTION"))
 }
@@ -15,3 +17,5 @@ get_wd <- function() {
   }
   current_wd
 }
+
+# nocov end

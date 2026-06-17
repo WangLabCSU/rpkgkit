@@ -13,6 +13,10 @@
 #'       Defaults to "https://unlicense.org".
 #'     \item `imports`: Character vector. Package dependencies to import.
 #'       Defaults to NULL.
+#'     \item `dependency`: Character vector. Hard dependencies for the
+#'       standalone file. Defaults to NULL.
+#'     \item `description`: Character. A short description of the standalone
+#'       file. Defaults to "To be filled.".
 #'   }
 #' @param open Logical. Whether to open the file in RStudio editor.
 #'   Defaults to TRUE.
@@ -26,7 +30,9 @@ create_standalone <- function(
   path = NULL,
   standalone_head = list(
     license = "https://unlicense.org",
-    imports = NULL
+    imports = NULL,
+    dependency = NULL,
+    description = "This file provides..."
   ),
   open = TRUE,
   ...
@@ -34,12 +40,18 @@ create_standalone <- function(
   rlang::check_dots_empty0()
   filename <- paste0("standalone-", standalone_name, ".R")
 
-  path <- path %||%
-    if (rlang::is_installed("rstudioapi")) {
-      dirname(rstudioapi::getActiveDocumentContext()$path)
-    } else {
-      "."
-    }
+  # Merge user-provided standalone_head with defaults so missing fields fall back
+  standalone_head <- utils::modifyList(
+    list(
+      license = "https://unlicense.org",
+      imports = NULL,
+      dependency = NULL,
+      description = "This file provides..."
+    ),
+    standalone_head
+  )
+
+  path <- path %||% get_wd()
 
   if (is_pkg(path)) {
     target_dir <- file.path(path, "R")
@@ -95,11 +107,22 @@ create_standalone <- function(
     sprintf("# file: %s", filename),
     sprintf("# last-updated: %s", today),
     sprintf("# license: %s", standalone_head$license),
-    sprintf("# imports: [%s]", paste(standalone_head$imports, collapse = ", ")),
-    "# ---"
+    sprintf(
+      "# imports: %s",
+      paste(standalone_head$imports %||% "", collapse = ", ")
+    ),
+    sprintf(
+      "# dependency: %s",
+      paste(standalone_head$dependency %||% "", collapse = ", ")
+    ),
+    "# ---",
+    "#",
+    sprintf("# %s", standalone_head$description),
+    "#",
+    paste0("# nocov", " start") # * make this function can be tested
   )
 
-  writeLines(c(head_lines, ""), con = target_path)
+  writeLines(head_lines, con = target_path)
 
   cli::cli_alert_success("Created standalone file: {.path {target_path}}")
 
