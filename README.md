@@ -4,7 +4,7 @@
 [![Lifecycle:experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
 [![R-CMD-check](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml)
-[![Devel version](https://img.shields.io/badge/devel%20version-0.0.6-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
+[![Devel version](https://img.shields.io/badge/devel%20version-0.0.7-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
 [![Codecov testcoverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WangLabCSU/rpkgkit)
 <!-- badges: end -->

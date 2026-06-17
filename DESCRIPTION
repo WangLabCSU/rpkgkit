@@ -1,6 +1,6 @@
 Package: rpkgkit
 Title: A Set of Tools to Help You Create and Maintain an R Package
-Version: 0.0.6
+Version: 0.0.7
 Authors@R: 
     person("Yuxi", "Yang", , "15364051195@163.com", role = c("aut", "cre"))
 Description: A set of tools to help you create and maintain an R package.
