@@ -23,7 +23,7 @@ test_that("filter_args_for_func returns empty list when no args match", {
   expect_length(result, 0)
 })
 
-test_that("filter_args_for_func preserves additional arguments via keep", {https://xmpalantir.wu.ac.at/cransubmit/conf_mail.php?code=9e1b68fc5e6afd2fcf0dc454596e66ae
+test_that("filter_args_for_func preserves additional arguments via keep", {
   f <- function(a, b) a + b
   args <- list(a = 1, b = 2, extra = 99, another = 100)
 
@@ -218,7 +218,13 @@ test_that("match_func_to_args: top_one_only with name_only=TRUE returns name", {
 
   args <- list(a = 1, b = 2)
 
-  result <- match_func_to_args(args, f1, f2, top_one_only = TRUE, name_only = TRUE)
+  result <- match_func_to_args(
+    args,
+    f1,
+    f2,
+    top_one_only = TRUE,
+    name_only = TRUE
+  )
   expect_type(result, "character")
   expect_equal(result, "f1")
 })
