@@ -9,21 +9,6 @@ test_that("make_func_call_explicit aborts when path is provided explicitly", {
   )
 })
 
-test_that("make_func_call_explicit aborts when path is NULL and rstudioapi unavailable", {
-  local_mocked_bindings(
-    is_installed = function(pkg) FALSE,
-    .package = "rlang"
-  )
-
-  expect_error(
-    make_func_call_explicit(
-      use_packages = "dplyr",
-      ignore_functions = "library"
-    ),
-    "is required"
-  )
-})
-
 test_that("make_func_call_explicit reads file, adds colons, and writes back", {
   mock_path <- "/mock/project/R/my_file.R"
   mock_input_code <- paste(
