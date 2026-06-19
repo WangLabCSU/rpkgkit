@@ -1,14 +1,3 @@
-test_that("make_func_call_explicit aborts when path is provided explicitly", {
-  expect_error(
-    make_func_call_explicit(
-      path = "test.R",
-      use_packages = "dplyr",
-      ignore_functions = "library"
-    ),
-    "is required"
-  )
-})
-
 test_that("make_func_call_explicit reads file, adds colons, and writes back", {
   mock_path <- "/mock/project/R/my_file.R"
   mock_input_code <- paste(

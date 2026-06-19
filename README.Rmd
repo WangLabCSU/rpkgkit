@@ -4,7 +4,6 @@
 [![Lifecycle:stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
-[![r-universe status badge](https://WangLabCSU.r-universe.dev/badges/rpkgkit)](https://WangLabCSU.r-universe.dev/rpkgkit)
 [![R-CMD-check](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml)
 [![Devel version](https://img.shields.io/badge/devel%20version-0.0.7-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
 [![Code size](https://img.shields.io/github/languages/code-size/WangLabCSU/rpkgkit.svg)](https://github.com/WangLabCSU/rpkgkit)
@@ -317,7 +316,7 @@ msg <- glue::glue("Hello, {name!")
 library(cli)
 warning <- ""
 bar <- cli::col_red(cli::cli_alert_warning(
-  "{.field warning}}: This string is missing {.val 2} brace{?s}"
+  "{.field warning}}: This string is missing {.val 1} brace{?s}"
 ))
 ```
 
@@ -327,7 +326,7 @@ detect_lost_glue_brace()
 # msg <- glue::glue("Hello, {name!")
 #                           ^^^^^^ 
 
-#   "{.field warning}}: This string is missing {.val 2} brace{?s}"
+#   "{.field warning}}: This string is missing {.val 1} brace{?s}"
 #    ^^^^^^^^^^^^^^^^^ 
 # ✖ Found 2 lines with mismatched braces: 3 and 8
 ```

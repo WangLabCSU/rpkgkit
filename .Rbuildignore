@@ -29,3 +29,4 @@
 ^\.fresh$
 ^\.vscode$
 ^CRAN-SUBMISSION$
+^tmp\.R$
