@@ -14,6 +14,10 @@
 #'
 #' @return The exit status of the `air format` command (invisibly).
 #'
+#' @examples
+#' \dontrun{
+#' air_format(system.file("", package = "rpkgkit"))
+#' }
 #' @export
 air_format <- function(path = NULL, ...) {
   check_air_installed()

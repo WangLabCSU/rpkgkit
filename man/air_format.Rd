@@ -26,3 +26,8 @@ Windows: \verb{powershell -ExecutionPolicy Bypass -c "irm https://github.com/pos
 uv: \verb{uv tool install air-formatter}
 brew (MacOS): \verb{brew install air}
 }
+\examples{
+\dontrun{
+air_format(system.file("", package = "rpkgkit"))
+}
+}

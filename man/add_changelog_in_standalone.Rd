@@ -26,3 +26,8 @@ standalone file. Also updates the \code{last-updated} field in the YAML header
 to today's date. If no \code{Changelog} section exists, one is created after
 the YAML header.
 }
+\examples{
+\dontrun{
+add_changelog_in_standalone(tempdir(), "Added new feature")
+}
+}

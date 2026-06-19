@@ -19,3 +19,8 @@ Updates the \code{last-updated} field in the YAML header of standalone files
 to today's date. Supports single file or batch update for all standalone
 files in a directory.
 }
+\examples{
+\dontrun{
+update_time_in_standalone(tempdir())
+}
+}

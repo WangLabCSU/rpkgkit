@@ -9,6 +9,10 @@
 #' @return Invisibly returns a character vector of missing function names,
 #'   or `NULL` if `_pkgdown.yml` does not exist. Prints a summary via `cli`.
 #'
+#' @examples
+#' \dontrun{
+#' check_pkgdown_reference()
+#' }
 #' @export
 check_pkgdown_reference <- function(pkg = NULL) {
   if (is.null(pkg) || !nzchar(pkg)) {

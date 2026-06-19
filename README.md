@@ -1,16 +1,45 @@
 # rpkgkit
 
 <!-- badges: start -->
-[![Lifecycle:experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Lifecycle:stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
+[![r-universe status badge](https://WangLabCSU.r-universe.dev/badges/rpkgkit)](https://WangLabCSU.r-universe.dev/rpkgkit)
 [![R-CMD-check](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml)
 [![Devel version](https://img.shields.io/badge/devel%20version-0.0.7-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
+[![Code size](https://img.shields.io/github/languages/code-size/WangLabCSU/rpkgkit.svg)](https://github.com/WangLabCSU/rpkgkit)
 [![Codecov testcoverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WangLabCSU/rpkgkit)
 <!-- badges: end -->
 
 The goal of rpkgkit is to provide useful functions for R package
 development.
+
+## Installation
+
+From CRAN:
+
+```r
+install.packages("rpkgkit")
+```
+
+From github:
+
+```r
+if (!requireNamespace("pak")) {
+  install.packages(
+    "pak",
+    repos = sprintf(
+      "https://r-lib.github.io/p/pak/stable/%s/%s/%s",
+      .Platform$pkgType,
+      R.Version()$os,
+      R.Version()$arch
+    )
+  )
+}
+pak::pkg_install("WangLabCSU/rpkgkit")
+```
+
 
 ## Features
 

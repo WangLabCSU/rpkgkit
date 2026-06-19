@@ -16,6 +16,11 @@
 #'
 #' @return Invisibly returns the result from the called flir function.
 #'
+#' @examplesIf rlang::is_installed("flir")
+#' tmp <- tempfile(fileext = ".R")
+#' writeLines("a<-1+1", tmp)
+#' flir_fix(tmp)
+#' cat(readLines(tmp, warn = FALSE), sep = "\n")
 #' @export
 flir_fix <- function(path = NULL, ...) {
   rlang::check_installed("flir")

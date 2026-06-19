@@ -15,6 +15,10 @@
 #'
 #' @details This function queries the GitHub API to list files in the R/ directory, filters for files starting with "standalone-", parses each file's YAML metadata (delimited by "# ---") and roxygen tags to extract descriptions, and generates usage code for importing each standalone file.
 #'
+#' @examples
+#' \dontrun{
+#' inquire_standalone("r-lib", "rlang")
+#' }
 #' @export
 inquire_standalone <- function(owner, repo, ...) {
   rlang::check_dots_empty0()

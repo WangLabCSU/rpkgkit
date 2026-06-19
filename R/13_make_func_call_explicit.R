@@ -42,7 +42,15 @@ make_func_call_explicit <- function(
   ...
 ) {
   rlang::check_dots_empty0()
-  rlang::check_installed("pedant")
+  if (!rlang::is_installed("pedant")) {
+    choice <- utils::askYesNo(cli::cli_fmt(cli::cli_alert_info(
+      "{.pkg pedant} is not installed. Would you like to install it?"
+    )))
+    if (!isTRUE(choice)) {
+      stop("Installation of pedant package is required")
+    }
+    pak::pkg_install("wurli/pedant")
+  }
   path <- if (is.null(path) && rlang::is_installed("rstudioapi")) {
     rstudioapi::getActiveDocumentContext()$path
   } else {

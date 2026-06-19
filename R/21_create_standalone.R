@@ -24,6 +24,10 @@
 #'
 #' @return Invisibly returns the path to the created file.
 #'
+#' @examples
+#' \dontrun{
+#' create_standalone("my_utils", path = tempdir())
+#' }
 #' @export
 create_standalone <- function(
   standalone_name = NULL,

@@ -27,3 +27,11 @@ The function determines the fix strategy based on the path type:
 \item If \code{path} is a directory, calls \code{flir::fix_dir()}
 }
 }
+\examples{
+\dontshow{if (rlang::is_installed("flir")) withAutoprint(\{ # examplesIf}
+tmp <- tempfile(fileext = ".R")
+writeLines("a<-1+1", tmp)
+flir_fix(tmp)
+cat(readLines(tmp, warn = FALSE), sep = "\n")
+\dontshow{\}) # examplesIf}
+}

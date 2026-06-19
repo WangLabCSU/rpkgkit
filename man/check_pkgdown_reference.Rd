@@ -18,3 +18,8 @@ or \code{NULL} if \verb{_pkgdown.yml} does not exist. Prints a summary via \code
 Parses the \code{NAMESPACE} and \verb{_pkgdown.yml} (if present) and reports any
 exported functions that are missing from the pkgdown reference index.
 }
+\examples{
+\dontrun{
+check_pkgdown_reference()
+}
+}

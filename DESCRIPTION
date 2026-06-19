@@ -1,9 +1,12 @@
 Package: rpkgkit
-Title: A Set of Tools to Help You Create and Maintain an R Package
+Title: Create and Maintain 'R' Packages
 Version: 0.0.7
 Authors@R: 
     person("Yuxi", "Yang", , "15364051195@163.com", role = c("aut", "cre"))
-Description: A set of tools to help you create and maintain an R package.
+Description: Create and maintain R packages with utilities for NEWS.md
+    management, standalone file creation, and code formatting. Supports popular
+    development workflows and integrates with 'usethis' and 'RStudio'. Includes
+    helper functions for renaming functions and detecting common coding errors.
 License: MIT + file LICENSE
 URL: https://github.com/WangLabCSU/rpkgkit
 BugReports: https://github.com/WangLabCSU/rpkgkit/issues
@@ -32,5 +35,4 @@ Imports:
     cli,
     rlang,
     rstudioapi
-Remotes:
-    github::wurli/pedant
+

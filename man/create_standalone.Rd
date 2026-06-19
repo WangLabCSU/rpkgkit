@@ -45,3 +45,8 @@ Invisibly returns the path to the created file.
 Creates a new standalone R script with YAML metadata header.
 If \code{path} is an R package, the file is created in the \verb{R/} subdirectory.
 }
+\examples{
+\dontrun{
+create_standalone("my_utils", path = tempdir())
+}
+}

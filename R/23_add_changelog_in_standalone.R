@@ -15,6 +15,10 @@
 #'
 #' @return Invisibly returns the path to the updated file.
 #'
+#' @examples
+#' \dontrun{
+#' add_changelog_in_standalone(tempdir(), "Added new feature")
+#' }
 #' @export
 add_changelog_in_standalone <- function(
   path = NULL,

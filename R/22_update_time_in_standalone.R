@@ -10,6 +10,10 @@
 #'
 #' @return Invisibly returns a character vector of updated file paths.
 #'
+#' @examples
+#' \dontrun{
+#' update_time_in_standalone(tempdir())
+#' }
 #' @export
 update_time_in_standalone <- function(path = NULL) {
   if (is.null(path) && rlang::is_installed("rstudioapi")) {
