@@ -28,3 +28,4 @@
 ^\.codebuddy$
 ^\.fresh$
 ^\.vscode$
+^CRAN-SUBMISSION$
