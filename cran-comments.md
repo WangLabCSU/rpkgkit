@@ -1,21 +1,19 @@
 ## R CMD check results
 
-0 errors | 0 warnings | 2 notes
+0 errors | 0 warnings | 1 notes
 
-* This is a new submission.
+* This is a resubmission.
+
+## Changes
+
+* Removed dependency on GitHub-only packages by incorporating the required
+  code directly into the package under license, ensuring all dependencies are available
+  from CRAN or base R.
 
 ## Notes
 
 * The NOTE "New submission" is expected for first-time CRAN submissions and will be
   resolved once the package is accepted.
-
-* NOTE about `pedant` package dependency: This package uses `pedant` (GitHub only,
-  `wurli/pedant`) in the `make_func_call_explicit()` function for adding double-colon
-  prefixes to function calls. To comply with CRAN policy, `Remotes` is not declared in
-  DESCRIPTION, and `pedant` is listed only in `Suggests` (not `Imports`). In practice,
-  we provide a runtime check similar to `rlang::check_installed()`: when
-  `make_func_call_explicit()` is called without `pedant` installed, the user is prompted
-  to install it interactively via `pak::pkg_install("wurli/pedant")`.
 
 ## Reverse Dependencies
 
