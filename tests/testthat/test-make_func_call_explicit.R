@@ -15,6 +15,11 @@ test_that("make_func_call_explicit reads file, adds colons, and writes back", {
   )
 
   local_mocked_bindings(
+    check_installed = function(pkg, ...) NULL,
+    .package = "rlang"
+  )
+
+  local_mocked_bindings(
     getActiveDocumentContext = function() list(path = mock_path),
     .package = "rstudioapi"
   )
@@ -41,7 +46,7 @@ test_that("make_func_call_explicit reads file, adds colons, and writes back", {
       )
       mock_output_code
     },
-    .package = "pedant"
+    .package = "rpkgkit"
   )
 
   writeLines_calls <- list()

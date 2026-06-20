@@ -7,9 +7,9 @@
 #' @param path A character string specifying the path to the R file to modify.
 #'   If `NULL` and RStudio is available, the currently active document path is used.
 #' @param use_packages A character vector of package names to process. Defaults to
-#'   `pedant::current_packages()`.
+#'   `current_packages()`.
 #' @param ignore_functions A character vector of function names to ignore. Defaults to
-#'   `pedant::imported_functions()`.
+#'   `imported_functions()`.
 #' @param ... Additional arguments. Currently unused and must be empty.
 #'
 #' @return
@@ -21,8 +21,9 @@
 #' specified packages, and adds explicit namespace qualifiers (`::`) to those
 #' calls. The modified code is written back to the original file.
 #'
-#' @seealso
-#' [pedant::add_double_colons()], [pedant::current_packages()], [pedant::imported_functions()]
+#' @description
+#' This function uses code adapted from the \href{https://github.com/wurli/pedant}{pedant}
+#' package by Jacob Scott et al., licensed under MIT.
 #'
 #' @examples
 #' \dontrun{
@@ -37,20 +38,13 @@
 #' @export
 make_func_call_explicit <- function(
   path = NULL,
-  use_packages = pedant::current_packages(),
-  ignore_functions = pedant::imported_functions(),
+  use_packages = current_packages(),
+  ignore_functions = imported_functions(),
   ...
 ) {
   rlang::check_dots_empty0()
-  if (!rlang::is_installed("pedant")) {
-    choice <- utils::askYesNo(cli::cli_fmt(cli::cli_alert_info(
-      "{.pkg pedant} is not installed. Would you like to install it?"
-    )))
-    if (!isTRUE(choice)) {
-      stop("Installation of pedant package is required")
-    }
-    pak::pkg_install("wurli/pedant")
-  }
+  rlang::check_installed("pkgload")
+
   path <- if (is.null(path) && rlang::is_installed("rstudioapi")) {
     rstudioapi::getActiveDocumentContext()$path
   } else {
@@ -58,7 +52,7 @@ make_func_call_explicit <- function(
   }
 
   cli::cli_alert_info("Retrieving function calls from {.pkg {use_packages}}")
-  formated_code <- pedant::add_double_colons(
+  formated_code <- add_double_colons(
     code = paste(readLines(path), collapse = "\n"),
     use_packages = use_packages,
     ignore_functions = ignore_functions

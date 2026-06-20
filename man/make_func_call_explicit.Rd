@@ -6,8 +6,8 @@
 \usage{
 make_func_call_explicit(
   path = NULL,
-  use_packages = pedant::current_packages(),
-  ignore_functions = pedant::imported_functions(),
+  use_packages = current_packages(),
+  ignore_functions = imported_functions(),
   ...
 )
 }
@@ -16,10 +16,10 @@ make_func_call_explicit(
 If \code{NULL} and RStudio is available, the currently active document path is used.}
 
 \item{use_packages}{A character vector of package names to process. Defaults to
-\code{pedant::current_packages()}.}
+\code{current_packages()}.}
 
 \item{ignore_functions}{A character vector of function names to ignore. Defaults to
-\code{pedant::imported_functions()}.}
+\code{imported_functions()}.}
 
 \item{...}{Additional arguments. Currently unused and must be empty.}
 }
@@ -30,6 +30,9 @@ specified file in place.
 \description{
 Add double colons (\code{::}) to function calls from specified packages to make
 package dependencies explicit in R code.
+
+This function uses code adapted from the \href{https://github.com/wurli/pedant}{pedant}
+package by Jacob Scott et al., licensed under MIT.
 }
 \details{
 This function reads the specified R file, identifies function calls from the
@@ -46,7 +49,4 @@ make_func_call_explicit(
 )
 }
 
-}
-\seealso{
-\code{\link[pedant:add_double_colons]{pedant::add_double_colons()}}, \code{\link[pedant:current_packages]{pedant::current_packages()}}, \code{\link[pedant:current_packages]{pedant::imported_functions()}}
 }

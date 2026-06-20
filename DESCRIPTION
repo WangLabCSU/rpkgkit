@@ -1,8 +1,15 @@
 Package: rpkgkit
 Title: Create and Maintain 'R' Packages
 Version: 0.0.7
-Authors@R: 
-    person("Yuxi", "Yang", , "15364051195@163.com", role = c("aut", "cre"))
+Authors@R: c(
+    person("Yuxi", "Yang", , "15364051195@163.com", role = c("aut", "cre")),
+    # 添加 pedant 的作者
+    person("Jacob", "Scott", role = c("aut", "cph"), 
+           comment = "Author of the included pedant code (https://github.com/wurli/pedant)"),
+    person("Christopher T.", "Kenny", role = c("ctb", "cph"), 
+           comment = "Contributor to the included pedant code"),
+    person("Sebastian", "Lammers", role = c("ctb", "cph"), 
+           comment = "Contributor to the included pedant code"))
 Description: Create and maintain R packages with utilities for NEWS.md
     management, standalone file creation, and code formatting. Supports popular
     development workflows and integrates with 'usethis' and 'RStudio'. Includes
@@ -27,7 +34,8 @@ Suggests:
     testthat (>= 3.0.0),
     yaml,
     grDevices,
-    pak
+    pak,
+    pkgload
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -36,3 +44,4 @@ Imports:
     cli,
     rlang,
     rstudioapi
+Copyright: Jacob Scott, Christopher T. Kenny, and Sebastian Lammers (for the pedant code included in R/vendor-pedant.R)
