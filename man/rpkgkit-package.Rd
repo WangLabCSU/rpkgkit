@@ -16,4 +16,19 @@ Useful links:
 }
 
 }
+\author{
+\strong{Maintainer}: Yuxi Yang \email{15364051195@163.com}
+
+Authors:
+\itemize{
+  \item Jacob Scott (Author of the included pedant code (https://github.com/wurli/pedant)) [copyright holder]
+}
+
+Other contributors:
+\itemize{
+  \item Christopher T. Kenny (Contributor to the included pedant code) [contributor, copyright holder]
+  \item Sebastian Lammers (Contributor to the included pedant code) [contributor, copyright holder]
+}
+
+}
 \keyword{internal}

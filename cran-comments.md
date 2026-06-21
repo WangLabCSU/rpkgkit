@@ -3,12 +3,16 @@
 0 errors | 0 warnings | 1 notes
 
 * This is a resubmission.
+* Apologies for the oversight in the previous submission — 'pedant' was
+  inadvertently left in Suggests despite its code being vendored into the
+  package. This has now been corrected.
 
 ## Changes
 
-* Removed dependency on GitHub-only packages by incorporating the required
-  code directly into the package under license, ensuring all dependencies are available
-  from CRAN or base R.
+* Removed 'pedant' from Suggests. The required functionality from pedant
+  has been vendored into the package (see R/vendor-pedant.R) under its
+  original MIT license, with full copyright attribution to the original
+  authors in the DESCRIPTION file.
 
 ## Notes
 

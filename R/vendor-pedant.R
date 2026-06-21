@@ -2,7 +2,7 @@
 # The following code is adapted from the 'pedant' package.
 # Source: https://github.com/wurli/pedant
 # Authors: Jacob Scott, Christopher T. Kenny, Sebastian Lammers
-# License: MIT + file LICENSE (See inst/pedant/LICENSE)
+# License: MIT + file LICENSE (See inst/vendor/pedant/LICENSE)
 # ==============================================================================
 #
 # nocov start
