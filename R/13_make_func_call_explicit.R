@@ -35,7 +35,7 @@
 #' ", file)
 #' make_func_call_explicit(
 #'   path = file,
-#'   use_packages = c("dplyr", "tidyr"),
+#'   use_packages = c("dplyr"),
 #'   ignore_functions = c("library", "require")
 #' )
 #' readLines(file) |> message()
@@ -54,7 +54,7 @@ make_func_call_explicit <- function(
   path <- if (is.null(path) && rlang::is_installed("rstudioapi")) {
     rstudioapi::getActiveDocumentContext()$path
   } else if (is.null(path)) {
-    cli::cli_abort(("c" = "{.arg path} is required"))
+    cli::cli_abort(("c" <- "{.arg path} is required"))
   } else {
     path
   }
