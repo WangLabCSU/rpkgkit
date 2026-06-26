@@ -96,18 +96,13 @@ test_that("use_hexsticker uses custom alt_text, height, and align", {
   expect_match(lines[1L], 'align="left"', fixed = TRUE)
 })
 
-test_that("use_hexsticker uses get_wd() when path is NULL", {
+test_that("use_hexsticker works with explicit path", {
   tmp <- tempfile("hexsticker")
   dir.create(tmp)
   on.exit(unlink(tmp, recursive = TRUE))
   writeLines(c("# My Package"), file.path(tmp, "README.md"))
 
-  local_mocked_bindings(
-    get_wd = function() tmp,
-    .package = "rpkgkit"
-  )
-
-  use_hexsticker("logo.png", path = NULL)
+  use_hexsticker("logo.png", path = tmp)
 
   lines <- readLines(file.path(tmp, "README.md"), warn = FALSE)
   expect_match(lines[1L], '<img src="logo.png"', fixed = TRUE)

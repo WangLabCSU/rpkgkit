@@ -15,7 +15,7 @@
 #' The `workflow_dispatch` input always overrides commit message detection.
 #'
 #' @param path Character. Path to the package root directory. Defaults to the
-#'   current working directory (with RStudio document detection).
+#'   current working directory (\code{"."}).
 #' @param overwrite Logical. If `TRUE`, overwrite an existing workflow file.
 #'   Defaults to `FALSE`.
 #'
@@ -24,12 +24,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' use_workflow_version_update()
-#' use_workflow_version_update(overwrite = TRUE)
+#' temp <- tempdir()
+#' usethis::create_package(temp)
+#' use_workflow_version_update(temp)
+#' use_workflow_version_update(temp, overwrite = TRUE)
 #' }
-use_workflow_version_update <- function(path = NULL, overwrite = FALSE) {
-  path <- path %||% getwd()
-
+use_workflow_version_update <- function(path = ".", overwrite = FALSE) {
   if (!is_pkg(path)) {
     cli::cli_abort(c(
       "x" = "{.path {path}} is not an R package root.",

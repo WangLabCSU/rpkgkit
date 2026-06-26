@@ -27,7 +27,7 @@ to today's date. If no \code{Changelog} section exists, one is created after
 the YAML header.
 }
 \examples{
-\dontrun{
+\donttest{
 add_changelog_in_standalone(tempdir(), "Added new feature")
 }
 }

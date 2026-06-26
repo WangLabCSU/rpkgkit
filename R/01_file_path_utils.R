@@ -10,7 +10,7 @@ get_wd <- function() {
     current_wd <- dirname(rstudioapi::getActiveDocumentContext()$path)
   }
   if (is.null(current_wd)) {
-    current_wd <- getwd()
+    current_wd <- "."
   }
   if (is_pkg(dirname(current_wd))) {
     return(dirname(current_wd))

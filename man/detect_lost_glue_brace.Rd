@@ -23,8 +23,10 @@ with line number and a visual caret (\verb{^^^^}) marker under the problematic
 region.
 }
 \examples{
-\dontrun{
-detect_lost_glue_brace("path/to/file.R")
+\donttest{
+file <- tempfile()
+writeLines("glue(\"{a\")", file)
+detect_lost_glue_brace(file)
 }
 
 }

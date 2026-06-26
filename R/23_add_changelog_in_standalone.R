@@ -16,7 +16,7 @@
 #' @return Invisibly returns the path to the updated file.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' add_changelog_in_standalone(tempdir(), "Added new feature")
 #' }
 #' @export
@@ -50,7 +50,11 @@ add_changelog_in_standalone <- function(
       full.names = TRUE
     )
   } else if (dir.exists(path)) {
-    files <- list.files(path, pattern = "^standalone-", full.names = TRUE)
+    files <- list.files(
+      path,
+      pattern = "^standalone-|^vendor-",
+      full.names = TRUE
+    )
   } else {
     cli::cli_abort("{.path {path}} does not exist.")
   }
@@ -65,7 +69,7 @@ add_changelog_in_standalone <- function(
     function(f) {
       lines <- readLines(f, warn = FALSE)
 
-      yaml_end <- which(lines == "# ---")
+      yaml_end <- which(lines == "# ---" | grepl(pattern = "# =+", x = lines))
       if (length(yaml_end) < 2L) {
         cli::cli_warn("No valid YAML header found in {.path {f}}.")
         return(FALSE)
@@ -87,10 +91,10 @@ add_changelog_in_standalone <- function(
         }
         new_lines <- c(
           "#",
-          "# Changelog:",
+          "# ## Changelog:",
           "#",
           sprintf("# %s:", date),
-          sprintf("# %s", description),
+          sprintf("# * %s", description),
           "#"
         )
         lines <- append(lines, new_lines, after = insert_pos - 1L)

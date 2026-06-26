@@ -4,7 +4,7 @@
 \alias{check_pkgdown_reference}
 \title{Check that all exported functions are listed in pkgdown reference}
 \usage{
-check_pkgdown_reference(pkg = NULL)
+check_pkgdown_reference(pkg = ".")
 }
 \arguments{
 \item{pkg}{Character. Path to the package root directory.
@@ -20,6 +20,10 @@ exported functions that are missing from the pkgdown reference index.
 }
 \examples{
 \dontrun{
-check_pkgdown_reference()
+dir <- tempdir()
+usethis::create_package(dir)
+usethis::proj_set(dir)
+usethis::use_pkgdown()
+check_pkgdown_reference(dir)
 }
 }

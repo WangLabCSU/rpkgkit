@@ -4,11 +4,11 @@
 \alias{use_workflow_version_update}
 \title{Create a GitHub Actions workflow to auto-update R package version}
 \usage{
-use_workflow_version_update(path = NULL, overwrite = FALSE)
+use_workflow_version_update(path = ".", overwrite = FALSE)
 }
 \arguments{
 \item{path}{Character. Path to the package root directory. Defaults to the
-current working directory (with RStudio document detection).}
+current working directory (\code{"."}).}
 
 \item{overwrite}{Logical. If \code{TRUE}, overwrite an existing workflow file.
 Defaults to \code{FALSE}.}
@@ -34,7 +34,9 @@ The \code{workflow_dispatch} input always overrides commit message detection.
 }
 \examples{
 \dontrun{
-use_workflow_version_update()
-use_workflow_version_update(overwrite = TRUE)
+temp <- tempdir()
+usethis::create_package(temp)
+use_workflow_version_update(temp)
+use_workflow_version_update(temp, overwrite = TRUE)
 }
 }

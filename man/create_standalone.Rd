@@ -10,7 +10,7 @@ create_standalone(
   path = NULL,
   standalone_head = list(license = "https://unlicense.org", imports = NULL, dependency =
     NULL, description = "This file provides..."),
-  open = TRUE,
+  open = rlang::is_interactive(),
   ...
 )
 }
@@ -19,7 +19,7 @@ create_standalone(
 (e.g., "my_utils" creates "standalone-my_utils.R").}
 
 \item{path}{Character. Directory path where to create the file.
-Defaults to the current RStudio document directory or ".".}
+Defaults to the current working directory (\code{"."}).}
 
 \item{standalone_head}{List. Metadata for the file header with elements:
 \itemize{
@@ -46,7 +46,7 @@ Creates a new standalone R script with YAML metadata header.
 If \code{path} is an R package, the file is created in the \verb{R/} subdirectory.
 }
 \examples{
-\dontrun{
+\donttest{
 create_standalone("my_utils", path = tempdir())
 }
 }

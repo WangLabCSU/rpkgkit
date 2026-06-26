@@ -8,22 +8,23 @@
 \alias{news_md_add_entry}
 \title{Manage NEWS.md file for R packages}
 \usage{
-news_md_check(path = NULL, strict = FALSE, verbose = TRUE)
+news_md_check(path = ".", strict = FALSE, verbose = TRUE)
 
-news_md_show(path = NULL, version = NULL, max_versions = NULL)
+news_md_show(path = ".", version = NULL, max_versions = NULL)
 
 news_md_add_entry(
   entry,
   version = NULL,
   category = "NEW FEATURES",
   contributor = NULL,
-  path = NULL,
+  path = ".",
   date = NULL,
   open_section = TRUE
 )
 }
 \arguments{
-\item{path}{Path to the package root. If NULL, uses current working directory.}
+\item{path}{Path to the package root. Defaults to the current working
+directory (\code{"."}).}
 
 \item{strict}{If TRUE, treats warnings as errors. Default is FALSE.}
 
@@ -36,8 +37,8 @@ news_md_add_entry(
 \item{entry}{Text of the news entry (without leading "* ").}
 
 \item{category}{Category of the change (e.g., "NEW FEATURES", "BUG FIXES",
-"MINOR IMPROVEMENTS", "DOCUMENTATION","NEW FEATURES", "BUG FIXES", "MINOR IMPROVEMENTS",
-"DOCUMENTATION", "DEPRECATED", "DEFUNCT", "BREAKING CHANGES", "PERFORMANCE", "TESTING",
+"MINOR IMPROVEMENTS", "DOCUMENTATION", "DEPRECATED",
+"DEFUNCT", "BREAKING CHANGES", "PERFORMANCE", "TESTING",
 "INTERNAL CHANGES"). Default is "NEW FEATURES".}
 
 \item{contributor}{GitHub username or name for attribution (optional).}
@@ -84,28 +85,41 @@ The NEWS.md format follows CRAN recommendations:
 }
 \examples{
 \dontrun{
-result <- news_md_check()
+temp <- tempdir()
+usethis::create_package(temp)
+file.create(file.path(temp, "NEWS.md"))
+result <- news_md_check(temp)
 if (!result$valid) {
   print(result$errors)
   print(result$warnings)
 }
 }
 \dontrun{
+temp <- tempdir()
+usethis::create_package(temp)
+file.create(file.path(temp, "NEWS.md"))
+news_md_add_entry("Added `foo()`", path = temp)
+
 # Show latest version news
-news_md_show(version = "latest")
+news_md_show(version = "latest", path = temp)
 
 # Show last 3 versions
-news_md_show(max_versions = 3)
+news_md_show(max_versions = 3, path = temp)
 }
 \dontrun{
+temp <- tempdir()
+usethis::create_package(temp)
+file.create(file.path(temp, "NEWS.md"))
 # Add a bug fix entry
 news_md_add_entry("Fixed issue with parsing large files.",
                   category = "BUG FIXES",
-                  contributor = "johndoe")
+                  contributor = "johndoe",
+                  path = temp)
 
 # Add a new feature with specific version
 news_md_add_entry("Added new function for data validation.",
                   version = "1.2.0",
-                  category = "NEW FEATURES")
+                  category = "NEW FEATURES",
+                  path = temp)
 }
 }

@@ -8,20 +8,21 @@
 #' @return The output file path from rmarkdown::render.
 #'
 #' @examples
-#' \dontrun{
-#' rlang::is_installed("rmarkdown")
+#' \donttest{
+#' rlang::check_installed("rmarkdown")
 #' tmp <- tempfile(fileext = ".Rmd")
 #' writeLines(c("---", "title: Test", "---", "", "Hello, world!"), tmp)
-#' render_rmd(tmp)
+#' render_rmd(path = tmp)
 #' }
 #' @export
 render_rmd <- function(path = NULL, output_format = "md_document", ...) {
   rlang::check_installed("rmarkdown")
-  path <- if (is.null(path) && rlang::is_installed("rstudioapi")) {
-    rstudioapi::getActiveDocumentContext()$path
-  }
+  path <- path %||%
+    if (rlang::is_installed("rstudioapi")) {
+      rstudioapi::getActiveDocumentContext()$path
+    }
   if (is.null(path)) {
-    cli::cli_abort(("c" = "{.arg path} is required"))
+    cli::cli_abort(c("x" = "{.arg path} is required"))
   }
   rmarkdown::render(input = path, output_format = output_format, ...)
 }

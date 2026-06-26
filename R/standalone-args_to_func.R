@@ -40,7 +40,7 @@
 #' common in wrapper functions and pipeline designs.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Example function with specific parameters
 #' example_function <- function(a, b, c = 10, d = 20) {
 #'   return(a + b + c + d)
@@ -140,7 +140,7 @@ filter_args_for_func <- function(args_list, fun, keep = NULL) {
 #'   }
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' f1 <- function(a, b) a + b
 #' f2 <- function(x, y, ...) x * y
 #' f3 <- function(p, q) p - q
@@ -277,7 +277,7 @@ match_func_to_args <- function(
 #' @return If `name_only` is `TRUE`, a character vector of argument names. Otherwise, a named list of arguments.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' inner_func <- function(a, b, ...) {
 #'   get_func_args(exclude = "b", name_only = TRUE)
 #' }

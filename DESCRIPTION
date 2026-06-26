@@ -1,6 +1,6 @@
 Package: rpkgkit
-Title: Create and Maintain 'R' Packages
-Version: 0.0.7
+Title: Create and Maintain R Packages
+Version: 0.1.0
 Authors@R: c(
     person("Yuxi", "Yang", , "15364051195@163.com", role = c("aut", "cre")),
     person("Jacob", "Scott", role = c("aut", "cph"), 
@@ -9,7 +9,7 @@ Authors@R: c(
            comment = "Contributor to the included pedant code"),
     person("Sebastian", "Lammers", role = c("ctb", "cph"), 
            comment = "Contributor to the included pedant code"))
-Description: Create and maintain R packages with utilities for NEWS.md
+Description: Utilities for R package development including NEWS.md
     management, standalone file creation, and code formatting. Supports popular
     development workflows and integrates with 'usethis' and 'RStudio'. Includes
     helper functions for renaming functions and detecting common coding errors.

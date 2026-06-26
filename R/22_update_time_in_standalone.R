@@ -11,7 +11,7 @@
 #' @return Invisibly returns a character vector of updated file paths.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' update_time_in_standalone(tempdir())
 #' }
 #' @export

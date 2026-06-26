@@ -10,7 +10,7 @@ use_hexsticker(
   alt_text = "package logo",
   height = 139,
   align = "right",
-  path = NULL,
+  path = ".",
   ...
 )
 }
@@ -29,8 +29,8 @@ no hyperlink is added.}
 
 \item{align}{Character. Image alignment attribute. Defaults to \code{"right"}.}
 
-\item{path}{Character. Path to the package root directory. If \code{NULL},
-uses the current working directory (with RStudio document detection).}
+\item{path}{Character. Path to the package root directory. Defaults to the
+current working directory (\code{"."}).}
 
 \item{...}{Additional HTML attributes to include in the \verb{<img>} tag as
 named arguments.}
@@ -44,8 +44,10 @@ the top-level heading (the line starting with \verb{# }) in \code{README.md}.
 This is a common pattern for R package README files.
 }
 \examples{
-\dontrun{
-use_hexsticker("man/figures/logo.png", url = "https://my-pkg-website.com")
-use_hexsticker("man/figures/logo_white.png", alt_text = "Package logo", height = 139)
+\donttest{
+temp <- tempdir()
+writeLines("# Package Name", file.path(temp, "README.md"))
+file.create(file.path(temp, "logo.png"))
+use_hexsticker(file.path(temp, "logo.png"), url = "https://my-pkg-website.com", path = temp)
 }
 }

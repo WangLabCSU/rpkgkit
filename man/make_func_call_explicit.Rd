@@ -40,13 +40,19 @@ specified packages, and adds explicit namespace qualifiers (\code{::}) to those
 calls. The modified code is written back to the original file.
 }
 \examples{
-\dontrun{
-make_func_call_explicit("path/to/file.R")
+\donttest{
+file <- tempfile(fileext = ".R")
+writeLines("
+starwars |>
+ mutate(name, bmi = mass / ((height / 100)^2)) |>
+ select(name:mass, bmi)
+", file)
 make_func_call_explicit(
-  path = "path/to/file.R",
+  path = file,
   use_packages = c("dplyr", "tidyr"),
   ignore_functions = c("library", "require")
 )
+readLines(file) |> message()
 }
 
 }

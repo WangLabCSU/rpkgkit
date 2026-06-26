@@ -23,3 +23,8 @@ reference:
     - use_hexsticker
     - detect_lost_glue_brace
     - rename_func
+    - add_double_colons()
+    - current_packages()
+    - imported_functions()
+    - is_dev_context()
+    - use_workflow_version_update()

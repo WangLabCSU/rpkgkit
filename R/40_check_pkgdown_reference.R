@@ -11,14 +11,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' check_pkgdown_reference()
+#' dir <- tempdir()
+#' usethis::create_package(dir)
+#' usethis::proj_set(dir)
+#' usethis::use_pkgdown()
+#' check_pkgdown_reference(dir)
 #' }
 #' @export
-check_pkgdown_reference <- function(pkg = NULL) {
-  if (is.null(pkg) || !nzchar(pkg)) {
-    pkg <- "."
-  }
-
+check_pkgdown_reference <- function(pkg = ".") {
   pkgdown_file <- file.path(pkg, "_pkgdown.yml")
 
   if (!file.exists(pkgdown_file)) {

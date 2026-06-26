@@ -19,7 +19,7 @@
 #' @return Character string. E.g., "my_function()" or "global".
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' f <- function() { get_caller_name() }
 #' f() # Returns "f()"
 #' }
@@ -93,7 +93,7 @@ add_caller_to_cli <- function(cli_func, offset = 2L) {
 #' @return An environment with wrapped functions.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' caller_cli <- create_caller_cli_env()
 #'
 #' # Global context

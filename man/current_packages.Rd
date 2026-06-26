@@ -25,6 +25,14 @@ current_packages(
 context is package development. Should be a subset of
 \code{c("Imports", "Depends", "Suggests", "Enhances", "LinkingTo")}}
 }
+\value{
+\code{TRUE} if the current context is package development, \code{FALSE} otherwise.
+
+A character vector of imported function names, or \code{NULL} if no
+NAMESPACE file is found or \code{{pkgload}} is not installed.
+
+A character vector of package names.
+}
 \description{
 These functions find the packages/functions to use when running
 \code{add_double_colons()}.

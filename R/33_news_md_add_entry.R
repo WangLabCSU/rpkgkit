@@ -7,11 +7,12 @@
 #' @param entry Text of the news entry (without leading "* ").
 #' @param version Package version number. If NULL, uses the version from DESCRIPTION.
 #' @param category Category of the change (e.g., "NEW FEATURES", "BUG FIXES",
-#'   "MINOR IMPROVEMENTS", "DOCUMENTATION","NEW FEATURES", "BUG FIXES", "MINOR IMPROVEMENTS",
-#'   "DOCUMENTATION", "DEPRECATED", "DEFUNCT", "BREAKING CHANGES", "PERFORMANCE", "TESTING",
+#'   "MINOR IMPROVEMENTS", "DOCUMENTATION", "DEPRECATED",
+#'   "DEFUNCT", "BREAKING CHANGES", "PERFORMANCE", "TESTING",
 #'   "INTERNAL CHANGES"). Default is "NEW FEATURES".
 #' @param contributor GitHub username or name for attribution (optional).
-#' @param path Path to the package root. If NULL, uses current working directory.
+#' @param path Path to the package root. Defaults to the current working
+#'   directory (\code{"."}).
 #' @param date Date of the release. If NULL, uses today's date (YYYY-MM-DD format).
 #' @param open_section If TRUE and the version section exists but isn't open
 #'   (has content after it), creates a new section. If FALSE, adds to existing section.
@@ -23,26 +24,30 @@
 #'
 #' @examples
 #' \dontrun{
+#' temp <- tempdir()
+#' usethis::create_package(temp)
+#' file.create(file.path(temp, "NEWS.md"))
 #' # Add a bug fix entry
 #' news_md_add_entry("Fixed issue with parsing large files.",
 #'                   category = "BUG FIXES",
-#'                   contributor = "johndoe")
+#'                   contributor = "johndoe",
+#'                   path = temp)
 #'
 #' # Add a new feature with specific version
 #' news_md_add_entry("Added new function for data validation.",
 #'                   version = "1.2.0",
-#'                   category = "NEW FEATURES")
+#'                   category = "NEW FEATURES",
+#'                   path = temp)
 #' }
 news_md_add_entry <- function(
   entry,
   version = NULL,
   category = "NEW FEATURES",
   contributor = NULL,
-  path = NULL,
+  path = ".",
   date = NULL,
   open_section = TRUE
 ) {
-  path <- path %||% getwd()
   category <- match_arg(
     category,
     c(
@@ -60,8 +65,8 @@ news_md_add_entry <- function(
   )
 
   # Get version from DESCRIPTION if not provided
+  desc_path <- file.path(path, "DESCRIPTION")
   if (is.null(version)) {
-    desc_path <- file.path(path, "DESCRIPTION")
     if (!file.exists(desc_path)) {
       cli::cli_abort(c(
         "x" = "DESCRIPTION file not found at {.path {desc_path}}",
@@ -83,6 +88,15 @@ news_md_add_entry <- function(
     ""
   }
 
+  # Get package name from DESCRIPTION (must exist if we reach here)
+  if (!file.exists(desc_path)) {
+    cli::cli_abort(c(
+      "x" = "DESCRIPTION file not found at {.path {desc_path}}",
+      "i" = "Please provide {.arg path} to package root"
+    ))
+  }
+  pkg_name <- read.dcf(desc_path)[, "Package"]
+
   # Vectorized entry formatting: ensure each starts with "* " and has contributor
   entry <- trimws(entry)
   needs_star <- !grepl("^\\*", entry)
@@ -102,13 +116,13 @@ news_md_add_entry <- function(
   }
 
   # Create version header
-  version_header <- sprintf("# %s %s (%s)", basename(path), version, date)
+  version_header <- sprintf("# %s %s (%s)", pkg_name, version, date)
 
   # Find existing version section
   # Header format: "# pkgname X.Y.Z (YYYY-MM-DD)", so match version before "("
   version_pattern <- sprintf(
     "^#\\s+%s\\s+%s\\s+\\(",
-    basename(path),
+    pkg_name,
     gsub("\\.", "\\\\.", version)
   )
   version_idx <- grep(version_pattern, lines)

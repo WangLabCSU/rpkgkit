@@ -28,6 +28,6 @@ brew (MacOS): \verb{brew install air}
 }
 \examples{
 \dontrun{
-air_format(system.file("", package = "rpkgkit"))
+air_format(system.file("R_template/zzz_template.R", package = "rpkgkit"))
 }
 }

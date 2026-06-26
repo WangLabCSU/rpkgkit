@@ -1,7 +1,11 @@
 # Test: add_changelog_in_standalone --------------------------------------------
 
 # Helper: create a standalone file with a standard YAML header and trailing content
-create_standalone_file <- function(path, header_lines, extra = "# future code") {
+create_standalone_file <- function(
+  path,
+  header_lines,
+  extra = "# future code"
+) {
   writeLines(c(header_lines, extra), path)
 }
 
@@ -64,7 +68,10 @@ test_that("add_changelog_in_standalone aborts when path does not exist", {
   non_existent <- tempfile("nonexistent_file")
 
   expect_error(
-    add_changelog_in_standalone(path = non_existent, description = "Update docs"),
+    add_changelog_in_standalone(
+      path = non_existent,
+      description = "Update docs"
+    ),
     "does not exist"
   )
 })
@@ -111,7 +118,9 @@ test_that("add_changelog_in_standalone uses rstudioapi when path is NULL", {
     .package = "base"
   )
 
-  result <- add_changelog_in_standalone(description = "Add new feature via rstudioapi")
+  result <- add_changelog_in_standalone(
+    description = "Add new feature via rstudioapi"
+  )
 
   expect_length(writeLines_calls, 1L)
   expect_equal(writeLines_calls[[1L]]$con, mock_path)
@@ -163,7 +172,7 @@ test_that("add_changelog_in_standalone creates changelog section when none exist
   expect_false(identical(updated[4L], "# last-updated: 2025-01-01"))
 
   # New changelog section should appear after the YAML header end
-  changelog_line <- grep("^# Changelog:", updated)
+  changelog_line <- grep("^# ## Changelog:", updated)
   expect_length(changelog_line, 1L)
   expect_gt(changelog_line, 7L)
 
@@ -214,7 +223,7 @@ test_that("add_changelog_in_standalone creates changelog with blank comment line
   # In no-changelog branch: yaml_end=7, insert_pos=8, lines[8]="#", blank_before=1
   # insert_pos becomes 9, then append at after=8
   # So new_lines should be inserted between original lines 8 and 9
-  changelog_line <- grep("^# Changelog:", updated)
+  changelog_line <- grep("^# ## Changelog:", updated)
   expect_length(changelog_line, 1L)
 
   # Feature after blank line entry should be present
@@ -461,7 +470,10 @@ test_that("add_changelog_in_standalone informs when package has no standalone fi
   on.exit(unlink(tmp, recursive = TRUE))
 
   expect_message(
-    result <- add_changelog_in_standalone(path = tmp, description = "No standalone"),
+    result <- add_changelog_in_standalone(
+      path = tmp,
+      description = "No standalone"
+    ),
     "No standalone files found"
   )
 
@@ -492,7 +504,10 @@ test_that("add_changelog_in_standalone warns when file has no valid YAML header"
   )
 
   expect_warning(
-    result <- add_changelog_in_standalone(path = tmp_file, description = "No YAML"),
+    result <- add_changelog_in_standalone(
+      path = tmp_file,
+      description = "No YAML"
+    ),
     "No valid YAML header"
   )
 

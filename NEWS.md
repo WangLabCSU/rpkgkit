@@ -1,3 +1,24 @@
+# . 0.1.0 (2026-06-25)
+
+## BUG FIXES
+
+* Fix path bug in `render_rmd()`
+
+
+# rpkgkit 0.1.0 (2026-06-25)
+
+## DOCUMENTATION
+
+* Fix documentation and examples to meet CRAN requirements
+
+
+## NEW FEATURES
+
+* Added `use_zzz()` for easier zzz.R management
+
+* Bump verion to v0.1
+
+
 # rpkgkit 0.0.7 (2026-06-17)
 
 ## MINOR IMPROVEMENTS

@@ -33,7 +33,7 @@
 #' environment. The wrapping is done via \code{\link{add_colors_to_cli}}.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create environment with colorful CLI functions
 #' cli_env <- create_colorful_cli_env()
 #'
@@ -121,7 +121,7 @@ create_colorful_cli_env <- function(
 #' automatic cleanup via \code{\link[base]{on.exit}} to call \code{\link[cli]{cli_end}}.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create a color-enabled version of cli_alert_info
 #' color_alert <- add_colors_to_cli(cli::cli_alert_info)
 #' color_alert("{.blue Info} {.green System OK}")
@@ -206,7 +206,7 @@ generate_color_code <- function() {
 #'   and contains a single-element list \code{list(color = <color>)}.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' cli_alert_inform2 <- add_colors_to_cli(cli::cli_alert_inform, generate_color_theme())
 #' color_cli <- create_colorful_cli_env(cli_theme = generate_color_theme())
 #' }

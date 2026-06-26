@@ -21,10 +21,10 @@ The output file path from rmarkdown::render.
 Render an R Markdown or R document to Markdown format
 }
 \examples{
-\dontrun{
-rlang::is_installed("rmarkdown")
+\donttest{
+rlang::check_installed("rmarkdown")
 tmp <- tempfile(fileext = ".Rmd")
 writeLines(c("---", "title: Test", "---", "", "Hello, world!"), tmp)
-render_rmd(tmp)
+render_rmd(path = tmp)
 }
 }

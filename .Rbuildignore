@@ -30,3 +30,4 @@
 ^\.vscode$
 ^CRAN-SUBMISSION$
 ^tmp\.R$
+^43_use_vendor\.R

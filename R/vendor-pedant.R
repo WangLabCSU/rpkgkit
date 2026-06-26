@@ -5,6 +5,11 @@
 # License: MIT + file LICENSE (See inst/vendor/pedant/LICENSE)
 # ==============================================================================
 #
+# ## Changelog
+#
+# 2026-06-25:
+# * Added `@return property to meet CRAN policies
+#
 # nocov start
 
 #' Make function calls explicit
@@ -189,6 +194,7 @@ get_dependencies <- function(
 }
 
 #' @rdname current_packages
+#' @return `TRUE` if the current context is package development, `FALSE` otherwise.
 #' @export
 is_dev_context <- function(dir = ".") {
   if (!requireNamespace("pkgload", quietly = TRUE)) {
@@ -218,6 +224,8 @@ loaded_packages <- function() {
 }
 
 #' @rdname current_packages
+#' @return A character vector of imported function names, or `NULL` if no
+#'   NAMESPACE file is found or `{pkgload}` is not installed.
 #' @export
 imported_functions <- function(dir = ".") {
   get_imports(dir)$functions
@@ -244,6 +252,8 @@ imported_functions <- function(dir = ".") {
 #' @param include_types The types of package imports to return if the current
 #'   context is package development. Should be a subset of
 #'   `c("Imports", "Depends", "Suggests", "Enhances", "LinkingTo")`
+#'
+#' @return A character vector of package names.
 #'
 #' @export
 current_packages <- function(

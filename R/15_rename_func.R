@@ -27,9 +27,13 @@
 #' and normalizes function names to the target style.
 #'
 #' @examples
-#' \dontrun{
-#' rename_func("path/to/file.R", style = "snake_case")
-#' rename_func("path/to/file.R", style = "camelCase")
+#' \donttest{
+#' temp <- tempfile(fileext = ".R")
+#' writeLines("foo_bar <- function(){message('foo_bar')}", temp)
+#' rename_func(temp, style = "camelCase")
+#' readLines(temp)
+#' rename_func(temp, style = "snake_case")
+#' readLines(temp)
 #' }
 #'
 #' @export

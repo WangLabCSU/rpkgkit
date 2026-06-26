@@ -39,7 +39,7 @@
 #' context where the function was called.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Internal usage examples
 #' match_arg("app", c("apple", "banana", "application"))  # Returns "apple"
 #' match_arg(NULL, c("red", "green", "blue"))             # Returns "red" (default)

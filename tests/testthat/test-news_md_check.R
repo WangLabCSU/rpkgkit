@@ -133,7 +133,11 @@ test_that("news_md_check detects trailing whitespace", {
   on.exit(unlink(tmp, recursive = TRUE))
 
   result <- news_md_check(path = tmp, verbose = FALSE)
-  expect_true(any(grepl("trailing whitespace", result$suggestions, ignore.case = TRUE)))
+  expect_true(any(grepl(
+    "trailing whitespace",
+    result$suggestions,
+    ignore.case = TRUE
+  )))
 })
 
 test_that("news_md_check suggests final blank line", {
@@ -251,5 +255,142 @@ test_that("news_md_check suggests blank line before version header", {
   on.exit(unlink(tmp, recursive = TRUE))
 
   result <- news_md_check(path = tmp, verbose = FALSE)
-  expect_true(any(grepl("Blank line recommended before version header", result$suggestions)))
+  expect_true(any(grepl(
+    "Blank line recommended before version header",
+    result$suggestions
+  )))
+})
+
+test_that("news_md_check suggests blank line before category header", {
+  tmp <- tempfile("pkg_")
+  dir.create(tmp)
+
+  # Bullet point immediately followed by a category header (no blank line)
+  news_content <- c(
+    "# testpkg 1.0.0 (2026-01-01)",
+    "",
+    "## NEW FEATURES",
+    "",
+    "* Some entry.",
+    "## BUG FIXES",
+    "",
+    "* Some fix.",
+    ""
+  )
+  writeLines(news_content, file.path(tmp, "NEWS.md"))
+  on.exit(unlink(tmp, recursive = TRUE))
+
+  result <- news_md_check(path = tmp, verbose = FALSE)
+  expect_true(any(grepl(
+    "Blank line recommended before category header",
+    result$suggestions
+  )))
+})
+
+test_that("news_md_check flags bullet not starting with capital letter", {
+  tmp <- tempfile("pkg_")
+  dir.create(tmp)
+
+  news_content <- c(
+    "# testpkg 1.0.0 (2026-01-01)",
+    "",
+    "## NEW FEATURES",
+    "",
+    "* lower case entry.",
+    ""
+  )
+  writeLines(news_content, file.path(tmp, "NEWS.md"))
+  on.exit(unlink(tmp, recursive = TRUE))
+
+  result <- news_md_check(path = tmp, verbose = FALSE)
+  expect_true(any(grepl(
+    "capital letter",
+    result$suggestions,
+    ignore.case = TRUE
+  )))
+})
+
+test_that("news_md_check flags long entries missing ending punctuation", {
+  tmp <- tempfile("pkg_")
+  dir.create(tmp)
+
+  news_content <- c(
+    "# testpkg 1.0.0 (2026-01-01)",
+    "",
+    "## NEW FEATURES",
+    "",
+    "* A long entry that goes well beyond fifty characters to trigger the punctuation check",
+    ""
+  )
+  writeLines(news_content, file.path(tmp, "NEWS.md"))
+  on.exit(unlink(tmp, recursive = TRUE))
+
+  result <- news_md_check(path = tmp, verbose = FALSE)
+  expect_true(any(grepl("end with punctuation", result$suggestions)))
+})
+
+test_that("news_md_check flags bare @username not in parentheses", {
+  tmp <- tempfile("pkg_")
+  dir.create(tmp)
+
+  news_content <- c(
+    "# testpkg 1.0.0 (2026-01-01)",
+    "",
+    "## NEW FEATURES",
+    "",
+    "* Fixed by @user1.",
+    ""
+  )
+  writeLines(news_content, file.path(tmp, "NEWS.md"))
+  on.exit(unlink(tmp, recursive = TRUE))
+
+  result <- news_md_check(path = tmp, verbose = FALSE)
+  expect_true(any(grepl(
+    "Contributor mentions should be in parentheses",
+    result$suggestions
+  )))
+})
+
+test_that("news_md_check flags bare #123 not in parentheses", {
+  tmp <- tempfile("pkg_")
+  dir.create(tmp)
+
+  news_content <- c(
+    "# testpkg 1.0.0 (2026-01-01)",
+    "",
+    "## NEW FEATURES",
+    "",
+    "* Fixed issue #456.",
+    ""
+  )
+  writeLines(news_content, file.path(tmp, "NEWS.md"))
+  on.exit(unlink(tmp, recursive = TRUE))
+
+  result <- news_md_check(path = tmp, verbose = FALSE)
+  expect_true(any(grepl(
+    "Issue/PR references should be in parentheses",
+    result$suggestions
+  )))
+})
+
+test_that("news_md_check flags dates in entries instead of headers", {
+  tmp <- tempfile("pkg_")
+  dir.create(tmp)
+
+  news_content <- c(
+    "# testpkg 1.0.0 (2026-01-01)",
+    "",
+    "## NEW FEATURES",
+    "",
+    "* Feature added on 2026-03-15.",
+    ""
+  )
+  writeLines(news_content, file.path(tmp, "NEWS.md"))
+  on.exit(unlink(tmp, recursive = TRUE))
+
+  result <- news_md_check(path = tmp, verbose = FALSE)
+  expect_true(any(grepl(
+    "Dates should be in version headers",
+    result$suggestions
+  )))
 })

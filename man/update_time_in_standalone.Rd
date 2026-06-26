@@ -20,7 +20,7 @@ to today's date. Supports single file or batch update for all standalone
 files in a directory.
 }
 \examples{
-\dontrun{
+\donttest{
 update_time_in_standalone(tempdir())
 }
 }

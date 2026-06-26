@@ -128,3 +128,155 @@ test_that("browse_standalone returns empty tibble when no standalone files exist
   )
   expect_setequal(names(result), expected_cols)
 })
+
+# ==============================================================================
+# Results parsing: single item
+# ==============================================================================
+
+test_that("browse_standalone parses a single result into expected columns", {
+  local_mocked_bindings(
+    check_installed = function(pkg, ...) invisible(),
+    .package = "rlang"
+  )
+
+  local_mocked_bindings(
+    gh = function(...) mock_search_response(list(
+      mock_search_item("owner/repo1", "standalone-utils.R")
+    )),
+    .package = "gh"
+  )
+
+  result <- browse_standalone()
+  expect_equal(nrow(result), 1L)
+  expect_equal(result$repo, "owner/repo1")
+  expect_equal(result$name, "standalone-utils.R")
+  expect_equal(result$path, "R/standalone-utils.R")
+  expect_equal(result$sha, "abc123")
+  expect_match(result$url, "owner/repo1")
+  expect_match(result$html_url, "owner/repo1")
+  expect_match(result$git_url, "owner/repo1")
+  expect_match(result$repo_url, "owner/repo1")
+})
+
+# ==============================================================================
+# Results parsing: multiple items
+# ==============================================================================
+
+test_that("browse_standalone parses multiple results", {
+  local_mocked_bindings(
+    check_installed = function(pkg, ...) invisible(),
+    .package = "rlang"
+  )
+
+  local_mocked_bindings(
+    gh = function(...) mock_search_response(list(
+      mock_search_item("owner/repo1", "standalone-utils.R"),
+      mock_search_item("owner/repo2", "standalone-helpers.R"),
+      mock_search_item("owner/repo3", "standalone-parsers.R")
+    )),
+    .package = "gh"
+  )
+
+  result <- browse_standalone()
+  expect_equal(nrow(result), 3L)
+  expect_equal(result$repo, c("owner/repo1", "owner/repo2", "owner/repo3"))
+})
+
+# ==============================================================================
+# Filtering: non-standalone filenames are excluded
+# ==============================================================================
+
+test_that("browse_standalone filters out files not starting with standalone-", {
+  local_mocked_bindings(
+    check_installed = function(pkg, ...) invisible(),
+    .package = "rlang"
+  )
+
+  local_mocked_bindings(
+    gh = function(...) mock_search_response(list(
+      mock_search_item("owner/repo1", "standalone-utils.R"),
+      mock_search_item("owner/repo1", "other-file.R"),    # should be filtered
+      mock_search_item("owner/repo2", "standalone-parsers.R"),
+      mock_search_item("owner/repo2", "import-helper.R")   # should be filtered
+    )),
+    .package = "gh"
+  )
+
+  result <- browse_standalone()
+  expect_equal(nrow(result), 2L)
+  expect_equal(result$name, c("standalone-utils.R", "standalone-parsers.R"))
+})
+
+# ==============================================================================
+# NULL repo_description → NA
+# ==============================================================================
+
+test_that("browse_standalone converts NULL repo_description to NA", {
+  local_mocked_bindings(
+    check_installed = function(pkg, ...) invisible(),
+    .package = "rlang"
+  )
+
+  # item with description = NULL
+  item_no_desc <- mock_search_item("owner/repo1", "standalone-utils.R")
+  # item with description provided
+  item_with_desc <- mock_search_item(
+    "owner/repo2",
+    "standalone-helpers.R",
+    repo_desc = "An R package"
+  )
+
+  local_mocked_bindings(
+    gh = function(...) mock_search_response(list(item_no_desc, item_with_desc)),
+    .package = "gh"
+  )
+
+  result <- browse_standalone()
+  expect_true(is.na(result$repo_description[1]))
+  expect_equal(result$repo_description[2], "An R package")
+})
+
+# ==============================================================================
+# Warning on empty results
+# ==============================================================================
+
+test_that("browse_standalone warns when no result items are returned", {
+  local_mocked_bindings(
+    check_installed = function(pkg, ...) invisible(),
+    .package = "rlang"
+  )
+
+  local_mocked_bindings(
+    gh = function(...) mock_search_response(list()),
+    .package = "gh"
+  )
+
+  expect_warning(
+    browse_standalone(),
+    "No standalone files found"
+  )
+})
+
+# ==============================================================================
+# Response without $items field (gh edge case)
+# ==============================================================================
+
+test_that("browse_standalone handles response without $items field", {
+  local_mocked_bindings(
+    check_installed = function(pkg, ...) invisible(),
+    .package = "rlang"
+  )
+
+  # gh::gh with some endpoints may return the list directly
+  local_mocked_bindings(
+    gh = function(...) list(
+      mock_search_item("owner/repo1", "standalone-utils.R")
+    ),
+    .package = "gh"
+  )
+
+  result <- browse_standalone()
+  expect_equal(nrow(result), 1L)
+  expect_equal(result$name, "standalone-utils.R")
+  expect_equal(result$repo, "owner/repo1")
+})

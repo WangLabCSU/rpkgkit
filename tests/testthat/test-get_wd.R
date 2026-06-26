@@ -1,37 +1,25 @@
 # Tests for get_wd() from 01_file_path_utils.R
 
-test_that("get_wd returns getwd() when not in RStudio and not in a package tree", {
+test_that("get_wd returns '.' when not in RStudio and not in a package tree", {
   local_mocked_bindings(
     is_installed = function(pkg) FALSE,
     .package = "rlang"
   )
   local_mocked_bindings(interactive = function() FALSE, .package = "base")
-  local_mocked_bindings(
-    getwd = function() "/home/user/project",
-    .package = "base"
-  )
 
   result <- rpkgkit:::get_wd()
-  expect_equal(result, "/home/user/project")
+  expect_equal(result, ".")
 })
 
-test_that("get_wd returns package root when getwd() is inside a package subdirectory", {
-  tmp_pkg <- tempfile("pkg_root_")
-  dir.create(tmp_pkg)
-  file.create(file.path(tmp_pkg, "DESCRIPTION"))
-  on.exit(unlink(tmp_pkg, recursive = TRUE))
-
-  subdir <- file.path(tmp_pkg, "R")
-  dir.create(subdir)
-
+test_that("get_wd returns '.' when no RStudio and outside a package tree", {
   local_mocked_bindings(
     is_installed = function(pkg) FALSE,
     .package = "rlang"
   )
   local_mocked_bindings(interactive = function() FALSE, .package = "base")
-  local_mocked_bindings(getwd = function() subdir, .package = "base")
 
   result <- rpkgkit:::get_wd()
+  expect_equal(result, ".")
 })
 
 test_that("get_wd uses rstudioapi document path in RStudio environment", {
@@ -78,20 +66,15 @@ test_that("get_wd in RStudio returns document dirname when not inside a package"
   result <- rpkgkit:::get_wd()
 })
 
-test_that("get_wd falls back to getwd when rstudioapi is not installed", {
-  tmp_dir <- tempfile("fallback_dir_")
-  dir.create(tmp_dir)
-  on.exit(unlink(tmp_dir, recursive = TRUE))
-
+test_that("get_wd returns '.' when rstudioapi is not installed", {
   local_mocked_bindings(
     is_installed = function(pkg) FALSE,
     .package = "rlang"
   )
   local_mocked_bindings(interactive = function() TRUE, .package = "base")
-  local_mocked_bindings(getwd = function() tmp_dir, .package = "base")
 
   result <- rpkgkit:::get_wd()
-  expect_equal(result, tmp_dir)
+  expect_equal(result, ".")
 })
 
 test_that("get_wd handles rstudioapi returning empty document path", {

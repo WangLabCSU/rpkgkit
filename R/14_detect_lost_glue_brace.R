@@ -15,8 +15,10 @@
 #'   otherwise. Side-effect messages are emitted via [cli].
 #'
 #' @examples
-#' \dontrun{
-#' detect_lost_glue_brace("path/to/file.R")
+#' \donttest{
+#' file <- tempfile()
+#' writeLines("glue(\"{a\")", file)
+#' detect_lost_glue_brace(file)
 #' }
 #'
 #' @export
@@ -42,16 +44,14 @@ detect_lost_glue_brace <- function(path = NULL) {
     if (!result$balanced) {
       error_lines <- c(error_lines, info$line1)
 
-      cli::cli_text("")
-      cat(
+      message(
         format_brace_error(
           line_content = lines[info$line1],
           str_content = info$content,
           line_num = info$line1,
           col_offset = info$col1,
           result = result
-        ),
-        "\n"
+        )
       )
     }
   }

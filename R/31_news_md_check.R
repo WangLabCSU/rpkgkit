@@ -4,7 +4,8 @@
 #' Validates the NEWS.md file against CRAN guidelines and common best practices.
 #' Reports issues found and provides suggestions for fixes.
 #'
-#' @param path Path to the package root. If NULL, uses current working directory.
+#' @param path Path to the package root. Defaults to the current working
+#'   directory (\code{"."}).
 #' @param strict If TRUE, treats warnings as errors. Default is FALSE.
 #' @param verbose If TRUE, prints detailed information about checks performed.
 #'
@@ -19,14 +20,16 @@
 #' @rdname news_md
 #' @examples
 #' \dontrun{
-#' result <- news_md_check()
+#' temp <- tempdir()
+#' usethis::create_package(temp)
+#' file.create(file.path(temp, "NEWS.md"))
+#' result <- news_md_check(temp)
 #' if (!result$valid) {
 #'   print(result$errors)
 #'   print(result$warnings)
 #' }
 #' }
-news_md_check <- function(path = NULL, strict = FALSE, verbose = TRUE) {
-  path <- path %||% get_wd()
+news_md_check <- function(path = ".", strict = FALSE, verbose = TRUE) {
   news_path <- file.path(path, "NEWS.md")
 
   result <- list(

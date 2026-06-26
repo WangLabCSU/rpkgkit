@@ -6,7 +6,7 @@
 #' @param standalone_name Character. The name suffix for the standalone file
 #'   (e.g., "my_utils" creates "standalone-my_utils.R").
 #' @param path Character. Directory path where to create the file.
-#'   Defaults to the current RStudio document directory or ".".
+#'   Defaults to the current working directory (\code{"."}).
 #' @param standalone_head List. Metadata for the file header with elements:
 #'   \itemize{
 #'     \item `license`: Character. License URL or identifier.
@@ -25,7 +25,7 @@
 #' @return Invisibly returns the path to the created file.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' create_standalone("my_utils", path = tempdir())
 #' }
 #' @export
@@ -38,7 +38,7 @@ create_standalone <- function(
     dependency = NULL,
     description = "This file provides..."
   ),
-  open = TRUE,
+  open = rlang::is_interactive(),
   ...
 ) {
   rlang::check_dots_empty0()
@@ -55,7 +55,7 @@ create_standalone <- function(
     standalone_head
   )
 
-  path <- path %||% get_wd()
+  path <- path %||% "."
 
   if (is_pkg(path)) {
     target_dir <- file.path(path, "R")

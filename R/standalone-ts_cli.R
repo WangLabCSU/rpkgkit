@@ -28,7 +28,7 @@
 #' cli's glue-like syntax \code{"{ }"}.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create a timestamp-enabled version of cli_alert_info
 #' timestamp_alert <- add_timestamp_to_cli(cli::cli_alert_info)
 #' timestamp_alert("This message will have a timestamp")
@@ -86,7 +86,7 @@ add_timestamp_to_cli <- function(
 #' environment.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Create environment with timestamped CLI functions
 #' cli_env <- create_ts_cli_env()
 #'
