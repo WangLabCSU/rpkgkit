@@ -1,11 +1,8 @@
-# . 0.1.0 (2026-06-25)
+# rpkgkit 0.1.0 (2026-06-25)
 
 ## BUG FIXES
 
 * Fix path bug in `render_rmd()`
-
-
-# rpkgkit 0.1.0 (2026-06-25)
 
 ## DOCUMENTATION
 
