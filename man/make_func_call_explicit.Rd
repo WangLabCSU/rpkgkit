@@ -49,7 +49,7 @@ starwars |>
 ", file)
 make_func_call_explicit(
   path = file,
-  use_packages = c("dplyr", "tidyr"),
+  use_packages = c("dplyr"),
   ignore_functions = c("library", "require")
 )
 readLines(file) |> message()
