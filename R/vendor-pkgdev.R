@@ -33,6 +33,7 @@
 #' }
 #'
 add_global_gitgnore <- function(pkg = ".") {
+  rlang::check_installed(c("devtools", "usethis"))
   # Template from Github
   # History files
   usethis::use_git_ignore(".Rproj.user", directory = pkg)

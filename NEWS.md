@@ -1,5 +1,10 @@
 # rpkgkit 0.1.1 (2026-06-27)
 
+## DOCUMENTATION
+
+* change unicode character to raw int for checking
+
+
 ## MINOR IMPROVEMENTS
 
 * make `check_pkgdown_reference()` easy to copy

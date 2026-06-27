@@ -46,24 +46,24 @@ non-UN languages) can be supplied via the \code{lang} argument.
 The following codes have built-in display name mappings:\tabular{ll}{
    Code \tab Display Name \cr
    \code{en} \tab English \cr
-   \code{zh-cn} \tab 简体中文 \cr
-   \code{zh-tw} \tab 繁體中文 \cr
-   \code{es} \tab Español \cr
-   \code{fr} \tab Français \cr
-   \code{de} \tab Deutsch \cr
-   \code{pt} \tab Português \cr
-   \code{ja} \tab 日本語 \cr
-   \code{ko} \tab 한국어 \cr
-   \code{ar} \tab العربية \cr
-   \code{ru} \tab Русский \cr
-   \code{it} \tab Italiano \cr
-   \code{nl} \tab Nederlands \cr
-   \code{pl} \tab Polski \cr
-   \code{tr} \tab Türkçe \cr
-   \code{vi} \tab Tiếng Việt \cr
-   \code{th} \tab ไทย \cr
-   \code{id} \tab Bahasa Indonesia \cr
-   \code{hi} \tab हिन्दी \cr
+   \code{zh-cn} \tab Chinese (Simplified) \cr
+   \code{zh-tw} \tab Chinese (Traditional) \cr
+   \code{es} \tab Spanish \cr
+   \code{fr} \tab French \cr
+   \code{de} \tab German \cr
+   \code{pt} \tab Portuguese \cr
+   \code{ja} \tab Japanese \cr
+   \code{ko} \tab Korean \cr
+   \code{ar} \tab Arabic \cr
+   \code{ru} \tab Russian \cr
+   \code{it} \tab Italian \cr
+   \code{nl} \tab Dutch \cr
+   \code{pl} \tab Polish \cr
+   \code{tr} \tab Turkish \cr
+   \code{vi} \tab Vietnamese \cr
+   \code{th} \tab Thai \cr
+   \code{id} \tab Indonesian \cr
+   \code{hi} \tab Hindi \cr
 }
 
 

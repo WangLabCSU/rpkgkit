@@ -2,6 +2,13 @@ url: https://wanglabcsu.github.io/rpkgkit/
 template:
   bootstrap: 5
   light-switch: true
+  bslib:
+    bootswatch: sandstone
+    code_font: { google: "JetBrains Mono" }
+    pkgdown-nav-height: 100px
+    bg: white
+    fg: black
+    primary: "#2c5f9b"
 
 title: rpkgkit
 description: >-
