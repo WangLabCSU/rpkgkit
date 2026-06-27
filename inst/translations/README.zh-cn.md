@@ -9,21 +9,21 @@
 [![Code size](https://img.shields.io/github/languages/code-size/WangLabCSU/rpkgkit.svg)](https://github.com/WangLabCSU/rpkgkit)
 [![Codecov testcoverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WangLabCSU/rpkgkit)
-[![简体中文](https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue)](inst/translations/README.zh-cn.md)
+[![English](https://img.shields.io/badge/README-English-blue)](../README.md)
+[![AI 翻译](https://img.shields.io/badge/AI_%E7%BF%BB%E8%AF%91-%E4%BB%85%E4%BE%9B%E5%8F%82%E8%80%83-yellow)]()
 <!-- badges: end -->
 
-The goal of rpkgkit is to provide useful functions for R package
-development.
+rpkgkit 的目标是为 R 包开发提供实用的函数。
 
-## Installation
+## 安装
 
-From CRAN:
+从 CRAN 安装：
 
 ```r
 install.packages("rpkgkit")
 ```
 
-From github:
+从 GitHub 安装：
 
 ```r
 if (!requireNamespace("pak")) {
@@ -40,19 +40,15 @@ if (!requireNamespace("pak")) {
 pak::pkg_install("WangLabCSU/rpkgkit")
 ```
 
+## 特性
 
-## Features
+所有函数都能自动检测 RStudio 和 Positron 中的活动文件上下文，因此通常可以省略文件路径参数。
 
-All functions can detect active file contexts in RStudio and Positron,
-so generally file path can be omitted.
+### 可用的独立脚本 (Standalone Scripts)
 
-### Available Standalone Scripts
+使用 `usethis::use_standalone("WangLabCSU/rpkgkit", "<name>")` 导入：
 
-Use `usethis::use_standalone("WangLabCSU/rpkgkit", "<name>")` to import:
-
-- args\_to\_func.R: matching arguments to function calls:
-
-<!-- -->
+- args\_to\_func.R：将参数列表与函数调用进行匹配：
 
 ```r
 f1 <- function(a, b) a + b
@@ -61,14 +57,14 @@ f3 <- function(p, q) p - q
 
 args <- list(a = 1, b = 2)
 
-# Strict matching (default): returns f1 only
+# 严格匹配（默认）：仅返回 f1
 match_func_to_args(args, f1, f2, f3)
 ```
 
 ```r
 args <- list(a = 1, b = 2, x = 3, y = 4)
 foo <- function(x , y = 1){x + y}
-filter_args_for_func(args, foo) # Keeps arguments for foo
+filter_args_for_func(args, foo) # 保留属于 foo 的参数
 # $x
 # [1] 3
 
@@ -76,9 +72,8 @@ filter_args_for_func(args, foo) # Keeps arguments for foo
 # [1] 4
 ```
 
-- caller\_cli.R: show where the cli function is called from
+- caller\_cli.R：显示 cli 函数的调用位置：
 
-<!-- -->
 ```r
 decorated <- add_caller_to_cli(cli::cli_alert_info)
 foo1 <- \() {
@@ -99,9 +94,9 @@ bar()
 # [1] "I' m in foo1"
 # ℹ [foo1()]: <- where is this called from?
 ```
-- colorful\_cli.R: Easier color calling in one cli function
 
-<!-- -->
+- colorful\_cli.R：在单个 cli 函数中更方便地使用颜色：
+
 ```r
 color_cli <- create_colorful_cli_env()
 color_cli$cli_alert_danger("{.red This is a red message}")
@@ -114,25 +109,23 @@ color_cli2$cli_alert_success(
   "{.violetred3 R}{.orange a}{.yellow i}{.green n}{.cyan b}{.blue o}{.purple w}"
 )
 ```
-- match\_arg.R: partial matching of arguments to function calls, like
-  `match.arg`, `rlang::arg_match`
 
-- ts\_cli.R: timestamp cli function
+- match\_arg.R：参数的局部匹配，类似 `match.arg`、`rlang::arg_match`：
 
-<!-- -->
+- ts\_cli.R：带时间戳的 cli 函数：
+
 ```r
 ts_cli <- create_ts_cli_env()
 ts_cli$cli_alert_info("Hello, world!")
 # ℹ [2026/05/30 22:45:42] Hello, world!
 ```
-### Standalone File Management
 
-- `inquire_standalone()` - List standalone files available in a GitHub
-  repository's `R/` directory
+### 独立脚本管理
 
-- `browse_standalone()` - Look up all available standalone files in GitHub repositories
+- `inquire_standalone()` — 列出 GitHub 仓库 `R/` 目录下可用的独立脚本文件
 
-<!-- -->
+- `browse_standalone()` — 查询 GitHub 仓库中所有可用的独立脚本文件
+
 ```r
 inquire_standalone("r-lib/rlang")
 # A tibble: 13 × 9
@@ -169,15 +162,15 @@ browse_standalone()
 # # ℹ 174 more rows
 ```
 
-- `create_standalone()` - Create standalone utility files in your
-  package
+- `create_standalone()` — 在包中创建独立脚本工具文件：
 
-```r    
+```r
 create_standalone("foo")
 # ✔ Created standalone file: /data/home/yyx/Project/rpkgkit/R/standalone-.R
 # ☐ File opened in editor.
 ```
-In `R/standalone-foo.R`
+
+在 `R/standalone-foo.R` 中：
 
 ```r
 # ---
@@ -193,10 +186,8 @@ In `R/standalone-foo.R`
 # nocov start
 ```
 
-- `update_time_in_standalone()` - Update `last-updated` field in
-  standalone files
+- `update_time_in_standalone()` — 更新独立脚本文件中的 `last-updated` 字段：
 
-<!-- -->
 ```r
 update_time_in_standalone()
 
@@ -209,10 +200,8 @@ update_time_in_standalone()
 # ---
 ```
 
-- `add_changelog_in_standalone()` - Add changelog entries to standalone
-  files
+- `add_changelog_in_standalone()` — 向独立脚本文件中添加更新日志条目：
 
-<!-- -->
 ```r
 add_changelog_in_standalone("R/standalone-foo.R", "Added foo function")
 # ✔ Added changelog entry for "2026-06-02" in 1 file(s).
@@ -231,12 +220,10 @@ add_changelog_in_standalone("R/standalone-foo.R", "Added foo function")
 # Added foo function
 ```
 
-### NEWS.md Management
+### NEWS.md 管理
 
-- `news_md_add_entry()` - Add new entries to NEWS.md following CRAN
-  guidelines
+- `news_md_add_entry()` — 按照 CRAN 规范向 NEWS.md 添加新条目：
 
-<!-- -->
 ```r
 news_md_add_entry("Added foo function")
 
@@ -247,9 +234,8 @@ news_md_add_entry("Added foo function")
 * Added foo function
 ```
 
-- `news_md_check()` - Validate NEWS.md format for CRAN compliance
+- `news_md_check()` — 验证 NEWS.md 格式是否符合 CRAN 要求：
 
-<!-- -->
 ```r
 news_md_check()
 # ℹ Checking NEWS.md with 22 lines
@@ -271,14 +257,13 @@ news_md_check()
 # [4] "Line 14: Longer entries should end with punctuation"
 ```
 
-- `news_md_show()` - Display NEWS.md content of a package in console with color
+- `news_md_show()` — 在控制台中以彩色形式展示包的 NEWS.md 内容
 
-### Other Utilities
+### 其他工具
 
-- `make_func_call_explicit()` - Make function calls explicit by adding
-  package prefixes
+- `make_func_call_explicit()` — 通过添加包前缀使函数显式调用
 
-This is a code snippet from [dplyr](https://github.com/tidyverse/dplyr)
+代码片段来自 [dplyr](https://github.com/tidyverse/dplyr)：
 
 ```r
 
@@ -289,7 +274,7 @@ starwars |>
 make_func_call_explicit("path_to_file", use_packages = "dplyr")
 ```
 
-It will be converted to
+将被转换为：
 
 ```r
 starwars |>
@@ -297,17 +282,15 @@ starwars |>
   dplyr::select(name:mass, bmi)
 ```
 
-- `use_hexsticker()` - Paste hex sticker to README.md
+- `use_hexsticker()` — 将 Hex 贴纸粘贴到 README.md 中：
 
-<!-- -->
 ```r
-use_hexsticker("rpkgkit.logo") # Althought it doesn't exist
+use_hexsticker("rpkgkit.logo") # 尽管该文件并不存在
 
 # rpkgkit <img src="rpkgkit.logo" alt="package logo" align="right" height="139"/>
 ```
 
-- `detect_lost_glue_brace()` - Find all `glue` calls that are missing a
-  closing brace in a file. Supports both `glue` and `cli` expressions.
+- `detect_lost_glue_brace()` — 查找文件中所有缺少右大括号的 `glue` 调用，同时支持 `glue` 和 `cli` 表达式：
 
 ```r
 # foo.R
@@ -332,10 +315,10 @@ detect_lost_glue_brace()
 # ✖ Found 2 lines with mismatched braces: 3 and 8
 ```
 
-- `use_zzz()` - Create `zzz.R` file in `R/` folder, with `.onLoad`, `.onAttach`, and package description
+- `use_zzz()` — 在 `R/` 目录下创建 `zzz.R` 文件，包含 `.onLoad`、`.onAttach` 及包描述信息：
 
 ```r
-# * E.g., use it in rpkgkit dev environment
+# * 例如，在 rpkgkit 开发环境下使用
 use_zzz()
 
 # #' @title Create and Maintain R Packages
@@ -371,10 +354,10 @@ use_zzz()
 # }
 ```
 
+## 致谢
 
-## Acknowledgements
+感谢以下人员与项目：
 
-We would like to thank the following people and projects:
+- [pedant](https://github.com/wurli/pedant) 包的作者 **Jacob Scott**、**Christopher T. Kenny** 和 **Sebastian Lammers** — 其代码（基于 MIT 许可）已包含在 `R/vendor-pedant.R` 中。
+- 所有报告问题、提出功能建议或帮助改进本包的贡献者与用户。
 
-- The authors of the [pedant](https://github.com/wurli/pedant) package — **Jacob Scott**, **Christopher T. Kenny**, and **Sebastian Lammers** — whose code is included (under MIT license) in `R/vendor-pedant.R`.
-- All contributors and users who have reported issues, suggested features, or helped improve the package.

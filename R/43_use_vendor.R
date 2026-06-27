@@ -84,9 +84,10 @@ use_vendor <- function(
   )
 
   # -- Step 6: Print acknowledgement snippet --
-  cli::cli_inform(
-    "{cli::col_red(cli::symbol$checkbox_off)} \
-    {.pkg Consider pasting the following statement into README.md}"
+  cli_inform_colored <- add_colors_to_cli(cli::cli_inform)
+  cli_inform_colored(
+    "{.red {(cli::symbol$checkbox_off)}} \
+    {.cyan Consider pasting the following statement into README.md}"
   )
   message("")
   message(sprintf(
