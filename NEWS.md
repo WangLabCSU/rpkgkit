@@ -2,6 +2,8 @@
 
 ## MINOR IMPROVEMENTS
 
+* make `check_pkgdown_reference()` easy to copy
+
 * Fixed lints
 
 
@@ -13,6 +15,11 @@
 
 
 # rpkgkit 0.1.0 (2026-06-25)
+
+## MINOR IMPROVEMENTS
+
+* typescript-source action update for `use_workflow_version_update()`
+
 
 ## BUG FIXES
 

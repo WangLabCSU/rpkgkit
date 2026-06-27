@@ -1,0 +1,23 @@
+{
+  "name": "@rpkgkit/version-bumper",
+  "version": "1.0.0",
+  "description": "GitHub Action for bumping R package versions",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build src/main.ts -o dist --minify --license licenses.txt",
+    "watch": "ncc build src/main.ts -o dist --watch"
+  },
+  "keywords": [],
+  "author": "Yuxi Yang",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "@actions/core": "^3.0.1",
+    "@actions/exec": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.1",
+    "@vercel/ncc": "^0.44.0",
+    "typescript": "^6.0.3"
+  }
+}

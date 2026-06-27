@@ -57,6 +57,13 @@
 ^\.positai$
 ^\.claude$
 ^index\.qmd$
+
+# GitHub Actions development files (exclude from package build)
+^inst/actions/.*/src/
+^inst/actions/.*/node_modules/
+^inst/actions/.*/package\.json$
+^inst/actions/.*/package-lock\.json$
+^inst/actions/.*/tsconfig\.json$
 ^index_files$
 ^index\.html$
 ^index\.md$

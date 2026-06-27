@@ -38,3 +38,10 @@ Rplots.pdf
 index_files/
 *index.html
 pkgdown/*_files
+# Node.js dependencies (but keep dist/)
+inst/actions/*/node_modules/
+inst/actions/*/lib/
+
+# Keep these tracked:
+# !inst/actions/*/dist/
+# !inst/actions/*/action.yml

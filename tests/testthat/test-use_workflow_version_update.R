@@ -38,8 +38,7 @@ test_that("creates workflow directory and copies template", {
   expect_true(file.exists(expected_path))
 
   lines <- readLines(expected_path, warn = FALSE)
-  expect_match(lines[1L], "rpkgkit::use_workflow_version_update", fixed = TRUE)
-  expect_match(lines[2L], "name: Update R Package Version", fixed = TRUE)
+  expect_match(lines[1L], "name: Update R Package Version", fixed = TRUE)
 })
 
 test_that("returns invisible file path", {
@@ -69,7 +68,7 @@ test_that("overwrite = TRUE replaces existing workflow file", {
   result <- use_workflow_version_update(path = tmp, overwrite = TRUE)
 
   lines <- readLines(workflow_file, warn = FALSE)
-  expect_match(lines[1L], "rpkgkit::use_workflow_version_update", fixed = TRUE)
+  expect_match(lines[1L], "name: Update R Package Version", fixed = TRUE)
   expect_equal(result, workflow_file)
 })
 
