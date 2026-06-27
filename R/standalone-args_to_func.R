@@ -1,11 +1,17 @@
 # ---
 # repo: Exceret/rpkgkit
 # file: standalone-args_to_func.R
-# last-updated: 2026-05-30
+# last-updated: 2026-06-27
 # license: https://unlicense.org
 # imports: [cli, rlang]
 # dependencies: [import-standalone-purrr]
 # ---
+#
+# ## Changelog:
+#
+# 2026-06-27:
+# * Fixed lints
+#
 
 #' @title Keep Wanted Arguments According to A Function from Dots
 #' @description
@@ -166,12 +172,14 @@ match_func_to_args <- function(
   dots_enabled = FALSE
 ) {
   # Validate args_list has proper names when non-empty
-  if (length(args_list) > 0) {
-    if (is.null(names(args_list)) || any(names(args_list) == "")) {
-      cli::cli_abort(c(
-        "x" = "`args_list` must be a named list with non-empty names for all elements when non-empty."
-      ))
-    }
+  if (
+    length(args_list) > 0 &&
+      is.null(names(args_list)) ||
+      !all(nzchar(names(args_list)))
+  ) {
+    cli::cli_abort(c(
+      "x" = "`args_list` must be a named list with non-empty names for all elements when non-empty."
+    ))
   }
 
   # Capture actual function objects
@@ -315,7 +323,7 @@ get_func_args <- function(
   }
   if (name_only) {
     arg_names <- names(args_list)
-    arg_names <- arg_names[arg_names != ""]
+    arg_names <- arg_names[nzchar(arg_names)]
 
     if (dots_expand && "..." %in% names(formals(func))) {
       arg_names <- c(arg_names, "...")

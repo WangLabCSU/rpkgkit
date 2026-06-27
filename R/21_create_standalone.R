@@ -113,11 +113,11 @@ create_standalone <- function(
     sprintf("# license: %s", standalone_head$license),
     sprintf(
       "# imports: %s",
-      paste(standalone_head$imports %||% "", collapse = ", ")
+      toString(standalone_head$imports %||% "")
     ),
     sprintf(
       "# dependency: %s",
-      paste(standalone_head$dependency %||% "", collapse = ", ")
+      toString(standalone_head$dependency %||% "")
     ),
     "# ---",
     "#",

@@ -158,7 +158,7 @@ to_style <- function(name, style) {
 
   # Step 3 -- lowercase and split into words
   words <- strsplit(tolower(name), " ")[[1L]]
-  words <- words[words != ""]
+  words <- words[nzchar(words)]
 
   if (length(words) == 0L) {
     return(name)

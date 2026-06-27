@@ -1,1 +1,1 @@
-This directory contains code from the pedant package (https://github.com/wurli/pedant), licensed under MIT.
+This directory contains license from the pedant package (https://github.com/wurli/pedant)

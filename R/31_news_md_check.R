@@ -178,25 +178,24 @@ news_md_check <- function(path = ".", strict = FALSE, verbose = TRUE) {
       }
 
       # Check for contributor attribution format (@username)
-      if (grepl("@[a-zA-Z][a-zA-Z0-9_-]*", line)) {
-        if (!grepl("\\(\\s*@[a-zA-Z][a-zA-Z0-9_-]*\\s*\\)", line)) {
-          msg <- sprintf(
-            "Line %d: Contributor mentions should be in parentheses: (@username)",
-            line_num
-          )
-          result$suggestions <- c(result$suggestions, msg)
-        }
+      if (
+        grepl("@[a-zA-Z][a-zA-Z0-9_-]*", line) &&
+          !grepl("\\(\\s*@[a-zA-Z][a-zA-Z0-9_-]*\\s*\\)", line)
+      ) {
+        msg <- sprintf(
+          "Line %d: Contributor mentions should be in parentheses: (@username)",
+          line_num
+        )
+        result$suggestions <- c(result$suggestions, msg)
       }
 
       # Check for issue/PR references
-      if (grepl("#[0-9]+", line)) {
-        if (!grepl("\\(#[0-9]+\\)", line)) {
-          msg <- sprintf(
-            "Line %d: Issue/PR references should be in parentheses: (#123)",
-            line_num
-          )
-          result$suggestions <- c(result$suggestions, msg)
-        }
+      if (grepl("#[0-9]+", line) && !grepl("\\(#[0-9]+\\)", line)) {
+        msg <- sprintf(
+          "Line %d: Issue/PR references should be in parentheses: (#123)",
+          line_num
+        )
+        result$suggestions <- c(result$suggestions, msg)
       }
     }
 
@@ -230,7 +229,7 @@ news_md_check <- function(path = ".", strict = FALSE, verbose = TRUE) {
   if (length(trailing_ws) > 0) {
     msg <- sprintf(
       "Lines with trailing whitespace: %s",
-      paste(trailing_ws, collapse = ", ")
+      toString(trailing_ws)
     )
     result$suggestions <- c(result$suggestions, msg)
   }

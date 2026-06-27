@@ -1,10 +1,16 @@
 # ---
 # repo: Exceret/rpkgkit
 # file: standalone-caller_cli.R
-# last-updated: 2026-04-16
+# last-updated: 2026-06-27
 # license: https://unlicense.org
 # imports: [cli, rlang]
 # ---
+#
+# ## Changelog:
+#
+# 2026-06-27:
+# * Fixed lints
+#
 
 #' @title Get Caller Name
 #'
@@ -70,12 +76,10 @@ add_caller_to_cli <- function(cli_func, offset = 2L) {
 
     messages <- list(...)
 
-    if (length(messages) > 0) {
-      if (is.character(messages[[1]])) {
-        # Construct the prefix: [caller]:
-        prefix <- paste0("[", caller_name, "]: ")
-        messages[[1]] <- paste0(prefix, messages[[1]])
-      }
+    if (length(messages) > 0 && is.character(messages[[1]])) {
+      # Construct the prefix: [caller]:
+      prefix <- paste0("[", caller_name, "]: ")
+      messages[[1]] <- paste0(prefix, messages[[1]])
     }
 
     do.call(cli_func, messages)

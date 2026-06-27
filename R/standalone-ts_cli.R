@@ -1,10 +1,16 @@
 # ---
 # repo: Exceret/rpkgkit
 # file: standalone-ts_cli.R
-# last-updated: 2026-05-30
+# last-updated: 2026-06-27
 # license: https://unlicense.org
 # imports: [cli]
 # ---
+#
+# ## Changelog:
+#
+# 2026-06-27:
+# * Fixed lints
+#
 
 #' @title A Decorator for Adding Timestamp to CLI Functions
 #'
@@ -49,10 +55,8 @@ add_timestamp_to_cli <- function(
   function(...) {
     messages <- list(...)
 
-    if (length(messages) > 0L) {
-      if (is.character(messages[[1L]])) {
-        messages[[1L]] <- paste0("{time_stamp()}", messages[[1L]])
-      }
+    if (length(messages) > 0L && is.character(messages[[1L]])) {
+      messages[[1L]] <- paste0("{time_stamp()}", messages[[1L]])
     }
 
     do.call(cli_func, messages)
