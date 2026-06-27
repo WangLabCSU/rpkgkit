@@ -6,6 +6,7 @@
 \usage{
 use_multilanguage_readme(
   lang = c("zh-cn", "es", "fr", "ar", "ru"),
+  color = "blue",
   ...,
   path = ".",
   overwrite = FALSE
@@ -16,6 +17,8 @@ use_multilanguage_readme(
 Defaults to the five non-English UN official languages. Codes must be
 supported by the internal name mapping (see \strong{Language Codes} below)
 or they will be used as-is for badge labels.}
+
+\item{color}{Color of badge. Defaults to \code{"blue"}}
 
 \item{...}{Not used.}
 

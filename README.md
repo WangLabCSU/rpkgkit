@@ -377,4 +377,5 @@ use_zzz()
 We would like to thank the following people and projects:
 
 - The authors of the [pedant](https://github.com/wurli/pedant) package — **Jacob Scott**, **Christopher T. Kenny**, and **Sebastian Lammers** — whose code is included (under MIT license) in `R/vendor-pedant.R`.
+- The authors of the [pkgdev](https://github.com/dieghernan/pkgdev) package &mdash; **Diego Hernangómez** &mdash; whose code is included (under MIT license) in `R/vendor-pkgdev.R`. 
 - All contributors and users who have reported issues, suggested features, or helped improve the package.

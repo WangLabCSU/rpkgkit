@@ -14,11 +14,13 @@
 #'   Defaults to the five non-English UN official languages. Codes must be
 #'   supported by the internal name mapping (see **Language Codes** below)
 #'   or they will be used as-is for badge labels.
+#'
+#' @param color Color of badge. Defaults to `"blue"`
+#' @param ... Not used.
 #' @param path Character. Path to the package root directory. Defaults to
 #'   the current working directory (`"."`).
 #' @param overwrite Logical. If `TRUE`, overwrite existing README translation
 #'   files. Defaults to `FALSE`.
-#' @param ... Not used.
 #'
 #' @section Language Codes:
 #' The following codes have built-in display name mappings:
@@ -61,6 +63,7 @@
 #' }
 use_multilanguage_readme <- function(
   lang = c("zh-cn", "es", "fr", "ar", "ru"),
+  color = "blue",
   ...,
   path = ".",
   overwrite = FALSE
@@ -149,9 +152,10 @@ use_multilanguage_readme <- function(
 
       encoded <- utils::URLencode(display_name, reserved = TRUE)
       sprintf(
-        "[![%s](https://img.shields.io/badge/README-%s-blue)](inst/translations/README.%s.md)",
+        "[![%s](https://img.shields.io/badge/README-%s-$s)](inst/translations/README.%s.md)",
         display_name,
         encoded,
+        color,
         code
       )
     },
@@ -189,6 +193,7 @@ use_multilanguage_readme <- function(
 #' @param lang Character vector of language codes (e.g. `"zh-cn"`, `"ja"`).
 #'   Defaults to `NULL`, which outputs disclaimers for **all** 19 supported
 #'   languages. Pass a single code to get one entry only.
+#' @param color Color of badge. Defaults to `"yellow"`
 #'
 #' @return Invisibly returns a named list of character vectors, where each
 #'   element contains the badge line and blockquote note for one language.

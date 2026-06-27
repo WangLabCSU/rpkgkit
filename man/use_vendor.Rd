@@ -4,17 +4,17 @@
 \alias{use_vendor}
 \title{Use a Vendor Package}
 \usage{
-use_vendor(pkg, branch = "main", ..., path = ".")
+use_vendor(pkg, ..., branch = "main", path = ".")
 }
 \arguments{
 \item{pkg}{GitHub repository specification in \code{"owner/repo"} form or a full
 GitHub URL (e.g. \code{"https://github.com/owner/repo"}).}
 
-\item{branch}{Github repository branch name.  Defaults to \code{"main"}}
-
 \item{...}{File paths within the vendor package to copy into your package
 and append to the vendor R file. If empty (default), only the
 infrastructure is set up.}
+
+\item{branch}{Github repository branch name.  Defaults to \code{"main"}}
 
 \item{path}{Path to the target package directory. Defaults to \code{"."}.}
 }

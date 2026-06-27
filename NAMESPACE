@@ -2,7 +2,9 @@
 
 export(add_changelog_in_standalone)
 export(add_double_colons)
+export(add_global_gitgnore)
 export(air_format)
+export(badge_translated_by_ai)
 export(browse_standalone)
 export(check_pkgdown_reference)
 export(create_standalone)

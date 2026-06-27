@@ -3,12 +3,15 @@ Title: Create and Maintain R Packages
 Version: 0.1.0
 Authors@R: c(
     person("Yuxi", "Yang", , "15364051195@163.com", role = c("aut", "cre")),
-    person("Jacob", "Scott", role = c("aut", "cph"), 
+    person("Jacob", "Scott", role = c("aut", "cph"),
            comment = "Author of the included pedant code (https://github.com/wurli/pedant)"),
-    person("Christopher T.", "Kenny", role = c("ctb", "cph"), 
+    person("Christopher T.", "Kenny", role = c("ctb", "cph"),
            comment = "Contributor to the included pedant code"),
-    person("Sebastian", "Lammers", role = c("ctb", "cph"), 
-           comment = "Contributor to the included pedant code"))
+    person("Sebastian", "Lammers", role = c("ctb", "cph"),
+           comment = "Contributor to the included pedant code"),
+    person("Diego", "Hernangómez", , "diego.hernangomezherrero@gmail.com", role = c("aut", "cph"),
+           comment = "Author of the included pkgdev code (https://github.com/dieghernan/pkgdev)")
+  )
 Description: Utilities for R package development including NEWS.md
     management, standalone file creation, and code formatting. Supports popular
     development workflows and integrates with 'usethis' and 'RStudio'. Includes
@@ -44,4 +47,4 @@ Imports:
     cli,
     rlang,
     rstudioapi
-Copyright: Jacob Scott, Christopher T. Kenny, and Sebastian Lammers (for the pedant code included in R/vendor-pedant.R)
+Copyright: Jacob Scott, Christopher T. Kenny, and Sebastian Lammers (for the pedant code included in R/vendor-pedant.R); Diego Hernangómez (for the pkgdev code included in R/vendor-pkgdev.R)
