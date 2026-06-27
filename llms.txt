@@ -1,0 +1,480 @@
+# rpkgkit
+
+The goal of rpkgkit is to provide useful functions for R package
+development.
+
+## Installation
+
+From CRAN:
+
+``` r
+
+install.packages("rpkgkit")
+```
+
+From github:
+
+``` r
+
+if (!requireNamespace("pak")) {
+  install.packages(
+    "pak",
+    repos = sprintf(
+      "https://r-lib.github.io/p/pak/stable/%s/%s/%s",
+      .Platform$pkgType,
+      R.Version()$os,
+      R.Version()$arch
+    )
+  )
+}
+pak::pkg_install("WangLabCSU/rpkgkit")
+```
+
+## Features
+
+All functions can detect active file contexts in RStudio and Positron,
+so generally file path can be omitted.
+
+### Available Standalone Scripts
+
+Use `usethis::use_standalone("WangLabCSU/rpkgkit", "<name>")` to import:
+
+- args_to_func.R: matching arguments to function calls:
+
+``` r
+
+f1 <- function(a, b) a + b
+f2 <- function(x, y, ...) x * y
+f3 <- function(p, q) p - q
+
+args <- list(a = 1, b = 2)
+
+# Strict matching (default): returns f1 only
+match_func_to_args(args, f1, f2, f3)
+```
+
+``` r
+
+args <- list(a = 1, b = 2, x = 3, y = 4)
+foo <- function(x , y = 1){x + y}
+filter_args_for_func(args, foo) # Keeps arguments for foo
+# $x
+# [1] 3
+
+# $y
+# [1] 4
+```
+
+- caller_cli.R: show where the cli function is called from
+
+``` r
+
+decorated <- add_caller_to_cli(cli::cli_alert_info)
+foo1 <- \() {
+  print("I' m in foo1")
+  decorated("<- where is this called from?")
+}
+foo2 <- \() {
+  print("I' m in foo2")
+  foo1()
+}
+bar <- function() {
+  print("I' m in bar")
+  foo2()
+}
+bar()
+# [1] "I' m in bar"
+# [1] "I' m in foo2"
+# [1] "I' m in foo1"
+# ℹ [foo1()]: <- where is this called from?
+```
+
+- colorful_cli.R: Easier color calling in one cli function
+
+``` r
+
+color_cli <- create_colorful_cli_env()
+color_cli$cli_alert_danger("{.red This is a red message}")
+color_cli$cli_alert_info("{.blue This is a blue message}")
+color_cli$cli_alert_info("{.orange This is an orange message}")
+# cyan, green, magenta, yellow, purple, etc
+
+color_cli2 <- create_colorful_cli_env(cli_theme = generate_color_theme()) # more color but slower
+color_cli2$cli_alert_success(
+  "{.violetred3 R}{.orange a}{.yellow i}{.green n}{.cyan b}{.blue o}{.purple w}"
+)
+```
+
+- match_arg.R: partial matching of arguments to function calls, like
+  `match.arg`,
+  [`rlang::arg_match`](https://rlang.r-lib.org/reference/arg_match.html)
+
+- ts_cli.R: timestamp cli function
+
+``` r
+
+ts_cli <- create_ts_cli_env()
+ts_cli$cli_alert_info("Hello, world!")
+# ℹ [2026/05/30 22:45:42] Hello, world!
+```
+
+### Standalone File Management
+
+- [`inquire_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/inquire_standalone.md) -
+  List standalone files available in a GitHub repository’s `R/`
+  directory
+
+- [`browse_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/browse_standalone.md) -
+  Look up all available standalone files in GitHub repositories
+
+``` r
+
+inquire_standalone("r-lib/rlang")
+# A tibble: 13 × 9
+#    name                         path                           sha                                       size url                               html_url git_url download_url type
+#    <chr>                        <chr>                          <chr>                                    <int> <chr>                             <chr>    <chr>   <chr>        <chr>
+#  1 standalone-cli.R             R/standalone-cli.R             14c6006f721028d2da0ab1654afd49e426e745c6 18672 https://api.github.com/repos/r-l… https:/… https:… https://raw… file
+#  2 standalone-downstream-deps.R R/standalone-downstream-deps.R 09b7700582bf710498d2ca5652662669655e5600  9213 https://api.github.com/repos/r-l… https:/… https:… https://raw… file
+#  3 standalone-lazyeval.R        R/standalone-lazyeval.R        50ced0ddc07e4fffccbec96ef34e30a82cfbb075  2313 https://api.github.com/repos/r-l… https:/… https:… https://raw… file
+#  4 standalone-lifecycle.R       R/standalone-lifecycle.R       70f03184aa89aa7e801b2fc6b8a12dd3a0e61700  6411 https://api.github.com/repos/r-l… https:/… https:… https://raw… file
+#  5 standalone-linked-version.R  R/standalone-linked-version.R  9ab21931a161722b6b837fa3cd40dd0a65b88551  2167 https://api.github.com/repos/r-l… https:/… https:… https://raw… file
+#  6 standalone-obj-type.R        R/standalone-obj-type.R        e9c33c8e34f2a194c2bd71f0126fc0bdaa974e61  7175 https://api.github.com/repos/r-l… https:/… https:… https://raw… file
+#  7 standalone-purrr.R           R/standalone-purrr.R           0c1d7677258aada8464e6c3f48fb70a062492a89  5501 https://api.github.com/repos/r-l… https:/… https:… https://raw… file
+#  8 standalone-rlang.R           R/standalone-rlang.R           4da3655d2d1c86535616c53cd5dab421e1e0cf6b  1807 https://api.github.com/repos/r-l… https:/… https:… https://raw… file
+#  9 standalone-s3-register.R     R/standalone-s3-register.R     05f0a2680fcbbdda64524ffa5481940671faac83  6056 https://api.github.com/repos/r-l… https:/… https:… https://raw… file
+# 10 standalone-sizes.R           R/standalone-sizes.R           03ee9f7a8ddddd6132a3ebf703e0a9aa3ccf30d5  3069 https://api.github.com/repos/r-l… https:/… https:… https://raw… file
+# 11 standalone-types-check.R     R/standalone-types-check.R     42c756a299cea38af775b587a1fe440de2afed40  6843 https://api.github.com/repos/r-l… https:/… https:… https://raw… file
+# 12 standalone-vctrs.R           R/standalone-vctrs.R           a78927f6d65fd769c61e2c132dea05d89a8b353a 14292 https://api.github.com/repos/r-l… https:/… https:… https://raw… file
+# 13 standalone-zeallot.R         R/standalone-zeallot.R         5e9d59a03e1d6df18ab4921e7d828750d6a41d6f   843 https://api.github.com/repos/r-l… https:/… https:… https://raw… file
+
+browse_standalone()
+# # A tibble: 184 × 9
+#    repo                   name                             path                               sha                 url   html_url git_url repo_url repo_description
+#    <chr>                  <chr>                            <chr>                              <chr>               <chr> <chr>    <chr>   <chr>    <chr>           
+#  1 tidymodels/parsnip     standalone-survival.R            R/standalone-survival.R            3f3809cc6019326a7f… http… https:/… https:… https:/… A tidy unified …
+#  2 prioritizr/prioritizr  standalone-cli.R                 R/standalone-cli.R                 00453fe89a55497eba… http… https:/… https:… https:/… Systematic cons…
+#  3 r-lib/rlang            standalone-vctrs.R               R/standalone-vctrs.R               a78927f6d65fd769c6… http… https:/… https:… https:/… Low-level API f…
+#  4 cran/prioritizr        standalone-all_columns_inherit.R R/standalone-all_columns_inherit.R 2c08f0fdc2e3749b46… http… https:/… https:… https:/… :exclamation: T…
+#  5 ai4ci/tidyabc          standalone-distributions.R       R/standalone-distributions.R       249a19d425c208db51… http… https:/… https:… https:/… R framework for…
+#  6 terminological/ggrrr   standalone-empirical.R           R/standalone-empirical.R           4bcde2d56ddc24ae9d… http… https:/… https:… https:/… Data presentati…
+#  7 WangLabCSU/SigBridgeR  standalone-get_var_value.R       R/standalone-get_var_value.R       6331dae57b7e759122… http… https:/… https:… https:/… SigBridgeR: Int…
+#  8 willgearty/deeptime    standalone-obj-type.R            R/standalone-obj-type.R            106accce773ab162cd… http… https:/… https:… https:/… An R package th…
+#  9 ddsjoberg/standalone   standalone-check_pkg_installed.R R/standalone-check_pkg_installed.R 571303b0f4e689ab4d… http… https:/… https:… https:/… Standalone scri…
+# 10 elipousson/standaloner standalone-extra-checks.R        R/standalone-extra-checks.R        75bda8f557cfcae29e… http… https:/… https:… https:/… Set or get a to…
+# # ℹ 174 more rows
+```
+
+- [`create_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/create_standalone.md) -
+  Create standalone utility files in your package
+
+``` r
+
+create_standalone("foo")
+# ✔ Created standalone file: /data/home/yyx/Project/rpkgkit/R/standalone-.R
+# ☐ File opened in editor.
+```
+
+In `R/standalone-foo.R`
+
+``` r
+
+# ---
+# repo: WangLabCSU/rpkgkit
+# file: standalone-foo.R
+# last-updated: 2026-06-02
+# license: https://unlicense.org
+# imports: []
+# ---
+# 
+# This file provides...
+#
+# nocov start
+```
+
+- [`update_time_in_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/update_time_in_standalone.md) -
+  Update `last-updated` field in standalone files
+
+``` r
+
+update_time_in_standalone()
+
+# ---
+# repo: WangLabCSU/rpkgkit
+# file: standalone-foo.R
+# last-updated: 2026-06-02
+# license: https://unlicense.org
+# imports: []
+# ---
+```
+
+- [`add_changelog_in_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/add_changelog_in_standalone.md) -
+  Add changelog entries to standalone files
+
+``` r
+
+add_changelog_in_standalone("R/standalone-foo.R", "Added foo function")
+# ✔ Added changelog entry for "2026-06-02" in 1 file(s).
+
+# ---
+# repo: WangLabCSU/rpkgkit
+# file: standalone-foo.R
+# last-updated: 2026-06-02
+# license: https://unlicense.org
+# imports: []
+# ---
+#
+# Changelog:
+#
+# 2026-06-02:
+# Added foo function
+```
+
+### NEWS.md Management
+
+- [`news_md_add_entry()`](https://wanglabcsu.github.io/rpkgkit/reference/news_md.md) -
+  Add new entries to NEWS.md following CRAN guidelines
+
+``` r
+news_md_add_entry("Added foo function")
+
+# rpkgkit 0.0.4 (2026-06-02)
+
+## NEW FEATURES
+
+* Added foo function
+```
+
+- [`news_md_check()`](https://wanglabcsu.github.io/rpkgkit/reference/news_md.md) -
+  Validate NEWS.md format for CRAN compliance
+
+``` r
+
+news_md_check()
+# ℹ Checking NEWS.md with 22 lines
+# ✔ NEWS.md passed all required checks
+# ℹ 4 suggestion(s) for improvement
+# $valid
+# [1] TRUE
+
+# $errors
+# character(0)
+
+# $warnings
+# character(0)
+
+# $suggestions
+# [1] "Line 10: Bullet points should start with '* ' followed by capital letter"
+# [2] "Line 12: Bullet points should start with '* ' followed by capital letter"
+# [3] "Line 14: Bullet points should start with '* ' followed by capital letter"
+# [4] "Line 14: Longer entries should end with punctuation"
+```
+
+- [`news_md_show()`](https://wanglabcsu.github.io/rpkgkit/reference/news_md.md) -
+  Display NEWS.md content of a package in console with color
+
+### Other Utilities
+
+- [`make_func_call_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_call_explicit.md) -
+  Make function calls explicit by adding package prefixes
+
+This is a code snippet from [dplyr](https://github.com/tidyverse/dplyr)
+
+``` r
+
+
+starwars |>
+  mutate(name, bmi = mass / ((height / 100)^2)) |>
+  select(name:mass, bmi)
+
+make_func_call_explicit("path_to_file", use_packages = "dplyr")
+```
+
+It will be converted to
+
+``` r
+
+starwars |>
+  dplyr::mutate(name, bmi = mass / ((height / 100)^2)) |>
+  dplyr::select(name:mass, bmi)
+```
+
+- [`use_hexsticker()`](https://wanglabcsu.github.io/rpkgkit/reference/use_hexsticker.md) -
+  Paste hex sticker to README.md
+
+``` r
+
+use_hexsticker("rpkgkit.logo") # Althought it doesn't exist
+
+# rpkgkit <img src="rpkgkit.logo" alt="package logo" align="right" height="139"/>
+```
+
+- [`detect_lost_glue_brace()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.md) -
+  Find all `glue` calls that are missing a closing brace in a file.
+  Supports both `glue` and `cli` expressions.
+
+``` r
+
+# foo.R
+name <- "world"
+msg <- glue::glue("Hello, {name!")
+
+library(cli)
+warning <- ""
+bar <- cli::col_red(cli::cli_alert_warning(
+  "{.field warning}}: This string is missing {.val 1} brace{?s}"
+))
+```
+
+``` r
+
+detect_lost_glue_brace()
+
+# msg <- glue::glue("Hello, {name!")
+#                           ^^^^^^ 
+
+#   "{.field warning}}: This string is missing {.val 1} brace{?s}"
+#    ^^^^^^^^^^^^^^^^^ 
+# ✖ Found 2 lines with mismatched braces: 3 and 8
+```
+
+- [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md) -
+  Create `zzz.R` file in `R/` folder, with `.onLoad`, `.onAttach`, and
+  package description
+
+``` r
+
+# * E.g., use it in rpkgkit dev environment
+use_zzz()
+
+# #' @title Create and Maintain R Packages
+# #'
+# #' @description Utilities for R package development including NEWS.md
+# #' management, standalone file creation, and code formatting. Supports popular
+# #' development workflows and integrates with 'usethis' and 'RStudio'. Includes
+# #' helper functions for renaming functions and detecting common coding errors.
+# #'
+# #' @section License:
+# #' MIT + file LICENSE
+# #'
+# #' @docType package
+# #' @name rpkgkit-package
+# #' @aliases rpkgkit
+# #' @keywords internal
+# #'
+# "_PACKAGE"
+
+
+# .onAttach <- function(libname, pkgname) {
+#   pkg_version <- utils::packageVersion(pkgname)
+
+#   msg <- cli::cli_fmt(cli::cli_alert_success(
+#     "{.pkg {pkgname}} v{pkg_version} loaded"
+#   ))
+#   packageStartupMessage(msg)
+#   invisible()
+# }
+
+# .onLoad <- function(libname, pkgname) {
+#   invisible()
+# }
+```
+
+## Acknowledgements
+
+We would like to thank the following people and projects:
+
+- The authors of the [pedant](https://github.com/wurli/pedant) package —
+  **Jacob Scott**, **Christopher T. Kenny**, and **Sebastian Lammers** —
+  whose code is included (under MIT license) in `R/vendor-pedant.R`.
+- The authors of the [pkgdev](https://github.com/dieghernan/pkgdev)
+  package — **Diego Hernangómez** — whose code is included (under MIT
+  license) in `R/vendor-pkgdev.R`.
+- All contributors and users who have reported issues, suggested
+  features, or helped improve the package.
+
+# Package index
+
+## Functions
+
+The following functions help you to create and maintain an R package.
+
+- [`add_changelog_in_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/add_changelog_in_standalone.md)
+  : Add or update a changelog entry in a standalone R file
+
+- [`add_double_colons()`](https://wanglabcsu.github.io/rpkgkit/reference/add_double_colons.md)
+  : Make function calls explicit
+
+- [`add_global_gitgnore()`](https://wanglabcsu.github.io/rpkgkit/reference/add_global_gitgnore.md)
+  :
+
+  Add `.gitignore` to package
+
+- [`add_global_rbuildignore()`](https://wanglabcsu.github.io/rpkgkit/reference/add_global_rbuildignore.md)
+  : Add global .Rbuildignore patterns
+
+- [`air_format()`](https://wanglabcsu.github.io/rpkgkit/reference/air_format.md)
+  : Format R code using air
+
+- [`badge_translated_by_ai()`](https://wanglabcsu.github.io/rpkgkit/reference/badge_translated_by_ai.md)
+  : Generate AI Translation Disclaimer Badge
+
+- [`browse_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/browse_standalone.md)
+  : Browse Standalone R Files Across GitHub
+
+- [`check_pkgdown_reference()`](https://wanglabcsu.github.io/rpkgkit/reference/check_pkgdown_reference.md)
+  : Check that all exported functions are listed in pkgdown reference
+
+- [`create_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/create_standalone.md)
+  :
+
+  Creates a new standalone R script with YAML metadata header. If `path`
+  is an R package, the file is created in the `R/` subdirectory.
+
+- [`is_dev_context()`](https://wanglabcsu.github.io/rpkgkit/reference/current_packages.md)
+  [`imported_functions()`](https://wanglabcsu.github.io/rpkgkit/reference/current_packages.md)
+  [`current_packages()`](https://wanglabcsu.github.io/rpkgkit/reference/current_packages.md)
+  : Get packages from the current context
+
+- [`detect_lost_glue_brace()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.md)
+  :
+
+  Detect Lost Glue Brace in `glue` and `cli` Expressions
+
+- [`flir_fix()`](https://wanglabcsu.github.io/rpkgkit/reference/flir_fix.md)
+  : Fix R code or package using flir
+
+- [`inquire_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/inquire_standalone.md)
+  : Inquire Standalone Files from a GitHub Repository
+
+- [`make_func_call_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_call_explicit.md)
+  : Make Function Calls Explicit
+
+- [`news_md_check()`](https://wanglabcsu.github.io/rpkgkit/reference/news_md.md)
+  [`news_md_show()`](https://wanglabcsu.github.io/rpkgkit/reference/news_md.md)
+  [`news_md_add_entry()`](https://wanglabcsu.github.io/rpkgkit/reference/news_md.md)
+  : Manage NEWS.md file for R packages
+
+- [`rename_func()`](https://wanglabcsu.github.io/rpkgkit/reference/rename_func.md)
+  : Rename Function Definitions in an R File
+
+- [`render_rmd()`](https://wanglabcsu.github.io/rpkgkit/reference/render_rmd.md)
+  : Render an R Markdown or R document to Markdown format
+
+- [`update_time_in_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/update_time_in_standalone.md)
+  : Update the last-updated field in standalone R files
+
+- [`use_hexsticker()`](https://wanglabcsu.github.io/rpkgkit/reference/use_hexsticker.md)
+  : Use Hex Sticker in README
+
+- [`use_multilanguage_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/use_multilanguage_readme.md)
+  : Create Multilingual README Files
+
+- [`use_vendor()`](https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.md)
+  : Use a Vendor Package
+
+- [`use_workflow_version_update()`](https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_version_update.md)
+  : Create a GitHub Actions workflow to auto-update R package version
+
+- [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
+  : Create a zzz.R file from a template
+
