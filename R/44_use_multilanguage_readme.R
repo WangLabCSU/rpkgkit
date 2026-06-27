@@ -152,7 +152,7 @@ use_multilanguage_readme <- function(
 
       encoded <- utils::URLencode(display_name, reserved = TRUE)
       sprintf(
-        "[![%s](https://img.shields.io/badge/README-%s-$s)](inst/translations/README.%s.md)",
+        "[![%s](https://img.shields.io/badge/README-%s-%s)](inst/translations/README.%s.md)",
         display_name,
         encoded,
         color,
@@ -163,7 +163,7 @@ use_multilanguage_readme <- function(
   )
 
   cli::cli_alert_success(
-    "v" = "Created {length(created_files)} README translation file(s) in {.path inst/translations}.",
+    "Created {length(created_files)} README translation file(s) in {.path inst/translations}."
   )
   cli_inform_colored <- add_colors_to_cli(cli::cli_inform)
   cli_inform_colored(
@@ -269,7 +269,7 @@ badge_translated_by_ai <- function(lang = "en", color = "yellow") {
   )
   message("")
 
-  output <- vector(mode = "list", length = length(lang))
+  output <- list()
   for (code in lang) {
     display_name <- lang_names[code]
     if (is.na(display_name)) {
