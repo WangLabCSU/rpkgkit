@@ -1,3 +1,17 @@
+# rpkgkit 0.1.1 (2026-06-27)
+
+## MINOR IMPROVEMENTS
+
+* Fixed lints
+
+
+## NEW FEATURES
+
+* Imported `add_global_gitignore` from pkgdev, under license MIT
+
+* Added `use_vendor()`,`use_multilanguage_readme()`
+
+
 # rpkgkit 0.1.0 (2026-06-25)
 
 ## BUG FIXES

@@ -71,7 +71,7 @@ check_pkgdown_reference <- function(pkg = ".") {
   )
 
   for (func in missing) {
-    cli::cli_ul("{.fun {func}}")
+    cli::cli_inform("- {.pkg {func}}")
   }
 
   invisible(missing)

@@ -6,6 +6,10 @@
 \usage{
 add_global_gitgnore(pkg = ".")
 }
+\arguments{
+\item{pkg}{The package to add the \code{.gitignore} file to. Defaults to the
+current working directory.}
+}
 \value{
 Invisible, and writes a global \code{.gitignore} file
 }

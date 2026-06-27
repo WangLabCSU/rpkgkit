@@ -2,29 +2,56 @@ url: ~
 template:
   bootstrap: 5
 
+navbar:
+  structure:
+    left:
+      - intro
+      - reference
+      - articles
+      - tutorials
+      - news
+    right:
+      - search
+      - github
+      - lightswitch
+  components:
+    reference:
+      text: Reference
+      href: reference/index.html
+    search:
+      search: []
+    news:
+      text: Changelog
+      href: news/index.html
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/WangLabCSU/rpkgkit/
+      aria-label: GitHub
+
 reference:
   - title: Functions
     desc: |
       The following functions help you to create and maintain an R package.
     contents:
-    - add_changelog_in_standalone
-    - browse_standalone
-    - air_format
-    - check_pkgdown_reference
-    - create_standalone
-    - flir_fix
-    - inquire_standalone
-    - make_func_call_explicit
-    - news_md_add_entry
-    - news_md_check
-    - news_md_show
-    - render_rmd
-    - update_time_in_standalone
-    - use_hexsticker
-    - detect_lost_glue_brace
-    - rename_func
-    - add_double_colons()
-    - current_packages()
-    - imported_functions()
-    - is_dev_context()
-    - use_workflow_version_update()
+      - add_changelog_in_standalone
+      - add_double_colons
+      - add_global_gitgnore
+      - air_format
+      - badge_translated_by_ai
+      - browse_standalone
+      - check_pkgdown_reference
+      - create_standalone
+      - is_dev_context
+      - detect_lost_glue_brace
+      - flir_fix
+      - inquire_standalone
+      - make_func_call_explicit
+      - news_md
+      - rename_func
+      - render_rmd
+      - update_time_in_standalone
+      - use_hexsticker
+      - use_multilanguage_readme
+      - use_vendor
+      - use_workflow_version_update
+      - use_zzz

@@ -18,7 +18,8 @@
 #' Adds a global `.gitgnore` file to the package. File based on default
 #' `.gitignore` provided by GitHub.
 #'
-#' @inheritParams update_docs
+#' @param pkg The package to add the `.gitignore` file to. Defaults to the
+#' current working directory.
 #'
 #' @export
 #'
