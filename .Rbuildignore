@@ -30,7 +30,6 @@
 ^\.vscode$
 ^CRAN-SUBMISSION$
 ^tmp\.R$
-^43_use_vendor\.R
 ^revdep$
 ^codemeta\.json$
 ^CITATION\.cff$
@@ -67,3 +66,5 @@
 ^index_files$
 ^index\.html$
 ^index\.md$
+^\.codebuddy/.*
+\.codebuddy$

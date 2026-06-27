@@ -1,6 +1,14 @@
-url: ~
+url: https://wanglabcsu.github.io/rpkgkit/
 template:
   bootstrap: 5
+  light-switch: true
+
+title: rpkgkit
+description: >-
+  Utilities for R package development including NEWS.md
+    management, standalone file creation, and code formatting. Supports popular
+    development workflows and integrates with 'usethis' and 'RStudio'. Includes
+    helper functions for renaming functions and detecting common coding errors.
 
 navbar:
   structure:
@@ -36,6 +44,7 @@ reference:
       - add_changelog_in_standalone
       - add_double_colons
       - add_global_gitgnore
+      - add_global_rbuildignore
       - air_format
       - badge_translated_by_ai
       - browse_standalone

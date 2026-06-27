@@ -11,6 +11,8 @@
 
 * Imported `add_global_gitignore` from pkgdev, under license MIT
 
+* Added `add_global_rbuildignore()` to supplement `.Rbuildignore` with common build-exclusion patterns
+
 * Added `use_vendor()`,`use_multilanguage_readme()`
 
 
