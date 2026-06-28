@@ -272,10 +272,12 @@ news_md_check()
 - [`news_md_show()`](https://wanglabcsu.github.io/rpkgkit/reference/news_md.md) -
   Display NEWS.md content of a package in console with color
 
-### Other Utilities
+### R Function Transformation
 
 - [`make_func_call_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_call_explicit.md) -
   Make function calls explicit by adding package prefixes
+- [`package_func_call_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_call_explicit.md) -
+  Make function calls explicit by adding package prefixes in a package
 
 This is a code snippet from [dplyr](https://github.com/tidyverse/dplyr)
 
@@ -298,18 +300,11 @@ starwars |>
   dplyr::select(name:mass, bmi)
 ```
 
-- [`use_hexsticker()`](https://wanglabcsu.github.io/rpkgkit/reference/use_hexsticker.md) -
-  Paste hex sticker to README.md
-
-``` r
-
-use_hexsticker("rpkgkit.logo") # Althought it doesn't exist
-
-# rpkgkit <img src="rpkgkit.logo" alt="package logo" align="right" height="139"/>
-```
-
 - [`detect_lost_glue_brace()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.md) -
   Find all `glue` calls that are missing a closing brace in a file.
+  Supports both `glue` and `cli` expressions.
+- [`package_lost_glue_brace()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.md) -
+  Find all `glue` calls that are missing a closing brace in a package.
   Supports both `glue` and `cli` expressions.
 
 ``` r
@@ -335,6 +330,79 @@ detect_lost_glue_brace()
 #   "{.field warning}}: This string is missing {.val 1} brace{?s}"
 #    ^^^^^^^^^^^^^^^^^ 
 # ✖ Found 2 lines with mismatched braces: 3 and 8
+```
+
+- [`make_func_arg_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_arg_explicit.md) -
+  Make function arguments are passed with explicit parameter names
+- [`package_func_arg_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_arg_explicit.md) -
+  Make function arguments are passed with explicit parameter names in a
+  package
+
+``` r
+
+tf <- tempfile(fileext = ".R")
+writeLines("vapply(1:9, function(x) x*2, numeric(1))", tf)
+make_func_arg_explicit(tf)
+# ✔ Made function arguments explicit in /tmp/RtmpOr1Iz0/file15b76c2120b264.R
+
+cat(readLines(tf), sep = "\n")
+# vapply(X = 1:9, FUN = function(x) x * 2, FUN.VALUE = numeric(length = 1))
+```
+
+- [`rename_func()`](https://wanglabcsu.github.io/rpkgkit/reference/rename_func.md) -
+  Rename functions in a file with specific style
+
+``` r
+
+tf <- tempfile(fileext = ".R")
+writeLines("this_is_a_function <- function(){message('Hello, world')}", tf)
+
+rename_func(
+  tf,
+  style = "camelCase"
+)
+# ✔ Renamed 1 function to "camelCase" style in /tmp/RtmpOr1Iz0/file15b76c8de7e51.R
+
+cat(readLines(tf), sep = "\n")
+# thisIsAFunction <- function(){message('Hello, world')}
+```
+
+- [`detect_print_and_cat()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_print_and_cat.md) -
+  Detect [`print()`](https://rdrr.io/r/base/print.html) and
+  [`cat()`](https://rdrr.io/r/base/cat.html) calls in a file
+- [`package_print_and_cat()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_print_and_cat.md) -
+  Detect [`print()`](https://rdrr.io/r/base/print.html) and
+  [`cat()`](https://rdrr.io/r/base/cat.html) calls in a package
+
+[`print()`](https://rdrr.io/r/base/print.html) and
+[`cat()`](https://rdrr.io/r/base/cat.html) are not allowed due to CRAN
+policy, so we need to fix them with
+[`message()`](https://rdrr.io/r/base/message.html)
+
+``` r
+
+tf <- tempfile(fileext = ".R")
+writeLines("print('Hello, world')", tf)
+detect_print_and_cat(tf)
+# print('Hello, world')
+# ^^^^^^
+# ✖ Found 1 unsupported call on line 
+# 1.
+detect_print_and_cat(tf, fix = TRUE)
+cat(readLines(tf), sep = "\n")
+# message('Hello, world')
+```
+
+### R Package Maintenance
+
+- [`use_hexsticker()`](https://wanglabcsu.github.io/rpkgkit/reference/use_hexsticker.md) -
+  Paste hex sticker to README.md
+
+``` r
+
+use_hexsticker("rpkgkit.logo") # Althought it doesn't exist
+
+# rpkgkit <img src="rpkgkit.logo" alt="package logo" align="right" height="139"/>
 ```
 
 - [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md) -
@@ -377,6 +445,55 @@ use_zzz()
 # .onLoad <- function(libname, pkgname) {
 #   invisible()
 # }
+```
+
+- [`check_pkgdown_reference()`](https://wanglabcsu.github.io/rpkgkit/reference/check_pkgdown_reference.md) -
+  Check if all exported function are referenced in `_pkgdown.yml`
+
+``` r
+
+check_pkgdown_reference()
+# ✖ 9 exported functions missing from pkgdown reference:
+# - current_packages
+# - detect_lost_glue_brace
+# - detect_print_and_cat
+# - imported_functions
+# - make_func_arg_explicit
+# - make_func_call_explicit
+# - news_md_add_entry
+# - news_md_check
+# - news_md_show
+```
+
+- [`use_vendor()`](https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.md) -
+  Reference a permissively-licensed R package from GitHub for inclusion
+  in your own R package. Make it easy to import github R package under
+  CRAN policy.
+
+License, copyright and declaration are automatically generated in
+`DESCRIPTION`, `R/vendor-*.R` and `inst/vendor/`.
+
+``` r
+
+dir <- tempdir()
+usethis::create_package(path = dir)
+use_vendor(pkg = "WangLabCSU/rpkgkit", "43_use_vendor.R", branch = "main", path = dir)
+# ℹ Fetching repository information for WangLabCSU/rpkgkit...
+# ✔ Vendor package uses MIT license.
+# ✔ Created directory /tmp/RtmpOr1Iz0/inst/vendor/rpkgkit.
+# ✔ Copied LICENSE.
+# ✔ Copied LICENSE.md.
+# ✔ Created inst/vendor/rpkgkit/README.md.
+# ✔ Created /tmp/RtmpOr1Iz0//R/vendor-rpkgkit.R.
+# ✔ Added rpkgkit authors to Authors@R.
+# ✔ Updated DESCRIPTION.
+# ☐ Consider pasting the following statement into README.md
+
+# ## Acknowledgements
+
+# We would like to thank the following people and projects:
+
+# - The authors of the [rpkgkit](https://github.com/WangLabCSU/rpkgkit) package &mdash; **Yuxi Yang, Jacob Scott, Christopher T. Kenny, Sebastian Lammers and Diego Hernangómez** &mdash; whose code is included (under MIT license) in `R/vendor-rpkgkit.R`.
 ```
 
 ## Acknowledgements

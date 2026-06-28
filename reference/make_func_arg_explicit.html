@@ -31,7 +31,7 @@ repeat, {, (, function) are not transformed."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -133,7 +133,7 @@ available, the currently active document is used automatically.</p>
 <span class="r-in"><span><span class="va">tf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".R"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="st">"vapply(1:9, function(x) x*2, numeric(1))"</span>, <span class="va">tf</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">make_func_arg_explicit</span><span class="op">(</span><span class="va">tf</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Made function arguments explicit in <span style="color: #0000BB;">/tmp/RtmpzoaY8y/file1a0c2812870.R</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Made function arguments explicit in <span style="color: #0000BB;">/tmp/RtmpFu9fmT/file1a355de2cc9c.R</span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">tf</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> vapply(X = 1:9, FUN = function(x) x * 2, FUN.VALUE = numeric(length = 1))</span>
 <span class="r-in"><span><span class="co"># vapply(X = 1:9, FUN = function(x) x*2, FUN.VALUE = numeric(1))</span></span></span>
