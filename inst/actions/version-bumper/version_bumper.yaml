@@ -51,11 +51,11 @@ jobs:
         id: version_bump
         uses: ./.github/actions/version-bumper
         with:
-          version_type: ${{ github.event.inputs.version_type || \'patch\' }}
+          version_type: ${{ github.event.inputs.version_type || 'patch' }}
           custom_version: ${{ github.event.inputs.custom_version }}
 
       - name: Update README badges
-        if: steps.version_bump.outputs.bumped == \'true\'
+        if: steps.version_bump.outputs.bumped == 'true'
         run: |
           NEW_VER="${{ steps.version_bump.outputs.new_version }}"
           for file in README.md README.Rmd; do
@@ -66,7 +66,7 @@ jobs:
           done
 
       - name: Commit and tag
-        if: steps.version_bump.outputs.bumped == \'true\'
+        if: steps.version_bump.outputs.bumped == 'true'
         run: |
           git add DESCRIPTION README.md README.Rmd 2>/dev/null || true
 

@@ -10,6 +10,8 @@
 #'
 #' @param path A character string specifying the path to the R file to inspect.
 #'   If `NULL` and RStudio is available, the currently active document path is used.
+#' @param test_included Whether to include test (`test/testthat/*`) files in the check.
+#' @param ... unused
 #'
 #' @return Invisibly returns `TRUE` if all expressions are balanced, `FALSE`
 #'   otherwise. Side-effect messages are emitted via [cli].
@@ -22,7 +24,8 @@
 #' }
 #'
 #' @export
-detect_lost_glue_brace <- function(path = NULL) {
+detect_lost_glue_brace <- function(path = NULL, ...) {
+  rlang::check_dots_empty0()
   path <- path %||% rstudioapi::getActiveDocumentContext()$path
   lines <- readLines(path, warn = FALSE)
   text <- paste(lines, collapse = "\n")
