@@ -10,7 +10,9 @@ problematic region.
 ## Usage
 
 ``` r
-detect_lost_glue_brace(path = NULL)
+package_lost_glue_brace(path = ".", test_included = TRUE, ...)
+
+detect_lost_glue_brace(path = NULL, ...)
 ```
 
 ## Arguments
@@ -21,11 +23,24 @@ detect_lost_glue_brace(path = NULL)
   `NULL` and RStudio is available, the currently active document path is
   used.
 
+- test_included:
+
+  Whether to include test (`test/testthat/*`) files in the check.
+
+- ...:
+
+  unused
+
 ## Value
 
 Invisibly returns `TRUE` if all expressions are balanced, `FALSE`
 otherwise. Side-effect messages are emitted via
 [cli::cli](https://cli.r-lib.org/reference/cli.html).
+
+## Functions
+
+- `package_lost_glue_brace()`: Scans all `.R` files in an R package (and
+  optionally `tests/testthat/`), aggregated with per-file reporting.
 
 ## Examples
 

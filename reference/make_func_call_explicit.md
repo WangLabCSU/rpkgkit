@@ -10,6 +10,13 @@ licensed under MIT.
 ## Usage
 
 ``` r
+package_func_call_explicit(
+  path = ".",
+  use_packages = current_packages(),
+  ignore_functions = imported_functions(),
+  ...
+)
+
 make_func_call_explicit(
   path = NULL,
   use_packages = current_packages(),
@@ -51,6 +58,11 @@ This function reads the specified R file, identifies function calls from
 the specified packages, and adds explicit namespace qualifiers (`::`) to
 those calls. The modified code is written back to the original file.
 
+## Functions
+
+- `package_func_call_explicit()`: Processes all `.R` files in a
+  package's `R/` directory, adding explicit namespace qualifiers.
+
 ## Examples
 
 ``` r
@@ -67,7 +79,7 @@ make_func_call_explicit(
   ignore_functions = c("library", "require")
 )
 #> ℹ Retrieving function calls from dplyr
-#> ✔ Successfully made function call explicit in /tmp/RtmpzW4VRV/file1ad012b6385.R
+#> ✔ Successfully made function call explicit in /tmp/RtmpIzFtE5/file1a552d4a931e.R
 readLines(file) |> message()
 #> starwars |> dplyr::mutate(name, bmi = mass / ((height / 100)^2)) |> dplyr::select(name:mass, bmi)
 # }

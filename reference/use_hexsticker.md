@@ -64,7 +64,7 @@ writeLines("# Package Name", file.path(temp, "README.md"))
 file.create(file.path(temp, "logo.png"))
 #> [1] TRUE
 use_hexsticker(file.path(temp, "logo.png"), url = "https://my-pkg-website.com", path = temp)
-#> ✔ Added hex sticker reference to /tmp/RtmpzW4VRV/README.md
-#> → Image: /tmp/RtmpzW4VRV/logo.png
+#> ✔ Added hex sticker reference to /tmp/RtmpIzFtE5/README.md
+#> → Image: /tmp/RtmpIzFtE5/logo.png
 # }
 ```

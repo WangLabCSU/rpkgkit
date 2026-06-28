@@ -2,6 +2,14 @@
 
 ## rpkgkit 0.1.1 (2026-06-27)
 
+### DEPRECATED
+
+- Removed unused packages in Suggests
+
+### BUG FIXES
+
+- Fixed quotes in action
+
 ### DOCUMENTATION
 
 - change unicode character to raw int for checking
@@ -15,6 +23,11 @@
 - Fixed lints
 
 ### NEW FEATURES
+
+- Added `package_*`, some package-wise functions
+
+- Added
+  [`make_func_arg_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_arg_explicit.md)
 
 - Imported `add_global_gitignore` from pkgdev, under license MIT
 

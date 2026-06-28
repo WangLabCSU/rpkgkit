@@ -41,10 +41,18 @@ The following functions help you to create and maintain an R package.
   [`current_packages()`](https://wanglabcsu.github.io/rpkgkit/reference/current_packages.md)
   : Get packages from the current context
 
-- [`detect_lost_glue_brace()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.md)
+- [`package_lost_glue_brace()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.md)
+  [`detect_lost_glue_brace()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.md)
   :
 
   Detect Lost Glue Brace in `glue` and `cli` Expressions
+
+- [`package_print_and_cat()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_print_and_cat.md)
+  [`detect_print_and_cat()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_print_and_cat.md)
+  :
+
+  Detect [`print()`](https://rdrr.io/r/base/print.html) and
+  [`cat()`](https://rdrr.io/r/base/cat.html) Calls (CRAN-Unsafe)
 
 - [`flir_fix()`](https://wanglabcsu.github.io/rpkgkit/reference/flir_fix.md)
   : Fix R code or package using flir
@@ -52,7 +60,12 @@ The following functions help you to create and maintain an R package.
 - [`inquire_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/inquire_standalone.md)
   : Inquire Standalone Files from a GitHub Repository
 
-- [`make_func_call_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_call_explicit.md)
+- [`package_func_arg_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_arg_explicit.md)
+  [`make_func_arg_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_arg_explicit.md)
+  : Make Function Arguments Explicit
+
+- [`package_func_call_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_call_explicit.md)
+  [`make_func_call_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_call_explicit.md)
   : Make Function Calls Explicit
 
 - [`news_md_check()`](https://wanglabcsu.github.io/rpkgkit/reference/news_md.md)
