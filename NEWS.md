@@ -1,5 +1,15 @@
 # rpkgkit 0.1.1 (2026-06-27)
 
+## DEPRECATED
+
+* Removed unused packages in Suggests
+
+
+## BUG FIXES
+
+* Fixed quotes in action
+
+
 ## DOCUMENTATION
 
 * change unicode character to raw int for checking
@@ -13,6 +23,10 @@
 
 
 ## NEW FEATURES
+
+* Added `package_*`, some package-wise functions
+
+* Added `make_func_arg_explicit()`
 
 * Imported `add_global_gitignore` from pkgdev, under license MIT
 
