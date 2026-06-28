@@ -40,7 +40,7 @@ jobs:
           use-public-rspm: true
 
       - name: Install desc
-        run: Rscript -e \'install.packages("desc")\'
+        run: Rscript -e "install.packages('desc')"
 
       - name: Configure Git
         run: |
@@ -51,8 +51,8 @@ jobs:
         id: version_bump
         uses: ./.github/actions/version-bumper
         with:
-          version_type: ${{ github.event.inputs.version_type || 'patch' }}
-          custom_version: ${{ github.event.inputs.custom_version }}
+          version_type: "${{ github.event.inputs.version_type || 'patch' }}"
+          custom_version: "${{ github.event.inputs.custom_version }}"
 
       - name: Update README badges
         if: steps.version_bump.outputs.bumped == 'true'

@@ -67,7 +67,8 @@ check_pkgdown_reference <- function(pkg = ".") {
   }
 
   cli::cli_alert_danger(
-    "{length(missing)} exported function{?s} missing from pkgdown reference:"
+    "{length(missing)} exported function{?s} missing from pkgdown reference,\
+     consider using {.code pkgdown::template_reference()} to regenerate the reference:"
   )
 
   for (func in missing) {
