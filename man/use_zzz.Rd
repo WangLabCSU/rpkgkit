@@ -6,7 +6,7 @@
 \usage{
 use_zzz(
   path = ".",
-  file_name = paste0(get_package_name(), "-package.R"),
+  file_name = paste0(get_package_name(path = path), "-package.R"),
   overwrite = FALSE,
   open = rlang::is_interactive(),
   ...

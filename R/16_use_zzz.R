@@ -31,67 +31,71 @@
 #' }
 use_zzz <- function(
   path = ".",
-  file_name = paste0(get_package_name(), "-package.R"),
+  file_name = paste0(get_package_name(path = path), "-package.R"),
   overwrite = FALSE,
   open = rlang::is_interactive(),
   ...
 ) {
   rlang::check_dots_empty0()
-  if (!is_pkg(path)) {
+  rlang::check_installed("usethis")
+  if (!is_pkg(path = path)) {
     cli::cli_abort(c(
-      "x" = "{.path {path}} is not an R package root.",
-      ">" = "No {.file DESCRIPTION} found."
+      x = "{.path {path}} is not an R package root.",
+      `>` = "No {.file DESCRIPTION} found."
     ))
   }
 
-  desc <- read.dcf(file.path(path, "DESCRIPTION"))
+  usethis::proj_set(path = path)
 
-  # ---- Extract fields from DESCRIPTION ----
+  desc <- read.dcf(file = file.path(path, "DESCRIPTION"))
   pkg <- desc[, "Package"]
   title <- desc[, "Title"]
-  description <- gsub("\n", "\n#' ", desc[, "Description"])
+  description <- gsub(
+    pattern = "\n",
+    replacement = "\n#' ",
+    x = desc[, "Description"]
+  )
   license <- desc[, "License"]
-
-  # ---- Read template ----
   template <- system.file(
     "R_template",
     "zzz_template.R",
     package = "rpkgkit",
     mustWork = TRUE
   )
-  tmpl <- readLines(template, warn = FALSE)
-
-  # ---- Replace placeholders ----
-  tmpl <- gsub("\\bPKG\\b", pkg, tmpl)
-  tmpl <- gsub("\\bTITLE\\b", title, tmpl)
-  tmpl <- gsub("\\bDESCRIPTION\\b", description, tmpl)
-  tmpl <- gsub("\\bLICENSE\\b", license, tmpl)
-
-  # ---- Write output with overwrite check ----
+  tmpl <- readLines(con = template, warn = FALSE)
+  tmpl <- gsub(pattern = "\\bPKG\\b", replacement = pkg, x = tmpl)
+  tmpl <- gsub(pattern = "\\bTITLE\\b", replacement = title, x = tmpl)
+  tmpl <- gsub(
+    pattern = "\\bDESCRIPTION\\b",
+    replacement = description,
+    x = tmpl
+  )
+  tmpl <- gsub(pattern = "\\bLICENSE\\b", replacement = license, x = tmpl)
   target_path <- file.path(path, "R", file_name)
-
   if (file.exists(target_path)) {
-    if (!isTRUE(overwrite)) {
+    if (!isTRUE(x = overwrite)) {
       cli::cli_abort(c(
-        "x" = "{.file {target_path}} already exists.",
-        ">" = "Use {.code overwrite = TRUE} to overwrite."
+        x = "{.file {target_path}} already exists.",
+        `>` = "Use {.code overwrite = TRUE} to overwrite."
       ))
     }
     cli::cli_alert_warning("Overwriting {.file {target_path}}.")
   }
+  dir.create(
+    path = dirname(path = target_path),
+    showWarnings = FALSE,
+    recursive = TRUE
+  )
+  writeLines(text = tmpl, con = target_path)
+  cli::cli_inform(c(v = "Created {.file {target_path}} from template."))
 
-  dir.create(dirname(target_path), recursive = TRUE, showWarnings = FALSE)
-  writeLines(tmpl, target_path)
+  usethis::use_package(package = "cli")
 
-  cli::cli_inform(c(
-    "v" = "Created {.file {target_path}} from template."
-  ))
-  if (isTRUE(open) && rlang::is_installed("rstudioapi")) {
+  if (isTRUE(x = open) && rlang::is_installed("rstudioapi")) {
     cli::cli_text(
       "{cli::col_red(cli::symbol$checkbox_off)} File opened in editor."
     )
     rstudioapi::navigateToFile(target_path)
   }
-
   invisible(target_path)
 }
