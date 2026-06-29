@@ -91,7 +91,11 @@ test_that("mfae_walk does not transform if", {
 })
 
 test_that("mfae_walk does not transform for loop", {
-  expr <- quote(for (i in 1:10) print(i))
+  expr <- quote(
+    for (i in 1:10) {
+      print(i)
+    }
+  )
   res <- .mfae_walk(expr)
   expect_equal(res[[1L]], quote(`for`))
 })
@@ -119,7 +123,14 @@ test_that("mfae_walk transforms nested calls", {
   res <- .mfae_walk(expr)
   # vapply formals: X, FUN, FUN.VALUE, ..., USE.NAMES
   # numeric(1) formals: length = 1
-  expect_equal(res, quote(vapply(X = 1:9, FUN = function(x) x * 2, FUN.VALUE = numeric(length = 1))))
+  expect_equal(
+    res,
+    quote(vapply(
+      X = 1:9,
+      FUN = function(x) x * 2,
+      FUN.VALUE = numeric(length = 1)
+    ))
+  )
 })
 
 # ---------------------------------------------------------------------------
@@ -153,7 +164,11 @@ test_that("mfae_resolve_function returns NULL for unknown namespace", {
 })
 
 test_that("mfae_resolve_function returns NULL for unknown function", {
-  fn <- .mfae_resolve_function(call(":::", quote(base), quote(nonexistent_fun_xyz)))
+  fn <- .mfae_resolve_function(call(
+    ":::",
+    quote(base),
+    quote(nonexistent_fun_xyz)
+  ))
   expect_null(fn)
 })
 
