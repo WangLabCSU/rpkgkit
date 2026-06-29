@@ -54,12 +54,10 @@ add_timestamp_to_cli <- function(
 ) {
   function(...) {
     messages <- list(...)
-
     if (length(messages) > 0L && is.character(messages[[1L]])) {
       messages[[1L]] <- paste0("{time_stamp()}", messages[[1L]])
     }
-
-    do.call(cli_func, messages)
+    do.call(what = cli_func, args = messages)
   }
 }
 
@@ -116,24 +114,20 @@ create_ts_cli_env <- function(
   }
 ) {
   cli_env <- new.env()
-
   vapply(
     X = cli_func,
     FUN = function(func_name) {
-      if (exists(func_name, envir = asNamespace("cli"))) {
-        orig_func <- get0(x = func_name, envir = asNamespace("cli"))
-
+      if (exists(x = func_name, envir = asNamespace(ns = "cli"))) {
+        orig_func <- get0(x = func_name, envir = asNamespace(ns = "cli"))
         new_func <- add_timestamp_to_cli(
           cli_func = orig_func,
           time_stamp = time_stamp
         )
-
-        assign(func_name, new_func, envir = cli_env)
+        assign(x = func_name, value = new_func, envir = cli_env)
         list(NULL)
       }
     },
     FUN.VALUE = list(NULL)
   )
-
   invisible(cli_env)
 }

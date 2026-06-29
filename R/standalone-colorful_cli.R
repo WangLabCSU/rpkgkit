@@ -69,25 +69,21 @@ create_colorful_cli_env <- function(
   )
 ) {
   cli_env <- new.env()
-
   vapply(
     X = cli_func,
     FUN = function(func_name) {
-      if (exists(func_name, envir = asNamespace("cli"))) {
-        orig_func <- get0(x = func_name, envir = asNamespace("cli"))
-
+      if (exists(x = func_name, envir = asNamespace(ns = "cli"))) {
+        orig_func <- get0(x = func_name, envir = asNamespace(ns = "cli"))
         new_func <- add_colors_to_cli(
           cli_func = orig_func,
           cli_theme = cli_theme
         )
-
-        assign(func_name, new_func, envir = cli_env)
+        assign(x = func_name, value = new_func, envir = cli_env)
         list(NULL)
       }
     },
     FUN.VALUE = list(NULL)
   )
-
   invisible(cli_env)
 }
 
@@ -153,7 +149,7 @@ add_colors_to_cli <- function(
     messages <- list(...)
     cli::cli_div(theme = cli_theme)
     on.exit(cli::cli_end())
-    do.call(cli_func, messages)
+    do.call(what = cli_func, args = messages)
   }
 }
 

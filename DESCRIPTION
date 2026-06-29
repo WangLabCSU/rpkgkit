@@ -26,8 +26,7 @@ Imports:
     cli,
     lifecycle,
     rlang,
-    rstudioapi,
-    withr
+    rstudioapi
 Suggests: 
     desc,
     devtools,
@@ -41,6 +40,7 @@ Suggests:
     stats,
     testthat (>= 3.0.0),
     usethis,
+    withr,
     yaml
 Config/testthat/edition: 3
 Config/usethis/last-upkeep: 2026-06-29

@@ -195,7 +195,7 @@ accumulate_right <- function(.x, .f, ..., .init) {
     Reduce(f = f, x = .x, init = .init, right = TRUE, accumulate = TRUE)
 }
 
-detect <- function(.x, .f, ..., .right = FALSE, .p = is_true) {
+detect <- function(.x, .f, ..., .right = FALSE, .p = rlang::is_true) {
     .p <- rlang::as_function(.p, env = rlang::global_env())
     .f <- rlang::as_function(.f, env = rlang::global_env())
     for (i in .rlang_purrr_index(x = .x, right = .right)) {
@@ -205,7 +205,7 @@ detect <- function(.x, .f, ..., .right = FALSE, .p = is_true) {
     }
     NULL
 }
-detect_index <- function(.x, .f, ..., .right = FALSE, .p = is_true) {
+detect_index <- function(.x, .f, ..., .right = FALSE, .p = rlang::is_true) {
     .p <- rlang::as_function(.p, env = rlang::global_env())
     .f <- rlang::as_function(.f, env = rlang::global_env())
     for (i in .rlang_purrr_index(x = .x, right = .right)) {
