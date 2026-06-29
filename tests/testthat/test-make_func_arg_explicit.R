@@ -134,18 +134,23 @@ test_that("mfae_walk transforms nested calls", {
 })
 
 # ---------------------------------------------------------------------------
-# .mfae_skipped_ops -- constant verification
+# .mfae_operators -- constant verification
 # ---------------------------------------------------------------------------
 
-test_that("mfae_skipped_ops contains core operators and special forms", {
-  expect_true("+" %in% .mfae_skipped_ops)
-  expect_true("if" %in% .mfae_skipped_ops)
-  expect_true("for" %in% .mfae_skipped_ops)
-  expect_true("function" %in% .mfae_skipped_ops)
-  expect_true("[" %in% .mfae_skipped_ops)
-  expect_true("$" %in% .mfae_skipped_ops)
-  expect_true("<-" %in% .mfae_skipped_ops)
-  expect_true("::" %in% .mfae_skipped_ops)
+test_that("mfae_operators contains core operators (not control flow)", {
+  expect_true("+" %in% .mfae_operators)
+  expect_true("[" %in% .mfae_operators)
+  expect_true("$" %in% .mfae_operators)
+  expect_true("<-" %in% .mfae_operators)
+  expect_true("::" %in% .mfae_operators)
+  # Control flow constructs are NOT in .mfae_operators — they have dedicated handlers
+  expect_false("if" %in% .mfae_operators)
+  expect_false("for" %in% .mfae_operators)
+  expect_false("while" %in% .mfae_operators)
+  expect_false("repeat" %in% .mfae_operators)
+  expect_false("function" %in% .mfae_operators)
+  expect_false("{" %in% .mfae_operators)
+  expect_false("(" %in% .mfae_operators)
 })
 
 # ---------------------------------------------------------------------------
@@ -222,6 +227,25 @@ test_that("mfae_match_args handles dots - unmatched args unnamed", {
 })
 
 test_that("mfae_match_args handles primitive without dots", {
+  expr <- quote(`+`(1, 2))
+  fmls <- pairlist(e1 = NULL, e2 = NULL)
+  res <- .mfae_match_args(expr, fmls)
+  expect_equal(names(res), c("", "e1", "e2"))
+})
+
+test_that("mfae_match_args does not name positional args when dots exist", {
+  # any() has formals (..., na.rm = FALSE)
+  # any(is.na(df)) — is.na(df) is a ... arg, NOT na.rm
+  expr <- quote(any(is.na(df)))
+  fmls <- formals(any)
+  res <- .mfae_match_args(expr, fmls)
+  # Positional arg is.na(df) must NOT be named "na.rm"
+  nm <- names(res) # NULL when all names are empty (correct)
+  expect_false(isTRUE(nm[2L] == "na.rm"))
+})
+
+test_that("mfae_match_args names non-dots only when there are no dots", {
+  # `+` has formals (e1, e2) — no dots, so positional args get named
   expr <- quote(`+`(1, 2))
   fmls <- pairlist(e1 = NULL, e2 = NULL)
   res <- .mfae_match_args(expr, fmls)
@@ -329,6 +353,23 @@ test_that("if/for/while constructs are not transformed", {
   writeLines(input_lines, tf)
   make_func_arg_explicit(tf)
   expect_equal(readLines(tf, warn = FALSE), expected_lines)
+})
+
+test_that("complex if condition with primitive dots is handled correctly", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  # any(is.na(df)) — is.na(df) is a ... arg, must NOT get name "na.rm"
+  input_lines <- c(
+    "if (any(is.na(df))) {",
+    "  mean(x, TRUE)",
+    "}"
+  )
+  writeLines(input_lines, tf)
+  make_func_arg_explicit(tf)
+  result <- readLines(tf, warn = FALSE)
+  # The condition any(is.na(df)) should keep is.na(df) unnamed (goes to ...)
+  expect_true(grepl("any\\(is\\.na\\(df\\)\\)", result[[1L]]))
+  # The body mean(x, TRUE) should be transformed (mean has ...)
+  expect_true(grepl("mean\\(x = x, TRUE\\)", result[[2L]]))
 })
 
 test_that("skip_functions parameter prevents transformation", {

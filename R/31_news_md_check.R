@@ -139,7 +139,7 @@ news_md_check <- function(path = ".", strict = FALSE, verbose = TRUE) {
           "Line %d: Non-standard category '%s'. Consider using standard categories like: %s",
           line_num,
           category,
-          paste(standard_categories[1:4], collapse = ", ")
+          toString(standard_categories[1L:4L])
         )
         result$suggestions <- c(result$suggestions, msg)
       }

@@ -1,5 +1,10 @@
 # rpkgkit 0.1.3 (2026-06-29)
 
+## BUG FIXES
+
+* Fixed ignorance of `make_func_arg_explicit()` when resolving complex R syntax
+
+
 ## MINOR IMPROVEMENTS
 
 * Made `use_zzz()` compatible with `usethis`

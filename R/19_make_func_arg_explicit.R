@@ -151,24 +151,61 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
     return(expr)
   }
 
+  # Handle namespace-qualified or anonymous function in call position
   op <- if (is.symbol(expr[[1L]])) as.character(expr[[1L]]) else NULL
   if (is.null(op)) {
     return(.mfae_walk_children(expr = expr, skip_fns = skip_fns))
   }
 
-  if (
-    grepl(pattern = "^%.*%$", x = op) || op %in% c(.mfae_skipped_ops, skip_fns)
-  ) {
+  # User-requested skip — check before R syntax dispatch
+  if (op %in% skip_fns) {
     return(.mfae_walk_children(expr = expr, skip_fns = skip_fns))
   }
 
+  # ---- R syntax-aware dispatch ---------------------------------------------
+  # Each control-flow / special-form construct has a dedicated handler that
+  # knows the exact child-position semantics of that R syntax node.
+  # This avoids string-based guessing and ensures correct traversal.
+  if (op == "if") {
+    return(.mfae_walk_if(expr, skip_fns))
+  }
+  if (op == "for") {
+    return(.mfae_walk_for(expr, skip_fns))
+  }
+  if (op == "while") {
+    return(.mfae_walk_while(expr, skip_fns))
+  }
+  if (op == "repeat") {
+    return(.mfae_walk_repeat(expr, skip_fns))
+  }
+  if (op == "function") {
+    return(.mfae_walk_function_def(expr, skip_fns))
+  }
+  if (op == "{") {
+    return(.mfae_walk_brace(expr, skip_fns))
+  }
+  if (op == "(") {
+    return(.mfae_walk_paren(expr, skip_fns))
+  }
+
+  # %...% infix operators and built-in operators — walk children only
+  if (grepl("^%.*%$", op) || op %in% .mfae_operators) {
+    return(.mfae_walk_children(expr, skip_fns))
+  }
+
+  # Regular function call — attempt to make args explicit
   .mfae_transform_call(expr = expr, skip_fns = skip_fns)
 }
 
 
-#' Operators and special forms that are never transformed
+#' Built-in R operators that are never transformed into named-arg calls.
+#'
+#' These are pure operators/syntax, not control flow (\code{if}, \code{for},
+#' \code{while}, \code{repeat}, \code{function}, \code{\{}, \code{(}) — those
+#' are dispatched by dedicated handlers in \code{.mfae_walk}. This list is
+#' used for the remaining operators where simply walking children suffices.
 #' @keywords internal
-.mfae_skipped_ops <- c(
+.mfae_operators <- c(
   "+",
   "-",
   "*",
@@ -191,20 +228,97 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
   "@",
   "[",
   "[[",
-  "{",
-  "(",
-  "if",
-  "for",
-  "while",
-  "repeat",
-  "function",
-  "return",
   "<-",
   "<<-",
   "=",
+  "return",
   "::",
   ":::"
 )
+
+
+# ---- Syntax-aware handlers for R control-flow constructs --------------------
+# Each handler knows the exact child-position semantics of that R syntax node,
+# following the same pattern as .gvv_extract_* in import-standalone-get_var_value.R.
+# This replaces the old string-based matching approach with proper R syntax
+# analysis, avoiding false matches in complex conditional expressions.
+
+#' Walk an \code{if} expression
+#' @keywords internal
+.mfae_walk_if <- function(expr, skip_fns = NULL) {
+  # if (cond) then_branch [else else_branch]
+  # expr[[1]] = if, expr[[2]] = cond, expr[[3]] = then, expr[[4]] = else
+  cond <- .mfae_walk(expr[[2L]], skip_fns)
+  then <- .mfae_walk(expr[[3L]], skip_fns)
+  if (length(expr) >= 4L) {
+    as.call(list(expr[[1L]], cond, then, .mfae_walk(expr[[4L]], skip_fns)))
+  } else {
+    as.call(list(expr[[1L]], cond, then))
+  }
+}
+
+#' Walk a \code{for} loop expression
+#' @keywords internal
+.mfae_walk_for <- function(expr, skip_fns = NULL) {
+  # for (var in seq) body
+  # expr[[1]] = for, expr[[2]] = var (symbol), expr[[3]] = seq, expr[[4]] = body
+  as.call(list(
+    expr[[1L]],
+    expr[[2L]], # loop variable — always a symbol
+    .mfae_walk(expr[[3L]], skip_fns), # sequence expression
+    .mfae_walk(expr[[4L]], skip_fns) # body
+  ))
+}
+
+#' Walk a \code{while} loop expression
+#' @keywords internal
+.mfae_walk_while <- function(expr, skip_fns = NULL) {
+  # while (cond) body
+  # expr[[1]] = while, expr[[2]] = cond, expr[[3]] = body
+  as.call(list(
+    expr[[1L]],
+    .mfae_walk(expr[[2L]], skip_fns), # condition
+    .mfae_walk(expr[[3L]], skip_fns) # body
+  ))
+}
+
+#' Walk a \code{repeat} loop expression
+#' @keywords internal
+.mfae_walk_repeat <- function(expr, skip_fns = NULL) {
+  # repeat body
+  # expr[[1]] = repeat, expr[[2]] = body
+  as.call(list(
+    expr[[1L]],
+    .mfae_walk(expr[[2L]], skip_fns) # body
+  ))
+}
+
+#' Walk a \code{function} definition expression
+#' @keywords internal
+.mfae_walk_function_def <- function(expr, skip_fns = NULL) {
+  # function(formals) body
+  # expr[[1]] = function, expr[[2]] = formals (pairlist), expr[[3]] = body
+  as.call(list(
+    expr[[1L]],
+    expr[[2L]], # formals — pairlist, returned as-is by .mfae_walk
+    .mfae_walk(expr[[3L]], skip_fns) # body
+  ))
+}
+
+#' Walk a \code{\{} block expression
+#' @keywords internal
+.mfae_walk_brace <- function(expr, skip_fns = NULL) {
+  # { expr1; expr2; ... }
+  new_args <- lapply(X = expr[-1L], FUN = .mfae_walk, skip_fns = skip_fns)
+  as.call(c(list(expr[[1L]]), new_args))
+}
+
+#' Walk a parenthesised expression
+#' @keywords internal
+.mfae_walk_paren <- function(expr, skip_fns = NULL) {
+  # (expr)
+  as.call(list(expr[[1L]], .mfae_walk(expr[[2L]], skip_fns)))
+}
 
 
 # ---- Call transformation ----------------------------------------------------
@@ -299,6 +413,19 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
   has_dots <- any(fml_nms == "...")
   fml_nms_no_dots <- setdiff(x = fml_nms, y = "...")
 
+  # Determine whether ... precedes ALL non-dots formals.  When it does,
+  # positional args must go to ... (unnamed) because R's argument matching
+  # does not reach named formals that follow ....  Common examples:
+  #   any(..., na.rm)     — ... is first, is.na(df) → ...
+  #   c(...)              — only ..., all positional → ...
+  #   seq.default(from, to, ...) — ... is last, positional fill from/to
+  dots_first <- FALSE
+  if (has_dots) {
+    dots_pos <- which(fml_nms == "...")[[1L]]
+    non_dots_pos <- which(fml_nms != "...")
+    dots_first <- length(non_dots_pos) == 0L || all(non_dots_pos > dots_pos)
+  }
+
   result_args <- list()
   result_nms <- character()
   matched <- character()
@@ -313,20 +440,23 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
     result_nms <- c(result_nms, nm)
   }
 
-  # Phase 2: positional arguments — fill remaining unmatched formals
+  # Phase 2: positional arguments
   pos_idx <- which(x = !nzchar(arg_nms))
   remaining <- setdiff(x = fml_nms_no_dots, y = matched)
 
   for (i in pos_idx) {
-    if (length(remaining) > 0L) {
+    if (dots_first) {
+      # ... absorbs all positional args — leave unnamed
+      result_args <- c(result_args, list(args[[i]]))
+      result_nms <- c(result_nms, "")
+    } else if (length(remaining) > 0L) {
+      # No dots before non-dots formals: fill remaining formals by position
       nm <- remaining[[1L]]
       remaining <- remaining[-1L]
       result_args <- c(result_args, list(args[[i]]))
       result_nms <- c(result_nms, nm)
-    } else if (has_dots) {
-      result_args <- c(result_args, list(args[[i]]))
-      result_nms <- c(result_nms, "")
     } else {
+      # Overflow: go to ... or leave unnamed (error in real call)
       result_args <- c(result_args, list(args[[i]]))
       result_nms <- c(result_nms, "")
     }
