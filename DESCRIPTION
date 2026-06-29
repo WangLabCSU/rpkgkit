@@ -31,7 +31,6 @@ Suggests:
     httr2,
     desc,
     pkgload,
-    withr,
     devtools,
     usethis
 Config/testthat/edition: 3

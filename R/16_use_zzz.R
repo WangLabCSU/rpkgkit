@@ -71,6 +71,13 @@ use_zzz <- function(
     x = tmpl
   )
   tmpl <- gsub(pattern = "\\bLICENSE\\b", replacement = license, x = tmpl)
+  tmpl <- c(
+    tmpl,
+    "",
+    "## usethis namespace: start",
+    "## usethis namespace: end",
+    "NULL"
+  )
   target_path <- file.path(path, "R", file_name)
   if (file.exists(target_path)) {
     if (!isTRUE(x = overwrite)) {

@@ -29,3 +29,8 @@
 .onLoad <- function(libname, pkgname) {
   invisible()
 }
+
+
+## usethis namespace: start
+## usethis namespace: end
+NULL

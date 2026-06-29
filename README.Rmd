@@ -37,7 +37,7 @@ if (!requireNamespace("pak")) {
     )
   )
 }
-pak::pkg_install("WangLabCSU/rpkgkit")
+pak::pak("Exceret/rpkgkit")
 ```
 
 
