@@ -62,7 +62,11 @@ use_zzz <- function(
     package = "rpkgkit",
     mustWork = TRUE
   )
-  tmpl <- readLines(con = template, warn = FALSE)
+  tmpl <- c(
+    paste("# nocov", "start"),
+    "",
+    readLines(con = template, warn = FALSE)
+  )
   tmpl <- gsub(pattern = "\\bPKG\\b", replacement = pkg, x = tmpl)
   tmpl <- gsub(pattern = "\\bTITLE\\b", replacement = title, x = tmpl)
   tmpl <- gsub(
@@ -76,7 +80,9 @@ use_zzz <- function(
     "",
     "## usethis namespace: start",
     "## usethis namespace: end",
-    "NULL"
+    "NULL",
+    "",
+    paste("# nocov", "end")
   )
   target_path <- file.path(path, "R", file_name)
   if (file.exists(target_path)) {

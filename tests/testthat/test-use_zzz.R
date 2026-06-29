@@ -1,7 +1,5 @@
 test_that("aborts when path is not a package root", {
-  tmp <- tempfile("not_pkg")
-  dir.create(tmp)
-  on.exit(unlink(tmp, recursive = TRUE))
+  tmp <- withr::local_tempdir()
 
   expect_error(
     use_zzz(path = tmp),
@@ -10,9 +8,12 @@ test_that("aborts when path is not a package root", {
 })
 
 test_that("aborts when zzz.R already exists and overwrite = FALSE", {
-  tmp <- tempfile("pkg")
-  dir.create(tmp)
-  on.exit(unlink(tmp, recursive = TRUE))
+  tmp <- withr::local_tempdir()
+  local_mocked_bindings(
+    proj_set = function(...) NULL,
+    use_package = function(...) NULL,
+    .package = "usethis"
+  )
 
   writeLines(
     c(
@@ -33,9 +34,12 @@ test_that("aborts when zzz.R already exists and overwrite = FALSE", {
 })
 
 test_that("creates zzz.R with PKG replaced in template", {
-  tmp <- tempfile("pkg")
-  dir.create(tmp)
-  on.exit(unlink(tmp, recursive = TRUE))
+  tmp <- withr::local_tempdir()
+  local_mocked_bindings(
+    proj_set = function(...) NULL,
+    use_package = function(...) NULL,
+    .package = "usethis"
+  )
 
   writeLines(
     c(
@@ -54,15 +58,18 @@ test_that("creates zzz.R with PKG replaced in template", {
   expect_true(file.exists(expected_path))
 
   lines <- readLines(expected_path, warn = FALSE)
-  expect_match(lines[1L], "#' @title My Test Package", fixed = TRUE)
-  expect_match(lines[9L], "^#' @name testpkg-package$", perl = TRUE)
-  expect_match(lines[10L], "^#' @aliases testpkg$", perl = TRUE)
+  expect_match(lines[3L], "#' @title My Test Package", fixed = TRUE)
+  expect_match(lines[11L], "^#' @name testpkg-package$", perl = TRUE)
+  expect_match(lines[12L], "^#' @aliases testpkg$", perl = TRUE)
 })
 
 test_that("creates zzz.R with correct TITLE replacement", {
-  tmp <- tempfile("pkg")
-  dir.create(tmp)
-  on.exit(unlink(tmp, recursive = TRUE))
+  tmp <- withr::local_tempdir()
+  local_mocked_bindings(
+    proj_set = function(...) NULL,
+    use_package = function(...) NULL,
+    .package = "usethis"
+  )
 
   writeLines(
     c(
@@ -77,13 +84,16 @@ test_that("creates zzz.R with correct TITLE replacement", {
   use_zzz(path = tmp)
 
   lines <- readLines(file.path(tmp, "R", "testpkg-package.R"), warn = FALSE)
-  expect_match(lines[1L], "#' @title Custom Title Here", fixed = TRUE)
+  expect_match(lines[3L], "#' @title Custom Title Here", fixed = TRUE)
 })
 
 test_that("creates zzz.R with DESCRIPTION replacement (including multiline)", {
-  tmp <- tempfile("pkg")
-  dir.create(tmp)
-  on.exit(unlink(tmp, recursive = TRUE))
+  tmp <- withr::local_tempdir()
+  local_mocked_bindings(
+    proj_set = function(...) NULL,
+    use_package = function(...) NULL,
+    .package = "usethis"
+  )
 
   writeLines(
     c(
@@ -99,20 +109,21 @@ test_that("creates zzz.R with DESCRIPTION replacement (including multiline)", {
   use_zzz(path = tmp)
 
   lines <- readLines(file.path(tmp, "R", "testpkg-package.R"), warn = FALSE)
-  # Description spans lines 3-4: "#' @description A package for testing."
-  # then "#' It has multiple lines."
   expect_match(
-    lines[3L],
+    lines[5L],
     "#' @description A package for testing.",
     fixed = TRUE
   )
-  expect_match(lines[4L], "#' It has multiple lines.", fixed = TRUE)
+  expect_match(lines[6L], "#' It has multiple lines.", fixed = TRUE)
 })
 
 test_that("creates zzz.R with correct LICENSE replacement", {
-  tmp <- tempfile("pkg")
-  dir.create(tmp)
-  on.exit(unlink(tmp, recursive = TRUE))
+  tmp <- withr::local_tempdir()
+  local_mocked_bindings(
+    proj_set = function(...) NULL,
+    use_package = function(...) NULL,
+    .package = "usethis"
+  )
 
   writeLines(
     c(
@@ -127,13 +138,16 @@ test_that("creates zzz.R with correct LICENSE replacement", {
   use_zzz(path = tmp)
 
   lines <- readLines(file.path(tmp, "R", "testpkg-package.R"), warn = FALSE)
-  expect_match(lines[6L], "^#' GPL-3$", perl = TRUE)
+  expect_match(lines[8L], "^#' GPL-3$", perl = TRUE)
 })
 
 test_that("overwrite = TRUE replaces existing zzz.R file", {
-  tmp <- tempfile("pkg")
-  dir.create(tmp)
-  on.exit(unlink(tmp, recursive = TRUE))
+  tmp <- withr::local_tempdir()
+  local_mocked_bindings(
+    proj_set = function(...) NULL,
+    use_package = function(...) NULL,
+    .package = "usethis"
+  )
 
   writeLines(
     c(
@@ -151,13 +165,16 @@ test_that("overwrite = TRUE replaces existing zzz.R file", {
   result <- use_zzz(path = tmp, overwrite = TRUE)
 
   lines <- readLines(result, warn = FALSE)
-  expect_match(lines[1L], "#' @title My Package", fixed = TRUE)
+  expect_match(lines[3L], "#' @title My Package", fixed = TRUE)
 })
 
 test_that("custom file_name is respected", {
-  tmp <- tempfile("pkg")
-  dir.create(tmp)
-  on.exit(unlink(tmp, recursive = TRUE))
+  tmp <- withr::local_tempdir()
+  local_mocked_bindings(
+    proj_set = function(...) NULL,
+    use_package = function(...) NULL,
+    .package = "usethis"
+  )
 
   writeLines(
     c(
@@ -177,9 +194,12 @@ test_that("custom file_name is respected", {
 })
 
 test_that("returns invisible file path", {
-  tmp <- tempfile("pkg")
-  dir.create(tmp)
-  on.exit(unlink(tmp, recursive = TRUE))
+  tmp <- withr::local_tempdir()
+  local_mocked_bindings(
+    proj_set = function(...) NULL,
+    use_package = function(...) NULL,
+    .package = "usethis"
+  )
 
   writeLines(
     c(
@@ -199,9 +219,12 @@ test_that("returns invisible file path", {
 })
 
 test_that("creates R/ directory if missing", {
-  tmp <- tempfile("pkg")
-  dir.create(tmp)
-  on.exit(unlink(tmp, recursive = TRUE))
+  tmp <- withr::local_tempdir()
+  local_mocked_bindings(
+    proj_set = function(...) NULL,
+    use_package = function(...) NULL,
+    .package = "usethis"
+  )
 
   writeLines(
     c(

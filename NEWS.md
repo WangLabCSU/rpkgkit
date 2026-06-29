@@ -9,6 +9,8 @@
 
 * Made `use_zzz()` compatible with `usethis`
 
+* Added cov ignorance in `use_zzz()`
+
 
 # rpkgkit 0.1.2 (2026-06-29)
 

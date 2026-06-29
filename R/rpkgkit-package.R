@@ -1,3 +1,5 @@
+# nocov start
+
 #' @title Create and Maintain R Packages
 #'
 #' @description Utilities for R package development including NEWS.md
@@ -34,3 +36,5 @@
 ## usethis namespace: start
 ## usethis namespace: end
 NULL
+
+# nocov end
