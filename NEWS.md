@@ -1,4 +1,16 @@
+# rpkgkit 0.1.3 (2026-06-29)
+
+## MINOR IMPROVEMENTS
+
+* Made `use_zzz()` compatible with `usethis`
+
+
 # rpkgkit 0.1.2 (2026-06-29)
+
+## NEW FEATURES
+
+* Added `convert_func_syntax()`
+
 
 ## MINOR IMPROVEMENTS
 

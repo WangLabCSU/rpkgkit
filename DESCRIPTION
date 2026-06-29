@@ -13,36 +13,39 @@ Authors@R: c(
            comment = "Author of the included pkgdev code (https://github.com/dieghernan/pkgdev)")
   )
 Description: Utilities for R package development including NEWS.md
-    management, standalone file creation, and code formatting. Supports popular
-    development workflows and integrates with 'usethis' and 'RStudio'. Includes
-    helper functions for renaming functions and detecting common coding errors.
+    management, standalone file creation, and code formatting. Supports
+    popular development workflows and integrates with 'usethis' and
+    'RStudio'. Includes helper functions for renaming functions and
+    detecting common coding errors.
 License: MIT + file LICENSE
 URL: https://github.com/WangLabCSU/rpkgkit
 BugReports: https://github.com/WangLabCSU/rpkgkit/issues
-Suggests: 
-    flir,
-    gh,
-    rmarkdown,
-    stats,
-    dplyr,
-    testthat (>= 3.0.0),
-    yaml,
-    grDevices,
-    httr2,
-    desc,
-    pkgload,
-    devtools,
-    usethis
-Config/testthat/edition: 3
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Depends: 
     R (>= 4.1.0)
 Imports: 
     cli,
     lifecycle,
-    rlang,
+    rlang (>= 1.1.0),
     rstudioapi
-Copyright: Jacob Scott, Christopher T. Kenny, and Sebastian Lammers (for the pedant code included in R/vendor-pedant.R); Diego Hernangómez (for the pkgdev code included in R/vendor-pkgdev.R)
+Suggests: 
+    desc,
+    devtools,
+    dplyr,
+    flir,
+    gh,
+    grDevices,
+    httr2,
+    pkgload,
+    rmarkdown,
+    stats,
+    testthat (>= 3.0.0),
+    usethis,
+    yaml
+Config/testthat/edition: 3
 Config/usethis/last-upkeep: 2026-06-29
+Copyright: Jacob Scott, Christopher T. Kenny, and Sebastian Lammers (for
+    the pedant code included in R/vendor-pedant.R); Diego Hernangómez (for
+    the pkgdev code included in R/vendor-pkgdev.R)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
