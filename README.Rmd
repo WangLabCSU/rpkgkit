@@ -1,4 +1,4 @@
-# rpkgkit
+# rpkgkit <a href="https://wanglabcsu.github.io/rpkgkit/"><img src="man/figures/logo.png" align="right" height="139" alt="rpkgkit website" /></a>
 
 <!-- badges: start -->
 [![Lifecycle:stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
@@ -375,14 +375,6 @@ cat(readLines(tf), sep = "\n")
 ```
 
 ### R Package Maintenance
-
-- `use_hexsticker()` - Paste hex sticker to README.md
-
-```r
-use_hexsticker("rpkgkit.logo") # Althought it doesn't exist
-
-# rpkgkit <img src="rpkgkit.logo" alt="package logo" align="right" height="139"/>
-```
 
 - `use_zzz()` - Create `zzz.R` file in `R/` folder, with `.onLoad`, `.onAttach`, and package description
 

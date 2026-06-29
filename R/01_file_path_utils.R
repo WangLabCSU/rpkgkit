@@ -18,4 +18,13 @@ get_wd <- function() {
   current_wd
 }
 
+get_package_name <- function(path = ".") {
+  if (!is_pkg(path)) {
+    stop("The path is not a package")
+  }
+
+  desc <- read.dcf(file.path(path, "DESCRIPTION"))
+  desc[, "Package"][[1L]]
+}
+
 # nocov end

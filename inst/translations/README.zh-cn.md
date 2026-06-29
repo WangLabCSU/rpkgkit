@@ -5,12 +5,12 @@
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
 [![R-CMD-check](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml)
-[![Devel version](https://img.shields.io/badge/devel%20version-0.1.0-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
+[![Devel version](https://img.shields.io/badge/devel%20version-0.1.1-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
 [![Code size](https://img.shields.io/github/languages/code-size/WangLabCSU/rpkgkit.svg)](https://github.com/WangLabCSU/rpkgkit)
 [![Codecov testcoverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WangLabCSU/rpkgkit)
 [![English](https://img.shields.io/badge/README-English-blue)](../README.md)
-[![AI 翻译](https://img.shields.io/badge/AI_%E7%BF%BB%E8%AF%91-%E4%BB%85%E4%BE%9B%E5%8F%82%E8%80%83-yellow)]()
+[![简体中文](https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue)]()
 <!-- badges: end -->
 
 rpkgkit 的目标是为 R 包开发提供实用的函数。
@@ -104,7 +104,7 @@ color_cli$cli_alert_info("{.blue This is a blue message}")
 color_cli$cli_alert_info("{.orange This is an orange message}")
 # cyan, green, magenta, yellow, purple, etc
 
-color_cli2 <- create_colorful_cli_env(cli_theme = generate_color_theme()) # more color but slower
+color_cli2 <- create_colorful_cli_env(cli_theme = generate_color_theme()) # 颜色更多但较慢
 color_cli2$cli_alert_success(
   "{.violetred3 R}{.orange a}{.yellow i}{.green n}{.cyan b}{.blue o}{.purple w}"
 )
@@ -148,7 +148,7 @@ inquire_standalone("r-lib/rlang")
 browse_standalone()
 # # A tibble: 184 × 9
 #    repo                   name                             path                               sha                 url   html_url git_url repo_url repo_description
-#    <chr>                  <chr>                            <chr>                              <chr>               <chr> <chr>    <chr>   <chr>    <chr>           
+#    <chr>                  <chr>                            <chr>                              <chr>               <chr> <chr>    <chr>   <chr>    <chr>
 #  1 tidymodels/parsnip     standalone-survival.R            R/standalone-survival.R            3f3809cc6019326a7f… http… https:/… https:… https:/… A tidy unified …
 #  2 prioritizr/prioritizr  standalone-cli.R                 R/standalone-cli.R                 00453fe89a55497eba… http… https:/… https:… https:/… Systematic cons…
 #  3 r-lib/rlang            standalone-vctrs.R               R/standalone-vctrs.R               a78927f6d65fd769c6… http… https:/… https:… https:/… Low-level API f…
@@ -180,7 +180,7 @@ create_standalone("foo")
 # license: https://unlicense.org
 # imports: []
 # ---
-# 
+#
 # This file provides...
 #
 # nocov start
@@ -259,9 +259,10 @@ news_md_check()
 
 - `news_md_show()` — 在控制台中以彩色形式展示包的 NEWS.md 内容
 
-### 其他工具
+### R 函数转换
 
-- `make_func_call_explicit()` — 通过添加包前缀使函数显式调用
+- `make_func_call_explicit()` — 通过添加包前缀使函数调用显式化
+- `package_func_call_explicit()` — 在包中通过添加包前缀使函数调用显式化
 
 代码片段来自 [dplyr](https://github.com/tidyverse/dplyr)：
 
@@ -282,15 +283,8 @@ starwars |>
   dplyr::select(name:mass, bmi)
 ```
 
-- `use_hexsticker()` — 将 Hex 贴纸粘贴到 README.md 中：
-
-```r
-use_hexsticker("rpkgkit.logo") # 尽管该文件并不存在
-
-# rpkgkit <img src="rpkgkit.logo" alt="package logo" align="right" height="139"/>
-```
-
-- `detect_lost_glue_brace()` — 查找文件中所有缺少右大括号的 `glue` 调用，同时支持 `glue` 和 `cli` 表达式：
+- `detect_lost_glue_brace()` — 查找文件中所有缺少右大括号的 `glue` 调用，同时支持 `glue` 和 `cli` 表达式
+- `package_lost_glue_brace()` — 在包中查找所有缺少右大括号的 `glue` 调用，同时支持 `glue` 和 `cli` 表达式
 
 ```r
 # foo.R
@@ -308,11 +302,68 @@ bar <- cli::col_red(cli::cli_alert_warning(
 detect_lost_glue_brace()
 
 # msg <- glue::glue("Hello, {name!")
-#                           ^^^^^^ 
+#                           ^^^^^^
 
 #   "{.field warning}}: This string is missing {.val 1} brace{?s}"
-#    ^^^^^^^^^^^^^^^^^ 
+#    ^^^^^^^^^^^^^^^^^
 # ✖ Found 2 lines with mismatched braces: 3 and 8
+```
+
+- `make_func_arg_explicit()` — 使函数调用中的参数使用显式参数名
+- `package_func_arg_explicit()` — 在包中使函数调用中的参数使用显式参数名
+
+```r
+tf <- tempfile(fileext = ".R")
+writeLines("vapply(1:9, function(x) x*2, numeric(1))", tf)
+make_func_arg_explicit(tf)
+# ✔ Made function arguments explicit in /tmp/RtmpOr1Iz0/file15b76c2120b264.R
+
+cat(readLines(tf), sep = "\n")
+# vapply(X = 1:9, FUN = function(x) x * 2, FUN.VALUE = numeric(length = 1))
+```
+
+- `rename_func()` — 按特定风格重命名文件中的函数
+
+```r
+tf <- tempfile(fileext = ".R")
+writeLines("this_is_a_function <- function(){message('Hello, world')}", tf)
+
+rename_func(
+  tf,
+  style = "camelCase"
+)
+# ✔ Renamed 1 function to "camelCase" style in /tmp/RtmpOr1Iz0/file15b76c8de7e51.R
+
+cat(readLines(tf), sep = "\n")
+# thisIsAFunction <- function(){message('Hello, world')}
+```
+
+- `detect_print_and_cat()` — 检测文件中的 `print()` 和 `cat()` 调用
+- `package_print_and_cat()` — 检测包中的 `print()` 和 `cat()` 调用
+
+由于 CRAN 政策不允许使用 `print()` 和 `cat()`，需要使用 `message()` 替代：
+
+```r
+tf <- tempfile(fileext = ".R")
+writeLines("print('Hello, world')", tf)
+detect_print_and_cat(tf)
+# print('Hello, world')
+# ^^^^^^
+# ✖ Found 1 unsupported call on line
+# 1.
+detect_print_and_cat(tf, fix = TRUE)
+cat(readLines(tf), sep = "\n")
+# message('Hello, world')
+```
+
+### R 包维护
+
+- `use_hexsticker()` — 将 Hex 贴纸粘贴到 README.md 中：
+
+```r
+use_hexsticker("rpkgkit.logo") # 尽管该文件并不存在
+
+# rpkgkit <img src="rpkgkit.logo" alt="package logo" align="right" height="139"/>
 ```
 
 - `use_zzz()` — 在 `R/` 目录下创建 `zzz.R` 文件，包含 `.onLoad`、`.onAttach` 及包描述信息：
@@ -354,10 +405,53 @@ use_zzz()
 # }
 ```
 
+- `check_pkgdown_reference()` — 检查 `_pkgdown.yml` 中是否引用了所有导出函数：
+
+```r
+check_pkgdown_reference()
+# ✖ 9 exported functions missing from pkgdown reference:
+# - current_packages
+# - detect_lost_glue_brace
+# - detect_print_and_cat
+# - imported_functions
+# - make_func_arg_explicit
+# - make_func_call_explicit
+# - news_md_add_entry
+# - news_md_check
+# - news_md_show
+```
+
+- `use_vendor()` — 从 GitHub 引用一个宽松许可的 R 包，以便纳入你自己的 R 包。在 CRAN 政策下轻松导入 GitHub R 包。
+
+许可协议、版权和声明将自动生成到 `DESCRIPTION`、`R/vendor-*.R` 和 `inst/vendor/` 中。
+
+```r
+dir <- tempdir()
+usethis::create_package(path = dir)
+use_vendor(pkg = "WangLabCSU/rpkgkit", "43_use_vendor.R", branch = "main", path = dir)
+# ℹ Fetching repository information for WangLabCSU/rpkgkit...
+# ✔ Vendor package uses MIT license.
+# ✔ Created directory /tmp/RtmpOr1Iz0/inst/vendor/rpkgkit.
+# ✔ Copied LICENSE.
+# ✔ Copied LICENSE.md.
+# ✔ Created inst/vendor/rpkgkit/README.md.
+# ✔ Created /tmp/RtmpOr1Iz0//R/vendor-rpkgkit.R.
+# ✔ Added rpkgkit authors to Authors@R.
+# ✔ Updated DESCRIPTION.
+# ☐ Consider pasting the following statement into README.md
+
+# ## Acknowledgements
+
+# We would like to thank the following people and projects:
+
+# - The authors of the [rpkgkit](https://github.com/WangLabCSU/rpkgkit) package &mdash; **Yuxi Yang, Jacob Scott, Christopher T. Kenny, Sebastian Lammers and Diego Hernangómez** &mdash; whose code is included (under MIT license) in `R/vendor-rpkgkit.R`.
+```
+
 ## 致谢
 
 感谢以下人员与项目：
 
 - [pedant](https://github.com/wurli/pedant) 包的作者 **Jacob Scott**、**Christopher T. Kenny** 和 **Sebastian Lammers** — 其代码（基于 MIT 许可）已包含在 `R/vendor-pedant.R` 中。
+- [pkgdev](https://github.com/dieghernan/pkgdev) 包的作者 **Diego Hernangómez** — 其代码（基于 MIT 许可）已包含在 `R/vendor-pkgdev.R` 中。
 - 所有报告问题、提出功能建议或帮助改进本包的贡献者与用户。
 

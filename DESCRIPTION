@@ -42,6 +42,7 @@ Depends:
     R (>= 4.1.0)
 Imports: 
     cli,
+    lifecycle,
     rlang,
     rstudioapi
 Copyright: Jacob Scott, Christopher T. Kenny, and Sebastian Lammers (for the pedant code included in R/vendor-pedant.R); Diego Hernangómez (for the pkgdev code included in R/vendor-pkgdev.R)

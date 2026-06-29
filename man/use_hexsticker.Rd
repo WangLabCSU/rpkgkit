@@ -8,7 +8,7 @@ use_hexsticker(
   img_path,
   url = NULL,
   alt_text = "package logo",
-  height = 139,
+  height = 139L,
   align = "right",
   path = ".",
   ...
@@ -39,13 +39,14 @@ named arguments.}
 Invisibly returns \code{TRUE} on success.
 }
 \description{
-Adds a hex sticker image (optionally wrapped in a hyperlink) at the end of
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Adds a hex sticker image (optionally wrapped in a hyperlink) at the end of
 the top-level heading (the line starting with \verb{# }) in \code{README.md}.
 This is a common pattern for R package README files.
 }
 \examples{
-\donttest{
+\dontrun{
 temp <- tempdir()
+usethis::create_package(path = temp)
 writeLines("# Package Name", file.path(temp, "README.md"))
 file.create(file.path(temp, "logo.png"))
 use_hexsticker(file.path(temp, "logo.png"), url = "https://my-pkg-website.com", path = temp)

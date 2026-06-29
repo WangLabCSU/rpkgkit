@@ -6,7 +6,7 @@
 \usage{
 use_zzz(
   path = ".",
-  file_name = "zzz.R",
+  file_name = paste0(get_package_name(), "-package.R"),
   overwrite = FALSE,
   open = rlang::is_interactive(),
   ...
@@ -16,7 +16,7 @@ use_zzz(
 \item{path}{Character. Path to the package root directory. Defaults to
 the current working directory (\code{"."}).}
 
-\item{file_name}{Character. Output file name. Defaults to \code{"zzz.R"}.}
+\item{file_name}{Character. Output file name. Defaults to \code{"<pkg_name>-package.R"}.}
 
 \item{overwrite}{Logical. If \code{TRUE}, overwrite an existing file.
 Defaults to \code{FALSE}.}

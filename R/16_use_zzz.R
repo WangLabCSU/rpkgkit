@@ -14,7 +14,7 @@
 #'
 #' @param path Character. Path to the package root directory. Defaults to
 #'   the current working directory (\code{"."}).
-#' @param file_name Character. Output file name. Defaults to `"zzz.R"`.
+#' @param file_name Character. Output file name. Defaults to `"<pkg_name>-package.R"`.
 #' @param overwrite Logical. If `TRUE`, overwrite an existing file.
 #'   Defaults to `FALSE`.
 #' @param open Logical. Whether to open the created file in the default editor.
@@ -31,7 +31,7 @@
 #' }
 use_zzz <- function(
   path = ".",
-  file_name = "zzz.R",
+  file_name = paste0(get_package_name(), "-package.R"),
   overwrite = FALSE,
   open = rlang::is_interactive(),
   ...

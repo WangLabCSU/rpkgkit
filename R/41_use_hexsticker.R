@@ -1,7 +1,7 @@
 #' Use Hex Sticker in README
 #'
 #' @description
-#' Adds a hex sticker image (optionally wrapped in a hyperlink) at the end of
+#' `r lifecycle::badge('deprecated')` Adds a hex sticker image (optionally wrapped in a hyperlink) at the end of
 #' the top-level heading (the line starting with \verb{# }) in \code{README.md}.
 #' This is a common pattern for R package README files.
 #'
@@ -23,8 +23,9 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' temp <- tempdir()
+#' usethis::create_package(path = temp)
 #' writeLines("# Package Name", file.path(temp, "README.md"))
 #' file.create(file.path(temp, "logo.png"))
 #' use_hexsticker(file.path(temp, "logo.png"), url = "https://my-pkg-website.com", path = temp)
@@ -33,11 +34,16 @@ use_hexsticker <- function(
   img_path,
   url = NULL,
   alt_text = "package logo",
-  height = 139,
+  height = 139L,
   align = "right",
   path = ".",
   ...
 ) {
+  lifecycle::deprecate_warn(
+    "0.1.3",
+    "use_hexsticker()",
+    with = "usethis::use_logo()"
+  )
   # Build <img> tag attributes
   img_attrs <- c(
     src = img_path,
@@ -47,7 +53,7 @@ use_hexsticker <- function(
   )
 
   extra_attrs <- list(...)
-  if (length(extra_attrs) > 0) {
+  if (length(extra_attrs) > 0L) {
     extra_named <- stats::setNames(
       vapply(extra_attrs, as.character, character(1)),
       names(extra_attrs)

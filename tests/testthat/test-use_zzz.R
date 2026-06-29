@@ -14,14 +14,17 @@ test_that("aborts when zzz.R already exists and overwrite = FALSE", {
   dir.create(tmp)
   on.exit(unlink(tmp, recursive = TRUE))
 
-  writeLines(c(
-    "Package: testpkg",
-    "Title: My Package",
-    "Description: A package for testing.",
-    "License: MIT + file LICENSE"
-  ), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c(
+      "Package: testpkg",
+      "Title: My Package",
+      "Description: A package for testing.",
+      "License: MIT + file LICENSE"
+    ),
+    file.path(tmp, "DESCRIPTION")
+  )
   dir.create(file.path(tmp, "R"))
-  file.create(file.path(tmp, "R", "zzz.R"))
+  file.create(file.path(tmp, "R", "testpkg-package.R"))
 
   expect_error(
     use_zzz(path = tmp, overwrite = FALSE),
@@ -34,16 +37,19 @@ test_that("creates zzz.R with PKG replaced in template", {
   dir.create(tmp)
   on.exit(unlink(tmp, recursive = TRUE))
 
-  writeLines(c(
-    "Package: testpkg",
-    "Title: My Test Package",
-    "Description: A package for testing.",
-    "License: MIT + file LICENSE"
-  ), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c(
+      "Package: testpkg",
+      "Title: My Test Package",
+      "Description: A package for testing.",
+      "License: MIT + file LICENSE"
+    ),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   result <- use_zzz(path = tmp)
 
-  expected_path <- file.path(tmp, "R", "zzz.R")
+  expected_path <- file.path(tmp, "R", "testpkg-package.R")
   expect_equal(result, expected_path)
   expect_true(file.exists(expected_path))
 
@@ -58,16 +64,19 @@ test_that("creates zzz.R with correct TITLE replacement", {
   dir.create(tmp)
   on.exit(unlink(tmp, recursive = TRUE))
 
-  writeLines(c(
-    "Package: testpkg",
-    "Title: Custom Title Here",
-    "Description: A package for testing.",
-    "License: MIT + file LICENSE"
-  ), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c(
+      "Package: testpkg",
+      "Title: Custom Title Here",
+      "Description: A package for testing.",
+      "License: MIT + file LICENSE"
+    ),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   use_zzz(path = tmp)
 
-  lines <- readLines(file.path(tmp, "R", "zzz.R"), warn = FALSE)
+  lines <- readLines(file.path(tmp, "R", "testpkg-package.R"), warn = FALSE)
   expect_match(lines[1L], "#' @title Custom Title Here", fixed = TRUE)
 })
 
@@ -76,20 +85,27 @@ test_that("creates zzz.R with DESCRIPTION replacement (including multiline)", {
   dir.create(tmp)
   on.exit(unlink(tmp, recursive = TRUE))
 
-  writeLines(c(
-    "Package: testpkg",
-    "Title: My Package",
-    "Description: A package for testing.",
-    "  It has multiple lines.",
-    "License: MIT + file LICENSE"
-  ), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c(
+      "Package: testpkg",
+      "Title: My Package",
+      "Description: A package for testing.",
+      "  It has multiple lines.",
+      "License: MIT + file LICENSE"
+    ),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   use_zzz(path = tmp)
 
-  lines <- readLines(file.path(tmp, "R", "zzz.R"), warn = FALSE)
+  lines <- readLines(file.path(tmp, "R", "testpkg-package.R"), warn = FALSE)
   # Description spans lines 3-4: "#' @description A package for testing."
   # then "#' It has multiple lines."
-  expect_match(lines[3L], "#' @description A package for testing.", fixed = TRUE)
+  expect_match(
+    lines[3L],
+    "#' @description A package for testing.",
+    fixed = TRUE
+  )
   expect_match(lines[4L], "#' It has multiple lines.", fixed = TRUE)
 })
 
@@ -98,16 +114,19 @@ test_that("creates zzz.R with correct LICENSE replacement", {
   dir.create(tmp)
   on.exit(unlink(tmp, recursive = TRUE))
 
-  writeLines(c(
-    "Package: testpkg",
-    "Title: My Package",
-    "Description: A package for testing.",
-    "License: GPL-3"
-  ), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c(
+      "Package: testpkg",
+      "Title: My Package",
+      "Description: A package for testing.",
+      "License: GPL-3"
+    ),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   use_zzz(path = tmp)
 
-  lines <- readLines(file.path(tmp, "R", "zzz.R"), warn = FALSE)
+  lines <- readLines(file.path(tmp, "R", "testpkg-package.R"), warn = FALSE)
   expect_match(lines[6L], "^#' GPL-3$", perl = TRUE)
 })
 
@@ -116,15 +135,18 @@ test_that("overwrite = TRUE replaces existing zzz.R file", {
   dir.create(tmp)
   on.exit(unlink(tmp, recursive = TRUE))
 
-  writeLines(c(
-    "Package: testpkg",
-    "Title: My Package",
-    "Description: A package for testing.",
-    "License: MIT + file LICENSE"
-  ), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c(
+      "Package: testpkg",
+      "Title: My Package",
+      "Description: A package for testing.",
+      "License: MIT + file LICENSE"
+    ),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   dir.create(file.path(tmp, "R"))
-  writeLines("# old content", file.path(tmp, "R", "zzz.R"))
+  writeLines("# old content", file.path(tmp, "R", "testpkg-package.R"))
 
   result <- use_zzz(path = tmp, overwrite = TRUE)
 
@@ -137,12 +159,15 @@ test_that("custom file_name is respected", {
   dir.create(tmp)
   on.exit(unlink(tmp, recursive = TRUE))
 
-  writeLines(c(
-    "Package: testpkg",
-    "Title: My Package",
-    "Description: A package for testing.",
-    "License: MIT + file LICENSE"
-  ), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c(
+      "Package: testpkg",
+      "Title: My Package",
+      "Description: A package for testing.",
+      "License: MIT + file LICENSE"
+    ),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   result <- use_zzz(path = tmp, file_name = "internal.R")
 
@@ -156,16 +181,19 @@ test_that("returns invisible file path", {
   dir.create(tmp)
   on.exit(unlink(tmp, recursive = TRUE))
 
-  writeLines(c(
-    "Package: testpkg",
-    "Title: My Package",
-    "Description: A package for testing.",
-    "License: MIT + file LICENSE"
-  ), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c(
+      "Package: testpkg",
+      "Title: My Package",
+      "Description: A package for testing.",
+      "License: MIT + file LICENSE"
+    ),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   result <- withVisible(use_zzz(path = tmp))
 
-  expected <- file.path(tmp, "R", "zzz.R")
+  expected <- file.path(tmp, "R", "testpkg-package.R")
   expect_equal(result$value, expected)
   expect_false(result$visible)
 })
@@ -175,12 +203,15 @@ test_that("creates R/ directory if missing", {
   dir.create(tmp)
   on.exit(unlink(tmp, recursive = TRUE))
 
-  writeLines(c(
-    "Package: testpkg",
-    "Title: My Package",
-    "Description: A package for testing.",
-    "License: MIT + file LICENSE"
-  ), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c(
+      "Package: testpkg",
+      "Title: My Package",
+      "Description: A package for testing.",
+      "License: MIT + file LICENSE"
+    ),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   result <- use_zzz(path = tmp)
 
