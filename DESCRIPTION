@@ -1,6 +1,6 @@
 Package: rpkgkit
 Title: Create and Maintain R Packages
-Version: 0.1.3
+Version: 0.1.4
 Authors@R: c(
     person("Yuxi", "Yang", , "15364051195@163.com", role = c("aut", "cre")),
     person("Jacob", "Scott", role = c("aut", "cph"),
