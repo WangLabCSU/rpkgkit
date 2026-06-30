@@ -27,7 +27,7 @@ if (!requireNamespace("pak")) {
     )
   )
 }
-pak::pkg_install("WangLabCSU/rpkgkit")
+pak::pak("Exceret/rpkgkit")
 ```
 
 ## Features
@@ -394,16 +394,6 @@ cat(readLines(tf), sep = "\n")
 ```
 
 ### R Package Maintenance
-
-- [`use_hexsticker()`](https://wanglabcsu.github.io/rpkgkit/reference/use_hexsticker.md) -
-  Paste hex sticker to README.md
-
-``` r
-
-use_hexsticker("rpkgkit.logo") # Althought it doesn't exist
-
-# rpkgkit <img src="rpkgkit.logo" alt="package logo" align="right" height="139"/>
-```
 
 - [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md) -
   Create `zzz.R` file in `R/` folder, with `.onLoad`, `.onAttach`, and

@@ -1,4 +1,4 @@
-# Create a zzz.R file from a template
+# Create a (pkgname)-package.R file from a template
 
 Copies the built-in `zzz_template.R` to the target package's `R/`
 directory and replaces template placeholders (all-caps words) with
@@ -17,12 +17,20 @@ Template placeholders replaced:
 
 - `LICENSE` — license type
 
+Other information:
+
+- `.onLoad` and `.onAttach` is added to the file.
+
+- `usethis` namespace is added to the file.
+
+- `%||%` is added to the file.
+
 ## Usage
 
 ``` r
 use_zzz(
   path = ".",
-  file_name = "zzz.R",
+  file_name = paste0(get_package_name(path = path), "-package.R"),
   overwrite = FALSE,
   open = rlang::is_interactive(),
   ...
@@ -38,7 +46,7 @@ use_zzz(
 
 - file_name:
 
-  Character. Output file name. Defaults to `"zzz.R"`.
+  Character. Output file name. Defaults to `"<pkg_name>-package.R"`.
 
 - overwrite:
 

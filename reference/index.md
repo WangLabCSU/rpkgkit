@@ -30,6 +30,11 @@ The following functions help you to create and maintain an R package.
 - [`check_pkgdown_reference()`](https://wanglabcsu.github.io/rpkgkit/reference/check_pkgdown_reference.md)
   : Check that all exported functions are listed in pkgdown reference
 
+- [`convert_func_syntax()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_func_syntax.md)
+  :
+
+  Switch Between Explicit `function()` and Implicit `\()` Syntax
+
 - [`create_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/create_standalone.md)
   :
 
@@ -83,7 +88,7 @@ The following functions help you to create and maintain an R package.
   : Update the last-updated field in standalone R files
 
 - [`use_hexsticker()`](https://wanglabcsu.github.io/rpkgkit/reference/use_hexsticker.md)
-  : Use Hex Sticker in README
+  **\[deprecated\]** : Use Hex Sticker in README
 
 - [`use_multilanguage_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/use_multilanguage_readme.md)
   : Create Multilingual README Files
@@ -95,4 +100,4 @@ The following functions help you to create and maintain an R package.
   : Create a GitHub Actions workflow to auto-update R package version
 
 - [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
-  : Create a zzz.R file from a template
+  : Create a (pkgname)-package.R file from a template

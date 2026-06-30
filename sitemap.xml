@@ -1,5 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/404.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/CODE_OF_CONDUCT.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/LICENSE-text.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/LICENSE.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/authors.html</loc></url>
@@ -14,16 +15,27 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/browse_standalone.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/check_air_installed.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/check_pkgdown_reference.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_func_syntax.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/create_standalone.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/current_packages.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/detect_print_and_cat.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-cfs_find_matching_paren.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-cfs_process_text_once.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-cfs_transform_text.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_capture_inline_comments.html</loc></url>
-<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_skipped_ops.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_operators.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_transform_call.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_walk.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_walk_brace.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_walk_children.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_walk_expr.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_walk_for.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_walk_function_def.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_walk_if.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_walk_paren.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_walk_repeat.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_walk_while.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/flir_fix.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/index.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/inquire_standalone.html</loc></url>

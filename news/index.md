@@ -1,5 +1,45 @@
 # Changelog
 
+## rpkgkit 0.1.4 (2026-06-29)
+
+### MINOR IMPROVEMENTS
+
+- Added `%||%` function in
+  [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
+
+## rpkgkit 0.1.3 (2026-06-29)
+
+### BUG FIXES
+
+- Fixed ignorance of
+  [`make_func_arg_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_arg_explicit.md)
+  when resolving complex R syntax
+
+### MINOR IMPROVEMENTS
+
+- Made
+  [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
+  compatible with `usethis`
+
+- Added cov ignorance in
+  [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
+
+## rpkgkit 0.1.2 (2026-06-29)
+
+### NEW FEATURES
+
+- Added
+  [`convert_func_syntax()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_func_syntax.md)
+
+### MINOR IMPROVEMENTS
+
+- Changed default file name created by
+  [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
+  to -package.R
+
+- Bug fix in
+  [`use_workflow_version_update()`](https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_version_update.md)
+
 ## rpkgkit 0.1.1 (2026-06-27)
 
 ### DEPRECATED

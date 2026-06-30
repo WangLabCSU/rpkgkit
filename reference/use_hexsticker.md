@@ -1,8 +1,9 @@
 # Use Hex Sticker in README
 
-Adds a hex sticker image (optionally wrapped in a hyperlink) at the end
-of the top-level heading (the line starting with `# `) in `README.md`.
-This is a common pattern for R package README files.
+**\[deprecated\]** Adds a hex sticker image (optionally wrapped in a
+hyperlink) at the end of the top-level heading (the line starting with
+`# `) in `README.md`. This is a common pattern for R package README
+files.
 
 ## Usage
 
@@ -11,7 +12,7 @@ use_hexsticker(
   img_path,
   url = NULL,
   alt_text = "package logo",
-  height = 139,
+  height = 139L,
   align = "right",
   path = ".",
   ...
@@ -58,13 +59,11 @@ Invisibly returns `TRUE` on success.
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # \dontrun{
 temp <- tempdir()
+usethis::create_package(path = temp)
 writeLines("# Package Name", file.path(temp, "README.md"))
 file.create(file.path(temp, "logo.png"))
-#> [1] TRUE
 use_hexsticker(file.path(temp, "logo.png"), url = "https://my-pkg-website.com", path = temp)
-#> ✔ Added hex sticker reference to /tmp/RtmpFu9fmT/README.md
-#> → Image: /tmp/RtmpFu9fmT/logo.png
-# }
+} # }
 ```
