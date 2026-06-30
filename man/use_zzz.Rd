@@ -2,7 +2,7 @@
 % Please edit documentation in R/45_use_zzz.R
 \name{use_zzz}
 \alias{use_zzz}
-\title{Create a zzz.R file from a template}
+\title{Create a (pkgname)-package.R file from a template}
 \usage{
 use_zzz(
   path = ".",
@@ -40,6 +40,13 @@ Template placeholders replaced:
 \item \code{TITLE} — package title
 \item \code{DESCRIPTION} — package description (multiline values get \verb{#' } prefix)
 \item \code{LICENSE} — license type
+}
+
+Other information:
+\itemize{
+\item \code{.onLoad} and \code{.onAttach} is added to the file.
+\item \code{usethis} namespace is added to the file.
+\item \verb{\%||\%} is added to the file.
 }
 }
 \examples{

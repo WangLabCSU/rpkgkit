@@ -56,6 +56,7 @@ reference:
       - badge_translated_by_ai
       - browse_standalone
       - check_pkgdown_reference
+      - convert_func_syntax
       - create_standalone
       - is_dev_context
       - package_lost_glue_brace

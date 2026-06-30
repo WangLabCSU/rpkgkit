@@ -37,4 +37,11 @@
 ## usethis namespace: end
 NULL
 
+`%||%` <- function(left, right) {
+  if (is.null(left)) {
+    return(right)
+  }
+  left
+}
+
 # nocov end

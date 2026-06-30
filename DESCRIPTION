@@ -25,7 +25,7 @@ Depends:
 Imports: 
     cli,
     lifecycle,
-    rlang,
+    rlang (>= 1.0.0),
     rstudioapi
 Suggests: 
     desc,

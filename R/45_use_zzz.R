@@ -1,4 +1,4 @@
-#' Create a zzz.R file from a template
+#' Create a (pkgname)-package.R file from a template
 #'
 #' @description
 #' Copies the built-in `zzz_template.R` to the target package's `R/` directory
@@ -11,6 +11,11 @@
 #' * `TITLE` — package title
 #' * `DESCRIPTION` — package description (multiline values get `#' ` prefix)
 #' * `LICENSE` — license type
+#'
+#' Other information:
+#' * `.onLoad` and `.onAttach` is added to the file.
+#' * `usethis` namespace is added to the file.
+#' * `%||%` is added to the file.
 #'
 #' @param path Character. Path to the package root directory. Defaults to
 #'   the current working directory (\code{"."}).
@@ -81,6 +86,8 @@ use_zzz <- function(
     "## usethis namespace: start",
     "## usethis namespace: end",
     "NULL",
+    "",
+    "`%||%` <- function(x, y) if (is.null(x)) y else x",
     "",
     paste("# nocov", "end")
   )

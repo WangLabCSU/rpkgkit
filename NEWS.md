@@ -1,3 +1,10 @@
+# rpkgkit 0.1.4 (2026-06-29)
+
+## MINOR IMPROVEMENTS
+
+* Added `%||%` function in `use_zzz()`
+
+
 # rpkgkit 0.1.3 (2026-06-29)
 
 ## BUG FIXES
