@@ -50,7 +50,7 @@ convert_func_syntax <- function(
       cli::cli_abort(c("x" = "{.arg path} is required when not in RStudio."))
   }
 
-  direction <- match_arg(direction, c("to_lambda", "to_explicit"))
+  direction <- match_arg(direction, c("to_lambda", "to_explicit"), NULL)
 
   text <- readLines(path, warn = FALSE)
   original <- paste(text, collapse = "\n")

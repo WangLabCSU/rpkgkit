@@ -144,7 +144,7 @@ use_multilanguage_readme <- function(
   )
 
   cli::cli_alert_success(
-    "Created {length(created_files)} README translation file(s) in {.path inst/translations}."
+    "Created {length(created_files)} README translation file{?s} in {.path inst/translations}."
   )
   cli_inform_colored <- add_colors_to_cli(cli::cli_inform)
   cli_inform_colored(

@@ -1,14 +1,24 @@
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 # rpkgkit <a href="https://wanglabcsu.github.io/rpkgkit/"><img src="man/figures/logo.png" align="right" height="139" alt="rpkgkit website" /></a>
 
 <!-- badges: start -->
+
 [![Lifecycle:stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![CRAN status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
+[![Project Status: Active - The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
 [![R-CMD-check](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml)
-[![Devel version](https://img.shields.io/badge/devel%20version-0.1.3-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
-[![Code size](https://img.shields.io/github/languages/code-size/WangLabCSU/rpkgkit.svg)](https://github.com/WangLabCSU/rpkgkit)
-[![Codecov testcoverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WangLabCSU/rpkgkit)
+[![Devel
+version](https://img.shields.io/badge/devel%20version-0.1.3-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
+[![Code
+size](https://img.shields.io/github/languages/code-size/WangLabCSU/rpkgkit.svg)](https://github.com/WangLabCSU/rpkgkit)
+[![Codecov
+testcoverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
+[![Ask
+DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WangLabCSU/rpkgkit)
 [![简体中文](https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue)](inst/translations/README.zh-cn.md)
 <!-- badges: end -->
 
@@ -19,13 +29,13 @@ development.
 
 From CRAN:
 
-```r
+``` r
 install.packages("rpkgkit")
 ```
 
 From github:
 
-```r
+``` r
 if (!requireNamespace("pak")) {
   install.packages(
     "pak",
@@ -40,7 +50,6 @@ if (!requireNamespace("pak")) {
 pak::pak("Exceret/rpkgkit")
 ```
 
-
 ## Features
 
 All functions can detect active file contexts in RStudio and Positron,
@@ -50,11 +59,11 @@ so generally file path can be omitted.
 
 Use `usethis::use_standalone("WangLabCSU/rpkgkit", "<name>")` to import:
 
-- args\_to\_func.R: matching arguments to function calls:
+- args_to_func.R: matching arguments to function calls:
 
 <!-- -->
 
-```r
+``` r
 f1 <- function(a, b) a + b
 f2 <- function(x, y, ...) x * y
 f3 <- function(p, q) p - q
@@ -65,7 +74,7 @@ args <- list(a = 1, b = 2)
 match_func_to_args(args, f1, f2, f3)
 ```
 
-```r
+``` r
 args <- list(a = 1, b = 2, x = 3, y = 4)
 foo <- function(x , y = 1){x + y}
 filter_args_for_func(args, foo) # Keeps arguments for foo
@@ -76,10 +85,11 @@ filter_args_for_func(args, foo) # Keeps arguments for foo
 # [1] 4
 ```
 
-- caller\_cli.R: show where the cli function is called from
+- caller_cli.R: show where the cli function is called from
 
 <!-- -->
-```r
+
+``` r
 decorated <- add_caller_to_cli(cli::cli_alert_info)
 foo1 <- \() {
   print("I' m in foo1")
@@ -99,10 +109,12 @@ bar()
 # [1] "I' m in foo1"
 # ℹ [foo1()]: <- where is this called from?
 ```
-- colorful\_cli.R: Easier color calling in one cli function
+
+- colorful_cli.R: Easier color calling in one cli function
 
 <!-- -->
-```r
+
+``` r
 color_cli <- create_colorful_cli_env()
 color_cli$cli_alert_danger("{.red This is a red message}")
 color_cli$cli_alert_info("{.blue This is a blue message}")
@@ -114,26 +126,31 @@ color_cli2$cli_alert_success(
   "{.violetred3 R}{.orange a}{.yellow i}{.green n}{.cyan b}{.blue o}{.purple w}"
 )
 ```
-- match\_arg.R: partial matching of arguments to function calls, like
+
+- match_arg.R: partial matching of arguments to function calls, like
   `match.arg`, `rlang::arg_match`
 
-- ts\_cli.R: timestamp cli function
+- ts_cli.R: timestamp cli function
 
 <!-- -->
-```r
+
+``` r
 ts_cli <- create_ts_cli_env()
 ts_cli$cli_alert_info("Hello, world!")
 # ℹ [2026/05/30 22:45:42] Hello, world!
 ```
+
 ### Standalone File Management
 
 - `inquire_standalone()` - List standalone files available in a GitHub
-  repository's `R/` directory
+  repository’s `R/` directory
 
-- `browse_standalone()` - Look up all available standalone files in GitHub repositories
+- `browse_standalone()` - Look up all available standalone files in
+  GitHub repositories
 
 <!-- -->
-```r
+
+``` r
 inquire_standalone("r-lib/rlang")
 # A tibble: 13 × 9
 #    name                         path                           sha                                       size url                               html_url git_url download_url type
@@ -172,14 +189,15 @@ browse_standalone()
 - `create_standalone()` - Create standalone utility files in your
   package
 
-```r    
+``` r
 create_standalone("foo")
 # ✔ Created standalone file: /data/home/yyx/Project/rpkgkit/R/standalone-.R
 # ☐ File opened in editor.
 ```
+
 In `R/standalone-foo.R`
 
-```r
+``` r
 # ---
 # repo: WangLabCSU/rpkgkit
 # file: standalone-foo.R
@@ -197,7 +215,8 @@ In `R/standalone-foo.R`
   standalone files
 
 <!-- -->
-```r
+
+``` r
 update_time_in_standalone()
 
 # ---
@@ -213,7 +232,8 @@ update_time_in_standalone()
   files
 
 <!-- -->
-```r
+
+``` r
 add_changelog_in_standalone("R/standalone-foo.R", "Added foo function")
 # ✔ Added changelog entry for "2026-06-02" in 1 file(s).
 
@@ -237,7 +257,8 @@ add_changelog_in_standalone("R/standalone-foo.R", "Added foo function")
   guidelines
 
 <!-- -->
-```r
+
+``` r
 news_md_add_entry("Added foo function")
 
 # rpkgkit 0.0.4 (2026-06-02)
@@ -250,7 +271,8 @@ news_md_add_entry("Added foo function")
 - `news_md_check()` - Validate NEWS.md format for CRAN compliance
 
 <!-- -->
-```r
+
+``` r
 news_md_check()
 # ℹ Checking NEWS.md with 22 lines
 # ✔ NEWS.md passed all required checks
@@ -271,18 +293,19 @@ news_md_check()
 # [4] "Line 14: Longer entries should end with punctuation"
 ```
 
-- `news_md_show()` - Display NEWS.md content of a package in console with color
+- `news_md_show()` - Display NEWS.md content of a package in console
+  with color
 
 ### R Function Transformation
 
 - `make_func_call_explicit()` - Make function calls explicit by adding
   package prefixes
-- `package_func_call_explicit()` - Make function calls explicit by adding
-  package prefixes in a package
+- `package_func_call_explicit()` - Make function calls explicit by
+  adding package prefixes in a package
 
 This is a code snippet from [dplyr](https://github.com/tidyverse/dplyr)
 
-```r
+``` r
 
 starwars |>
   mutate(name, bmi = mass / ((height / 100)^2)) |>
@@ -293,7 +316,7 @@ make_func_call_explicit("path_to_file", use_packages = "dplyr")
 
 It will be converted to
 
-```r
+``` r
 starwars |>
   dplyr::mutate(name, bmi = mass / ((height / 100)^2)) |>
   dplyr::select(name:mass, bmi)
@@ -302,9 +325,10 @@ starwars |>
 - `detect_lost_glue_brace()` - Find all `glue` calls that are missing a
   closing brace in a file. Supports both `glue` and `cli` expressions.
 - `package_lost_glue_brace()` - Find all `glue` calls that are missing a
-  closing brace in a package. Supports both `glue` and `cli` expressions.
+  closing brace in a package. Supports both `glue` and `cli`
+  expressions.
 
-```r
+``` r
 # foo.R
 name <- "world"
 msg <- glue::glue("Hello, {name!")
@@ -316,7 +340,7 @@ bar <- cli::col_red(cli::cli_alert_warning(
 ))
 ```
 
-```r
+``` r
 detect_lost_glue_brace()
 
 # msg <- glue::glue("Hello, {name!")
@@ -327,10 +351,12 @@ detect_lost_glue_brace()
 # ✖ Found 2 lines with mismatched braces: 3 and 8
 ```
 
-- `make_func_arg_explicit()` - Make function arguments are passed with explicit parameter names
-- `package_func_arg_explicit()` - Make function arguments are passed with explicit parameter names in a package
+- `make_func_arg_explicit()` - Make function arguments are passed with
+  explicit parameter names
+- `package_func_arg_explicit()` - Make function arguments are passed
+  with explicit parameter names in a package
 
-```r
+``` r
 tf <- tempfile(fileext = ".R")
 writeLines("vapply(1:9, function(x) x*2, numeric(1))", tf)
 make_func_arg_explicit(tf)
@@ -342,7 +368,7 @@ cat(readLines(tf), sep = "\n")
 
 - `rename_func()` - Rename functions in a file with specific style
 
-```r
+``` r
 tf <- tempfile(fileext = ".R")
 writeLines("this_is_a_function <- function(){message('Hello, world')}", tf)
 
@@ -356,12 +382,15 @@ cat(readLines(tf), sep = "\n")
 # thisIsAFunction <- function(){message('Hello, world')}
 ```
 
-- `detect_print_and_cat()` - Detect `print()` and `cat()` calls in a file
-- `package_print_and_cat()` - Detect `print()` and `cat()` calls in a package
+- `detect_print_and_cat()` - Detect `print()` and `cat()` calls in a
+  file
+- `package_print_and_cat()` - Detect `print()` and `cat()` calls in a
+  package
 
-`print()` and `cat()` are not allowed due to CRAN policy, so we need to fix them with `message()`
+`print()` and `cat()` are not allowed due to CRAN policy, so we need to
+fix them with `message()`
 
-```r
+``` r
 tf <- tempfile(fileext = ".R")
 writeLines("print('Hello, world')", tf)
 detect_print_and_cat(tf)
@@ -374,11 +403,30 @@ cat(readLines(tf), sep = "\n")
 # message('Hello, world')
 ```
 
+- `convert_func_syntax()` - Convert function syntax between `function()`
+  and `\()`
+
+``` r
+f <- tempfile(fileext = ".R")
+writeLines("f <- function(x) x^2", f)
+convert_func_syntax(f)
+# ✔ Converted function definitions in /tmp/Rtmp9ftJDS/file2a5a1320c9342e.R to "to_lambda"
+message(readLines(f), sep = "\n")
+# f <- \(x) x^2
+
+convert_func_syntax(f, "to_explicit")
+# ✔ Converted function definitions in /tmp/Rtmp9ftJDS/file2a5a1320c9342e.R to "to_explicit"
+message(readLines(f), sep = "\n")
+# f <- function(x) x^2
+```
+
 ### R Package Maintenance
 
-- `use_zzz()` - Create `zzz.R` file in `R/` folder, with `.onLoad`, `.onAttach`, and package description
+- `use_zzz()` - Create `{pkgname}-package.R` file in `R/` folder, with
+  `.onLoad`, `.onAttach`, `%||%` and package description. Similar to
+  `usethis::use_package_doc()` but more powerful.
 
-```r
+``` r
 # * E.g., use it in rpkgkit dev environment
 use_zzz()
 
@@ -415,9 +463,10 @@ use_zzz()
 # }
 ```
 
-- `check_pkgdown_reference()` - Check if all exported function are referenced in `_pkgdown.yml` 
+- `check_pkgdown_reference()` - Check if all exported function are
+  referenced in `_pkgdown.yml`
 
-```r
+``` r
 check_pkgdown_reference()
 # ✖ 9 exported functions missing from pkgdown reference:
 # - current_packages
@@ -431,11 +480,14 @@ check_pkgdown_reference()
 # - news_md_show
 ```
 
-- `use_vendor()` - Reference a permissively-licensed R package from GitHub for inclusion in your own R package. Make it easy to import github R package under CRAN policy.
+- `use_vendor()` - Reference a permissively-licensed R package from
+  GitHub for inclusion in your own R package. Make it easy to import
+  github R package under CRAN policy.
 
-License, copyright and declaration are automatically generated in `DESCRIPTION`, `R/vendor-*.R` and `inst/vendor/`.
+License, copyright and declaration are automatically generated in
+`DESCRIPTION`, `R/vendor-*.R` and `inst/vendor/`.
 
-```r
+``` r
 dir <- tempdir()
 usethis::create_package(path = dir)
 use_vendor(pkg = "WangLabCSU/rpkgkit", "43_use_vendor.R", branch = "main", path = dir)
@@ -457,10 +509,36 @@ use_vendor(pkg = "WangLabCSU/rpkgkit", "43_use_vendor.R", branch = "main", path 
 # - The authors of the [rpkgkit](https://github.com/WangLabCSU/rpkgkit) package &mdash; **Yuxi Yang, Jacob Scott, Christopher T. Kenny, Sebastian Lammers and Diego Hernangómez** &mdash; whose code is included (under MIT license) in `R/vendor-rpkgkit.R`.
 ```
 
+- `use_multilanguage_readme()` - Create a multi-language README.md
+  template for your R package.
+- `badge_translated_by_ai()` - Create a badge for translated by AI.
+
+``` r
+use_multilangauge_readme("es")
+# ✔ Created 1 README translation file in inst/translations.
+# ☐ Consider pasting the following badges into your main README.md:
+
+# [![Español](https://img.shields.io/badge/README-Espa%C3%B1ol-blue)](inst/translations/README.es.md)
+```
+
+``` r
+badge_translated_by_ai("es")
+# ☐ Consider copying the following statement to the AI-translated file(s):
+
+# [![AI](https://img.shields.io/badge/AI-Espa%C3%B1ol-yellow)]()
+
+# > Este contenido ha sido traducido por IA y no ha sido revisado. No es la lengua materna del autor y es solo para referencia.
+```
+
 ## Acknowledgements
 
 We would like to thank the following people and projects:
 
-- The authors of the [pedant](https://github.com/wurli/pedant) package — **Jacob Scott**, **Christopher T. Kenny**, and **Sebastian Lammers** — whose code is included (under MIT license) in `R/vendor-pedant.R`.
-- The authors of the [pkgdev](https://github.com/dieghernan/pkgdev) package &mdash; **Diego Hernangómez** &mdash; whose code is included (under MIT license) in `R/vendor-pkgdev.R`. 
-- All contributors and users who have reported issues, suggested features, or helped improve the package.
+- The authors of the [pedant](https://github.com/wurli/pedant) package —
+  **Jacob Scott**, **Christopher T. Kenny**, and **Sebastian Lammers** —
+  whose code is included (under MIT license) in `R/vendor-pedant.R`.
+- The authors of the [pkgdev](https://github.com/dieghernan/pkgdev)
+  package — **Diego Hernangómez** — whose code is included (under MIT
+  license) in `R/vendor-pkgdev.R`.
+- All contributors and users who have reported issues, suggested
+  features, or helped improve the package.
