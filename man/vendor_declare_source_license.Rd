@@ -5,7 +5,7 @@
 \title{Helper: set up inst/vendor/\if{html}{\out{<pkg>}}/ with LICENSE files and README}
 \usage{
 vendor_declare_source_license(
-  path = ".",
+  path = NULL,
   owner = character(1L),
   repo = character(1L),
   branch = character(1L),

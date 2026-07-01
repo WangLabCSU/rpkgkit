@@ -10,7 +10,7 @@ use_hexsticker(
   alt_text = "package logo",
   height = 139L,
   align = "right",
-  path = ".",
+  path = NULL,
   ...
 )
 }
@@ -29,8 +29,8 @@ no hyperlink is added.}
 
 \item{align}{Character. Image alignment attribute. Defaults to \code{"right"}.}
 
-\item{path}{Character. Path to the package root directory. Defaults to the
-current working directory (\code{"."}).}
+\item{path}{Character. Path to the package root directory. If \code{NULL}
+(the default), uses the current working directory.}
 
 \item{...}{Additional HTML attributes to include in the \verb{<img>} tag as
 named arguments.}

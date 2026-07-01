@@ -6,7 +6,7 @@
 \alias{make_func_arg_explicit}
 \title{Make Function Arguments Explicit}
 \usage{
-package_func_arg_explicit(path = ".", skip_functions = NULL, ...)
+package_func_arg_explicit(path = NULL, skip_functions = NULL, ...)
 
 make_func_arg_explicit(path = NULL, skip_functions = NULL, ...)
 }

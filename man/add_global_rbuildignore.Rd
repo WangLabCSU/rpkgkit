@@ -4,15 +4,15 @@
 \alias{add_global_rbuildignore}
 \title{Add global .Rbuildignore patterns}
 \usage{
-add_global_rbuildignore(..., path = ".")
+add_global_rbuildignore(..., path = NULL)
 }
 \arguments{
 \item{...}{Additional regex patterns (character strings) to add beyond
 the curated defaults. Each must already be in \code{.Rbuildignore} regex
 format (e.g. \code{"^\\\\.myfile$"}).}
 
-\item{path}{Character. Path to the package root directory. Defaults to
-the current working directory (\code{"."}).}
+\item{path}{Character. Path to the package root directory. If \code{NULL}
+(the default), uses the current working directory.}
 }
 \value{
 Invisibly returns the path to \code{.Rbuildignore}.

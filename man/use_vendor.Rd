@@ -4,7 +4,7 @@
 \alias{use_vendor}
 \title{Use a Vendor Package}
 \usage{
-use_vendor(pkg, ..., branch = "main", path = ".")
+use_vendor(pkg, ..., branch = "main", path = NULL)
 }
 \arguments{
 \item{pkg}{GitHub repository specification in \code{"owner/repo"} form or a full
@@ -16,7 +16,8 @@ infrastructure is set up.}
 
 \item{branch}{Github repository branch name.  Defaults to \code{"main"}}
 
-\item{path}{Path to the target package directory. Defaults to \code{"."}.}
+\item{path}{Path to the target package directory. If \code{NULL}
+(the default), uses the current working directory.}
 }
 \value{
 Invisibly returns \code{NULL}, called for side effects.

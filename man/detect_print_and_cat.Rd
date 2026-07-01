@@ -6,7 +6,7 @@
 \alias{detect_print_and_cat}
 \title{Detect \code{print()} and \code{cat()} Calls (CRAN-Unsafe)}
 \usage{
-package_print_and_cat(path = ".", test_included = TRUE, fix = FALSE, ...)
+package_print_and_cat(path = NULL, test_included = TRUE, fix = FALSE, ...)
 
 detect_print_and_cat(path = NULL, fix = FALSE, ...)
 }

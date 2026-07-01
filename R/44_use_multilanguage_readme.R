@@ -17,8 +17,8 @@
 #'
 #' @param color Color of badge. Defaults to `"blue"`
 #' @param ... Not used.
-#' @param path Character. Path to the package root directory. Defaults to
-#'   the current working directory (`"."`).
+#' @param path Character. Path to the package root directory. If \code{NULL}
+#'   (the default), uses the current working directory.
 #' @param overwrite Logical. If `TRUE`, overwrite existing README translation
 #'   files. Defaults to `FALSE`.
 #'
@@ -65,10 +65,11 @@ use_multilanguage_readme <- function(
   lang = c("zh-cn", "es", "fr", "ar", "ru"),
   color = "blue",
   ...,
-  path = ".",
+  path = NULL,
   overwrite = FALSE
 ) {
   rlang::check_dots_empty0()
+  path <- path %||% "."
 
   # -- Validate package root --
   if (!is_pkg(path)) {

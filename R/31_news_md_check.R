@@ -4,8 +4,8 @@
 #' Validates the NEWS.md file against CRAN guidelines and common best practices.
 #' Reports issues found and provides suggestions for fixes.
 #'
-#' @param path Path to the package root. Defaults to the current working
-#'   directory (\code{"."}).
+#' @param path Path to the package root. If \code{NULL} (the default), uses
+#'   the current working directory.
 #' @param strict If TRUE, treats warnings as errors. Default is FALSE.
 #' @param verbose If TRUE, prints detailed information about checks performed.
 #'
@@ -29,7 +29,8 @@
 #'   print(result$warnings)
 #' }
 #' }
-news_md_check <- function(path = ".", strict = FALSE, verbose = TRUE) {
+news_md_check <- function(path = NULL, strict = FALSE, verbose = TRUE) {
+  path <- path %||% "."
   news_path <- file.path(path, "NEWS.md")
 
   result <- list(

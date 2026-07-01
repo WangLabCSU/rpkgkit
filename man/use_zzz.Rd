@@ -5,7 +5,7 @@
 \title{Create a (pkgname)-package.R file from a template}
 \usage{
 use_zzz(
-  path = ".",
+  path = NULL,
   file_name = paste0(get_package_name(path = path), "-package.R"),
   overwrite = FALSE,
   open = rlang::is_interactive(),
@@ -13,8 +13,8 @@ use_zzz(
 )
 }
 \arguments{
-\item{path}{Character. Path to the package root directory. Defaults to
-the current working directory (\code{"."}).}
+\item{path}{Character. Path to the package root directory. If \code{NULL}
+(the default), uses the current working directory.}
 
 \item{file_name}{Character. Output file name. Defaults to \code{"<pkg_name>-package.R"}.}
 
@@ -46,7 +46,6 @@ Other information:
 \itemize{
 \item \code{.onLoad} and \code{.onAttach} is added to the file.
 \item \code{usethis} namespace is added to the file.
-\item \verb{\%||\%} is added to the file.
 }
 }
 \examples{

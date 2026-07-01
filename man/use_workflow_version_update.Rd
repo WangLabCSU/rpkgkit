@@ -4,11 +4,16 @@
 \alias{use_workflow_version_update}
 \title{Create a GitHub Actions workflow to auto-update R package version}
 \usage{
-use_workflow_version_update(path = ".", overwrite = FALSE, color = "blue", ...)
+use_workflow_version_update(
+  path = NULL,
+  overwrite = FALSE,
+  color = "blue",
+  ...
+)
 }
 \arguments{
-\item{path}{Character. Path to the package root directory. Defaults to the
-current working directory (\code{"."}).}
+\item{path}{Character. Path to the package root directory. If \code{NULL}
+(the default), uses the current working directory.}
 
 \item{overwrite}{Logical. If \code{TRUE}, overwrite an existing workflow file.
 Defaults to \code{FALSE}.}

@@ -13,7 +13,8 @@
 #'   and append to the vendor R file. If empty (default), only the
 #'   infrastructure is set up.
 #' @param branch Github repository branch name.  Defaults to `"main"`
-#' @param path Path to the target package directory. Defaults to `"."`.
+#' @param path Path to the target package directory. If \code{NULL}
+#'   (the default), uses the current working directory.
 #'
 #' @return Invisibly returns `NULL`, called for side effects.
 #' @export
@@ -27,9 +28,10 @@ use_vendor <- function(
   pkg,
   ...,
   branch = "main",
-  path = "."
+  path = NULL
 ) {
   rlang::check_installed(c("httr2", "desc"))
+  path <- path %||% "."
 
   path <- normalizePath(path, mustWork = FALSE)
 
@@ -204,12 +206,13 @@ vendor_desc_authors <- function(desc) {
 #' Helper: set up inst/vendor/<pkg>/ with LICENSE files and README
 #' @keywords internal
 vendor_declare_source_license <- function(
-  path = ".",
+  path = NULL,
   owner = character(1L),
   repo = character(1L),
   branch = character(1L),
   repo_url = character(1L)
 ) {
+  path <- path %||% "."
   vendor_dir <- file.path(path, "inst", "vendor", repo)
   dir.create(vendor_dir, recursive = TRUE, showWarnings = FALSE)
   cli::cli_alert_success("Created directory {.file {vendor_dir}}.")
@@ -263,7 +266,7 @@ vendor_declare_source_license <- function(
 # Helper: create R/vendor-<pkg>.R
 #' @keywords internal
 vendor_create_r_file <- function(
-  path = ".",
+  path = NULL,
   repo = character(1L),
   repo_url = character(1L),
   author_str = character(1L),
@@ -273,6 +276,7 @@ vendor_create_r_file <- function(
   dots = list(),
   desc_vendor = NULL
 ) {
+  path <- path %||% "."
   r_path <- file.path(path, "R", sprintf("vendor-%s.R", repo))
 
   files_to_copy <- lapply(X = dots, FUN = function(file) {
@@ -423,11 +427,12 @@ vendor_create_r_file <- function(
 #' Helper: update DESCRIPTION with vendor authors and copyright
 #' @keywords internal
 vendor_update_desc <- function(
-  path = ".",
+  path = NULL,
   author_info = character(1L),
   repo = character(1L),
   repo_url = character(1L)
 ) {
+  path <- path %||% "."
   desc <- desc::desc(file = file.path(path, "DESCRIPTION"))
 
   # -- Update Authors@R --

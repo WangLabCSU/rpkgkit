@@ -8,7 +8,7 @@ use_multilanguage_readme(
   lang = c("zh-cn", "es", "fr", "ar", "ru"),
   color = "blue",
   ...,
-  path = ".",
+  path = NULL,
   overwrite = FALSE
 )
 }
@@ -22,8 +22,8 @@ or they will be used as-is for badge labels.}
 
 \item{...}{Not used.}
 
-\item{path}{Character. Path to the package root directory. Defaults to
-the current working directory (\code{"."}).}
+\item{path}{Character. Path to the package root directory. If \code{NULL}
+(the default), uses the current working directory.}
 
 \item{overwrite}{Logical. If \code{TRUE}, overwrite existing README translation
 files. Defaults to \code{FALSE}.}

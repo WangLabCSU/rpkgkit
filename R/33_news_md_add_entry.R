@@ -11,8 +11,8 @@
 #'   "DEFUNCT", "BREAKING CHANGES", "PERFORMANCE", "TESTING",
 #'   "INTERNAL CHANGES"). Default is "NEW FEATURES".
 #' @param contributor GitHub username or name for attribution (optional).
-#' @param path Path to the package root. Defaults to the current working
-#'   directory (\code{"."}).
+#' @param path Path to the package root. If \code{NULL} (the default), uses
+#'   the current working directory.
 #' @param date Date of the release. If NULL, uses today's date (YYYY-MM-DD format).
 #' @param open_section If TRUE and the version section exists but isn't open
 #'   (has content after it), creates a new section. If FALSE, adds to existing section.
@@ -44,10 +44,11 @@ news_md_add_entry <- function(
   version = NULL,
   category = "NEW FEATURES",
   contributor = NULL,
-  path = ".",
+  path = NULL,
   date = NULL,
   open_section = TRUE
 ) {
+  path <- path %||% "."
   category <- match_arg(
     category,
     c(

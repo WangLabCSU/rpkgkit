@@ -15,10 +15,9 @@
 #' Other information:
 #' * `.onLoad` and `.onAttach` is added to the file.
 #' * `usethis` namespace is added to the file.
-#' * `%||%` is added to the file.
 #'
-#' @param path Character. Path to the package root directory. Defaults to
-#'   the current working directory (\code{"."}).
+#' @param path Character. Path to the package root directory. If \code{NULL}
+#'   (the default), uses the current working directory.
 #' @param file_name Character. Output file name. Defaults to `"<pkg_name>-package.R"`.
 #' @param overwrite Logical. If `TRUE`, overwrite an existing file.
 #'   Defaults to `FALSE`.
@@ -35,13 +34,14 @@
 #' use_zzz(dir)
 #' }
 use_zzz <- function(
-  path = ".",
+  path = NULL,
   file_name = paste0(get_package_name(path = path), "-package.R"),
   overwrite = FALSE,
   open = rlang::is_interactive(),
   ...
 ) {
   rlang::check_dots_empty0()
+  path <- path %||% "."
   rlang::check_installed("usethis")
   if (!is_pkg(path = path)) {
     cli::cli_abort(c(
@@ -86,8 +86,6 @@ use_zzz <- function(
     "## usethis namespace: start",
     "## usethis namespace: end",
     "NULL",
-    "",
-    "`%||%` <- function(x, y) if (is.null(x)) y else x",
     "",
     paste("# nocov", "end")
   )

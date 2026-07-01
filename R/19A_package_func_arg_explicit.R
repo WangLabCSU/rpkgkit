@@ -2,8 +2,9 @@
 #'   package's \code{R/} directory, making function arguments explicit.
 #'
 #' @export
-package_func_arg_explicit <- function(path = ".", skip_functions = NULL, ...) {
+package_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
   rlang::check_dots_empty0()
+  path <- path %||% "."
   path <- normalizePath(path = path, mustWork = FALSE)
   if (!is_pkg(path = path)) {
     cli::cli_abort("{.path {path}} is not an R package (no DESCRIPTION found).")

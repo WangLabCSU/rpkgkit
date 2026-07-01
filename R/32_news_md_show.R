@@ -3,8 +3,8 @@
 #' @description
 #' Reads and displays the NEWS.md file content with optional filtering.
 #'
-#' @param path Path to the package root. Defaults to the current working
-#'   directory (\code{"."}).
+#' @param path Path to the package root. If \code{NULL} (the default), uses
+#'   the current working directory.
 #' @param version Show only entries for a specific version. Use "latest" for most recent.
 #' @param max_versions Maximum number of versions to display. NULL shows all.
 #'
@@ -26,7 +26,8 @@
 #' # Show last 3 versions
 #' news_md_show(max_versions = 3, path = temp)
 #' }
-news_md_show <- function(path = ".", version = NULL, max_versions = NULL) {
+news_md_show <- function(path = NULL, version = NULL, max_versions = NULL) {
+  path <- path %||% "."
   news_path <- file.path(path, "NEWS.md")
 
   if (!file.exists(news_path)) {

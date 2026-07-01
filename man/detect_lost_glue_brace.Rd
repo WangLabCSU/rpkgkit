@@ -6,7 +6,7 @@
 \alias{detect_lost_glue_brace}
 \title{Detect Lost Glue Brace in \code{glue} and \code{cli} Expressions}
 \usage{
-package_lost_glue_brace(path = ".", test_included = TRUE, ...)
+package_lost_glue_brace(path = NULL, test_included = TRUE, ...)
 
 detect_lost_glue_brace(path = NULL, ...)
 }

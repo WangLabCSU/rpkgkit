@@ -3,13 +3,14 @@
 #'
 #' @export
 package_func_call_explicit <- function(
-  path = ".",
+  path = NULL,
   use_packages = current_packages(),
   ignore_functions = imported_functions(),
   ...
 ) {
   rlang::check_dots_empty0()
   rlang::check_installed("pkgload")
+  path <- path %||% "."
   path <- normalizePath(path = path, mustWork = FALSE)
   if (!is_pkg(path = path)) {
     cli::cli_abort("{.path {path}} is not an R package (no DESCRIPTION found).")

@@ -13,8 +13,8 @@
 #' @param ... Additional regex patterns (character strings) to add beyond
 #'   the curated defaults. Each must already be in `.Rbuildignore` regex
 #'   format (e.g. `"^\\.myfile$"`).
-#' @param path Character. Path to the package root directory. Defaults to
-#'   the current working directory (`"."`).
+#' @param path Character. Path to the package root directory. If \code{NULL}
+#'   (the default), uses the current working directory.
 #'
 #' @return Invisibly returns the path to `.Rbuildignore`.
 #' @export
@@ -26,7 +26,8 @@
 #' # With additional custom patterns
 #' add_global_rbuildignore("^\\.myconfig$", "^data-raw$")
 #' }
-add_global_rbuildignore <- function(..., path = ".") {
+add_global_rbuildignore <- function(..., path = NULL) {
+  path <- path %||% "."
   if (!is_pkg(path)) {
     cli::cli_abort(c(
       "x" = "{.path {path}} is not an R package root.",

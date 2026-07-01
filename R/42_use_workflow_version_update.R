@@ -14,8 +14,8 @@
 #'
 #' The `workflow_dispatch` input always overrides commit message detection.
 #'
-#' @param path Character. Path to the package root directory. Defaults to the
-#'   current working directory (\code{"."}).
+#' @param path Character. Path to the package root directory. If \code{NULL}
+#'   (the default), uses the current working directory.
 #' @param overwrite Logical. If `TRUE`, overwrite an existing workflow file.
 #'   Defaults to `FALSE`.
 #' @param color badge color
@@ -32,11 +32,12 @@
 #' use_workflow_version_update(temp, overwrite = TRUE)
 #' }
 use_workflow_version_update <- function(
-  path = ".",
+  path = NULL,
   overwrite = FALSE,
   color = "blue",
   ...
 ) {
+  path <- path %||% "."
   if (!is_pkg(path)) {
     cli::cli_abort(c(
       "x" = "{.path {path}} is not an R package root.",

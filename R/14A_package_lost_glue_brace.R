@@ -2,7 +2,8 @@
 #'   (and optionally \code{tests/testthat/}), aggregated with per-file reporting.
 #'
 #' @export
-package_lost_glue_brace <- function(path = ".", test_included = TRUE, ...) {
+package_lost_glue_brace <- function(path = NULL, test_included = TRUE, ...) {
+  path <- path %||% "."
   path <- normalizePath(path = path, mustWork = FALSE)
   if (!is_pkg(path = path)) {
     cli::cli_abort("{.path {path}} is not an R package (no DESCRIPTION found).")

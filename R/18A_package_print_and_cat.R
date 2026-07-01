@@ -3,11 +3,12 @@
 #'
 #' @export
 package_print_and_cat <- function(
-  path = ".",
+  path = NULL,
   test_included = TRUE,
   fix = FALSE,
   ...
 ) {
+  path <- path %||% "."
   path <- normalizePath(path = path, mustWork = FALSE)
   if (!is_pkg(path = path)) {
     cli::cli_abort("{.path {path}} is not an R package (no DESCRIPTION found).")

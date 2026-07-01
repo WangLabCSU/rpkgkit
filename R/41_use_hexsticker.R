@@ -14,8 +14,8 @@
 #' @param height Numeric or character. Image height in pixels. Defaults to
 #'   \code{139}.
 #' @param align Character. Image alignment attribute. Defaults to \code{"right"}.
-#' @param path Character. Path to the package root directory. Defaults to the
-#'   current working directory (\code{"."}).
+#' @param path Character. Path to the package root directory. If \code{NULL}
+#'   (the default), uses the current working directory.
 #' @param ... Additional HTML attributes to include in the \verb{<img>} tag as
 #'   named arguments.
 #'
@@ -36,9 +36,10 @@ use_hexsticker <- function(
   alt_text = "package logo",
   height = 139L,
   align = "right",
-  path = ".",
+  path = NULL,
   ...
 ) {
+  path <- path %||% "."
   lifecycle::deprecate_warn(
     "0.1.3",
     "use_hexsticker()",

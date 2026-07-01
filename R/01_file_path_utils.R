@@ -18,7 +18,8 @@ get_wd <- function() {
   current_wd
 }
 
-get_package_name <- function(path = ".") {
+get_package_name <- function(path = NULL) {
+  path <- path %||% "."
   if (!is_pkg(path)) {
     stop("The path is not a package")
   }

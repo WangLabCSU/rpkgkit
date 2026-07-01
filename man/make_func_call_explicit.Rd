@@ -7,7 +7,7 @@
 \title{Make Function Calls Explicit}
 \usage{
 package_func_call_explicit(
-  path = ".",
+  path = NULL,
   use_packages = current_packages(),
   ignore_functions = imported_functions(),
   ...

@@ -8,23 +8,23 @@
 \alias{news_md_add_entry}
 \title{Manage NEWS.md file for R packages}
 \usage{
-news_md_check(path = ".", strict = FALSE, verbose = TRUE)
+news_md_check(path = NULL, strict = FALSE, verbose = TRUE)
 
-news_md_show(path = ".", version = NULL, max_versions = NULL)
+news_md_show(path = NULL, version = NULL, max_versions = NULL)
 
 news_md_add_entry(
   entry,
   version = NULL,
   category = "NEW FEATURES",
   contributor = NULL,
-  path = ".",
+  path = NULL,
   date = NULL,
   open_section = TRUE
 )
 }
 \arguments{
-\item{path}{Path to the package root. Defaults to the current working
-directory (\code{"."}).}
+\item{path}{Path to the package root. If \code{NULL} (the default), uses
+the current working directory.}
 
 \item{strict}{If TRUE, treats warnings as errors. Default is FALSE.}
 
