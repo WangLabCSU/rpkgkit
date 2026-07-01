@@ -4,7 +4,37 @@
 
 ## Reviewer comments
 
-This is a resubmission in response to the review by Benjamin Altmann.
+This is a resubmission in response to the review by Konstanze Lauseker.
+
+### Writing to home filespace
+
+All functions that previously defaulted to `path = "."` now use `path = NULL`
+as the default parameter. The following functions were updated:
+
+- `use_zzz()`
+- `add_global_rbuildignore()`
+- `news_md_check()`, `news_md_show()`, `news_md_add_entry()`
+- `use_hexsticker()`, `use_workflow_version_update()`
+- `use_vendor()`, `use_multilanguage_readme()`
+- `package_lost_glue_brace()`, `package_print_and_cat()`
+- `package_func_call_explicit()`, `package_func_arg_explicit()`
+- Internal helpers: `vendor_declare_source_license()`,
+  `vendor_create_r_file()`, `vendor_update_desc()`,
+  `get_package_name()`
+
+All examples and tests write to `tempdir()` or `tempfile()` only, and all
+temporary files are properly cleaned up (using `withr::local_tempdir()`,
+`withr::local_tempfile()`, or `on.exit(unlink(...))`).
+
+### Test results
+
+All 1129 tests pass with 0 failures (`devtools::test()`).
+
+---
+
+## Previous responses (for historical reference)
+
+### R CMD check results (previous submission)
 
 ### 1. Description and Title
 
