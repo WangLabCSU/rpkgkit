@@ -208,7 +208,7 @@ update_time_in_standalone()
 ```
 
 - [`add_changelog_in_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/add_changelog_in_standalone.md) -
-  Add changelog entries to standalone files
+  Add changelog entries to standalone files.
 
 ``` r
 
@@ -235,13 +235,39 @@ add_changelog_in_standalone("R/standalone-foo.R", "Added foo function")
   Add new entries to NEWS.md following CRAN guidelines
 
 ``` r
-news_md_add_entry("Added foo function")
 
+news_md_add_entry("Added foo function")
+```
+
+``` R
 # rpkgkit 0.0.4 (2026-06-02)
 
 ## NEW FEATURES
 
 * Added foo function
+```
+
+Add a different entry
+
+``` r
+
+news_md_add_entry(
+  entry = "Fixed bugs in `foo()`",  
+  version = "0.0.4",
+  category = "BUG FIXES"
+)
+```
+
+``` R
+# rpkgkit 0.0.4 (2026-06-02)
+
+## NEW FEATURES
+
+* Added foo function
+
+## BUG FIXES
+
+* Fixed bugs in `foo()`
 ```
 
 - [`news_md_check()`](https://wanglabcsu.github.io/rpkgkit/reference/news_md.md) -
@@ -393,11 +419,31 @@ cat(readLines(tf), sep = "\n")
 # message('Hello, world')
 ```
 
+- [`convert_func_syntax()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_func_syntax.md) -
+  Convert function syntax between `function()` and `\()`
+
+``` r
+
+f <- tempfile(fileext = ".R")
+writeLines("f <- function(x) x^2", f)
+convert_func_syntax(f)
+# ✔ Converted function definitions in /tmp/Rtmp9ftJDS/file2a5a1320c9342e.R to "to_lambda"
+message(readLines(f), sep = "\n")
+# f <- \(x) x^2
+
+convert_func_syntax(f, "to_explicit")
+# ✔ Converted function definitions in /tmp/Rtmp9ftJDS/file2a5a1320c9342e.R to "to_explicit"
+message(readLines(f), sep = "\n")
+# f <- function(x) x^2
+```
+
 ### R Package Maintenance
 
 - [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md) -
-  Create `zzz.R` file in `R/` folder, with `.onLoad`, `.onAttach`, and
-  package description
+  Create `{pkgname}-package.R` file in `R/` folder, with `.onLoad`,
+  `.onAttach`, `%||%` and package description. Similar to
+  [`usethis::use_package_doc()`](https://usethis.r-lib.org/reference/use_package_doc.html)
+  but more powerful.
 
 ``` r
 
@@ -434,6 +480,13 @@ use_zzz()
 
 # .onLoad <- function(libname, pkgname) {
 #   invisible()
+# }
+
+# `%||%` <- function(left, right) {
+#   if (is.null(left)) {
+#     return(right)
+#   }
+#   left
 # }
 ```
 
@@ -484,6 +537,30 @@ use_vendor(pkg = "WangLabCSU/rpkgkit", "43_use_vendor.R", branch = "main", path 
 # We would like to thank the following people and projects:
 
 # - The authors of the [rpkgkit](https://github.com/WangLabCSU/rpkgkit) package &mdash; **Yuxi Yang, Jacob Scott, Christopher T. Kenny, Sebastian Lammers and Diego Hernangómez** &mdash; whose code is included (under MIT license) in `R/vendor-rpkgkit.R`.
+```
+
+- [`use_multilanguage_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/use_multilanguage_readme.md) -
+  Create a multi-language README.md template for your R package.
+- [`badge_translated_by_ai()`](https://wanglabcsu.github.io/rpkgkit/reference/badge_translated_by_ai.md) -
+  Create a badge for translated by AI.
+
+``` r
+
+use_multilangauge_readme("es")
+# ✔ Created 1 README translation file in inst/translations.
+# ☐ Consider pasting the following badges into your main README.md:
+
+# [![Español](https://img.shields.io/badge/README-Espa%C3%B1ol-blue)](inst/translations/README.es.md)
+```
+
+``` r
+
+badge_translated_by_ai("es")
+# ☐ Consider copying the following statement to the AI-translated file(s):
+
+# [![AI](https://img.shields.io/badge/AI-Espa%C3%B1ol-yellow)]()
+
+# > Este contenido ha sido traducido por IA y no ha sido revisado. No es la lengua materna del autor y es solo para referencia.
 ```
 
 ## Acknowledgements
