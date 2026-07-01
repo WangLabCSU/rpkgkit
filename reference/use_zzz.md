@@ -23,13 +23,11 @@ Other information:
 
 - `usethis` namespace is added to the file.
 
-- `%||%` is added to the file.
-
 ## Usage
 
 ``` r
 use_zzz(
-  path = ".",
+  path = NULL,
   file_name = paste0(get_package_name(path = path), "-package.R"),
   overwrite = FALSE,
   open = rlang::is_interactive(),
@@ -41,8 +39,8 @@ use_zzz(
 
 - path:
 
-  Character. Path to the package root directory. Defaults to the current
-  working directory (`"."`).
+  Character. Path to the package root directory. If `NULL` (the
+  default), uses the current working directory.
 
 - file_name:
 

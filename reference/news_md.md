@@ -15,16 +15,16 @@ create a new version section if needed or add to an existing one.
 ## Usage
 
 ``` r
-news_md_check(path = ".", strict = FALSE, verbose = TRUE)
+news_md_check(path = NULL, strict = FALSE, verbose = TRUE)
 
-news_md_show(path = ".", version = NULL, max_versions = NULL)
+news_md_show(path = NULL, version = NULL, max_versions = NULL)
 
 news_md_add_entry(
   entry,
   version = NULL,
   category = "NEW FEATURES",
   contributor = NULL,
-  path = ".",
+  path = NULL,
   date = NULL,
   open_section = TRUE
 )
@@ -34,8 +34,8 @@ news_md_add_entry(
 
 - path:
 
-  Path to the package root. Defaults to the current working directory
-  (`"."`).
+  Path to the package root. If `NULL` (the default), uses the current
+  working directory.
 
 - strict:
 

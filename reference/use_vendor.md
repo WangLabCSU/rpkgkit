@@ -15,7 +15,7 @@ your own R package. This function:
 ## Usage
 
 ``` r
-use_vendor(pkg, ..., branch = "main", path = ".")
+use_vendor(pkg, ..., branch = "main", path = NULL)
 ```
 
 ## Arguments
@@ -37,7 +37,8 @@ use_vendor(pkg, ..., branch = "main", path = ".")
 
 - path:
 
-  Path to the target package directory. Defaults to `"."`.
+  Path to the target package directory. If `NULL` (the default), uses
+  the current working directory.
 
 ## Value
 

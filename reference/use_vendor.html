@@ -21,7 +21,7 @@ Prints an acknowledgement snippet for your README
 
     <a class="navbar-brand me-2" href="../index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,7 @@ your own R package. This function:</p><ul><li><p>Creates <code>inst/vendor/&lt;p
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">use_vendor</span><span class="op">(</span><span class="va">pkg</span>, <span class="va">...</span>, branch <span class="op">=</span> <span class="st">"main"</span>, path <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">use_vendor</span><span class="op">(</span><span class="va">pkg</span>, <span class="va">...</span>, branch <span class="op">=</span> <span class="st">"main"</span>, path <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -85,7 +85,8 @@ infrastructure is set up.</p></dd>
 
 
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
-<dd><p>Path to the target package directory. Defaults to <code>"."</code>.</p></dd>
+<dd><p>Path to the target package directory. If <code>NULL</code>
+(the default), uses the current working directory.</p></dd>
 
 </dl></div>
     <div class="section level2">

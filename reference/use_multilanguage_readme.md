@@ -16,7 +16,7 @@ use_multilanguage_readme(
   lang = c("zh-cn", "es", "fr", "ar", "ru"),
   color = "blue",
   ...,
-  path = ".",
+  path = NULL,
   overwrite = FALSE
 )
 ```
@@ -40,8 +40,8 @@ use_multilanguage_readme(
 
 - path:
 
-  Character. Path to the package root directory. Defaults to the current
-  working directory (`"."`).
+  Character. Path to the package root directory. If `NULL` (the
+  default), uses the current working directory.
 
 - overwrite:
 

@@ -21,15 +21,20 @@ The `workflow_dispatch` input always overrides commit message detection.
 ## Usage
 
 ``` r
-use_workflow_version_update(path = ".", overwrite = FALSE, color = "blue", ...)
+use_workflow_version_update(
+  path = NULL,
+  overwrite = FALSE,
+  color = "blue",
+  ...
+)
 ```
 
 ## Arguments
 
 - path:
 
-  Character. Path to the package root directory. Defaults to the current
-  working directory (`"."`).
+  Character. Path to the package root directory. If `NULL` (the
+  default), uses the current working directory.
 
 - overwrite:
 

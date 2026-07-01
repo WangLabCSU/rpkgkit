@@ -14,7 +14,7 @@ use_hexsticker(
   alt_text = "package logo",
   height = 139L,
   align = "right",
-  path = ".",
+  path = NULL,
   ...
 )
 ```
@@ -44,8 +44,8 @@ use_hexsticker(
 
 - path:
 
-  Character. Path to the package root directory. Defaults to the current
-  working directory (`"."`).
+  Character. Path to the package root directory. If `NULL` (the
+  default), uses the current working directory.
 
 - ...:
 

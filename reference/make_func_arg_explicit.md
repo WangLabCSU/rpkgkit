@@ -20,7 +20,7 @@ assignment (`<-`, `=`, `<<-`), and special syntax (`if`, `for`, `while`,
 ## Usage
 
 ``` r
-package_func_arg_explicit(path = ".", skip_functions = NULL, ...)
+package_func_arg_explicit(path = NULL, skip_functions = NULL, ...)
 
 make_func_arg_explicit(path = NULL, skip_functions = NULL, ...)
 ```
@@ -66,7 +66,7 @@ the currently active document is used automatically.
 tf <- tempfile(fileext = ".R")
 writeLines("vapply(1:9, function(x) x*2, numeric(1))", tf)
 make_func_arg_explicit(tf)
-#> ✔ Made function arguments explicit in /tmp/RtmpTVTOaL/file1a39576b0db6.R
+#> ✔ Made function arguments explicit in /tmp/RtmpeT66h2/file1a923527543c.R
 cat(readLines(tf), sep = "\n")
 #> vapply(X = 1:9, FUN = function(x) x * 2, FUN.VALUE = numeric(length = 1))
 # vapply(X = 1:9, FUN = function(x) x*2, FUN.VALUE = numeric(1))

@@ -10,7 +10,7 @@ problematic region.
 ## Usage
 
 ``` r
-package_lost_glue_brace(path = ".", test_included = TRUE, ...)
+package_lost_glue_brace(path = NULL, test_included = TRUE, ...)
 
 detect_lost_glue_brace(path = NULL, ...)
 ```

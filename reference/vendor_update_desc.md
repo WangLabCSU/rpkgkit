@@ -6,7 +6,7 @@ Helper: update DESCRIPTION with vendor authors and copyright
 
 ``` r
 vendor_update_desc(
-  path = ".",
+  path = NULL,
   author_info = character(1L),
   repo = character(1L),
   repo_url = character(1L)

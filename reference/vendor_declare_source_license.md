@@ -6,7 +6,7 @@ Helper: set up inst/vendor// with LICENSE files and README
 
 ``` r
 vendor_declare_source_license(
-  path = ".",
+  path = NULL,
   owner = character(1L),
   repo = character(1L),
   branch = character(1L),

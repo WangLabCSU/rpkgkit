@@ -13,7 +13,7 @@ files that should not be shipped with a package.
 ## Usage
 
 ``` r
-add_global_rbuildignore(..., path = ".")
+add_global_rbuildignore(..., path = NULL)
 ```
 
 ## Arguments
@@ -26,8 +26,8 @@ add_global_rbuildignore(..., path = ".")
 
 - path:
 
-  Character. Path to the package root directory. Defaults to the current
-  working directory (`"."`).
+  Character. Path to the package root directory. If `NULL` (the
+  default), uses the current working directory.
 
 ## Value
 

@@ -11,7 +11,7 @@ licensed under MIT.
 
 ``` r
 package_func_call_explicit(
-  path = ".",
+  path = NULL,
   use_packages = current_packages(),
   ignore_functions = imported_functions(),
   ...
@@ -79,7 +79,7 @@ make_func_call_explicit(
   ignore_functions = c("library", "require")
 )
 #> ℹ Retrieving function calls from dplyr
-#> ✔ Successfully made function call explicit in /tmp/RtmpTVTOaL/file1a397cdc2f38.R
+#> ✔ Successfully made function call explicit in /tmp/RtmpeT66h2/file1a9211fa1a07.R
 readLines(file) |> message()
 #> starwars |> dplyr::mutate(name, bmi = mass / ((height / 100)^2)) |> dplyr::select(name:mass, bmi)
 # }

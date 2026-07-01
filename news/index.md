@@ -1,5 +1,11 @@
 # Changelog
 
+## rpkgkit 0.1.6 (2026-07-01)
+
+### MINOR IMPROVEMENTS
+
+- Made `path = "."` to `path = NULL` because of CRAN requirements
+
 ## rpkgkit 0.1.5 (2026-06-30)
 
 ### MINOR IMPROVEMENTS

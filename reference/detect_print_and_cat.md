@@ -19,7 +19,7 @@ other identifiers (e.g. `sprintf` or `print.myclass`).
 ## Usage
 
 ``` r
-package_print_and_cat(path = ".", test_included = TRUE, fix = FALSE, ...)
+package_print_and_cat(path = NULL, test_included = TRUE, fix = FALSE, ...)
 
 detect_print_and_cat(path = NULL, fix = FALSE, ...)
 ```
@@ -88,7 +88,7 @@ detect_print_and_cat(tmp)
 
 # --- With auto-fix ---
 detect_print_and_cat(tmp, fix = TRUE)
-#> ✔ Fixed 1 line in file1a3949aa6fee.R.
+#> ✔ Fixed 1 line in file1a92e6567e5.R.
 #> print("hello")
 #> ^^^^^^
 #> ✖ Found 1 unsupported call on line 
