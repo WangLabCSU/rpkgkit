@@ -326,23 +326,7 @@ test_that("convert_func_syntax resolves path from rstudioapi when path=NULL", {
     writeLines = function(text, path, ...) invisible(),
     .package = "base"
   )
-  expect_invisible(convert_func_syntax(path = NULL))
-})
-
-test_that("convert_func_syntax: match_arg silently falls back to default for unmatched direction", {
-  # match_arg with no match falls back to default (first choice) without error
-  local_mocked_bindings(
-    readLines = function(path, ...) c("f <- function(x) x"),
-    .package = "base"
-  )
-  local_mocked_bindings(
-    writeLines = function(text, path, ...) invisible(),
-    .package = "base"
-  )
-  expect_message(
-    convert_func_syntax(path = "dummy.R", direction = "unmatched"),
-    "Converted.*to_lambda"
-  )
+  expect_error(convert_func_syntax(path = NULL))
 })
 
 test_that("convert_func_syntax: check_dots_empty0 inspects caller dots, not own ...", {

@@ -1,3 +1,10 @@
+# rpkgkit 0.1.5 (2026-06-30)
+
+## MINOR IMPROVEMENTS
+
+* Added 'Last-updated','Version','Imports' in `use_vendor()`. Relevant files are also updated.
+
+
 # rpkgkit 0.1.4 (2026-06-29)
 
 ## MINOR IMPROVEMENTS

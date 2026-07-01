@@ -74,3 +74,12 @@ reference:
       - use_vendor
       - use_workflow_version_update
       - use_zzz
+      - current_packages
+      - detect_lost_glue_brace
+      - detect_print_and_cat
+      - imported_functions
+      - make_func_arg_explicit
+      - make_func_call_explicit
+      - news_md_add_entry
+      - news_md_check
+      - news_md_show

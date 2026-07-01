@@ -46,7 +46,7 @@ Config/testthat/edition: 3
 Config/usethis/last-upkeep: 2026-06-29
 Copyright: Jacob Scott, Christopher T. Kenny, and Sebastian Lammers (for
     the pedant code included in R/vendor-pedant.R); Diego Hernangómez (for
-    the pkgdev code included in R/vendor-pkgdev.R)
+    the pkgdev code included in R/vendor-pkgdev.R);  and  (for the pedant code included in R/vendor-pedant.R); Diego Hernangómez (for the pkgdev code included in R/vendor-pkgdev.R)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
