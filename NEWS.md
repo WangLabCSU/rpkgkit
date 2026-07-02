@@ -1,3 +1,10 @@
+# rpkgkit 0.1.7 (2026-07-02)
+
+## NEW FEATURES
+
+* Added `use_r_v4.1.0()`
+
+
 # rpkgkit 0.1.6 (2026-07-01)
 
 ## MINOR IMPROVEMENTS

@@ -106,10 +106,13 @@ test_that("inquire_standalone treats owner containing '/' as full repo_spec", {
 
   local_mocked_bindings(
     gh = function(endpoint, ..., .accept = NULL) {
-      gh_calls <<- append(gh_calls, list(list(
-        endpoint = endpoint,
-        repo_spec = list(...)$repo_spec
-      )))
+      gh_calls <<- append(
+        gh_calls,
+        list(list(
+          endpoint = endpoint,
+          repo_spec = list(...)$repo_spec
+        ))
+      )
       list()
     },
     .package = "gh"
@@ -131,10 +134,13 @@ test_that("inquire_standalone combines separate owner and repo", {
 
   local_mocked_bindings(
     gh = function(endpoint, ..., .accept = NULL) {
-      gh_calls <<- append(gh_calls, list(list(
-        endpoint = endpoint,
-        repo_spec = list(...)$repo_spec
-      )))
+      gh_calls <<- append(
+        gh_calls,
+        list(list(
+          endpoint = endpoint,
+          repo_spec = list(...)$repo_spec
+        ))
+      )
       list()
     },
     .package = "gh"
@@ -306,9 +312,12 @@ test_that("inquire_standalone handles owner with trailing slash in combined form
   gh_calls <- list()
   local_mocked_bindings(
     gh = function(endpoint, ..., .accept = NULL) {
-      gh_calls <<- append(gh_calls, list(list(
-        repo_spec = list(...)$repo_spec
-      )))
+      gh_calls <<- append(
+        gh_calls,
+        list(list(
+          repo_spec = list(...)$repo_spec
+        ))
+      )
       list()
     },
     .package = "gh"
@@ -329,7 +338,7 @@ test_that("inquire_standalone handles multiple standalone files with same name (
     gh = function(endpoint, ..., .accept = NULL) {
       mock_gh_response(list(
         list(name = "standalone-cli.R"),
-        list(name = "standalone-cli.R")  # duplicate entry
+        list(name = "standalone-cli.R") # duplicate entry
       ))
     },
     .package = "gh"

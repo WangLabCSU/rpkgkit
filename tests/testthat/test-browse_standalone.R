@@ -140,9 +140,11 @@ test_that("browse_standalone parses a single result into expected columns", {
   )
 
   local_mocked_bindings(
-    gh = function(...) mock_search_response(list(
-      mock_search_item("owner/repo1", "standalone-utils.R")
-    )),
+    gh = function(...) {
+      mock_search_response(list(
+        mock_search_item("owner/repo1", "standalone-utils.R")
+      ))
+    },
     .package = "gh"
   )
 
@@ -169,11 +171,13 @@ test_that("browse_standalone parses multiple results", {
   )
 
   local_mocked_bindings(
-    gh = function(...) mock_search_response(list(
-      mock_search_item("owner/repo1", "standalone-utils.R"),
-      mock_search_item("owner/repo2", "standalone-helpers.R"),
-      mock_search_item("owner/repo3", "standalone-parsers.R")
-    )),
+    gh = function(...) {
+      mock_search_response(list(
+        mock_search_item("owner/repo1", "standalone-utils.R"),
+        mock_search_item("owner/repo2", "standalone-helpers.R"),
+        mock_search_item("owner/repo3", "standalone-parsers.R")
+      ))
+    },
     .package = "gh"
   )
 
@@ -193,12 +197,14 @@ test_that("browse_standalone filters out files not starting with standalone-", {
   )
 
   local_mocked_bindings(
-    gh = function(...) mock_search_response(list(
-      mock_search_item("owner/repo1", "standalone-utils.R"),
-      mock_search_item("owner/repo1", "other-file.R"),    # should be filtered
-      mock_search_item("owner/repo2", "standalone-parsers.R"),
-      mock_search_item("owner/repo2", "import-helper.R")   # should be filtered
-    )),
+    gh = function(...) {
+      mock_search_response(list(
+        mock_search_item("owner/repo1", "standalone-utils.R"),
+        mock_search_item("owner/repo1", "other-file.R"), # should be filtered
+        mock_search_item("owner/repo2", "standalone-parsers.R"),
+        mock_search_item("owner/repo2", "import-helper.R") # should be filtered
+      ))
+    },
     .package = "gh"
   )
 
@@ -269,9 +275,11 @@ test_that("browse_standalone handles response without $items field", {
 
   # gh::gh with some endpoints may return the list directly
   local_mocked_bindings(
-    gh = function(...) list(
-      mock_search_item("owner/repo1", "standalone-utils.R")
-    ),
+    gh = function(...) {
+      list(
+        mock_search_item("owner/repo1", "standalone-utils.R")
+      )
+    },
     .package = "gh"
   )
 

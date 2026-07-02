@@ -43,7 +43,11 @@ test_that("match_arg aborts when arg length > 1 and no match", {
 })
 
 test_that("match_arg with ambiguous partial match falls through to default", {
-  result <- rpkgkit:::match_arg("a", c("apple", "application", "banana"), default = "banana")
+  result <- rpkgkit:::match_arg(
+    "a",
+    c("apple", "application", "banana"),
+    default = "banana"
+  )
   # "a" is ambiguous between "apple" and "application", pmatch returns 0
   expect_equal(result, "banana")
 })

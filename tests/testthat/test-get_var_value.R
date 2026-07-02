@@ -42,7 +42,9 @@ test_that("get_var_value ignores dead code after return()", {
 
 test_that("get_var_value traces for loop iterations", {
   f <- function(x = 2) {
-    for (k in 1:3) x <- x * 2
+    for (k in 1:3) {
+      x <- x * 2
+    }
     x
   }
   expect_equal(rpkgkit:::get_var_value("x", f), 16)
@@ -50,7 +52,9 @@ test_that("get_var_value traces for loop iterations", {
 
 test_that("get_var_value traces while loop iterations", {
   f <- function(x = 2) {
-    while (x < 10) x <- x * 2
+    while (x < 10) {
+      x <- x * 2
+    }
     x
   }
   expect_equal(rpkgkit:::get_var_value("x", f), 16)

@@ -76,12 +76,20 @@ test_that("passes use_packages and ignore_functions to make_func_call_explicit",
 
   called_with <- list()
   local_mocked_bindings(
-    make_func_call_explicit = function(path, use_packages, ignore_functions, ...) {
-      called_with <<- append(called_with, list(list(
-        path = path,
-        use_packages = use_packages,
-        ignore_functions = ignore_functions
-      )))
+    make_func_call_explicit = function(
+      path,
+      use_packages,
+      ignore_functions,
+      ...
+    ) {
+      called_with <<- append(
+        called_with,
+        list(list(
+          path = path,
+          use_packages = use_packages,
+          ignore_functions = ignore_functions
+        ))
+      )
     },
     .package = "rpkgkit"
   )

@@ -440,7 +440,11 @@ test_that("contributor attribution with vectorized entries", {
   writeLines("Package: testpkg\nVersion: 1.0.0", file.path(tmp, "DESCRIPTION"))
   on.exit(unlink(tmp, recursive = TRUE))
 
-  news_md_add_entry(c("Feature A", "Feature B"), path = tmp, contributor = "dev1")
+  news_md_add_entry(
+    c("Feature A", "Feature B"),
+    path = tmp,
+    contributor = "dev1"
+  )
 
   content <- readLines(file.path(tmp, "NEWS.md"))
   feat_a <- grep("Feature A", content, value = TRUE)

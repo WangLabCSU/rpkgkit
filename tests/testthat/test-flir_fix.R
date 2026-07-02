@@ -22,7 +22,10 @@ test_that("flir_fix uses rstudioapi to get path when path is NULL", {
 
   captured <- NULL
   local_mocked_bindings(
-    fix = function(path, ...) { captured <<- path; invisible(path) },
+    fix = function(path, ...) {
+      captured <<- path
+      invisible(path)
+    },
     .package = "flir"
   )
 
@@ -42,7 +45,10 @@ test_that("flir_fix calls flir::fix when path is a file", {
 
   captured <- NULL
   local_mocked_bindings(
-    fix = function(path, ...) { captured <<- path; invisible(path) },
+    fix = function(path, ...) {
+      captured <<- path
+      invisible(path)
+    },
     .package = "flir"
   )
 
@@ -72,7 +78,10 @@ test_that("flir_fix calls flir::fix_package when path is a package directory", {
 
   captured <- NULL
   local_mocked_bindings(
-    fix_package = function(path, ...) { captured <<- path; invisible(path) },
+    fix_package = function(path, ...) {
+      captured <<- path
+      invisible(path)
+    },
     .package = "flir"
   )
 
@@ -102,7 +111,10 @@ test_that("flir_fix calls flir::fix_dir when path is a directory but not a packa
 
   captured <- NULL
   local_mocked_bindings(
-    fix_dir = function(path, ...) { captured <<- path; invisible(path) },
+    fix_dir = function(path, ...) {
+      captured <<- path
+      invisible(path)
+    },
     .package = "flir"
   )
 
@@ -136,7 +148,10 @@ test_that("flir_fix forwards extra arguments via ... to flir functions", {
 
   captured_args <- NULL
   local_mocked_bindings(
-    fix = function(path, ...) { captured_args <<- list(...); invisible(path) },
+    fix = function(path, ...) {
+      captured_args <<- list(...)
+      invisible(path)
+    },
     .package = "flir"
   )
 

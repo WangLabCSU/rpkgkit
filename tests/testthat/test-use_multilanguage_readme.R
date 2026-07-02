@@ -16,7 +16,10 @@ test_that("aborts when path is not an R package root", {
 
 test_that("creates inst/translations/ directory", {
   tmp <- withr::local_tempdir()
-  writeLines(c("Package: mypkg", "Title: My Package"), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c("Package: mypkg", "Title: My Package"),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   suppressMessages(
     use_multilanguage_readme(path = tmp, lang = "de")
@@ -27,7 +30,10 @@ test_that("creates inst/translations/ directory", {
 
 test_that("creates README file for each language code", {
   tmp <- withr::local_tempdir()
-  writeLines(c("Package: mypkg", "Title: My Package"), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c("Package: mypkg", "Title: My Package"),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   suppressMessages(
     use_multilanguage_readme(path = tmp, lang = c("de", "ja", "ko"))
@@ -41,14 +47,19 @@ test_that("creates README file for each language code", {
 
 test_that("README content includes package name and language display name", {
   tmp <- withr::local_tempdir()
-  writeLines(c("Package: mypkg", "Title: My Package"), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c("Package: mypkg", "Title: My Package"),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   suppressMessages(
     use_multilanguage_readme(path = tmp, lang = "de")
   )
 
-  content <- readLines(file.path(tmp, "inst", "translations", "README.de.md"),
-    warn = FALSE)
+  content <- readLines(
+    file.path(tmp, "inst", "translations", "README.de.md"),
+    warn = FALSE
+  )
   expect_match(content[1L], "# mypkg")
   expect_match(content[1L], "Deutsch")
   expect_match(content[3L], "TODO: Translate")
@@ -56,7 +67,10 @@ test_that("README content includes package name and language display name", {
 
 test_that("skips existing file when overwrite = FALSE", {
   tmp <- withr::local_tempdir()
-  writeLines(c("Package: mypkg", "Title: My Package"), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c("Package: mypkg", "Title: My Package"),
+    file.path(tmp, "DESCRIPTION")
+  )
   trans_dir <- file.path(tmp, "inst", "translations")
   dir.create(trans_dir, recursive = TRUE)
   writeLines("custom content", file.path(trans_dir, "README.de.md"))
@@ -72,7 +86,10 @@ test_that("skips existing file when overwrite = FALSE", {
 
 test_that("overwrites existing file when overwrite = TRUE", {
   tmp <- withr::local_tempdir()
-  writeLines(c("Package: mypkg", "Title: My Package"), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c("Package: mypkg", "Title: My Package"),
+    file.path(tmp, "DESCRIPTION")
+  )
   trans_dir <- file.path(tmp, "inst", "translations")
   dir.create(trans_dir, recursive = TRUE)
   writeLines("custom content", file.path(trans_dir, "README.de.md"))
@@ -88,7 +105,10 @@ test_that("overwrites existing file when overwrite = TRUE", {
 
 test_that("returns invisible character vector of created file paths", {
   tmp <- withr::local_tempdir()
-  writeLines(c("Package: mypkg", "Title: My Package"), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c("Package: mypkg", "Title: My Package"),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   result <- suppressMessages(
     withVisible(use_multilanguage_readme(path = tmp, lang = c("de", "ja")))
@@ -101,20 +121,28 @@ test_that("returns invisible character vector of created file paths", {
 
 test_that("unknown language codes use the code itself as display name", {
   tmp <- withr::local_tempdir()
-  writeLines(c("Package: mypkg", "Title: My Package"), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c("Package: mypkg", "Title: My Package"),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   suppressMessages(
     use_multilanguage_readme(path = tmp, lang = "xx")
   )
 
-  content <- readLines(file.path(tmp, "inst", "translations", "README.xx.md"),
-    warn = FALSE)
+  content <- readLines(
+    file.path(tmp, "inst", "translations", "README.xx.md"),
+    warn = FALSE
+  )
   expect_match(content[1L], "xx")
 })
 
 test_that("duplicate language codes are deduplicated", {
   tmp <- withr::local_tempdir()
-  writeLines(c("Package: mypkg", "Title: My Package"), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c("Package: mypkg", "Title: My Package"),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   suppressMessages(
     use_multilanguage_readme(path = tmp, lang = c("de", "de", "fr", "fr"))
@@ -128,7 +156,10 @@ test_that("duplicate language codes are deduplicated", {
 
 test_that("default languages create 5 files", {
   tmp <- withr::local_tempdir()
-  writeLines(c("Package: mypkg", "Title: My Package"), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c("Package: mypkg", "Title: My Package"),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   suppressMessages(
     use_multilanguage_readme(path = tmp)
@@ -139,14 +170,22 @@ test_that("default languages create 5 files", {
   expect_length(files, 5L)
   expect_setequal(
     files,
-    c("README.zh-cn.md", "README.es.md", "README.fr.md",
-      "README.ar.md", "README.ru.md")
+    c(
+      "README.zh-cn.md",
+      "README.es.md",
+      "README.fr.md",
+      "README.ar.md",
+      "README.ru.md"
+    )
   )
 })
 
 test_that("badge output contains shields.io URL and correct color", {
   tmp <- withr::local_tempdir()
-  writeLines(c("Package: mypkg", "Title: My Package"), file.path(tmp, "DESCRIPTION"))
+  writeLines(
+    c("Package: mypkg", "Title: My Package"),
+    file.path(tmp, "DESCRIPTION")
+  )
 
   # Capture messages WITHOUT suppressing them
   msgs <- capture_messages(

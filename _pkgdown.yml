@@ -71,6 +71,7 @@ reference:
       - update_time_in_standalone
       - use_hexsticker
       - use_multilanguage_readme
+      - use_r_v4.1.0
       - use_vendor
       - use_workflow_version_update
       - use_zzz

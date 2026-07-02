@@ -81,7 +81,10 @@ test_that("update_time_in_standalone uses rstudioapi active document path when p
   expect_equal(readLines_calls[[1L]], mock_path)
   expect_length(writeLines_calls, 1L)
   expect_equal(writeLines_calls[[1L]]$con, mock_path)
-  expect_match(writeLines_calls[[1L]]$text[4L], "^# last-updated: \\d{4}-\\d{2}-\\d{2}")
+  expect_match(
+    writeLines_calls[[1L]]$text[4L],
+    "^# last-updated: \\d{4}-\\d{2}-\\d{2}"
+  )
   expect_false(
     identical(writeLines_calls[[1L]]$text[4L], "# last-updated: 2025-01-01")
   )
@@ -128,7 +131,10 @@ test_that("update_time_in_standalone updates a single standalone file", {
   expect_equal(writeLines_calls[[1L]]$text[6L], "# imports: [cli]")
 
   # last-updated changed to today's date
-  expect_match(writeLines_calls[[1L]]$text[4L], "^# last-updated: \\d{4}-\\d{2}-\\d{2}")
+  expect_match(
+    writeLines_calls[[1L]]$text[4L],
+    "^# last-updated: \\d{4}-\\d{2}-\\d{2}"
+  )
   expect_false(
     identical(writeLines_calls[[1L]]$text[4L], "# last-updated: 2025-03-15")
   )
