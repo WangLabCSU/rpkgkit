@@ -15,6 +15,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Codecov-testcoverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
 [![Ask-DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WangLabCSU/rpkgkit)
 [![简体中文](https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue)](inst/translations/README.zh-cn.md)
+[![Dependencies](https://tinyverse.netlify.app/badge/rpkgkit)](https://cran.r-project.org/package=rpkgkit)
 <!-- badges: end -->
 
 The goal of rpkgkit is to provide useful functions for R package
@@ -551,6 +552,11 @@ badge_translated_by_ai("es")
 
 # > Este contenido ha sido traducido por IA y no ha sido revisado. No es la lengua materna del autor y es solo para referencia.
 ```
+
+- `Add_global_rbuildignore()` - Add global .Rbuildignore file to your R
+  package.
+- `Add_global_gitignore()` - Add global .gitignore file to your R
+  package.
 
 ## Acknowledgements
 
