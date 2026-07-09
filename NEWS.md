@@ -1,5 +1,10 @@
 # rpkgkit 0.1.7 (2026-07-02)
 
+## BUG FIXES
+
+* Fixed timestamp updating bug in `add_changelog_in_standalone()` when modifying `vendor-*.R`
+
+
 ## NEW FEATURES
 
 * Added `use_r_v4.1.0()`

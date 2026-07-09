@@ -46,7 +46,7 @@ add_changelog_in_standalone <- function(
   } else if (is_pkg(path)) {
     files <- list.files(
       file.path(path, "R"),
-      pattern = "^standalone-",
+      pattern = "^standalone-|^vendor-",
       full.names = TRUE
     )
   } else if (dir.exists(path)) {
@@ -76,7 +76,11 @@ add_changelog_in_standalone <- function(
       }
       yaml_end <- yaml_end[2L]
 
-      lastupdated_idx <- grep("^#\\s+last-updated:\\s*", lines)
+      lastupdated_idx <- grep(
+        "^#\\s+last-updated:\\s*",
+        lines,
+        ignore.case = TRUE
+      )
       if (length(lastupdated_idx) > 0L) {
         lines[lastupdated_idx] <- sprintf("# last-updated: %s", date)
       }
@@ -128,7 +132,7 @@ add_changelog_in_standalone <- function(
   )
 
   cli::cli_alert_success(
-    "Added changelog entry for {.val {date}} in {sum(updated)} file(s)."
+    "Added changelog entry ({date}) for {.path {files}}."
   )
 
   invisible(files[updated])
