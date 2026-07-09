@@ -563,6 +563,11 @@ badge_translated_by_ai("es")
 # > Este contenido ha sido traducido por IA y no ha sido revisado. No es la lengua materna del autor y es solo para referencia.
 ```
 
+- `Add_global_rbuildignore()` - Add global .Rbuildignore file to your R
+  package.
+- `Add_global_gitignore()` - Add global .gitignore file to your R
+  package.
+
 ## Acknowledgements
 
 We would like to thank the following people and projects:
@@ -670,6 +675,11 @@ The following functions help you to create and maintain an R package.
 
 - [`use_multilanguage_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/use_multilanguage_readme.md)
   : Create Multilingual README Files
+
+- [`use_r_v4.1.0()`](https://wanglabcsu.github.io/rpkgkit/reference/use_r_v4.1.0.md)
+  :
+
+  Add a minimum `R` version dependency to a package
 
 - [`use_vendor()`](https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.md)
   : Use a Vendor Package

@@ -93,6 +93,11 @@ The following functions help you to create and maintain an R package.
 - [`use_multilanguage_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/use_multilanguage_readme.md)
   : Create Multilingual README Files
 
+- [`use_r_v4.1.0()`](https://wanglabcsu.github.io/rpkgkit/reference/use_r_v4.1.0.md)
+  :
+
+  Add a minimum `R` version dependency to a package
+
 - [`use_vendor()`](https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.md)
   : Use a Vendor Package
 

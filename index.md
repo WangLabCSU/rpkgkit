@@ -563,6 +563,11 @@ badge_translated_by_ai("es")
 # > Este contenido ha sido traducido por IA y no ha sido revisado. No es la lengua materna del autor y es solo para referencia.
 ```
 
+- `Add_global_rbuildignore()` - Add global .Rbuildignore file to your R
+  package.
+- `Add_global_gitignore()` - Add global .gitignore file to your R
+  package.
+
 ## Acknowledgements
 
 We would like to thank the following people and projects:

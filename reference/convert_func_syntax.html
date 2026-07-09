@@ -13,7 +13,7 @@ definitions via iterative passes."><meta property="og:image" content="https://wa
 
     <a class="navbar-brand me-2" href="../index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,12 +97,12 @@ converted in multiple iterative passes, so all nesting levels are reached.</p>
 <span class="r-in"><span><span class="va">temp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".R"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="st">"add_one &lt;- function(x) x + 1"</span>, <span class="va">temp</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">convert_func_syntax</span><span class="op">(</span><span class="va">temp</span>, direction <span class="op">=</span> <span class="st">"to_lambda"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Converted function definitions in <span style="color: #0000BB;">/tmp/RtmpeT66h2/file1a92d171aa8.R</span> to <span style="color: #0000BB;">"to_lambda"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Converted function definitions in <span style="color: #0000BB;">/tmp/Rtmp4SKCPp/file1aaa42435074.R</span> to <span style="color: #0000BB;">"to_lambda"</span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">temp</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "add_one &lt;- \\(x) x + 1"</span>
 <span class="r-in"><span><span class="co"># "add_one &lt;- \(x) x + 1"</span></span></span>
 <span class="r-in"><span><span class="fu">convert_func_syntax</span><span class="op">(</span><span class="va">temp</span>, direction <span class="op">=</span> <span class="st">"to_explicit"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Converted function definitions in <span style="color: #0000BB;">/tmp/RtmpeT66h2/file1a92d171aa8.R</span> to <span style="color: #0000BB;">"to_explicit"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Converted function definitions in <span style="color: #0000BB;">/tmp/Rtmp4SKCPp/file1aaa42435074.R</span> to <span style="color: #0000BB;">"to_explicit"</span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">temp</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "add_one &lt;- function(x) x + 1"</span>
 <span class="r-in"><span><span class="co"># "add_one &lt;- function(x) x + 1"</span></span></span>
@@ -119,7 +119,7 @@ converted in multiple iterative passes, so all nesting levels are reached.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

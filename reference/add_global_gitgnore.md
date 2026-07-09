@@ -6,7 +6,7 @@ Adds a global `.gitgnore` file to the package. File based on default
 ## Usage
 
 ``` r
-add_global_gitgnore(pkg = ".")
+add_global_gitgnore(pkg = NULL)
 ```
 
 ## Arguments

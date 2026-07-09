@@ -1,5 +1,18 @@
 # Changelog
 
+## rpkgkit 0.1.7 (2026-07-02)
+
+### BUG FIXES
+
+- Fixed timestamp updating bug in
+  [`add_changelog_in_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/add_changelog_in_standalone.md)
+  when modifying `vendor-*.R`
+
+### NEW FEATURES
+
+- Added
+  [`use_r_v4.1.0()`](https://wanglabcsu.github.io/rpkgkit/reference/use_r_v4.1.0.md)
+
 ## rpkgkit 0.1.6 (2026-07-01)
 
 ### MINOR IMPROVEMENTS
