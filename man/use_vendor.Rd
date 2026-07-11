@@ -26,8 +26,8 @@ Invisibly returns \code{NULL}, called for side effects.
 Reference a permissively-licensed R package from GitHub for inclusion in
 your own R package. This function:
 \itemize{
-\item Creates \verb{inst/vendor/<pkg>/} with LICENSE files and a README
-\item Creates \verb{R/vendor-<pkg>.R} with attribution header and optional vendored code
+\item Creates \verb{inst/vendor/pkg/} with LICENSE files and a README
+\item Creates \code{R/vendor-pkg.R} with attribution header and optional vendored code
 \item Updates \code{DESCRIPTION} (\code{Authors@R} and \code{Copyright} fields)
 \item Prints an acknowledgement snippet for your README
 }

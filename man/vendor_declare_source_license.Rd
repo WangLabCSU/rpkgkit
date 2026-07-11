@@ -2,7 +2,7 @@
 % Please edit documentation in R/43_use_vendor.R
 \name{vendor_declare_source_license}
 \alias{vendor_declare_source_license}
-\title{Helper: set up inst/vendor/\if{html}{\out{<pkg>}}/ with LICENSE files and README}
+\title{Helper: set up inst/vendor/pkg/ with LICENSE files and README}
 \usage{
 vendor_declare_source_license(
   path = NULL,
@@ -13,6 +13,6 @@ vendor_declare_source_license(
 )
 }
 \description{
-Helper: set up inst/vendor/\if{html}{\out{<pkg>}}/ with LICENSE files and README
+Helper: set up inst/vendor/pkg/ with LICENSE files and README
 }
 \keyword{internal}

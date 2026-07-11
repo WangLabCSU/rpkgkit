@@ -2,8 +2,8 @@
 #'
 #' Reference a permissively-licensed R package from GitHub for inclusion in
 #' your own R package. This function:
-#' - Creates `inst/vendor/<pkg>/` with LICENSE files and a README
-#' - Creates `R/vendor-<pkg>.R` with attribution header and optional vendored code
+#' - Creates `inst/vendor/pkg/` with LICENSE files and a README
+#' - Creates `R/vendor-pkg.R` with attribution header and optional vendored code
 #' - Updates `DESCRIPTION` (`Authors@R` and `Copyright` fields)
 #' - Prints an acknowledgement snippet for your README
 #'
@@ -56,7 +56,7 @@ use_vendor <- function(
   license_spdx <- vendor_desc_license(desc = desc_vendor)
   author_info <- vendor_desc_authors(desc = desc_vendor)
 
-  # -- Create inst/vendor/<pkg>/ with LICENSE files and README --
+  # -- Create inst/vendor/pkg/ with LICENSE files and README --
   vendor_declare_source_license(
     path = path,
     owner = spec$owner,
@@ -65,7 +65,7 @@ use_vendor <- function(
     repo_url = spec$repo_url
   )
 
-  # -- Create R/vendor-<pkg>.R --
+  # -- Create R/vendor-pkg.R --
   vendor_create_r_file(
     path = path,
     repo = spec$repo,
@@ -203,7 +203,7 @@ vendor_desc_authors <- function(desc) {
 }
 
 
-#' Helper: set up inst/vendor/<pkg>/ with LICENSE files and README
+#' Helper: set up inst/vendor/pkg/ with LICENSE files and README
 #' @keywords internal
 vendor_declare_source_license <- function(
   path = NULL,
@@ -263,7 +263,7 @@ vendor_declare_source_license <- function(
 }
 
 
-# Helper: create R/vendor-<pkg>.R
+# Helper: create R/vendor-pkg.R
 #' @keywords internal
 vendor_create_r_file <- function(
   path = NULL,
