@@ -6,11 +6,14 @@
 # imports: [cli]
 # ---
 #
+# Add timestamps to CLI function output.
+#
 # ## Changelog:
 #
 # 2026-06-27:
 # * Fixed lints
 #
+# nocov start
 
 #' @title A Decorator for Adding Timestamp to CLI Functions
 #'
@@ -131,3 +134,5 @@ create_ts_cli_env <- function(
   )
   invisible(cli_env)
 }
+
+# nocov end

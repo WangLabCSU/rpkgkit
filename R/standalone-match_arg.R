@@ -5,6 +5,10 @@
 # license: https://unlicense.org
 # imports: [rlang, cli]
 # ---
+#
+# Robust argument matching with exact, partial, and default fallback.
+#
+# nocov start
 
 #' @title Argument Matching with Default Fallback
 #'
@@ -106,3 +110,5 @@ match_arg <- function(
     .frame = .frame
   )
 }
+
+# nocov end

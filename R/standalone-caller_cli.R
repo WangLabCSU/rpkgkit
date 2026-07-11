@@ -6,11 +6,14 @@
 # imports: [cli, rlang]
 # ---
 #
+# Retrieve caller name and add caller context to CLI functions.
+#
 # ## Changelog:
 #
 # 2026-06-27:
 # * Fixed lints
 #
+# nocov start
 
 #' @title Get Caller Name
 #'
@@ -139,3 +142,5 @@ create_caller_cli_env <- function(
 
   invisible(cli_env)
 }
+
+# nocov end

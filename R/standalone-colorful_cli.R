@@ -5,6 +5,10 @@
 # license: https://unlicense.org
 # imports: [cli]
 # ---
+#
+# Create colorful CLI function environments with custom color themes.
+#
+# nocov start
 
 #' @title Create Environment with Colorful CLI Functions
 #'
@@ -220,3 +224,5 @@ generate_color_theme <- function() {
   names(cli_list_colors) <- paste0("span.", color_names)
   cli_list_colors
 }
+
+# nocov end

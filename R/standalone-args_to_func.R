@@ -7,11 +7,14 @@
 # dependencies: [import-standalone-purrr]
 # ---
 #
+# Match arguments to function calls and filter argument lists.
+#
 # ## Changelog:
 #
 # 2026-06-27:
 # * Fixed lints
 #
+# nocov start
 
 #' @title Keep Wanted Arguments According to A Function from Dots
 #' @description
@@ -334,3 +337,5 @@ get_func_args <- function(
 
   lapply(args_list, eval, envir = envir)
 }
+
+# nocov end
