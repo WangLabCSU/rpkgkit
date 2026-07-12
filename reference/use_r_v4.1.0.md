@@ -38,10 +38,10 @@ Invisibly returns `NULL`, called for side effects.
 # \donttest{
 tmpdir <- tempdir()
 usethis::create_package(path = tmpdir)
-#> ✔ Setting active project to "/tmp/Rtmp4SKCPp".
+#> ✔ Setting active project to "/tmp/RtmpHxfAh1".
 #> ✔ Creating R/.
 #> ✔ Writing DESCRIPTION.
-#> Package: Rtmp4SKCPp
+#> Package: RtmpHxfAh1
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):
@@ -55,7 +55,7 @@ usethis::create_package(path = tmpdir)
 #> ✔ Writing NAMESPACE.
 #> ✔ Setting active project to "<no active project>".
 use_r_v4.1.0(path = tmpdir)
-#> ✔ Setting active project to "/tmp/Rtmp4SKCPp".
+#> ✔ Setting active project to "/tmp/RtmpHxfAh1".
 #> ✔ Adding R to Depends field in DESCRIPTION.
 # }
 ```

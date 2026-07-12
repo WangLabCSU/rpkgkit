@@ -3,10 +3,10 @@
 Reference a permissively-licensed R package from GitHub for inclusion in
 your own R package. This function:
 
-- Creates `inst/vendor/<pkg>/` with LICENSE files and a README
+- Creates `inst/vendor/pkg/` with LICENSE files and a README
 
-- Creates `R/vendor-<pkg>.R` with attribution header and optional
-  vendored code
+- Creates `R/vendor-pkg.R` with attribution header and optional vendored
+  code
 
 - Updates `DESCRIPTION` (`Authors@R` and `Copyright` fields)
 

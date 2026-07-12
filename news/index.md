@@ -1,5 +1,15 @@
 # Changelog
 
+## rpkgkit v0.1.8 (2026-07-12)
+
+### BUG FIXES
+
+- Fixed dots checking error in
+  [`browse_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/browse_standalone.md)
+
+- Fixed `.gitignore` not found error in `vendor-pkgdev.R`, this bug is
+  from source code of `pkgdev`
+
 ## rpkgkit 0.1.7 (2026-07-02)
 
 ### BUG FIXES
