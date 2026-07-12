@@ -1,3 +1,6 @@
+# ? This function was no longer maintained.
+# nocov start
+
 #' Use Hex Sticker in README
 #'
 #' @description
@@ -125,3 +128,5 @@ use_hexsticker <- function(
 
   invisible(TRUE)
 }
+
+# nocov end

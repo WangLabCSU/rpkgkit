@@ -40,7 +40,7 @@ use_zzz <- function(
   open = rlang::is_interactive(),
   ...
 ) {
-  rlang::check_dots_empty0()
+  rlang::check_dots_empty()
   path <- path %||% "."
   rlang::check_installed("usethis")
   if (!is_pkg(path = path)) {

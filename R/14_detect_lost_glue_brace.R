@@ -25,7 +25,7 @@
 #'
 #' @export
 detect_lost_glue_brace <- function(path = NULL, ...) {
-  rlang::check_dots_empty0()
+  rlang::check_dots_empty()
   path <- path %||% rstudioapi::getActiveDocumentContext()$path
   lines <- readLines(path, warn = FALSE)
   text <- paste(lines, collapse = "\n")

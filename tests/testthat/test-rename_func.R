@@ -380,7 +380,7 @@ test_that("rename_func: extra ... args pass through (check_dots_empty0 checks ca
   writeLines("MyFunc <- function(x) x", tmp)
   on.exit(unlink(tmp))
 
-  expect_no_error(rename_func(tmp, extra_arg = 1))
+  expect_error(rename_func(tmp, extra_arg = 1))
 })
 
 test_that("rename_func: invalid style falls back to default (snake_case)", {

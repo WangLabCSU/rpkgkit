@@ -46,7 +46,7 @@
 #'
 #' @export
 make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
-  rlang::check_dots_empty0()
+  rlang::check_dots_empty()
   path <- path %||% rstudioapi::getActiveDocumentContext()$path
   lines <- readLines(con = path, warn = FALSE)
   all_text <- paste(lines, collapse = "\n")

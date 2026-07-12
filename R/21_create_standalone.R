@@ -41,7 +41,7 @@ create_standalone <- function(
   open = rlang::is_interactive(),
   ...
 ) {
-  rlang::check_dots_empty0()
+  rlang::check_dots_empty()
   filename <- paste0("standalone-", standalone_name, ".R")
 
   # Merge user-provided standalone_head with defaults so missing fields fall back

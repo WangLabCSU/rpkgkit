@@ -45,7 +45,6 @@
 #'
 #' @export
 browse_standalone <- function(per_page = 100L, limit = 200L, ...) {
-  rlang::check_dots_empty0()
   rlang::check_installed(c("gh", "dplyr"))
 
   `%>%` <- dplyr::`%>%`

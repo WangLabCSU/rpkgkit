@@ -3,7 +3,7 @@
 #'
 #' @export
 package_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
-  rlang::check_dots_empty0()
+  rlang::check_dots_empty()
   path <- path %||% "."
   path <- normalizePath(path = path, mustWork = FALSE)
   if (!is_pkg(path = path)) {

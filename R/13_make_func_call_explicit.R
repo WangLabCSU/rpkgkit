@@ -48,7 +48,7 @@ make_func_call_explicit <- function(
   ignore_functions = imported_functions(),
   ...
 ) {
-  rlang::check_dots_empty0()
+  rlang::check_dots_empty()
   rlang::check_installed("pkgload")
 
   path <- if (is.null(path) && rlang::is_installed("rstudioapi")) {

@@ -42,7 +42,7 @@ rename_func <- function(
   style = c("snake_case", "camelCase", "PascalCase", "google"),
   ...
 ) {
-  rlang::check_dots_empty0()
+  rlang::check_dots_empty()
 
   path <- if (is.null(path) && rlang::is_installed("rstudioapi")) {
     rstudioapi::getActiveDocumentContext()$path

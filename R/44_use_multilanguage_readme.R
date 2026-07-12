@@ -68,7 +68,7 @@ use_multilanguage_readme <- function(
   path = NULL,
   overwrite = FALSE
 ) {
-  rlang::check_dots_empty0()
+  rlang::check_dots_empty()
   path <- path %||% "."
 
   # -- Validate package root --

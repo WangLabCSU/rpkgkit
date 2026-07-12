@@ -21,7 +21,7 @@
 #' }
 #' @export
 inquire_standalone <- function(owner, repo, ...) {
-  rlang::check_dots_empty0()
+  rlang::check_dots_empty()
   rlang::check_installed(c("gh", "dplyr"))
   repo_spec <- if (grepl("/", owner)) {
     owner

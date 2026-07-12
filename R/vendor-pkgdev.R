@@ -95,7 +95,7 @@ add_global_gitgnore <- function(pkg = NULL) {
 
   # Revdep
   # Cleanup previous versions
-  f <- readLines(".gitignore")
+  f <- readLines(file.path(pkg, ".gitignore")) # ! CHANGE
   fnew <- f[f != "revdep"]
   writeLines(fnew, ".gitignore")
 
