@@ -1,3 +1,10 @@
+# rpkgkit 0.1.9 (2026-07-13)
+
+## NEW FEATURES
+
+* add `open_cffinit()`
+
+
 # rpkgkit v0.1.8 (2026-07-12)
 
 ## BUG FIXES
