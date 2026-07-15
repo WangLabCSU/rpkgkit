@@ -18,8 +18,12 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![简体中文](https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue)](inst/translations/README.zh-cn.md)
 <!-- badges: end -->
 
-The goal of rpkgkit is to provide useful functions for R package
-development.
+## Recommended Best Practices
+
+While there are many open-source projects available for R package
+development, many tedious and repetitive tasks in the development
+process can be simplified through functionalization. The goal of rpkgkit
+is to provide useful functions for R package development.
 
 ## Installation
 

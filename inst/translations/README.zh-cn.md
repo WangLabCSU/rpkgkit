@@ -1,31 +1,37 @@
-# rpkgkit
+# rpkgkit <a href="https://wanglabcsu.github.io/rpkgkit/"><img src="man/figures/logo.png" align="right" height="139" alt="rpkgkit website" /></a>
 
 <!-- badges: start -->
+
 [![Lifecycle:stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![CRAN status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
+[![Project Status: Active - The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![CRAN-status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
 [![R-CMD-check](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml)
-[![Devel version](https://img.shields.io/badge/devel%20version-0.1.1-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
-[![Code size](https://img.shields.io/github/languages/code-size/WangLabCSU/rpkgkit.svg)](https://github.com/WangLabCSU/rpkgkit)
-[![Codecov testcoverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WangLabCSU/rpkgkit)
+[![Devel-version](https://img.shields.io/badge/devel%20version-0.1.8-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
+[![Codesize](https://img.shields.io/github/languages/code-size/WangLabCSU/rpkgkit.svg)](https://github.com/WangLabCSU/rpkgkit)
+[![Codecov-testcoverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
+[![Ask-DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WangLabCSU/rpkgkit)
+[![Dependencies](https://tinyverse.netlify.app/badge/rpkgkit)](https://cran.r-project.org/package=rpkgkit)
 [![English](https://img.shields.io/badge/README-English-blue)](../README.md)
 [![简体中文](https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue)]()
 <!-- badges: end -->
 
-rpkgkit 的目标是为 R 包开发提供实用的函数。
+## 推荐的最佳实践
+
+虽然已经有很多面向 R 包开发的开源项目，但开发过程中许多繁琐且重复的任务可以通过函数化来简化。rpkgkit 的目标是为 R 包开发提供实用的函数。
 
 ## 安装
 
 从 CRAN 安装：
 
-```r
+``` r
 install.packages("rpkgkit")
 ```
 
 从 GitHub 安装：
 
-```r
+``` r
 if (!requireNamespace("pak")) {
   install.packages(
     "pak",
@@ -37,7 +43,7 @@ if (!requireNamespace("pak")) {
     )
   )
 }
-pak::pkg_install("WangLabCSU/rpkgkit")
+pak::pak("Exceret/rpkgkit")
 ```
 
 ## 特性
@@ -48,9 +54,11 @@ pak::pkg_install("WangLabCSU/rpkgkit")
 
 使用 `usethis::use_standalone("WangLabCSU/rpkgkit", "<name>")` 导入：
 
-- args\_to\_func.R：将参数列表与函数调用进行匹配：
+- args_to_func.R：将参数列表与函数调用进行匹配：
 
-```r
+<!-- -->
+
+``` r
 f1 <- function(a, b) a + b
 f2 <- function(x, y, ...) x * y
 f3 <- function(p, q) p - q
@@ -61,7 +69,7 @@ args <- list(a = 1, b = 2)
 match_func_to_args(args, f1, f2, f3)
 ```
 
-```r
+``` r
 args <- list(a = 1, b = 2, x = 3, y = 4)
 foo <- function(x , y = 1){x + y}
 filter_args_for_func(args, foo) # 保留属于 foo 的参数
@@ -72,9 +80,11 @@ filter_args_for_func(args, foo) # 保留属于 foo 的参数
 # [1] 4
 ```
 
-- caller\_cli.R：显示 cli 函数的调用位置：
+- caller_cli.R：显示 cli 函数的调用来源位置：
 
-```r
+<!-- -->
+
+``` r
 decorated <- add_caller_to_cli(cli::cli_alert_info)
 foo1 <- \() {
   print("I' m in foo1")
@@ -95,38 +105,44 @@ bar()
 # ℹ [foo1()]: <- where is this called from?
 ```
 
-- colorful\_cli.R：在单个 cli 函数中更方便地使用颜色：
+- colorful_cli.R：在单个 cli 函数中更方便地调用颜色：
 
-```r
+<!-- -->
+
+``` r
 color_cli <- create_colorful_cli_env()
 color_cli$cli_alert_danger("{.red This is a red message}")
 color_cli$cli_alert_info("{.blue This is a blue message}")
 color_cli$cli_alert_info("{.orange This is an orange message}")
-# cyan, green, magenta, yellow, purple, etc
+# cyan, green, magenta, yellow, purple, 等
 
-color_cli2 <- create_colorful_cli_env(cli_theme = generate_color_theme()) # 颜色更多但较慢
+color_cli2 <- create_colorful_cli_env(cli_theme = generate_color_theme()) # 颜色更多但速度较慢
 color_cli2$cli_alert_success(
   "{.violetred3 R}{.orange a}{.yellow i}{.green n}{.cyan b}{.blue o}{.purple w}"
 )
 ```
 
-- match\_arg.R：参数的局部匹配，类似 `match.arg`、`rlang::arg_match`：
+- match_arg.R：函数参数的局部匹配，类似 `match.arg`、`rlang::arg_match`
 
-- ts\_cli.R：带时间戳的 cli 函数：
+- ts_cli.R：带时间戳的 cli 函数：
 
-```r
+<!-- -->
+
+``` r
 ts_cli <- create_ts_cli_env()
 ts_cli$cli_alert_info("Hello, world!")
 # ℹ [2026/05/30 22:45:42] Hello, world!
 ```
 
-### 独立脚本管理
+### 独立脚本文件管理
 
 - `inquire_standalone()` — 列出 GitHub 仓库 `R/` 目录下可用的独立脚本文件
 
-- `browse_standalone()` — 查询 GitHub 仓库中所有可用的独立脚本文件
+- `browse_standalone()` — 浏览 GitHub 仓库中所有可用的独立脚本文件
 
-```r
+<!-- -->
+
+``` r
 inquire_standalone("r-lib/rlang")
 # A tibble: 13 × 9
 #    name                         path                           sha                                       size url                               html_url git_url download_url type
@@ -148,7 +164,7 @@ inquire_standalone("r-lib/rlang")
 browse_standalone()
 # # A tibble: 184 × 9
 #    repo                   name                             path                               sha                 url   html_url git_url repo_url repo_description
-#    <chr>                  <chr>                            <chr>                              <chr>               <chr> <chr>    <chr>   <chr>    <chr>
+#    <chr>                  <chr>                            <chr>                              <chr>               <chr> <chr>    <chr>   <chr>    <chr>           
 #  1 tidymodels/parsnip     standalone-survival.R            R/standalone-survival.R            3f3809cc6019326a7f… http… https:/… https:… https:/… A tidy unified …
 #  2 prioritizr/prioritizr  standalone-cli.R                 R/standalone-cli.R                 00453fe89a55497eba… http… https:/… https:… https:/… Systematic cons…
 #  3 r-lib/rlang            standalone-vctrs.R               R/standalone-vctrs.R               a78927f6d65fd769c6… http… https:/… https:… https:/… Low-level API f…
@@ -162,9 +178,9 @@ browse_standalone()
 # # ℹ 174 more rows
 ```
 
-- `create_standalone()` — 在包中创建独立脚本工具文件：
+- `create_standalone()` — 在你的包中创建独立脚本工具文件
 
-```r
+``` r
 create_standalone("foo")
 # ✔ Created standalone file: /data/home/yyx/Project/rpkgkit/R/standalone-.R
 # ☐ File opened in editor.
@@ -172,7 +188,7 @@ create_standalone("foo")
 
 在 `R/standalone-foo.R` 中：
 
-```r
+``` r
 # ---
 # repo: WangLabCSU/rpkgkit
 # file: standalone-foo.R
@@ -180,15 +196,17 @@ create_standalone("foo")
 # license: https://unlicense.org
 # imports: []
 # ---
-#
+# 
 # This file provides...
 #
 # nocov start
 ```
 
-- `update_time_in_standalone()` — 更新独立脚本文件中的 `last-updated` 字段：
+- `update_time_in_standalone()` — 更新独立脚本文件中的 `last-updated` 字段
 
-```r
+<!-- -->
+
+``` r
 update_time_in_standalone()
 
 # ---
@@ -200,9 +218,11 @@ update_time_in_standalone()
 # ---
 ```
 
-- `add_changelog_in_standalone()` — 向独立脚本文件中添加更新日志条目：
+- `add_changelog_in_standalone()` — 向独立脚本文件中添加更新日志条目
 
-```r
+<!-- -->
+
+``` r
 add_changelog_in_standalone("R/standalone-foo.R", "Added foo function")
 # ✔ Added changelog entry for "2026-06-02" in 1 file(s).
 
@@ -222,21 +242,45 @@ add_changelog_in_standalone("R/standalone-foo.R", "Added foo function")
 
 ### NEWS.md 管理
 
-- `news_md_add_entry()` — 按照 CRAN 规范向 NEWS.md 添加新条目：
+- `news_md_add_entry()` — 按照 CRAN 规范向 NEWS.md 添加新条目
 
-```r
+<!-- -->
+
+``` r
 news_md_add_entry("Added foo function")
-
-# rpkgkit 0.0.4 (2026-06-02)
-
-## NEW FEATURES
-
-* Added foo function
 ```
 
-- `news_md_check()` — 验证 NEWS.md 格式是否符合 CRAN 要求：
+    # rpkgkit 0.0.4 (2026-06-02)
 
-```r
+    ## NEW FEATURES
+
+    * Added foo function
+
+添加一条不同类型的条目：
+
+``` r
+news_md_add_entry(
+  entry = "Fixed bugs in `foo()`",  
+  version = "0.0.4",
+  category = "BUG FIXES"
+)
+```
+
+    # rpkgkit 0.0.4 (2026-06-02)
+
+    ## NEW FEATURES
+
+    * Added foo function
+
+    ## BUG FIXES
+
+    * Fixed bugs in `foo()`
+
+- `news_md_check()` — 验证 NEWS.md 格式是否符合 CRAN 要求
+
+<!-- -->
+
+``` r
 news_md_check()
 # ℹ Checking NEWS.md with 22 lines
 # ✔ NEWS.md passed all required checks
@@ -262,11 +306,11 @@ news_md_check()
 ### R 函数转换
 
 - `make_func_call_explicit()` — 通过添加包前缀使函数调用显式化
-- `package_func_call_explicit()` — 在包中通过添加包前缀使函数调用显式化
+- `package_func_call_explicit()` — 在包中批量添加包前缀使函数调用显式化
 
-代码片段来自 [dplyr](https://github.com/tidyverse/dplyr)：
+以下代码片段来自 [dplyr](https://github.com/tidyverse/dplyr)：
 
-```r
+``` r
 
 starwars |>
   mutate(name, bmi = mass / ((height / 100)^2)) |>
@@ -277,16 +321,16 @@ make_func_call_explicit("path_to_file", use_packages = "dplyr")
 
 将被转换为：
 
-```r
+``` r
 starwars |>
   dplyr::mutate(name, bmi = mass / ((height / 100)^2)) |>
   dplyr::select(name:mass, bmi)
 ```
 
-- `detect_lost_glue_brace()` — 查找文件中所有缺少右大括号的 `glue` 调用，同时支持 `glue` 和 `cli` 表达式
-- `package_lost_glue_brace()` — 在包中查找所有缺少右大括号的 `glue` 调用，同时支持 `glue` 和 `cli` 表达式
+- `detect_lost_glue_brace()` — 查找文件中所有缺少右括号的 `glue` 调用，同时支持 `glue` 和 `cli` 表达式
+- `package_lost_glue_brace()` — 在包中查找所有缺少右括号的 `glue` 调用，同时支持 `glue` 和 `cli` 表达式
 
-```r
+``` r
 # foo.R
 name <- "world"
 msg <- glue::glue("Hello, {name!")
@@ -298,21 +342,21 @@ bar <- cli::col_red(cli::cli_alert_warning(
 ))
 ```
 
-```r
+``` r
 detect_lost_glue_brace()
 
 # msg <- glue::glue("Hello, {name!")
-#                           ^^^^^^
+#                           ^^^^^^ 
 
 #   "{.field warning}}: This string is missing {.val 1} brace{?s}"
-#    ^^^^^^^^^^^^^^^^^
+#    ^^^^^^^^^^^^^^^^^ 
 # ✖ Found 2 lines with mismatched braces: 3 and 8
 ```
 
-- `make_func_arg_explicit()` — 使函数调用中的参数使用显式参数名
-- `package_func_arg_explicit()` — 在包中使函数调用中的参数使用显式参数名
+- `make_func_arg_explicit()` — 使函数参数使用显式参数名传递
+- `package_func_arg_explicit()` — 在包中使函数参数使用显式参数名传递
 
-```r
+``` r
 tf <- tempfile(fileext = ".R")
 writeLines("vapply(1:9, function(x) x*2, numeric(1))", tf)
 make_func_arg_explicit(tf)
@@ -324,7 +368,7 @@ cat(readLines(tf), sep = "\n")
 
 - `rename_func()` — 按特定风格重命名文件中的函数
 
-```r
+``` r
 tf <- tempfile(fileext = ".R")
 writeLines("this_is_a_function <- function(){message('Hello, world')}", tf)
 
@@ -341,34 +385,42 @@ cat(readLines(tf), sep = "\n")
 - `detect_print_and_cat()` — 检测文件中的 `print()` 和 `cat()` 调用
 - `package_print_and_cat()` — 检测包中的 `print()` 和 `cat()` 调用
 
-由于 CRAN 政策不允许使用 `print()` 和 `cat()`，需要使用 `message()` 替代：
+根据 CRAN 政策不允许使用 `print()` 和 `cat()`，因此需要用 `message()` 来修正：
 
-```r
+``` r
 tf <- tempfile(fileext = ".R")
 writeLines("print('Hello, world')", tf)
 detect_print_and_cat(tf)
 # print('Hello, world')
 # ^^^^^^
-# ✖ Found 1 unsupported call on line
+# ✖ Found 1 unsupported call on line 
 # 1.
 detect_print_and_cat(tf, fix = TRUE)
 cat(readLines(tf), sep = "\n")
 # message('Hello, world')
 ```
 
-### R 包维护
+- `convert_func_syntax()` — 在 `function()` 和 `\()` 语法之间转换函数定义
 
-- `use_hexsticker()` — 将 Hex 贴纸粘贴到 README.md 中：
+``` r
+f <- tempfile(fileext = ".R")
+writeLines("f <- function(x) x^2", f)
+convert_func_syntax(f)
+# ✔ Converted function definitions in /tmp/Rtmp9ftJDS/file2a5a1320c9342e.R to "to_lambda"
+message(readLines(f), sep = "\n")
+# f <- \(x) x^2
 
-```r
-use_hexsticker("rpkgkit.logo") # 尽管该文件并不存在
-
-# rpkgkit <img src="rpkgkit.logo" alt="package logo" align="right" height="139"/>
+convert_func_syntax(f, "to_explicit")
+# ✔ Converted function definitions in /tmp/Rtmp9ftJDS/file2a5a1320c9342e.R to "to_explicit"
+message(readLines(f), sep = "\n")
+# f <- function(x) x^2
 ```
 
-- `use_zzz()` — 在 `R/` 目录下创建 `zzz.R` 文件，包含 `.onLoad`、`.onAttach` 及包描述信息：
+### R 包维护
 
-```r
+- `use_zzz()` — 在 `R/` 目录下创建 `{pkgname}-package.R` 文件，包含 `.onLoad`、`.onAttach`、`%||%` 以及包描述信息。类似于 `usethis::use_package_doc()` 但功能更强大。
+
+``` r
 # * 例如，在 rpkgkit 开发环境下使用
 use_zzz()
 
@@ -403,11 +455,18 @@ use_zzz()
 # .onLoad <- function(libname, pkgname) {
 #   invisible()
 # }
+
+# `%||%` <- function(left, right) {
+#   if (is.null(left)) {
+#     return(right)
+#   }
+#   left
+# }
 ```
 
-- `check_pkgdown_reference()` — 检查 `_pkgdown.yml` 中是否引用了所有导出函数：
+- `check_pkgdown_reference()` — 检查 `_pkgdown.yml` 中是否引用了所有导出函数
 
-```r
+``` r
 check_pkgdown_reference()
 # ✖ 9 exported functions missing from pkgdown reference:
 # - current_packages
@@ -421,11 +480,11 @@ check_pkgdown_reference()
 # - news_md_show
 ```
 
-- `use_vendor()` — 从 GitHub 引用一个宽松许可的 R 包，以便纳入你自己的 R 包。在 CRAN 政策下轻松导入 GitHub R 包。
+- `use_vendor()` — 从 GitHub 引用一个宽松许可的 R 包以便纳入你自己的 R 包。在 CRAN 政策下轻松导入来自 GitHub 的 R 包。
 
 许可协议、版权和声明将自动生成到 `DESCRIPTION`、`R/vendor-*.R` 和 `inst/vendor/` 中。
 
-```r
+``` r
 dir <- tempdir()
 usethis::create_package(path = dir)
 use_vendor(pkg = "WangLabCSU/rpkgkit", "43_use_vendor.R", branch = "main", path = dir)
@@ -447,11 +506,33 @@ use_vendor(pkg = "WangLabCSU/rpkgkit", "43_use_vendor.R", branch = "main", path 
 # - The authors of the [rpkgkit](https://github.com/WangLabCSU/rpkgkit) package &mdash; **Yuxi Yang, Jacob Scott, Christopher T. Kenny, Sebastian Lammers and Diego Hernangómez** &mdash; whose code is included (under MIT license) in `R/vendor-rpkgkit.R`.
 ```
 
+- `use_multilanguage_readme()` — 为你的 R 包创建多语言 README.md 模板
+- `badge_translated_by_ai()` — 创建"由 AI 翻译"徽章
+
+``` r
+use_multilangauge_readme("es")
+# ✔ Created 1 README translation file in inst/translations.
+# ☐ Consider pasting the following badges into your main README.md:
+
+# [![Español](https://img.shields.io/badge/README-Espa%C3%B1ol-blue)](inst/translations/README.es.md)
+```
+
+``` r
+badge_translated_by_ai("es")
+# ☐ Consider copying the following statement to the AI-translated file(s):
+
+# [![AI](https://img.shields.io/badge/AI-Espa%C3%B1ol-yellow)]()
+
+# > Este contenido ha sido traducido por IA y no ha sido revisado. No es la lengua materna del autor y es solo para referencia.
+```
+
+- `Add_global_rbuildignore()` — 向你的 R 包中添加全局 `.Rbuildignore` 文件
+- `Add_global_gitignore()` — 向你的 R 包中添加全局 `.gitignore` 文件
+
 ## 致谢
 
 感谢以下人员与项目：
 
-- [pedant](https://github.com/wurli/pedant) 包的作者 **Jacob Scott**、**Christopher T. Kenny** 和 **Sebastian Lammers** — 其代码（基于 MIT 许可）已包含在 `R/vendor-pedant.R` 中。
-- [pkgdev](https://github.com/dieghernan/pkgdev) 包的作者 **Diego Hernangómez** — 其代码（基于 MIT 许可）已包含在 `R/vendor-pkgdev.R` 中。
+- [pedant](https://github.com/wurli/pedant) 包的作者 — **Jacob Scott**、**Christopher T. Kenny** 和 **Sebastian Lammers** — 其代码（基于 MIT 许可）已包含在 `R/vendor-pedant.R` 中。
+- [pkgdev](https://github.com/dieghernan/pkgdev) 包的作者 — **Diego Hernangómez** — 其代码（基于 MIT 许可）已包含在 `R/vendor-pkgdev.R` 中。
 - 所有报告问题、提出功能建议或帮助改进本包的贡献者与用户。
-
