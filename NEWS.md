@@ -7,7 +7,7 @@
 
 ## NEW FEATURES
 
-* Added `standalone-convert_noascii_code()`
+* Added `convert_noascii_code()` to convert non-ascii code to ascii code, complying with CRAN requirements
 
 ## BUG FIXES
 
