@@ -563,7 +563,7 @@ badge_translated_by_ai("es")
 - `Add_global_gitignore()` - Add global .gitignore file to your R
   package.
 
-- `convert_noascii_code()` - Convert non-ASCII code to ASCII code. Make
+- `convert_nonascii_code()` - Convert non-ASCII code to ASCII code. Make
   it easy to use non-ASCII code under CRAN policy.
 
 ``` r

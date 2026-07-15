@@ -8,7 +8,7 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN-status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
 [![R-CMD-check](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml)
-[![Devel-version](https://img.shields.io/badge/devel%20version-0.1.8-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
+[![Devel-version](https://img.shields.io/badge/devel%20version-0.1.9-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
 [![Codesize](https://img.shields.io/github/languages/code-size/WangLabCSU/rpkgkit.svg)](https://github.com/WangLabCSU/rpkgkit)
 [![Codecov-testcoverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
 [![Ask-DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WangLabCSU/rpkgkit)
@@ -525,6 +525,31 @@ badge_translated_by_ai("es")
 # [![AI](https://img.shields.io/badge/AI-Espa%C3%B1ol-yellow)]()
 
 # > Este contenido ha sido traducido por IA y no ha sido revisado. No es la lengua materna del autor y es solo para referencia.
+```
+
+- `convert_nonascii_code()` — Convierte código no ASCII a código ASCII. Facilita el uso de código no ASCII bajo la política de CRAN.
+
+``` r
+# desde un archivo
+tmp <- tempfile()
+writeLines("foo <- \\() message('En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor.')", tmp)
+convert_nonascii_code(tmp)
+# ☐ Overwrite file /tmp/Rtmp72DzrV/file1e2ec6cc2d66c with converted content? (yes/No/cancel) 
+# yes
+# ℹ Converted content written to /tmp/Rtmp72DzrV/file1e2ec6cc2d66c
+message(readLines(tmp))
+# foo <- \() message('En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que viv\u00eda un hidalgo de los de lanza en astillero, adarga antigua, roc\u00edn flaco y galgo corredor.')
+```
+
+``` r
+# desde una expresión R
+convert_nonascii_code(
+  cli::cli_alert_info("Me gustas cuando callas, porque estás como ausente...")
+)
+# ℹ Converted code (copy from console):
+# cli::cli_alert_info("Me gustas cuando callas, porque est\u00e1s como ausente...")
+cli::cli_alert_info("Me gustas cuando callas, porque est\u00e1s como ausente...")
+# ℹ Me gustas cuando callas, porque estás como ausente...
 ```
 
 - `Add_global_rbuildignore()` — Agrega un archivo `.Rbuildignore` global a tu paquete R.
