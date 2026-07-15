@@ -107,7 +107,7 @@ convert_nonascii_code_path <- function(
     return(invisible(converted))
   }
 
-  # overwrite is NULL — prompt user interactively
+  # overwrite is NULL, prompt user interactively
   if (rlang::is_interactive()) {
     msg <- cli::cli_fmt(cli::cli_text(
       "{cli::col_red(cli::symbol$checkbox_off)} \
@@ -128,7 +128,7 @@ convert_nonascii_code_path <- function(
 
 #' @keywords internal
 convert_nonascii_code_expr <- function(code, reverse = FALSE) {
-  code_str <- rlang::expr_deparse(code)
+  code_str <- paste(rlang::expr_deparse(code), collapse = "\n")
 
   if (reverse) {
     converted <- restore_unicode_escapes(code_str)

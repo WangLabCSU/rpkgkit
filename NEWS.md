@@ -1,3 +1,9 @@
+# rpkgkit 0.1.10 (2026-07-15)
+
+## BUG FIXES
+
+* Fixed bug when deparsing multiline code in `convert_nonascii_code()`
+
 # rpkgkit 0.1.9 (2026-07-14)
 
 ## MINOR IMPROVEMENTS
