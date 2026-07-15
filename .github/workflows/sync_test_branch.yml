@@ -1,0 +1,41 @@
+name: Sync Main to Test Branch
+on:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-test-branch-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  sync-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Sync main to test
+        id: sync
+        uses: ./.github/actions/sync-test-branch
+        with:
+          branch: test
+
+      - name: Log result
+        run: |
+          if [[ "${{ steps.sync.outputs.synced }}" == "true" ]]; then
+            echo "✅ Test branch synced from main."
+          else
+            echo "⏭️  Test branch has unmerged work — skipped."
+          fi

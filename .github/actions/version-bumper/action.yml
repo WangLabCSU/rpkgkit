@@ -1,6 +1,6 @@
 name: "R Package Version Bumper"
 description: "Automatically bump version in R package DESCRIPTION with smart commit detection"
-author: "Yuxi Wang Lab, CSU"
+author: "Exceret"
 branding:
   icon: "package"
   color: "blue"
