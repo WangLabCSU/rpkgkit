@@ -41,39 +41,39 @@ test_that("convert_nonascii_code reports when no changes needed on file", {
   )
 })
 
-test_that(".encode_nonascii encodes non-ASCII only", {
-  result <- .encode_nonascii("a\u4e2db\u6587c")
+test_that("encode_nonascii encodes non-ASCII only", {
+  result <- encode_nonascii("a\u4e2db\u6587c")
   expect_equal(result, "a\\u4e2db\\u6587c")
 })
 
-test_that(".encode_nonascii leaves pure ASCII unchanged", {
-  result <- .encode_nonascii("hello world 123")
+test_that("encode_nonascii leaves pure ASCII unchanged", {
+  result <- encode_nonascii("hello world 123")
   expect_equal(result, "hello world 123")
 })
 
-test_that(".restore_unicode_escapes restores all escape sequences", {
-  result <- .restore_unicode_escapes("a\\u4e2db\\u6587c")
+test_that("restore_unicode_escapes restores all escape sequences", {
+  result <- restore_unicode_escapes("a\\u4e2db\\u6587c")
   expect_equal(result, "a\u4e2db\u6587c")
 })
 
-test_that(".restore_unicode_escapes leaves non-escape text unchanged", {
-  result <- .restore_unicode_escapes("hello world")
+test_that("restore_unicode_escapes leaves non-escape text unchanged", {
+  result <- restore_unicode_escapes("hello world")
   expect_equal(result, "hello world")
 })
 
-test_that(".convert_nonascii_code_expr encodes non-ASCII in quoted expression", {
-  result <- .convert_nonascii_code_expr(rlang::expr(print('\u4e2d\u6587')))
+test_that("convert_nonascii_code_expr encodes non-ASCII in quoted expression", {
+  result <- convert_nonascii_code_expr(rlang::expr(print('\u4e2d\u6587')))
   expect_true(grepl("\\\\u4e2d", result))
   expect_true(grepl("\\\\u6587", result))
 })
 
-test_that(".convert_nonascii_code_expr leaves ASCII-only expr unchanged", {
-  result <- .convert_nonascii_code_expr(rlang::expr(print(hello)))
+test_that("convert_nonascii_code_expr leaves ASCII-only expr unchanged", {
+  result <- convert_nonascii_code_expr(rlang::expr(print(hello)))
   expect_true(grepl("print(hello)", result, fixed = TRUE))
 })
 
-test_that(".convert_nonascii_code_expr restores escapes with reverse", {
-  result <- .convert_nonascii_code_expr(
+test_that("convert_nonascii_code_expr restores escapes with reverse", {
+  result <- convert_nonascii_code_expr(
     rlang::expr(print('\u4e2d\u6587')),
     reverse = TRUE
   )

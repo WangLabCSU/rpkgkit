@@ -1,22 +1,3 @@
-# ---
-# repo: Exceret/rpkgkit
-# file: standalone-convert_nonascii_code.R
-# last-updated: 2026-07-14
-# license: https://unlicense.org
-# imports: [rlang]
-# dependency:
-# ---
-#
-# Convert non-ASCII characters in R code to their ASCII escape sequences,
-# or vice versa (ASCII escapes back to readable characters).
-#
-# ## Changelog:
-#
-# 2026-07-14:
-# * Initial implementation
-#
-# nocov start
-
 #' @title Convert Non-ASCII Code
 #'
 #' @description
@@ -51,7 +32,7 @@
 #' convert_nonascii_code(print('\u4e2d\u6587'), reverse = TRUE)
 #' }
 #'
-#' @noRd
+#' @export
 convert_nonascii_code <- function(
   code,
   ...,
@@ -67,47 +48,46 @@ convert_nonascii_code <- function(
       NULL
     })
     if (is.character(val) && length(val) == 1 && file.exists(val)) {
-      return(.convert_nonascii_code_path(
+      return(convert_nonascii_code_path(
         val,
         reverse = reverse,
         overwrite = overwrite
       ))
     }
-    .convert_nonascii_code_expr(expr, reverse = reverse)
+    convert_nonascii_code_expr(expr, reverse = reverse)
   } else if (is.call(expr) || is.expression(expr) || is.pairlist(expr)) {
-    .convert_nonascii_code_expr(expr, reverse = reverse)
+    convert_nonascii_code_expr(expr, reverse = reverse)
   } else if (is.character(code) && length(code) == 1 && file.exists(code)) {
-    .convert_nonascii_code_path(code, reverse = reverse, overwrite = overwrite)
+    convert_nonascii_code_path(code, reverse = reverse, overwrite = overwrite)
   } else if (is.character(code) && length(code) == 1) {
-    .convert_nonascii_code_expr(expr, reverse = reverse)
+    convert_nonascii_code_expr(expr, reverse = reverse)
   } else {
-    rlang::abort(c(
-      "x" = sprintf("Cannot handle input of type <%s>.", class(code))
+    cli::cli_abort(c(
+      "x" = "Cannot handle input of type {.cls {class(code))}}"
     ))
   }
 }
 
-#' @noRd
-.convert_nonascii_code_path <- function(
+convert_nonascii_code_path <- function(
   path,
   reverse = FALSE,
   overwrite = NULL
 ) {
   if (!file.exists(path)) {
-    rlang::abort(c("x" = sprintf("File %s does not exist.", path)))
+    cli::cli_abort(c("x" = "File {.path {path}} does not exist."))
   }
 
   lines <- readLines(path, warn = FALSE)
   code_str <- paste(lines, collapse = "\n")
 
   if (reverse) {
-    converted <- .restore_unicode_escapes(code_str)
+    converted <- restore_unicode_escapes(code_str)
   } else {
-    converted <- .encode_nonascii(code_str)
+    converted <- encode_nonascii(code_str)
   }
 
   if (identical(converted, code_str)) {
-    message(
+    cli::cli_alert_warning(
       "No non-ASCII characters found (or no escapes to restore)."
     )
     return(invisible(code_str))
@@ -115,12 +95,12 @@ convert_nonascii_code <- function(
 
   if (isTRUE(overwrite)) {
     writeLines(converted, con = path)
-    message(sprintf("Converted content written to %s", path))
+    cli::cli_alert_info("Converted content written to {.path {path}}")
     return(invisible(path))
   }
 
   if (isFALSE(overwrite)) {
-    message(
+    cli::cli_alert_warning(
       "Printing converted code to console (use overwrite = TRUE to write file):"
     )
     message(paste(converted, sep = "\n"))
@@ -129,31 +109,34 @@ convert_nonascii_code <- function(
 
   # overwrite is NULL — prompt user interactively
   if (rlang::is_interactive()) {
-    msg <- sprintf("Overwrite file `%s` with converted content?", path)
+    msg <- cli::cli_fmt(cli::cli_text(
+      "{cli::col_red(cli::symbol$checkbox_off)} \
+      Overwrite file {.path {path}} with converted content?"
+    ))
     ans <- utils::askYesNo(msg, default = FALSE)
     if (isTRUE(ans)) {
       writeLines(converted, con = path)
-      message(sprintf("Converted content written to `%s`", path))
+      cli::cli_alert_info("Converted content written to {.path {path}}")
       return(invisible(path))
     }
   }
 
-  message("Printing converted code to console:")
+  cli::cli_alert_info("Printing converted code to console:\n")
   message(paste(converted, sep = "\n"))
   invisible(converted)
 }
 
-#' @noRd
-.convert_nonascii_code_expr <- function(code, reverse = FALSE) {
+#' @keywords internal
+convert_nonascii_code_expr <- function(code, reverse = FALSE) {
   code_str <- rlang::expr_deparse(code)
 
   if (reverse) {
-    converted <- .restore_unicode_escapes(code_str)
+    converted <- restore_unicode_escapes(code_str)
   } else {
-    converted <- .encode_nonascii(code_str)
+    converted <- encode_nonascii(code_str)
   }
 
-  message("Converted code (copy from console):")
+  cli::cli_alert_info("Converted code (copy from console):\n")
   message(paste(converted, sep = "\n"))
   invisible(converted)
 }
@@ -166,8 +149,8 @@ convert_nonascii_code <- function(
 #'
 #' @param x A character string.
 #' @return A character string with non-ASCII characters escaped.
-#' @noRd
-.encode_nonascii <- function(x) {
+#' @keywords internal
+encode_nonascii <- function(x) {
   chars <- strsplit(x, NULL)[[1]]
   ints <- utf8ToInt(x)
   result <- vapply(
@@ -191,8 +174,8 @@ convert_nonascii_code <- function(
 #'
 #' @param x A character string potentially containing `\\uXXXX` escapes.
 #' @return A character string with escapes resolved.
-#' @noRd
-.restore_unicode_escapes <- function(x) {
+#' @keywords internal
+restore_unicode_escapes <- function(x) {
   m <- gregexpr("\\\\u[0-9a-fA-F]{4}", x, perl = TRUE)
   regmatches(x, m) <- lapply(regmatches(x, m), function(escapes) {
     vapply(
