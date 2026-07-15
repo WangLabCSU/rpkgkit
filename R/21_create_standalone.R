@@ -42,6 +42,12 @@ create_standalone <- function(
   ...
 ) {
   rlang::check_dots_empty()
+  if (!rlang::is_list(standalone_head)) {
+    cli::cli_abort(c(
+      "x" = "{.code standalone_head} must be a {.cls list}",
+      ">" = "Current {.code standalone_head} is a {.cls {class(standalone_head)}}"
+    ))
+  }
   filename <- paste0("standalone-", standalone_name, ".R")
 
   # Merge user-provided standalone_head with defaults so missing fields fall back
@@ -123,7 +129,9 @@ create_standalone <- function(
     "#",
     sprintf("# %s", standalone_head$description),
     "#",
-    paste0("# nocov", " start") # * make this function can be tested
+    paste0("# nocov", " start"), # * make this function can be tested
+    "\n# TODO\n",
+    paste0("# nocov", " end")
   )
 
   writeLines(head_lines, con = target_path)

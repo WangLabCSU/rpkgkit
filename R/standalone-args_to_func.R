@@ -1,15 +1,18 @@
 # ---
 # repo: Exceret/rpkgkit
 # file: standalone-args_to_func.R
-# last-updated: 2026-06-27
+# last-updated: 2026-07-14
 # license: https://unlicense.org
-# imports: [cli, rlang]
+# imports: [rlang]
 # dependencies: [import-standalone-purrr]
 # ---
 #
 # Match arguments to function calls and filter argument lists.
 #
 # ## Changelog:
+#
+# 2026-07-14:
+# * Removed Redundant dependency cli
 #
 # 2026-06-27:
 # * Fixed lints
@@ -180,7 +183,7 @@ match_func_to_args <- function(
       is.null(names(args_list)) ||
       !all(nzchar(names(args_list)))
   ) {
-    cli::cli_abort(c(
+    rlang::abort(c(
       "x" = "`args_list` must be a named list with non-empty names for all elements when non-empty."
     ))
   }
@@ -257,7 +260,7 @@ match_func_to_args <- function(
         guess_df$position_sum[1] == guess_df$position_sum[2] &&
         guess_df$arg_count[1] == guess_df$arg_count[2]
     ) {
-      cli::cli_warn(
+      rlang::warn(
         "Arguments provided is not enough to select a function, still return the first function but result may differ from expected"
       )
     }
@@ -318,7 +321,7 @@ get_func_args <- function(
     } else if (is.numeric(exclude)) {
       args_list <- args_list[-exclude]
     } else {
-      cli::cli_abort(c(
+      rlang::abort(c(
         "x" = "GetFuncArgs: `exclude` cannot be {.cls {class(exclude)}}",
         ">" = "Expect {.cls {c('character','integer','numeric')}}"
       ))

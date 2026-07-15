@@ -85,7 +85,7 @@ add_changelog_in_standalone <- function(
         lines[lastupdated_idx] <- sprintf("# last-updated: %s", date)
       }
 
-      changelog_idx <- grep("^#\\s+Changelog:", lines)
+      changelog_idx <- grep("#\\s+Changelog:", lines, ignore.case = TRUE)
 
       if (length(changelog_idx) == 0L) {
         insert_pos <- yaml_end + 1L

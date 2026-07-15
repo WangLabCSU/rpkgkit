@@ -1,3 +1,14 @@
+# rpkgkit 0.1.9 (2026-07-14)
+
+## NEW FEATURES
+
+* Added `standalone-convert_noascii_code()`
+
+## BUG FIXES
+
+* `add_changelog_in_standalone()`: Fixed a bug when retrieving `Changelog` badge
+
+
 # rpkgkit v0.1.8 (2026-07-12)
 
 ## BUG FIXES
