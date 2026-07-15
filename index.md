@@ -1,6 +1,6 @@
 # rpkgkit
 
-## Recommended Best Practices
+## Inspiration
 
 While there are many open-source projects available for R package
 development, many tedious and repetitive tasks in the development
@@ -569,8 +569,38 @@ badge_translated_by_ai("es")
 
 - `Add_global_rbuildignore()` - Add global .Rbuildignore file to your R
   package.
+
 - `Add_global_gitignore()` - Add global .gitignore file to your R
   package.
+
+- [`convert_nonascii_code()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_nonascii_code.md) -
+  Convert non-ASCII code to ASCII code. Make it easy to use non-ASCII
+  code under CRAN policy.
+
+``` r
+
+# from a file
+tmp <- tempfile()
+writeLines("foo <- \\() message('滚滚长江东逝水')", tmp)
+convert_nonascii_code(tmp)
+# ☐ Overwrite file /tmp/Rtmp72DzrV/file1e2ec6cc2d66c with converted content? (yes/No/cancel) 
+# yes
+# ℹ Converted content written to /tmp/Rtmp72DzrV/file1e2ec6cc2d66c
+message(readLines(tmp))
+# 
+```
+
+``` r
+
+# from R expression
+convert_nonascii_code(
+  cli::cli_alert_info("明月几时有")
+)
+# ℹ Converted code (copy from console):
+# cli::cli_alert_info("\u660e\u6708\u51e0\u65f6\u6709")
+cli::cli_alert_info("\u660e\u6708\u51e0\u65f6\u6709")
+# ℹ 明月几时有
+```
 
 ## Acknowledgements
 

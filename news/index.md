@@ -1,5 +1,12 @@
 # Changelog
 
+## rpkgkit 0.1.10 (2026-07-15)
+
+### BUG FIXES
+
+- Fixed bug when deparsing multiline code in
+  [`convert_nonascii_code()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_nonascii_code.md)
+
 ## rpkgkit 0.1.9 (2026-07-14)
 
 ### MINOR IMPROVEMENTS
