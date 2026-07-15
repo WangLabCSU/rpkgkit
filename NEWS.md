@@ -7,6 +7,8 @@
 
 ## NEW FEATURES
 
+* Added `use_workflow_test_branch()`, which can create a test branch for maintaining R pkg. This branch will sync
+
 * Added `convert_noascii_code()` to convert non-ascii code to ascii code, complying with CRAN requirements
 
 ## BUG FIXES

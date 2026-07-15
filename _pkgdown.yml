@@ -73,6 +73,7 @@ reference:
       - use_multilanguage_readme
       - use_r_v4.1.0
       - use_vendor
+      - use_workflow_test_branch
       - use_workflow_version_update
       - use_zzz
       - current_packages
@@ -84,3 +85,5 @@ reference:
       - news_md_add_entry
       - news_md_check
       - news_md_show
+      - convert_nonascii_code
+      - open_cffinit

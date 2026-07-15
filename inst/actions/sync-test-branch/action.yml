@@ -1,0 +1,14 @@
+name: "Sync Test Branch"
+description: "Force-push main branch contents to test branch when main is updated, skipping if test has unmerged work."
+author: "Yuxi Wang Lab, CSU"
+branding:
+  icon: "git-branch"
+  color: "green"
+
+outputs:
+  synced:
+    description: "Whether test branch was synced (true/false)"
+
+runs:
+  using: "node20"
+  main: "dist/index.js"
