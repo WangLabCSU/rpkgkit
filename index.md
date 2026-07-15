@@ -1,7 +1,11 @@
 # rpkgkit
 
-The goal of rpkgkit is to provide useful functions for R package
-development.
+## Recommended Best Practices
+
+While there are many open-source projects available for R package
+development, many tedious and repetitive tasks in the development
+process can be simplified through functionalization. The goal of rpkgkit
+is to provide useful functions for R package development.
 
 ## Installation
 

@@ -66,7 +66,7 @@ the currently active document is used automatically.
 tf <- tempfile(fileext = ".R")
 writeLines("vapply(1:9, function(x) x*2, numeric(1))", tf)
 make_func_arg_explicit(tf)
-#> ✔ Made function arguments explicit in /tmp/RtmpHxfAh1/file1a567d765efc.R
+#> ✔ Made function arguments explicit in /tmp/Rtmpnplwlb/file1a931334f443.R
 cat(readLines(tf), sep = "\n")
 #> vapply(X = 1:9, FUN = function(x) x * 2, FUN.VALUE = numeric(length = 1))
 # vapply(X = 1:9, FUN = function(x) x*2, FUN.VALUE = numeric(1))

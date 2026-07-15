@@ -1,5 +1,28 @@
 # Changelog
 
+## rpkgkit 0.1.9 (2026-07-14)
+
+### MINOR IMPROVEMENTS
+
+- Updated
+  [`use_vendor()`](https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.md)
+  to make it fully comply standalone header format
+
+### NEW FEATURES
+
+- Added
+  [`use_workflow_test_branch()`](https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_test_branch.md),
+  which can create a test branch for maintaining R pkg. This branch will
+  sync
+
+- Added `convert_noascii_code()` to convert non-ascii code to ascii
+  code, complying with CRAN requirements
+
+### BUG FIXES
+
+- [`add_changelog_in_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/add_changelog_in_standalone.md):
+  Fixed a bug when retrieving `Changelog` badge
+
 ## rpkgkit v0.1.8 (2026-07-12)
 
 ### BUG FIXES
