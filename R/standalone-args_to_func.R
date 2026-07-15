@@ -322,8 +322,8 @@ get_func_args <- function(
       args_list <- args_list[-exclude]
     } else {
       rlang::abort(c(
-        "x" = "GetFuncArgs: `exclude` cannot be {.cls {class(exclude)}}",
-        ">" = "Expect {.cls {c('character','integer','numeric')}}"
+        "x" = sprintf("GetFuncArgs: `exclude` cannot be <%s>", class(exclude)),
+        ">" = "Expect <character/integer/numeric>"
       ))
     }
   }

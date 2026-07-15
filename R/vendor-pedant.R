@@ -1,12 +1,12 @@
-# ==============================================================================
+# ---
 # The following code is adapted from the 'pedant' package.
 # Source: https://github.com/wurli/pedant
 # Authors: Jacob Scott, Christopher T. Kenny, Sebastian Lammers
 # License: MIT + file LICENSE (See inst/vendor/pedant/LICENSE)
 # Last-updated: 2026-06-30
 # Vendor version: 0.1.0
-# Imports: rstudioapi, pkgload
-# ==============================================================================
+# Imports: [rstudioapi, pkgload]
+# ---
 #
 # ## Changelog
 #

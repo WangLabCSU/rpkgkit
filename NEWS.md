@@ -1,5 +1,10 @@
 # rpkgkit 0.1.9 (2026-07-14)
 
+## MINOR IMPROVEMENTS
+
+* Updated `use_vendor()` to make it fully comply standalone header format
+
+
 ## NEW FEATURES
 
 * Added `standalone-convert_noascii_code()`

@@ -329,7 +329,7 @@ vendor_create_r_file <- function(
 
   # -- Build header --
   r_lines <- c(
-    "# ==============================================================================",
+    "# ---",
     sprintf("# The following code is adapted from the '%s' package.", repo),
     sprintf("# Source: %s", repo_url),
     sprintf("# Authors: %s", author_str),
@@ -350,8 +350,8 @@ vendor_create_r_file <- function(
     ),
     sprintf("# Last-updated: %s", Sys.Date()),
     sprintf("# Vendor version: %s", vendor_version),
-    sprintf("# Imports: %s", imports_str),
-    "# ==============================================================================",
+    sprintf("# Imports: [%s]", imports_str),
+    "# ---",
     "#",
     "# nocov start"
   )

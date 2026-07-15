@@ -426,7 +426,7 @@ test_that("vendor_create_r_file creates header with attribution and metadata", {
   # New metadata fields
   expect_match(lines[7L], "Last-updated: ", fixed = TRUE)
   expect_match(lines[8L], "Vendor version: 0.3.1", fixed = TRUE)
-  expect_match(lines[9L], "Imports: none", fixed = TRUE)
+  expect_match(lines[9L], "Imports: [none]", fixed = TRUE)
 
   expect_true(any(grepl("nocov start", lines)))
   expect_true(any(grepl("nocov end", lines)))
@@ -467,7 +467,7 @@ test_that("vendor_create_r_file appends downloaded file content and extracts imp
   expect_match(lines, "fun2 <- function", fixed = TRUE, all = FALSE)
   expect_match(lines, "File: R/utils\\.R", all = FALSE)
   expect_match(lines, "Vendor version: 0.3.1", fixed = TRUE, all = FALSE)
-  expect_match(lines, "Imports: cli", fixed = TRUE, all = FALSE)
+  expect_match(lines, "Imports: [cli]", fixed = TRUE, all = FALSE)
 })
 
 test_that("vendor_create_r_file handles empty dots with only header and nocov markers", {
