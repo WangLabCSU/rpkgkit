@@ -1,5 +1,11 @@
 # Changelog
 
+## rpkgkit 0.1.11 (2026-07-17)
+
+### BUG FIXES
+
+- Fixed documentation
+
 ## rpkgkit 0.1.10 (2026-07-15)
 
 ### BUG FIXES
