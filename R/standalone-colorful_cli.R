@@ -1,5 +1,5 @@
 # ---
-# repo: Exceret/rpkgkit
+# repo: WangLabCSU/rpkgkit
 # file: standalone-colorful_cli.R
 # last-updated: 2026-05-30
 # license: https://unlicense.org

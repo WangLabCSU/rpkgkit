@@ -1,5 +1,5 @@
 # ---
-# repo: Exceret/rpkgkit
+# repo: WangLabCSU/rpkgkit
 # file: standalone-args_to_func.R
 # last-updated: 2026-07-14
 # license: https://unlicense.org

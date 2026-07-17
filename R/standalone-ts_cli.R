@@ -1,5 +1,5 @@
 # ---
-# repo: Exceret/rpkgkit
+# repo: WangLabCSU/rpkgkit
 # file: standalone-ts_cli.R
 # last-updated: 2026-06-27
 # license: https://unlicense.org

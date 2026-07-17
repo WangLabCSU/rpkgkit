@@ -555,12 +555,21 @@ badge_translated_by_ai("es")
 # from a file
 tmp <- tempfile()
 writeLines("foo <- \\() message('滚滚长江东逝水')", tmp)
+tools::showNonASCIIfile(tmp) 
+# 1: foo <- \() message('<e6><bb><9a><e6><bb><9a><e9><95><bf><e6><b1><9f><e4><b8><9c><e9><80><9d><e6><b0><b4>')
+
 convert_nonascii_code(tmp)
 # ☐ Overwrite file /tmp/Rtmp72DzrV/file1e2ec6cc2d66c with converted content? (yes/No/cancel) 
 # yes
 # ℹ Converted content written to /tmp/Rtmp72DzrV/file1e2ec6cc2d66c
+
 message(readLines(tmp))
-# 
+# foo <- \() message('\u6eda\u6eda\u957f\u6c5f\u4e1c\u901d\u6c34')
+
+tools::showNonASCIIfile(tmp) # empty
+source(tmp)
+foo()
+# 滚滚长江东逝水
 ```
 
 ```r
