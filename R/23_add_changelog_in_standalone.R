@@ -98,8 +98,7 @@ add_changelog_in_standalone <- function(
           "# ## Changelog:",
           "#",
           sprintf("# %s:", date),
-          sprintf("# * %s", description),
-          "#"
+          sprintf("# * %s", description)
         )
         lines <- append(lines, new_lines, after = insert_pos - 1L)
       } else {
@@ -109,7 +108,8 @@ add_changelog_in_standalone <- function(
         new_lines <- c(
           "#",
           sprintf("# %s:", date),
-          sprintf("# %s", description)
+          sprintf("# * %s", description),
+          "#"
         )
 
         if (blank_comment == 1L) {

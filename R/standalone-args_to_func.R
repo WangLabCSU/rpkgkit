@@ -1,18 +1,20 @@
 # ---
 # repo: WangLabCSU/rpkgkit
 # file: standalone-args_to_func.R
-# last-updated: 2026-07-14
+# last-updated: 2026-07-21
 # license: https://unlicense.org
 # imports: [rlang]
-# dependencies: [import-standalone-purrr]
 # ---
 #
 # Match arguments to function calls and filter argument lists.
 #
 # ## Changelog:
 #
+# 2026-07-21:
+# * Removed redundant dependency standalone-purrr
+#
 # 2026-07-14:
-# * Removed Redundant dependency cli
+# * Removed redundant dependency cli
 #
 # 2026-06-27:
 # * Fixed lints
@@ -201,23 +203,24 @@ match_func_to_args <- function(
   func_formals <- lapply(dots_funcs, formals)
   names(func_formals) <- func_names
 
-  guess <- imap(
-    .x = func_formals,
-    .f = function(lst, func_name) {
-      has_dots <- "..." %in% names(lst)
-      has_these_args <- names(lst) %in% names(args_list)
-      positions <- which(has_these_args)
-      count <- sum(has_these_args)
+  guess <- vector(mode = "list", length = length(func_formals))
+  for (i in seq_along(func_formals)) {
+    lst <- func_formals[[i]]
+    func_name <- func_names[[i]]
 
-      data.frame(
-        func_name = func_name,
-        position_sum = if (length(positions) == 0L) 0L else sum(positions),
-        arg_count = count,
-        has_dots = has_dots,
-        stringsAsFactors = FALSE
-      )
-    }
-  )
+    has_dots <- "..." %in% names(lst)
+    has_these_args <- names(lst) %in% names(args_list)
+    positions <- which(has_these_args)
+    count <- sum(has_these_args)
+
+    guess[[i]] <- data.frame(
+      func_name = func_name,
+      position_sum = if (length(positions) == 0L) 0L else sum(positions),
+      arg_count = count,
+      has_dots = has_dots,
+      stringsAsFactors = FALSE
+    )
+  }
 
   guess_df <- do.call(rbind, guess)
   guess_df <- guess_df[
