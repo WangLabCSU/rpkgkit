@@ -1,6 +1,6 @@
-# Helper: set up inst/vendor/pkg/ with LICENSE files and README
+# Helper: set up inst/vendor// with LICENSE files and README
 
-Helper: set up inst/vendor/pkg/ with LICENSE files and README
+Helper: set up inst/vendor// with LICENSE files and README
 
 ## Usage
 

@@ -13,7 +13,7 @@ definitions via iterative passes."><meta property="og:image" content="https://wa
 
     <a class="navbar-brand me-2" href="../index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,7 +40,7 @@ definitions via iterative passes."><meta property="og:image" content="https://wa
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Switch Between Explicit <code>function()</code> and Implicit <code>\()</code> Syntax</h1>
-      <small class="dont-index">Source: <a href="https://github.com/WangLabCSU/rpkgkit/blob/main/R/16_convert_func_syntax.R" class="external-link"><code>R/16_convert_func_syntax.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/WangLabCSU/rpkgkit/blob/v0.1.7/R/16_convert_func_syntax.R" class="external-link"><code>R/16_convert_func_syntax.R</code></a></small>
       <div class="d-none name"><code>convert_func_syntax.Rd</code></div>
     </div>
 
@@ -97,12 +97,12 @@ converted in multiple iterative passes, so all nesting levels are reached.</p>
 <span class="r-in"><span><span class="va">temp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".R"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="st">"add_one &lt;- function(x) x + 1"</span>, <span class="va">temp</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">convert_func_syntax</span><span class="op">(</span><span class="va">temp</span>, direction <span class="op">=</span> <span class="st">"to_lambda"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Converted function definitions in <span style="color: #0000BB;">/tmp/RtmpcVtOJE/file1a83168d16a7.R</span> to <span style="color: #0000BB;">"to_lambda"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Converted function definitions in <span style="color: #0000BB;">/tmp/Rtmp88Qrsk/file1b194cba4789.R</span> to <span style="color: #0000BB;">"to_lambda"</span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">temp</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "add_one &lt;- \\(x) x + 1"</span>
 <span class="r-in"><span><span class="co"># "add_one &lt;- \(x) x + 1"</span></span></span>
 <span class="r-in"><span><span class="fu">convert_func_syntax</span><span class="op">(</span><span class="va">temp</span>, direction <span class="op">=</span> <span class="st">"to_explicit"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Converted function definitions in <span style="color: #0000BB;">/tmp/RtmpcVtOJE/file1a83168d16a7.R</span> to <span style="color: #0000BB;">"to_explicit"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Converted function definitions in <span style="color: #0000BB;">/tmp/Rtmp88Qrsk/file1b194cba4789.R</span> to <span style="color: #0000BB;">"to_explicit"</span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">temp</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "add_one &lt;- function(x) x + 1"</span>
 <span class="r-in"><span><span class="co"># "add_one &lt;- function(x) x + 1"</span></span></span>

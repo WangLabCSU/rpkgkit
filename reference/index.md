@@ -101,17 +101,8 @@ The following functions help you to create and maintain an R package.
 - [`use_vendor()`](https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.md)
   : Use a Vendor Package
 
-- [`use_workflow_test_branch()`](https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_test_branch.md)
-  : Create a GitHub Actions Workflow to Sync Main to Test Branch
-
 - [`use_workflow_version_update()`](https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_version_update.md)
   : Create a GitHub Actions workflow to auto-update R package version
 
 - [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
   : Create a (pkgname)-package.R file from a template
-
-- [`convert_nonascii_code()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_nonascii_code.md)
-  : Convert Non-ASCII Code
-
-- [`open_cffinit()`](https://wanglabcsu.github.io/rpkgkit/reference/open_cffinit.md)
-  : Open the CFF initializer
