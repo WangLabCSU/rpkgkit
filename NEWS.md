@@ -1,3 +1,14 @@
+# rpkgkit 0.1.12 (2026-07-21)
+
+## MINOR IMPROVEMENTS
+
+* Removed redundant dependancy standalone-purrr in `standalone-args_to_func.R`
+* Changelog format in standalone file created by `add_changelog_in_standalone()` was beatified
+
+## DOCUMENTATION
+
+* Fixed an error in examples of `filter_args_for_func()` in `standalone-args_to_func.R`
+
 # rpkgkit 0.1.11 (2026-07-17)
 
 ## BUG FIXES
