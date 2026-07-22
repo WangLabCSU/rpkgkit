@@ -102,7 +102,7 @@
 #' # Execute with filtered arguments
 #' result <- do.call(example_function, filtered_args)
 #' print(result)
-#' #> [1] 16
+#' #> [1] 26
 #' }
 #'
 #' @seealso
