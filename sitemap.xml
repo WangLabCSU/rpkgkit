@@ -16,6 +16,7 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/check_air_installed.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/check_pkgdown_reference.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_func_syntax.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_nonascii_code.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/create_standalone.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/current_packages.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.html</loc></url>
@@ -37,6 +38,7 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_walk_repeat.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_walk_while.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-vendor_extract_imports.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/encode_nonascii.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/flir_fix.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/index.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/inquire_standalone.html</loc></url>
@@ -44,15 +46,18 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/make_func_arg_explicit.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/make_func_call_explicit.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/news_md.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/open_cffinit.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/rename_func.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/render_rmd.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/repo_spec_parse.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/restore_unicode_escapes.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/rpkgkit-package.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/update_time_in_standalone.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_hexsticker.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_multilanguage_readme.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_r_v4.1.0.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_test_branch.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_version_update.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/vendor_declare_source_license.html</loc></url>
