@@ -10,6 +10,9 @@
 #' @export
 open_cffinit <- function(...) {
   rlang::check_dots_empty()
+  cli::cli_alert_info(
+    "Opening CFF initializer to generate a CITATION.cff file."
+  )
   utils::browseURL(
     "https://citation-file-format.github.io/cff-initializer-javascript/#/"
   )
