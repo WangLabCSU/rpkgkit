@@ -45,3 +45,5 @@ inst/actions/*/lib/
 # Keep these tracked:
 # !inst/actions/*/dist/
 # !inst/actions/*/action.yml
+.DS_Store
+.quarto
