@@ -98,7 +98,8 @@ add_changelog_in_standalone <- function(
           "# ## Changelog:",
           "#",
           sprintf("# %s:", date),
-          sprintf("# * %s", description)
+          sprintf("# * %s", description),
+          "#"
         )
         lines <- append(lines, new_lines, after = insert_pos - 1L)
       } else {

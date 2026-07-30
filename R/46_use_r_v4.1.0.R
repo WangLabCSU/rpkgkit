@@ -28,8 +28,8 @@ use_r_v4.1.0 <- function(path = NULL, ...) {
   path <- path %||% "."
   if (!is_pkg(path = path)) {
     cli::cli_abort(c(
-      x = "{.path {path}} is not an R package root.",
-      `>` = "No {.file DESCRIPTION} found."
+      "x" = "{.path {path}} is not an R package root.",
+      ">" = "No {.file DESCRIPTION} found."
     ))
   }
   usethis::proj_set(path = path)

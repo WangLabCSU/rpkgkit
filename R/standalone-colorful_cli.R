@@ -1,10 +1,16 @@
 # ---
 # repo: WangLabCSU/rpkgkit
 # file: standalone-colorful_cli.R
-# last-updated: 2026-05-30
+# last-updated: 2026-07-30
 # license: https://unlicense.org
 # imports: [cli]
 # ---
+#
+#
+# ## Changelog:
+#
+# 2026-07-30:
+# * fixed cli syntax in generate_color_code when generating code
 #
 # Create colorful CLI function environments with custom color themes.
 #
@@ -183,13 +189,15 @@ add_colors_to_cli <- function(
 generate_color_code <- function() {
   rlang::expr({
     cli::cli_div(
-      span.red = list(color = "red"),
-      span.blue = list(color = "blue"),
-      span.orange = list(color = "orange"),
-      span.purple = list(color = "purple"),
-      span.green = list(color = "green"),
-      span.magenta = list(color = "magenta"),
-      span.cyan = list(color = "cyan")
+      theme = list(
+        span.red = list(color = "red"),
+        span.blue = list(color = "blue"),
+        span.orange = list(color = "orange"),
+        span.purple = list(color = "purple"),
+        span.green = list(color = "green"),
+        span.magenta = list(color = "magenta"),
+        span.cyan = list(color = "cyan")
+      )
     )
     on.exit(cli::cli_end())
   })

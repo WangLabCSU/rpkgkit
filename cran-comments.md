@@ -4,9 +4,40 @@
 
 ## Reviewer comments
 
-This is a resubmission in response to the review by Konstanze Lauseker.
+This is a resubmission. Version 0.1.12.
 
-### Writing to home filespace
+### Changes since last submission (0.1.11)
+
+#### NEW FEATURES
+
+* Added `open_cffinit()` — opens the CFF initializer in a browser to generate
+  `CITATION.cff` files.
+
+#### MINOR IMPROVEMENTS
+
+* Removed redundant dependency `standalone-purrr` in
+  `standalone-args_to_func.R`.
+* Beautified the changelog format in standalone files created by
+  `add_changelog_in_standalone()`.
+* Added community files (CONTRIBUTING.md, SUPPORT.md, issue template).
+* Added informative message when opening CFF initializer.
+
+#### DOCUMENTATION
+
+* Fixed an error in examples of `filter_args_for_func()` in
+  `standalone-args_to_func.R`.
+
+### Test results
+
+All 1182 tests pass with 0 failures (`devtools::test()`).
+
+---
+
+## Previous responses (for historical reference)
+
+### R CMD check results (v0.1.11)
+
+#### Writing to home filespace
 
 All functions that previously defaulted to `path = "."` now use `path = NULL`
 as the default parameter. The following functions were updated:
@@ -26,30 +57,22 @@ All examples and tests write to `tempdir()` or `tempfile()` only, and all
 temporary files are properly cleaned up (using `withr::local_tempdir()`,
 `withr::local_tempfile()`, or `on.exit(unlink(...))`).
 
-### Test results
+### R CMD check results (v0.1.7 — initial submission)
 
-All 1129 tests pass with 0 failures (`devtools::test()`).
-
----
-
-## Previous responses (for historical reference)
-
-### R CMD check results (previous submission)
-
-### 1. Description and Title
+#### 1. Description and Title
 
 The Description no longer starts with wording similar to the Title.
 The single quotes around 'R' in the Title have been removed to be consistent
 with the Description text, which uses R without quotes.
 
-### 2. Missing \value tags in .Rd files
+#### 2. Missing \value tags in .Rd files
 
 Added `@return` roxygen documentation for `is_dev_context()`,
 `imported_functions()`, and `current_packages()` in R/vendor-pedant.R.
 `man/current_packages.Rd` now includes a \value section describing the
 return value of each exported function.
 
-### 3. \dontrun{} replaced with \donttest{}
+#### 3. \dontrun{} replaced with \donttest{}
 
 Replaced `\dontrun{}` with `\donttest{}` in all examples except for three
 functions that genuinely require external software or API keys:
@@ -59,14 +82,13 @@ functions that genuinely require external software or API keys:
 - `air_format()` — requires the external `air` binary
 - `news_md_check()`, `news_md_add_entry()`, `news_md_show()`, `check_pkgdown_reference`, `use_workflow_version_update()`, `use_zzz()`  - requires R package `usethis`
 
-
-### 4. cat() replaced with message()
+#### 4. cat() replaced with message()
 
 In `R/14_detect_lost_glue_brace.R`, the `cat()` call (and the adjacent
 `cli::cli_text("")`) has been replaced with `message()`, which is the
 recommended approach for informational messages that can be suppressed.
 
-### 5. Writing to home filespace / getwd()
+#### 5. Writing to home filespace / getwd()
 
 All functions that previously used `getwd()` (or the internal `get_wd()`
 helper) as a default path fallback now use `path = "."` as the default
@@ -81,7 +103,3 @@ parameter value. Specifically:
 - Internal `get_wd()` function: fallback changed from `getwd()` to `"."`
 
 In examples and vignettes, `tempdir()` is used where file writing is needed.
-
-### Test results
-
-All 675 tests pass with 0 failures (`devtools::test()`).

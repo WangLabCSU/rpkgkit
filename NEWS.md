@@ -1,13 +1,21 @@
-# rpkgkit 0.1.12 (2026-07-21)
+# rpkgkit 0.1.12 (2026-07-26)
+
+## NEW FEATURES
+
+* Added `open_cffinit()` — opens the CFF initializer in a browser to generate
+  `CITATION.cff` files.
 
 ## MINOR IMPROVEMENTS
 
-* Removed redundant dependancy standalone-purrr in `standalone-args_to_func.R`
-* Changelog format in standalone file created by `add_changelog_in_standalone()` was beatified
+* Removed redundant dependency `standalone-purrr` in `standalone-args_to_func.R`.
+* Beautified the changelog format in standalone files created by
+  `add_changelog_in_standalone()`.
+* Added community files (CONTRIBUTING.md, SUPPORT.md, issue template).
 
 ## DOCUMENTATION
 
-* Fixed an error in examples of `filter_args_for_func()` in `standalone-args_to_func.R`
+* Fixed an error in examples of `filter_args_for_func()` in
+  `standalone-args_to_func.R`.
 
 # rpkgkit 0.1.11 (2026-07-17)
 
