@@ -87,6 +87,11 @@ add_double_colons <- function(
   # variable-length lookbehinds aren't possible
   code <- gsub(":: +", "::", code)
 
+  # Protect comments and roxygen2 documentation from transformation, so that
+  # function calls inside them are left untouched
+  protected <- protect_comments(code)
+  code <- protected$code
+
   # Regular expression to extract function calls
   backticks_fns <- "`[^`]+`(?= *[(])"
   syntactic_fns <- "(?<=[^a-zA-Z._]|^)[a-zA-Z._]+(?= *[(])"
@@ -144,12 +149,75 @@ add_double_colons <- function(
   ]
   out <- str_replace_all(code, funs_regex, replacements)
 
+  # Restore the protected comments
+  out <- restore_comments(out, protected$comments)
+
   if (replace_selection) {
     rstudioapi::insertText(out)
     return(invisible(out))
   }
 
   out
+}
+
+# Find the position of the first `#` that starts a comment in a line of R
+# code, ignoring `#` inside string literals or backtick identifiers.
+# Returns `Inf` if the line contains no comment.
+find_comment_start <- function(line) {
+  chars <- strsplit(line, "", fixed = TRUE)[[1]]
+  in_string <- ""
+  escaped <- FALSE
+  for (i in seq_along(chars)) {
+    ch <- chars[[i]]
+    if (nzchar(in_string)) {
+      if (escaped) {
+        escaped <- FALSE
+      } else if (ch == "\\") {
+        escaped <- TRUE
+      } else if (ch == in_string) {
+        in_string <- ""
+      }
+    } else if (ch == "#") {
+      return(i)
+    } else if (ch %in% c('"', "'", "`")) {
+      in_string <- ch
+    }
+  }
+  Inf
+}
+
+# Replace comments (including roxygen2 `#'` lines and trailing comments) with
+# placeholders so that the transformation in `add_double_colons()` does not
+# touch them. Returns a list with the modified code and the mapping between
+# placeholders and the original comments.
+protect_comments <- function(code) {
+  lines <- strsplit(code, "\n", fixed = TRUE)[[1]]
+  # `strsplit()` drops a trailing empty element, so restore the newline count
+  if (grepl("\n$", code)) {
+    lines <- c(lines, "")
+  }
+  comments <- list(placeholder = character(0), text = character(0))
+  out <- character(length(lines))
+  for (i in seq_along(lines)) {
+    start <- find_comment_start(lines[[i]])
+    if (is.finite(start)) {
+      placeholder <- paste0("\001RCOMMENT_", length(comments$text) + 1L, "\001")
+      comments$placeholder <- c(comments$placeholder, placeholder)
+      comments$text <- c(comments$text, substring(lines[[i]], start))
+      out[[i]] <- paste0(substring(lines[[i]], 1L, start - 1L), placeholder)
+    } else {
+      out[[i]] <- lines[[i]]
+    }
+  }
+  list(code = paste(out, collapse = "\n"), comments = comments)
+}
+
+# Restore the original comments from their placeholders
+restore_comments <- function(code, comments) {
+  for (i in seq_along(comments$text)) {
+    code <- gsub(comments$placeholder[[i]], comments$text[[i]], code, fixed = TRUE)
+  }
+  code
 }
 
 get_imports <- function(dir = ".") {

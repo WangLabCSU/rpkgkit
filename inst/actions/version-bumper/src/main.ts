@@ -196,6 +196,9 @@ async function run(): Promise<void> {
             if (inferred !== 'none') {
                 bumpType = inferred;
                 core.info(`🔄 Using inferred type: ${bumpType}`);
+            } else {
+                bumpType = 'none';
+                core.info('⏭️  No bump keywords in commit message, skipping');
             }
         }
 

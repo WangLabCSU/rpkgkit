@@ -20,7 +20,7 @@ If \code{NULL} and RStudio is available, the currently active document path is u
 }
 \value{
 Invisibly returns \code{TRUE} if all expressions are balanced, \code{FALSE}
-otherwise. Side-effect messages are emitted via \link[cli:cli]{cli::cli}.
+otherwise. Side-effect messages are emitted via \link[cli:cli]{cli}.
 }
 \description{
 Check whether \verb{\{} and \verb{\}} are balanced in all \code{glue()} / \code{glue_data()}

@@ -29,6 +29,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Yuxi Yang \email{15364051195@163.com}
   \item Jacob Scott (Author of the included pedant code (https://github.com/wurli/pedant)) [copyright holder]
   \item Diego Hernangómez \email{diego.hernangomezherrero@gmail.com} (Author of the included pkgdev code (https://github.com/dieghernan/pkgdev)) [copyright holder]
 }

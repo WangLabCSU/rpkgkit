@@ -1,3 +1,17 @@
+# rpkgkit 0.1.13 (2026-08-13)
+
+## BUG FIXES
+
+* `make_func_call_explicit()` (and `add_double_colons()`) no longer add `::`
+  to function calls inside comments or roxygen2 documentation. Comments
+  (including `#'` roxygen2 lines and trailing comments) are now left
+  untouched.
+
+## MINOR IMPROVEMENTS
+
+* Updated standalone `colorful_cli`.
+* Beautified `use_zzz` with a spinner loading animation.
+
 # rpkgkit 0.1.12 (2026-07-26)
 
 ## NEW FEATURES
