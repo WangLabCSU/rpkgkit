@@ -35,7 +35,7 @@ detect_lost_glue_brace(path = NULL, ...)
 
 Invisibly returns `TRUE` if all expressions are balanced, `FALSE`
 otherwise. Side-effect messages are emitted via
-[cli::cli](https://cli.r-lib.org/reference/cli.html).
+[cli](https://cli.r-lib.org/reference/cli.html).
 
 ## Functions
 

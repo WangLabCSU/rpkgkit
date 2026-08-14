@@ -24,6 +24,8 @@ Useful links:
 
 Authors:
 
+- Yuxi Yang <15364051195@163.com>
+
 - Jacob Scott (Author of the included pedant code
   (https://github.com/wurli/pedant)) \[copyright holder\]
 

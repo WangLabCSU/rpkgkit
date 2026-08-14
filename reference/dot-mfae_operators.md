@@ -10,7 +10,3 @@ where simply walking children suffices.
 ``` r
 .mfae_operators
 ```
-
-## Format
-
-An object of class `character` of length 28.

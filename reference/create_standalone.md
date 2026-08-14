@@ -61,6 +61,6 @@ Invisibly returns the path to the created file.
 ``` r
 # \donttest{
 create_standalone("my_utils", path = tempdir())
-#> ✔ Created standalone file: /tmp/RtmpAM3FIu/standalone-my_utils.R
+#> ✔ Created standalone file: /tmp/RtmpfFkUws/standalone-my_utils.R
 # }
 ```

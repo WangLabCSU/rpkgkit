@@ -48,7 +48,6 @@ Invisibly returns `NULL`, called for side effects.
 
 ``` r
 if (FALSE) { # \dontrun{
-use_vendor("wurli/pedant")
-use_vendor("https://github.com/wurli/pedant", "R/add_double_colons.R")
+use_vendor("hadley/emo", "R/zzz.R")
 } # }
 ```
