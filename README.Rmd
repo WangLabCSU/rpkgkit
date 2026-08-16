@@ -435,6 +435,23 @@ message(readLines(f), sep = "\n")
 # f <- function(x) x^2
 ```
 
+- `convert_knitr_chunk_header()` - Convert legacy knitr chunk headers in R Markdown files to the current header syntax.
+
+````r
+tf <- tempfile(fileext = ".Rmd")
+writeLines(
+  c("```{r, echo=TRUE, fig.width=10}", "x <- 1", "```"),
+  tf
+)
+convert_knitr_chunk_header(tf)
+cat(readLines(tf), sep = "\n")
+# ```{r}
+# #| echo = TRUE,
+# #| fig.width = 10
+# x <- 1
+# ```
+````
+
 
 ### R Package Maintenance
 
