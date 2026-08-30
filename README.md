@@ -16,8 +16,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Ask-DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WangLabCSU/rpkgkit)
 [![Dependencies](https://tinyverse.netlify.app/badge/rpkgkit)](https://cran.r-project.org/package=rpkgkit)
 [![简体中文](https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue)](inst/translations/README.zh-cn.md)
-[![R-universe
-version](https://wanglabcsu.r-universe.dev/rpkgkit/badges/version)](https://wanglabcsu.r-universe.dev/rpkgkit)
+[![R-universe-version](https://wanglabcsu.r-universe.dev/rpkgkit/badges/version)](https://wanglabcsu.r-universe.dev/rpkgkit)
 <!-- badges: end -->
 
 ## Inspiration
@@ -33,6 +32,12 @@ From CRAN:
 
 ``` r
 install.packages("rpkgkit")
+```
+
+From R-universe:
+
+``` r
+install.packages('rpkgkit', repos = c('https://wanglabcsu.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 From github:
