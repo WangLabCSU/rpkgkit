@@ -1,3 +1,14 @@
+# rpkgkit 0.1.14 (2026-09-14)
+
+## NEW FEATURES
+
+* Added `use_bugreports()` — sets the `BugReports` field of a package's
+  `DESCRIPTION` file, defaulting to the GitHub issues page detected from
+  the `git` remote.
+* Added `use_url()` — sets the `URL` field of a package's `DESCRIPTION`
+  file, defaulting to the GitHub repository detected from the `git` remote,
+  with an optional pkgdown website URL.
+
 # rpkgkit 0.1.13 (2026-08-13)
 
 ## BUG FIXES

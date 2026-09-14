@@ -3,9 +3,10 @@
 #' @title Create and Maintain R Packages
 #'
 #' @description Utilities for R package development including NEWS.md
-#' management, standalone file creation, and code formatting. Supports popular
-#' development workflows and integrates with 'usethis' and 'RStudio'. Includes
-#' helper functions for renaming functions and detecting common coding errors.
+#' management, standalone file creation, and code formatting. Supports
+#' popular development workflows and integrates with 'usethis' and
+#' 'RStudio'. Includes helper functions for renaming functions and
+#' detecting common coding errors.
 #'
 #' @section License:
 #' MIT + file LICENSE
@@ -21,11 +22,11 @@
 .onAttach <- function(libname, pkgname) {
   pkg_version <- utils::packageVersion(pkgname)
 
-  msg <- cli::cli_fmt(cli::cli_alert_success(
-    "{.pkg {pkgname}} v{pkg_version} loaded"
-  ))
-  packageStartupMessage(msg)
-  invisible()
+  startup_spinner(
+    expr = invisible(),
+    pkgname = pkgname,
+    pkg_version = pkg_version
+  )
 }
 
 .onLoad <- function(libname, pkgname) {
@@ -33,15 +34,56 @@
 }
 
 
+startup_spinner <- function(expr, pkgname, pkg_version) {
+  if (!interactive() || !startup_message_allowed()) {
+    return(force(expr))
+  }
+
+  id <- cli::cli_progress_step(
+    msg = "{.pkg {pkgname}} v{pkg_version} loading",
+    msg_done = "{.pkg {pkgname}} v{pkg_version} loaded",
+    msg_failed = "{.pkg {pkgname}} v{pkg_version} fail to load",
+    spinner = TRUE
+  )
+
+  on.exit(
+    cli::cli_progress_done(id = id),
+    add = TRUE
+  )
+
+  force(expr)
+}
+
+startup_message_allowed <- function() {
+  allowed <- FALSE
+
+  withRestarts(
+    {
+      signalCondition(structure(
+        list(message = ".__startup_probe__."),
+        class = c(
+          "packageStartupProbe",
+          "packageStartupMessage",
+          "condition"
+        )
+      ))
+      allowed <- TRUE
+    },
+    muffleMessage = function() NULL
+  )
+
+  allowed
+}
+
 ## usethis namespace: start
 ## usethis namespace: end
 NULL
 
-`%||%` <- function(left, right) {
-  if (is.null(left)) {
-    return(right)
+`%||%` <- function(x, y) {
+  if (is.null(x)) {
+    x <- y
   }
-  left
+  x
 }
 
 # nocov end

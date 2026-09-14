@@ -215,7 +215,12 @@ protect_comments <- function(code) {
 # Restore the original comments from their placeholders
 restore_comments <- function(code, comments) {
   for (i in seq_along(comments$text)) {
-    code <- gsub(comments$placeholder[[i]], comments$text[[i]], code, fixed = TRUE)
+    code <- gsub(
+      comments$placeholder[[i]],
+      comments$text[[i]],
+      code,
+      fixed = TRUE
+    )
   }
   code
 }

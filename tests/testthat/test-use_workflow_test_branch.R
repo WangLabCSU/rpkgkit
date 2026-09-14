@@ -11,7 +11,12 @@ test_that("aborts when workflow file already exists and overwrite = FALSE", {
   tmp <- withr::local_tempdir(pattern = "pkg")
   file.create(file.path(tmp, "DESCRIPTION"))
 
-  workflow_file <- file.path(tmp, ".github", "workflows", "sync_test_branch.yml")
+  workflow_file <- file.path(
+    tmp,
+    ".github",
+    "workflows",
+    "sync_test_branch.yml"
+  )
   dir.create(dirname(workflow_file), recursive = TRUE)
   file.create(workflow_file)
 
@@ -25,7 +30,13 @@ test_that("aborts when action file already exists and overwrite = FALSE", {
   tmp <- withr::local_tempdir(pattern = "pkg")
   file.create(file.path(tmp, "DESCRIPTION"))
 
-  action_file <- file.path(tmp, ".github", "actions", "sync-test-branch", "action.yml")
+  action_file <- file.path(
+    tmp,
+    ".github",
+    "actions",
+    "sync-test-branch",
+    "action.yml"
+  )
   dir.create(dirname(action_file), recursive = TRUE)
   file.create(action_file)
 
@@ -41,7 +52,12 @@ test_that("creates workflow directory and copies template", {
 
   result <- use_workflow_test_branch(path = tmp)
 
-  expected_path <- file.path(tmp, ".github", "workflows", "sync_test_branch.yml")
+  expected_path <- file.path(
+    tmp,
+    ".github",
+    "workflows",
+    "sync_test_branch.yml"
+  )
   expect_equal(result, expected_path)
   expect_true(file.exists(expected_path))
 
@@ -68,7 +84,12 @@ test_that("overwrite = TRUE replaces existing workflow file", {
   tmp <- withr::local_tempdir(pattern = "pkg")
   file.create(file.path(tmp, "DESCRIPTION"))
 
-  workflow_file <- file.path(tmp, ".github", "workflows", "sync_test_branch.yml")
+  workflow_file <- file.path(
+    tmp,
+    ".github",
+    "workflows",
+    "sync_test_branch.yml"
+  )
   dir.create(dirname(workflow_file), recursive = TRUE)
   writeLines(c("# old content"), workflow_file)
 

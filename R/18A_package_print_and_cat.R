@@ -117,6 +117,7 @@ scan_file_print_cat <- function(file, fix = FALSE) {
         0L
       }
     caret <- paste0(
+      "\t",
       strrep(x = " ", times = info$col1 - 1L),
       strrep(x = "^", times = caret_width)
     )

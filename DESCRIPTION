@@ -18,7 +18,8 @@ Description: Utilities for R package development including NEWS.md
     'RStudio'. Includes helper functions for renaming functions and
     detecting common coding errors.
 License: MIT + file LICENSE
-URL: https://github.com/WangLabCSU/rpkgkit
+URL: https://github.com/WangLabCSU/rpkgkit,
+    https://wanglabcsu.github.io/rpkgkit/
 BugReports: https://github.com/WangLabCSU/rpkgkit/issues
 Depends: 
     R (>= 4.1.0)
@@ -50,4 +51,4 @@ Copyright: Jacob Scott, Christopher T. Kenny, and Sebastian Lammers (for
     the pkgdev code included in R/vendor-pkgdev.R);  and  (for the pedant code included in R/vendor-pedant.R); Diego Hernangómez (for the pkgdev code included in R/vendor-pkgdev.R)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0

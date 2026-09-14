@@ -102,7 +102,9 @@ test_that("convert_nonascii_code NSE with string arg that is not a file", {
 })
 
 test_that("convert_nonascii_code handles { } multi-line expression", {
-  result <- convert_nonascii_code({ cli::cli_alert_info("明月几时有") })
+  result <- convert_nonascii_code({
+    cli::cli_alert_info("明月几时有")
+  })
   expect_true(grepl("\\\\u660e", result))
   expect_true(grepl("\\\\u6708", result))
   expect_true(grepl("\\\\u51e0", result))
@@ -111,7 +113,12 @@ test_that("convert_nonascii_code handles { } multi-line expression", {
 })
 
 test_that("convert_nonascii_code handles { } multi-line expression with reverse", {
-  result <- convert_nonascii_code({ cli::cli_alert_info("明月几时有") }, reverse = TRUE)
+  result <- convert_nonascii_code(
+    {
+      cli::cli_alert_info("明月几时有")
+    },
+    reverse = TRUE
+  )
   expect_true(grepl("明月几时有", result))
 })
 
