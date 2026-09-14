@@ -88,7 +88,7 @@ detect_print_and_cat(tmp)
 
 # --- With auto-fix ---
 detect_print_and_cat(tmp, fix = TRUE)
-#> ✔ Fixed 1 line in file1c0b6af2de6a.R.
+#> ✔ Fixed 1 line in file1ad23b0e582.R.
 #> print("hello")
 #> ^^^^^^
 #> ✖ Found 1 unsupported call on line 
@@ -106,7 +106,7 @@ package_print_and_cat(pkg)
 #> example.R
 #> Line 1:
 #>     cat("debug\n")
-#> ^^^^
+#>  ^^^^
 #> 
 # }
 ```

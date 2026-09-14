@@ -87,6 +87,11 @@ The following functions help you to create and maintain an R package.
 - [`update_time_in_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/update_time_in_standalone.md)
   : Update the last-updated field in standalone R files
 
+- [`use_bugreports()`](https://wanglabcsu.github.io/rpkgkit/reference/use_bugreports.md)
+  :
+
+  Add a `BugReports` field to a package's `DESCRIPTION`
+
 - [`use_hexsticker()`](https://wanglabcsu.github.io/rpkgkit/reference/use_hexsticker.md)
   **\[deprecated\]** : Use Hex Sticker in README
 
@@ -97,6 +102,11 @@ The following functions help you to create and maintain an R package.
   :
 
   Add a minimum `R` version dependency to a package
+
+- [`use_url()`](https://wanglabcsu.github.io/rpkgkit/reference/use_url.md)
+  :
+
+  Add a `URL` field to a package's `DESCRIPTION`
 
 - [`use_vendor()`](https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.md)
   : Use a Vendor Package
@@ -115,3 +125,6 @@ The following functions help you to create and maintain an R package.
 
 - [`open_cffinit()`](https://wanglabcsu.github.io/rpkgkit/reference/open_cffinit.md)
   : Open the CFF initializer
+
+- [`convert_knitr_chunk_header()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_knitr_chunk_header.md)
+  : Convert Knitr Chunk Headers in R Markdown Files

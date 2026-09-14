@@ -1,5 +1,19 @@
 # Changelog
 
+## rpkgkit 0.1.14 (2026-09-14)
+
+### NEW FEATURES
+
+- Added
+  [`use_bugreports()`](https://wanglabcsu.github.io/rpkgkit/reference/use_bugreports.md)
+  — sets the `BugReports` field of a package’s `DESCRIPTION` file,
+  defaulting to the GitHub issues page detected from the `git` remote.
+- Added
+  [`use_url()`](https://wanglabcsu.github.io/rpkgkit/reference/use_url.md)
+  — sets the `URL` field of a package’s `DESCRIPTION` file, defaulting
+  to the GitHub repository detected from the `git` remote, with an
+  optional pkgdown website URL.
+
 ## rpkgkit 0.1.13 (2026-08-13)
 
 ### BUG FIXES

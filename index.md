@@ -16,6 +16,13 @@ From CRAN:
 install.packages("rpkgkit")
 ```
 
+From R-universe:
+
+``` r
+
+install.packages('rpkgkit', repos = c('https://wanglabcsu.r-universe.dev', 'https://cloud.r-project.org'))
+```
+
 From github:
 
 ``` r
@@ -439,6 +446,26 @@ convert_func_syntax(f, "to_explicit")
 # ✔ Converted function definitions in /tmp/Rtmp9ftJDS/file2a5a1320c9342e.R to "to_explicit"
 message(readLines(f), sep = "\n")
 # f <- function(x) x^2
+```
+
+- [`convert_knitr_chunk_header()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_knitr_chunk_header.md) -
+  Convert legacy knitr chunk headers in R Markdown files to the current
+  header syntax.
+
+``` r
+
+tf <- tempfile(fileext = ".Rmd")
+writeLines(
+  c("```{r, echo=TRUE, fig.width=10}", "x <- 1", "```"),
+  tf
+)
+convert_knitr_chunk_header(tf)
+cat(readLines(tf), sep = "\n")
+# ```{r}
+# #| echo = TRUE,
+# #| fig.width = 10
+# x <- 1
+# ```
 ```
 
 ### R Package Maintenance

@@ -18,6 +18,7 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/check_air_installed.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/check_pkgdown_reference.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_func_syntax.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_knitr_chunk_header.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_nonascii_code.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/create_standalone.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/current_packages.html</loc></url>
@@ -55,9 +56,11 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/restore_unicode_escapes.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/rpkgkit-package.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/update_time_in_standalone.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_bugreports.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_hexsticker.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_multilanguage_readme.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_r_v4.1.0.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_url.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_test_branch.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_version_update.html</loc></url>
