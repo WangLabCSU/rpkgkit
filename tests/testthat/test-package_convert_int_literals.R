@@ -45,11 +45,13 @@ test_that("package_convert_int_literals aborts when ... is not empty", {
 
   expect_error(
     package_convert_int_literals(root, extra = "foo"),
-    "must be empty"
+    "unused argument"
   )
   # the file must be left untouched when the check fails
-  expect_equal(readLines(file.path(root, "R", "a.R"), warn = FALSE),
-               "f <- function() 1")
+  expect_equal(
+    readLines(file.path(root, "R", "a.R"), warn = FALSE),
+    "f <- function() 1"
+  )
 })
 
 test_that("package_convert_int_literals validates `recursive`", {
@@ -67,8 +69,10 @@ test_that("package_convert_int_literals converts integers in R/ files", {
 
   changed <- package_convert_int_literals(root)
 
-  expect_equal(readLines(file.path(root, "R", "a.R"), warn = FALSE),
-               "f <- function() seq_len(10L)")
+  expect_equal(
+    readLines(file.path(root, "R", "a.R"), warn = FALSE),
+    "f <- function() seq_len(10L)"
+  )
   expect_equal(changed, norm(file.path(root, "R", "a.R")))
 })
 
@@ -148,8 +152,10 @@ test_that("package_convert_int_literals respects a custom `dirs` argument", {
 
   expect_equal(changed, norm(file.path(extra, "b.R")))
   # R/ was not touched
-  expect_equal(readLines(file.path(root, "R", "a.R"), warn = FALSE),
-               "f <- function() 1")
+  expect_equal(
+    readLines(file.path(root, "R", "a.R"), warn = FALSE),
+    "f <- function() 1"
+  )
 })
 
 test_that("package_convert_int_literals respects recursive = FALSE", {

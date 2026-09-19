@@ -31,7 +31,7 @@ package_convert_int_literals <- function(
   recursive = TRUE,
   ...
 ) {
-  rlang::check_dots_empty0(...)
+  rlang::check_dots_empty(...)
   rlang::check_bool(recursive)
 
   path <- path %||% "."
@@ -43,7 +43,7 @@ package_convert_int_literals <- function(
     ))
   }
 
-  path <- normalizePath(path, winslash = "/", mustWork = TRUE)
+  path <- normalizePath(path, mustWork = TRUE)
 
   files <- character()
   for (d in dirs) {
