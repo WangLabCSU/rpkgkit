@@ -16,6 +16,8 @@ Useful links:
 
 - <https://github.com/WangLabCSU/rpkgkit>
 
+- <https://wanglabcsu.github.io/rpkgkit/>
+
 - Report bugs at <https://github.com/WangLabCSU/rpkgkit/issues>
 
 ## Author

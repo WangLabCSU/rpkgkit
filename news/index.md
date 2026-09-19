@@ -1,5 +1,19 @@
 # Changelog
 
+## rpkgkit 0.1.15
+
+### BUG FIXES
+
+- [`convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.md),
+  [`package_convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/package_convert_int_literals.md),
+  and
+  [`convert_func_syntax()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_func_syntax.md)
+  now forward `...` to
+  [`rlang::check_dots_empty0()`](https://rlang.r-lib.org/reference/check_dots_empty0.html).
+  Previously the call was made without `...`, so the documented “`...`
+  must be empty” check was a no-op and extra arguments were silently
+  ignored.
+
 ## rpkgkit 0.1.14 (2026-09-14)
 
 ### NEW FEATURES

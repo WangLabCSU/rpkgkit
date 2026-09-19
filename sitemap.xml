@@ -18,6 +18,7 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/check_air_installed.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/check_pkgdown_reference.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_func_syntax.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_knitr_chunk_header.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_nonascii_code.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/create_standalone.html</loc></url>
@@ -27,6 +28,7 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-cfs_find_matching_paren.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-cfs_process_text_once.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-cfs_transform_text.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-cil_process_text.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_capture_inline_comments.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_operators.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_transform_call.html</loc></url>
@@ -50,6 +52,7 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/make_func_call_explicit.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/news_md.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/open_cffinit.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/package_convert_int_literals.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/rename_func.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/render_rmd.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/repo_spec_parse.html</loc></url>

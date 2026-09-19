@@ -128,3 +128,15 @@ The following functions help you to create and maintain an R package.
 
 - [`convert_knitr_chunk_header()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_knitr_chunk_header.md)
   : Convert Knitr Chunk Headers in R Markdown Files
+
+- [`convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.md)
+  :
+
+  Add Explicit Integer Suffix `L` to Integer Literals
+
+- [`package_convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/package_convert_int_literals.md)
+  :
+
+  Apply
+  [`convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.md)
+  to an R Package
