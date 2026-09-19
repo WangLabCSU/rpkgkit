@@ -90,3 +90,5 @@ reference:
       - convert_nonascii_code
       - open_cffinit
       - convert_knitr_chunk_header
+      - convert_int_literals
+      - package_convert_int_literals

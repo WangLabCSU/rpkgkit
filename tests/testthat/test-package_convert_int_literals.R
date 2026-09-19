@@ -21,6 +21,15 @@ make_test_pkg <- function(env = parent.frame()) {
   root
 }
 
+# `package_convert_int_literals()` returns paths normalized via
+# `normalizePath()`, which on Windows uses a different separator/drive form and
+# on macOS resolves symlinks (e.g. `/var` -> `/private/var`, temp dirs ->
+# 8.3 short paths). Normalize both sides before comparing so the tests are
+# portable.
+norm <- function(path) {
+  normalizePath(path, winslash = "/", mustWork = FALSE)
+}
+
 test_that("package_convert_int_literals aborts when path is not a package", {
   root <- withr::local_tempdir()
 
@@ -60,7 +69,7 @@ test_that("package_convert_int_literals converts integers in R/ files", {
 
   expect_equal(readLines(file.path(root, "R", "a.R"), warn = FALSE),
                "f <- function() seq_len(10L)")
-  expect_equal(changed, file.path(root, "R", "a.R"))
+  expect_equal(changed, norm(file.path(root, "R", "a.R")))
 })
 
 test_that("package_convert_int_literals returns changed paths invisibly", {
@@ -82,7 +91,7 @@ test_that("package_convert_int_literals also processes tests/ files", {
     readLines(test_file, warn = FALSE),
     'test_that("x", expect_equal(1L, 1L))'
   )
-  expect_true(test_file %in% changed)
+  expect_true(norm(test_file) %in% changed)
   expect_length(changed, 2L)
 })
 
@@ -93,8 +102,8 @@ test_that("package_convert_int_literals picks up .R and .r files", {
 
   changed <- package_convert_int_literals(root)
 
-  expect_true(file.path(root, "R", "a.R") %in% changed)
-  expect_true(file.path(root, "R", "b.r") %in% changed)
+  expect_true(norm(file.path(root, "R", "a.R")) %in% changed)
+  expect_true(norm(file.path(root, "R", "b.r")) %in% changed)
 })
 
 test_that("package_convert_int_literals only reports files that changed", {
@@ -104,7 +113,7 @@ test_that("package_convert_int_literals only reports files that changed", {
 
   changed <- package_convert_int_literals(root)
 
-  expect_equal(changed, file.path(root, "R", "changed.R"))
+  expect_equal(changed, norm(file.path(root, "R", "changed.R")))
 })
 
 test_that("package_convert_int_literals is idempotent", {
@@ -125,7 +134,7 @@ test_that("package_convert_int_literals skips missing directories", {
 
   changed <- package_convert_int_literals(root, dirs = c("R", "tests"))
 
-  expect_equal(changed, file.path(root, "R", "a.R"))
+  expect_equal(changed, norm(file.path(root, "R", "a.R")))
 })
 
 test_that("package_convert_int_literals respects a custom `dirs` argument", {
@@ -137,7 +146,7 @@ test_that("package_convert_int_literals respects a custom `dirs` argument", {
 
   changed <- package_convert_int_literals(root, dirs = "extra")
 
-  expect_equal(changed, file.path(extra, "b.R"))
+  expect_equal(changed, norm(file.path(extra, "b.R")))
   # R/ was not touched
   expect_equal(readLines(file.path(root, "R", "a.R"), warn = FALSE),
                "f <- function() 1")
@@ -151,8 +160,8 @@ test_that("package_convert_int_literals respects recursive = FALSE", {
 
   changed <- package_convert_int_literals(root, recursive = FALSE)
 
-  expect_true(file.path(root, "R", "top.R") %in% changed)
-  expect_false(file.path(root, "R", "sub", "nested.R") %in% changed)
+  expect_true(norm(file.path(root, "R", "top.R")) %in% changed)
+  expect_false(norm(file.path(root, "R", "sub", "nested.R")) %in% changed)
   expect_equal(
     readLines(file.path(root, "R", "sub", "nested.R"), warn = FALSE),
     "g <- function() 2"
@@ -166,7 +175,7 @@ test_that("package_convert_int_literals recurses by default", {
 
   changed <- package_convert_int_literals(root)
 
-  expect_true(file.path(root, "R", "sub", "nested.R") %in% changed)
+  expect_true(norm(file.path(root, "R", "sub", "nested.R")) %in% changed)
 })
 
 test_that("package_convert_int_literals returns empty with a message when no R files", {
@@ -186,8 +195,7 @@ test_that("package_convert_int_literals normalizes a relative path", {
   withr::local_dir(root)
   changed <- package_convert_int_literals(".")
 
-  expect_equal(changed, file.path(normalizePath(root, winslash = "/"),
-                                  "R", "a.R"))
+  expect_equal(changed, norm(file.path(root, "R", "a.R")))
 })
 
 test_that("package_convert_int_literals defaults path to '.'", {
