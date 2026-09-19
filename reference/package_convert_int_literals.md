@@ -46,10 +46,10 @@ Invisibly returns a character vector of modified file paths.
 # \donttest{
 tmp_pkg <- tempdir()
 usethis::create_package(tmp_pkg, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmpM6i24U".
+#> ✔ Setting active project to "/tmp/RtmpJHVjaU".
 #> ✔ Creating R/.
 #> ✔ Writing DESCRIPTION.
-#> Package: RtmpM6i24U
+#> Package: RtmpJHVjaU
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):

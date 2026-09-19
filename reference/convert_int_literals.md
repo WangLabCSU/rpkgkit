@@ -57,7 +57,7 @@ and it is **not**:
 temp <- tempfile(fileext = ".R")
 writeLines("tmp <- seq_len(10)", temp)
 convert_int_literals(temp)
-#> ✔ Added explicit integer suffixes in /tmp/RtmpM6i24U/file19f072bef3b8.R
+#> ✔ Added explicit integer suffixes in /tmp/RtmpJHVjaU/file19df92bb10e.R
 readLines(temp)
 #> [1] "tmp <- seq_len(10L)"
 # "tmp <- seq_len(10L)"

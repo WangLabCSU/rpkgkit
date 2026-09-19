@@ -43,8 +43,8 @@ Invisibly returns the URL that was written.
 # \donttest{
 tmpdir <- tempdir()
 usethis::create_package(path = tmpdir)
-#> ✔ Setting active project to "/tmp/RtmpM6i24U".
-#> Package: RtmpM6i24U
+#> ✔ Setting active project to "/tmp/RtmpJHVjaU".
+#> Package: RtmpJHVjaU
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):
@@ -60,7 +60,7 @@ use_bugreports(
   url = "https://github.com/WangLabCSU/rpkgkit/issues",
   path = tmpdir
 )
-#> ✔ Setting active project to "/tmp/RtmpM6i24U".
+#> ✔ Setting active project to "/tmp/RtmpJHVjaU".
 #> ✔ Setting BugReports field to <https://github.com/WangLabCSU/rpkgkit/issues>.
 # }
 ```

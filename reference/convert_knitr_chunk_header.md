@@ -40,7 +40,7 @@ Invisibly returns a character vector of file paths that were converted.
 tmp <- tempfile(fileext = ".Rmd")
 writeLines(c("```{r, echo=TRUE, fig.width=10}", "x <- 1", "```"), tmp)
 convert_knitr_chunk_header(tmp)
-#> ℹ Converting knitr chunk headers in /tmp/RtmpM6i24U/file19f073001ba8.Rmd
+#> ℹ Converting knitr chunk headers in /tmp/RtmpJHVjaU/file19df55af9f7f.Rmd
 readLines(tmp)
 #> [1] "```{r}"            "#| echo = TRUE,"   "#| fig.width = 10"
 #> [4] "x <- 1"            "```"              

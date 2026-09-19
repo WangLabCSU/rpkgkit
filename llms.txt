@@ -468,6 +468,33 @@ cat(readLines(tf), sep = "\n")
 # ```
 ```
 
+- [`convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.md) -
+  Add explicit integer suffix `L` to bare integer literals in an R file,
+  e.g. `seq_len(10)` becomes `seq_len(10L)`. Strings, comments and
+  already-suffixed, floating-point, scientific and complex literals are
+  left unchanged.
+
+``` r
+
+tf <- tempfile(fileext = ".R")
+writeLines("x <- seq_len(10) # length 10", tf)
+convert_int_literals(tf)
+cat(readLines(tf), sep = "\n")
+# x <- seq_len(10L) # length 10
+```
+
+- [`package_convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/package_convert_int_literals.md) -
+  Apply
+  [`convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.md)
+  to every `.R` / `.r` file under the `R/` and `tests/` directories of a
+  package. Returns the paths of the files that were modified.
+
+``` r
+
+package_convert_int_literals(".")
+# ✔ Processed 12 files, updated 3
+```
+
 ### R Package Maintenance
 
 - [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md) -
