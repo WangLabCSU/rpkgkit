@@ -43,7 +43,7 @@ package_convert_int_literals <- function(
     ))
   }
 
-  path <- normalizePath(path, mustWork = TRUE)
+  path <- normalizePath(path, winslash = "/", mustWork = TRUE)
 
   files <- character()
   for (d in dirs) {
