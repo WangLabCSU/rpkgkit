@@ -10,11 +10,11 @@ test_that("news_md_add_entry creates NEWS.md when it does not exist", {
 
   content <- readLines(file.path(tmp, "NEWS.md"))
   expect_match(
-    content[1],
+    content[1L],
     "# testpkg 1.0.0 \\([0-9]{4}-[0-9]{2}-[0-9]{2}\\)"
   )
-  expect_equal(content[3], "## NEW FEATURES")
-  expect_equal(content[5], "* Added new function foo()")
+  expect_equal(content[3L], "## NEW FEATURES")
+  expect_equal(content[5L], "* Added new function foo()")
 })
 
 test_that("news_md_add_entry adds entry to existing NEWS.md", {
@@ -77,7 +77,7 @@ test_that("news_md_add_entry uses custom version and date", {
   )
 
   content <- readLines(file.path(tmp, "NEWS.md"))
-  expect_match(content[1], "testpkg 2\\.0\\.0 \\(2026-06-01\\)")
+  expect_match(content[1L], "testpkg 2\\.0\\.0 \\(2026-06-01\\)")
 })
 
 test_that("news_md_add_entry handles open_section = FALSE", {
@@ -116,8 +116,8 @@ test_that("news_md_add_entry adds entry with pre-existing * prefix correctly", {
   content <- readLines(file.path(tmp, "NEWS.md"))
   stars <- grep("^\\*", content)
   # Should only appear once
-  expect_length(stars, 1)
-  expect_match(content[stars[1]], "\\* Already has star")
+  expect_length(stars, 1L)
+  expect_match(content[stars[1L]], "\\* Already has star")
 })
 
 test_that("news_md_add_entry aborts when DESCRIPTION is missing and version is NULL", {
@@ -479,7 +479,7 @@ test_that("open_section = FALSE with existing content adds to current section (n
   content <- readLines(file.path(tmp, "NEWS.md"))
   # Should only have one version header (added to existing, not new version)
   version_headers <- grep("^# testpkg 1\\.0\\.0", content)
-  expect_length(version_headers, 1)
+  expect_length(version_headers, 1L)
   # The entry should be present in a new category
   expect_true(any(grepl("Fresh entry", content)))
   # A new category section should have been created

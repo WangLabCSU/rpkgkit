@@ -1,6 +1,6 @@
 test_that("match_arg aborts when choices is empty", {
   expect_error(
-    rpkgkit:::match_arg("x", character(0)),
+    rpkgkit:::match_arg("x", character(0L)),
     "No choices provided"
   )
 })

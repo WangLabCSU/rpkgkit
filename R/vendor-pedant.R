@@ -122,11 +122,11 @@ add_double_colons <- function(
   }
 
   # Get the replacement text for each function call
-  called_funs_pkgs <- vapply(called_funs, get_pkg, character(1))
+  called_funs_pkgs <- vapply(called_funs, get_pkg, character(1L))
   no_pkg <- is.na(called_funs_pkgs)
 
   # Warn about any unfound functions
-  if (any(no_pkg) > 0) {
+  if (any(no_pkg) > 0L) {
     warning(
       sprintf(
         "Couldn't find packages exporting %d function(s): `%s()`",
@@ -144,7 +144,7 @@ add_double_colons <- function(
     vapply(
       all_calls,
       function(x) which(names(called_funs_pkgs) == x),
-      integer(1)
+      integer(1L)
     )
   ]
   out <- str_replace_all(code, funs_regex, replacements)
@@ -164,7 +164,7 @@ add_double_colons <- function(
 # code, ignoring `#` inside string literals or backtick identifiers.
 # Returns `Inf` if the line contains no comment.
 find_comment_start <- function(line) {
-  chars <- strsplit(line, "", fixed = TRUE)[[1]]
+  chars <- strsplit(line, "", fixed = TRUE)[[1L]]
   in_string <- ""
   escaped <- FALSE
   for (i in seq_along(chars)) {
@@ -191,12 +191,12 @@ find_comment_start <- function(line) {
 # touch them. Returns a list with the modified code and the mapping between
 # placeholders and the original comments.
 protect_comments <- function(code) {
-  lines <- strsplit(code, "\n", fixed = TRUE)[[1]]
+  lines <- strsplit(code, "\n", fixed = TRUE)[[1L]]
   # `strsplit()` drops a trailing empty element, so restore the newline count
   if (grepl("\n$", code)) {
     lines <- c(lines, "")
   }
-  comments <- list(placeholder = character(0), text = character(0))
+  comments <- list(placeholder = character(0L), text = character(0L))
   out <- character(length(lines))
   for (i in seq_along(lines)) {
     start <- find_comment_start(lines[[i]])
@@ -240,8 +240,8 @@ get_imports <- function(dir = ".") {
   }
 
   out <- list(
-    packages = lapply(imports, function(x) if (length(x) == 1) x else NULL),
-    functions = lapply(imports, function(x) x[-1])
+    packages = lapply(imports, function(x) if (length(x) == 1L) x else NULL),
+    functions = lapply(imports, function(x) x[-1L])
   )
 
   lapply(out, unlist, use.names = FALSE)
@@ -347,12 +347,12 @@ current_packages <- function(
 }
 
 str_extract_all <- function(x, pattern, invert = FALSE) {
-  regmatches(x, gregexpr(pattern, x, perl = TRUE), invert)[[1]]
+  regmatches(x, gregexpr(pattern, x, perl = TRUE), invert)[[1L]]
 }
 
 str_replace_all <- function(x, pattern, replacement) {
   regex <- gregexpr(pattern, x, perl = TRUE)
-  regmatches(x, regex)[[1]] <- replacement
+  regmatches(x, regex)[[1L]] <- replacement
   x
 }
 

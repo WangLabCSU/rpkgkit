@@ -48,16 +48,16 @@ walk <- function(.x, .f, ...) {
 }
 
 map_lgl <- function(.x, .f, ...) {
-    .rlang_purrr_map_mold(.x, .f, logical(length = 1), ...)
+    .rlang_purrr_map_mold(.x, .f, logical(length = 1L), ...)
 }
 map_int <- function(.x, .f, ...) {
-    .rlang_purrr_map_mold(.x, .f, integer(length = 1), ...)
+    .rlang_purrr_map_mold(.x, .f, integer(length = 1L), ...)
 }
 map_dbl <- function(.x, .f, ...) {
-    .rlang_purrr_map_mold(.x, .f, double(length = 1), ...)
+    .rlang_purrr_map_mold(.x, .f, double(length = 1L), ...)
 }
 map_chr <- function(.x, .f, ...) {
-    .rlang_purrr_map_mold(.x, .f, character(length = 1), ...)
+    .rlang_purrr_map_mold(.x, .f, character(length = 1L), ...)
 }
 .rlang_purrr_map_mold <- function(.x, .f, .mold, ...) {
   .f <- rlang::as_function(.f, env = rlang::global_env())
@@ -136,9 +136,9 @@ transpose <- function(.l) {
     if (!length(.l)) {
         return(.l)
     }
-    inner_names <- names(.l[[1]])
+    inner_names <- names(.l[[1L]])
     if (is.null(inner_names)) {
-        fields <- seq_along(.l[[1]])
+        fields <- seq_along(.l[[1L]])
     }
     else {
         fields <- rlang::set_names(inner_names)

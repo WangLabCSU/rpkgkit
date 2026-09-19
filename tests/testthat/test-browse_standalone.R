@@ -238,8 +238,8 @@ test_that("browse_standalone converts NULL repo_description to NA", {
   )
 
   result <- browse_standalone()
-  expect_true(is.na(result$repo_description[1]))
-  expect_equal(result$repo_description[2], "An R package")
+  expect_true(is.na(result$repo_description[1L]))
+  expect_equal(result$repo_description[2L], "An R package")
 })
 
 # ==============================================================================

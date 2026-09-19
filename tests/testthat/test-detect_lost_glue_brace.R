@@ -18,7 +18,7 @@ test_that("detect_lost_glue_brace resolves path from rstudioapi", {
   local_mocked_bindings(
     readLines = function(path, ...) {
       expect_equal(path, "/mock/file.R")
-      character(0)
+      character(0L)
     },
     .package = "base"
   )
@@ -175,7 +175,7 @@ test_that("handles escaped quotes in strings", {
 
 test_that("empty file returns TRUE", {
   local_mocked_bindings(
-    readLines = function(path, ...) character(0),
+    readLines = function(path, ...) character(0L),
     .package = "base"
   )
   expect_true(detect_lost_glue_brace("empty.R"))
@@ -232,30 +232,30 @@ test_that("check_brace_balance: missing closing brace", {
   res <- check_brace_balance("Hello {name")
   expect_false(res$balanced)
   # "Hello {name" = 11 chars, '{' at position 7
-  expect_equal(res$unmatched_opens, 7)
-  expect_length(res$unmatched_closes, 0)
-  expect_equal(res$hl_start, 7)
-  expect_equal(res$hl_end, 11)
+  expect_equal(res$unmatched_opens, 7L)
+  expect_length(res$unmatched_closes, 0L)
+  expect_equal(res$hl_start, 7L)
+  expect_equal(res$hl_end, 11L)
 })
 
 test_that("check_brace_balance: extra closing brace without any open", {
   res <- check_brace_balance("Hello name}")
   expect_false(res$balanced)
   # "Hello name}" = 11 chars, '}' at position 11
-  expect_length(res$unmatched_opens, 0)
-  expect_equal(res$unmatched_closes, 11)
-  expect_equal(res$hl_start, 11)
-  expect_equal(res$hl_end, 11)
+  expect_length(res$unmatched_opens, 0L)
+  expect_equal(res$unmatched_closes, 11L)
+  expect_equal(res$hl_start, 11L)
+  expect_equal(res$hl_end, 11L)
 })
 
 test_that("check_brace_balance: extra closing brace after matched pair", {
   res <- check_brace_balance("{.val name}}")
   expect_false(res$balanced)
   # {.val name}} -> { at 1, } matching at 11, extra } at 12
-  expect_equal(res$unmatched_closes, 12)
+  expect_equal(res$unmatched_closes, 12L)
   # hl from nearest { (1) to first extra } (12)
-  expect_equal(res$hl_start, 1)
-  expect_equal(res$hl_end, 12)
+  expect_equal(res$hl_start, 1L)
+  expect_equal(res$hl_end, 12L)
 })
 
 test_that("check_brace_balance: both unmatched open and extra close", {
@@ -263,11 +263,11 @@ test_that("check_brace_balance: both unmatched open and extra close", {
   # chars: a(1) {(2) b(3) }(4) c(5) }(6) d(7)
   # { at 2, } at 4 (pops), } at 6 (extra)
   expect_false(res$balanced)
-  expect_length(res$unmatched_opens, 0)
-  expect_equal(res$unmatched_closes, 6)
+  expect_length(res$unmatched_opens, 0L)
+  expect_equal(res$unmatched_closes, 6L)
   # hl from nearest { before 6 = 2, to first extra = 6
-  expect_equal(res$hl_start, 2)
-  expect_equal(res$hl_end, 6)
+  expect_equal(res$hl_start, 2L)
+  expect_equal(res$hl_end, 6L)
 })
 
 test_that("check_brace_balance: extra close after unmatched open", {
@@ -275,9 +275,9 @@ test_that("check_brace_balance: extra close after unmatched open", {
   # chars: {(1) a(2) }(3) }(4)
   # { at 1, } at 3 (pops), } at 4 (extra)
   expect_false(res$balanced)
-  expect_equal(res$unmatched_closes, 4)
-  expect_equal(res$hl_start, 1)
-  expect_equal(res$hl_end, 4)
+  expect_equal(res$unmatched_closes, 4L)
+  expect_equal(res$hl_start, 1L)
+  expect_equal(res$hl_end, 4L)
 })
 
 test_that("check_brace_balance: multiple unmatched opens", {
@@ -285,18 +285,18 @@ test_that("check_brace_balance: multiple unmatched opens", {
   # chars: a(1) {(2) b(3) {(4) c(5)
   # unmatched opens at 2, 4
   expect_false(res$balanced)
-  expect_equal(res$unmatched_opens, c(2, 4))
-  expect_equal(res$hl_start, 2)
-  expect_equal(res$hl_end, 5)
+  expect_equal(res$unmatched_opens, c(2L, 4L))
+  expect_equal(res$hl_start, 2L)
+  expect_equal(res$hl_end, 5L)
 })
 
 test_that("check_brace_balance: only closing braces returns extra closes", {
   res <- check_brace_balance("a}b}c")
   expect_false(res$balanced)
-  expect_equal(res$unmatched_closes, c(2, 4))
+  expect_equal(res$unmatched_closes, c(2L, 4L))
   # hl from first extra } (2) back to nearest { (none) so start = end = 2
-  expect_equal(res$hl_start, 2)
-  expect_equal(res$hl_end, 2)
+  expect_equal(res$hl_start, 2L)
+  expect_equal(res$hl_end, 2L)
 })
 
 # ---------------------------------------------------------------------------
@@ -326,7 +326,7 @@ test_that("find_nearest_open_before finds nearest brace in string with multiple"
 # ---------------------------------------------------------------------------
 
 test_that("format_brace_error produces basic caret alignment", {
-  result <- list(hl_start = 8, hl_end = 13)
+  result <- list(hl_start = 8L, hl_end = 13L)
   out <- format_brace_error(
     line_content = '  "Hello, {name!"',
     str_content = "Hello, {name!",
@@ -345,7 +345,7 @@ test_that("format_brace_error produces basic caret alignment", {
 })
 
 test_that("format_brace_error handles single character highlight", {
-  result <- list(hl_start = 12, hl_end = 12)
+  result <- list(hl_start = 12L, hl_end = 12L)
   out <- format_brace_error(
     line_content = 'glue::glue("Hello name}")',
     str_content = "Hello name}",
@@ -363,7 +363,7 @@ test_that("format_brace_error handles single character highlight", {
 })
 
 test_that("format_brace_error handles multi-character highlight", {
-  result <- list(hl_start = 1, hl_end = 15)
+  result <- list(hl_start = 1L, hl_end = 15L)
   out <- format_brace_error(
     line_content = 'glue::glue("{.val x}}")',
     str_content = "{.val x}}",
@@ -381,7 +381,7 @@ test_that("format_brace_error handles multi-character highlight", {
 })
 
 test_that("format_brace_error handles highlight at start of line", {
-  result <- list(hl_start = 1, hl_end = 6)
+  result <- list(hl_start = 1L, hl_end = 6L)
   out <- format_brace_error(
     line_content = '"{name}"',
     str_content = "{name}",
@@ -408,7 +408,7 @@ test_that("find_glue_cli_strings returns empty list for no target calls", {
   text <- "x <- 1\ny <- x + 2\nprint(y)"
   exprs <- parse(text = text, keep.source = TRUE)
   pd <- utils::getParseData(exprs)
-  expect_length(find_glue_cli_strings(pd), 0)
+  expect_length(find_glue_cli_strings(pd), 0L)
 })
 
 test_that("find_glue_cli_strings finds strings in glue::glue call", {
@@ -416,9 +416,9 @@ test_that("find_glue_cli_strings finds strings in glue::glue call", {
   exprs <- parse(text = text, keep.source = TRUE)
   pd <- utils::getParseData(exprs)
   res <- find_glue_cli_strings(pd)
-  expect_length(res, 1)
-  expect_equal(res[[1]]$content, "Hello {name}")
-  expect_true(res[[1]]$line1 >= 1)
+  expect_length(res, 1L)
+  expect_equal(res[[1L]]$content, "Hello {name}")
+  expect_true(res[[1L]]$line1 >= 1L)
 })
 
 test_that("find_glue_cli_strings finds strings in cli_* call", {
@@ -426,8 +426,8 @@ test_that("find_glue_cli_strings finds strings in cli_* call", {
   exprs <- parse(text = text, keep.source = TRUE)
   pd <- utils::getParseData(exprs)
   res <- find_glue_cli_strings(pd)
-  expect_length(res, 1)
-  expect_equal(res[[1]]$content, "Value is {x}")
+  expect_length(res, 1L)
+  expect_equal(res[[1L]]$content, "Value is {x}")
 })
 
 test_that("find_glue_cli_strings finds strings in glue_data call", {
@@ -435,7 +435,7 @@ test_that("find_glue_cli_strings finds strings in glue_data call", {
   exprs <- parse(text = text, keep.source = TRUE)
   pd <- utils::getParseData(exprs)
   res <- find_glue_cli_strings(pd)
-  expect_length(res, 1)
+  expect_length(res, 1L)
 })
 
 test_that("find_glue_cli_strings handles nested function calls", {
@@ -443,8 +443,8 @@ test_that("find_glue_cli_strings handles nested function calls", {
   exprs <- parse(text = text, keep.source = TRUE)
   pd <- utils::getParseData(exprs)
   res <- find_glue_cli_strings(pd)
-  expect_length(res, 1)
-  expect_equal(res[[1]]$content, "{.val x}}")
+  expect_length(res, 1L)
+  expect_equal(res[[1L]]$content, "{.val x}}")
 })
 
 test_that("find_glue_cli_strings deduplicates strings", {
@@ -456,7 +456,7 @@ test_that("find_glue_cli_strings deduplicates strings", {
   pd <- utils::getParseData(exprs)
   res <- find_glue_cli_strings(pd)
   # Two separate calls, each with "{a}" — should be 2 items (different line1/col1)
-  expect_length(res, 2)
+  expect_length(res, 2L)
 })
 
 # ---------------------------------------------------------------------------
@@ -466,7 +466,7 @@ test_that("find_glue_cli_strings deduplicates strings", {
 test_that("parse_safely parses valid R code", {
   exprs <- parse_safely("x <- 1\ny <- 2", "test.R")
   expect_type(exprs, "expression")
-  expect_length(exprs, 2)
+  expect_length(exprs, 2L)
 })
 
 test_that("parse_safely aborts on invalid R code", {

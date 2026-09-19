@@ -289,7 +289,7 @@ vendor_create_r_file <- function(
 
   # -- Download all files first (needed for Imports analysis) --
   downloaded_contents <- list()
-  if (length(files_to_copy) > 0) {
+  if (length(files_to_copy) > 0L) {
     cli::cli_progress_bar(
       "Downloading src",
       type = "download",
@@ -320,7 +320,7 @@ vendor_create_r_file <- function(
 
   all_content <- unlist(downloaded_contents, use.names = FALSE)
   imports <- .vendor_extract_imports(all_content)
-  imports_str <- if (length(imports) > 0) {
+  imports_str <- if (length(imports) > 0L) {
     toString(imports)
   } else {
     "none"

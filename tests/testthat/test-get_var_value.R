@@ -1,63 +1,63 @@
 test_that("get_var_value returns parameter default value", {
-  f <- function(x = 42) x
-  expect_equal(rpkgkit:::get_var_value("x", f), 42)
+  f <- function(x = 42L) x
+  expect_equal(rpkgkit:::get_var_value("x", f), 42L)
 })
 
 test_that("get_var_value returns computed value from parameter", {
-  f <- function(a = 1, b = 2) {
-    c <- a * 2 + b * 3
+  f <- function(a = 1L, b = 2L) {
+    c <- a * 2L + b * 3L
     c
   }
-  expect_equal(rpkgkit:::get_var_value("c", f), 8)
+  expect_equal(rpkgkit:::get_var_value("c", f), 8L)
 })
 
 test_that("get_var_value resolves chained assignments", {
-  f <- function(a = 1, b = 2) {
-    c <- a * 2 + b * 3
-    d <- c^2
+  f <- function(a = 1L, b = 2L) {
+    c <- a * 2L + b * 3L
+    d <- c^2L
     d
   }
-  expect_equal(rpkgkit:::get_var_value("d", f), 64)
+  expect_equal(rpkgkit:::get_var_value("d", f), 64L)
 })
 
 test_that("get_var_value handles <<- assignment", {
-  f <- function(a = 1, b = 2) {
-    c <- a * 2 + b * 3
-    d <- c^2
-    e <<- d - 1
+  f <- function(a = 1L, b = 2L) {
+    c <- a * 2L + b * 3L
+    d <- c^2L
+    e <<- d - 1L
     e
   }
-  expect_equal(rpkgkit:::get_var_value("e", f), 63)
+  expect_equal(rpkgkit:::get_var_value("e", f), 63L)
 })
 
 test_that("get_var_value ignores dead code after return()", {
   f <- function(a = "A", ...) {
-    a <- 1
+    a <- 1L
     return(a)
-    a <- 2
+    a <- 2L
     a
   }
-  expect_equal(rpkgkit:::get_var_value("a", f), 1)
+  expect_equal(rpkgkit:::get_var_value("a", f), 1L)
 })
 
 test_that("get_var_value traces for loop iterations", {
-  f <- function(x = 2) {
-    for (k in 1:3) {
-      x <- x * 2
+  f <- function(x = 2L) {
+    for (k in 1L:3L) {
+      x <- x * 2L
     }
     x
   }
-  expect_equal(rpkgkit:::get_var_value("x", f), 16)
+  expect_equal(rpkgkit:::get_var_value("x", f), 16L)
 })
 
 test_that("get_var_value traces while loop iterations", {
-  f <- function(x = 2) {
-    while (x < 10) {
-      x <- x * 2
+  f <- function(x = 2L) {
+    while (x < 10L) {
+      x <- x * 2L
     }
     x
   }
-  expect_equal(rpkgkit:::get_var_value("x", f), 16)
+  expect_equal(rpkgkit:::get_var_value("x", f), 16L)
 })
 
 test_that("get_var_value handles if/else branches", {
@@ -85,7 +85,7 @@ test_that("get_var_value handles if/else with FALSE condition", {
 })
 
 test_that("get_var_value aborts when variable not found", {
-  f <- function(x = 1) y
+  f <- function(x = 1L) y
   expect_error(
     rpkgkit:::get_var_value("nonexistent", f),
     "not found"
@@ -93,62 +93,62 @@ test_that("get_var_value aborts when variable not found", {
 })
 
 test_that("get_var_value handles function calls in expressions", {
-  f <- function(n = 5) {
+  f <- function(n = 5L) {
     x <- seq_len(n)
     x
   }
   result <- rpkgkit:::get_var_value("x", f)
-  expect_equal(result, 1:5)
+  expect_equal(result, 1L:5L)
 })
 
 test_that("get_var_value handles subset assignment with [", {
-  f <- function(n = 3) {
-    x <- 1:n
-    x[2] <- 99
+  f <- function(n = 3L) {
+    x <- 1L:n
+    x[2L] <- 99L
     x
   }
   result <- rpkgkit:::get_var_value("x", f)
-  expect_equal(result[2], 99)
+  expect_equal(result[2L], 99L)
 })
 
 test_that("get_var_value handles subset assignment with [[", {
-  f <- function(n = 3) {
-    x <- 1:n
-    x[[2]] <- 99
+  f <- function(n = 3L) {
+    x <- 1L:n
+    x[[2L]] <- 99L
     x
   }
   result <- rpkgkit:::get_var_value("x", f)
-  expect_equal(result[[2]], 99)
+  expect_equal(result[[2L]], 99L)
 })
 
 test_that("get_var_value handles `repeat` loop with break", {
-  f <- function(x = 1) {
+  f <- function(x = 1L) {
     repeat {
-      x <- x * 2
-      if (x > 10) break
+      x <- x * 2L
+      if (x > 10L) break
     }
     x
   }
-  expect_equal(rpkgkit:::get_var_value("x", f), 16)
+  expect_equal(rpkgkit:::get_var_value("x", f), 16L)
 })
 
 test_that("get_var_value handles `$` subset assignment", {
   f <- function() {
-    x <- list(a = 1, b = 2)
-    x$b <- 99
+    x <- list(a = 1L, b = 2L)
+    x$b <- 99L
     x
   }
   result <- rpkgkit:::get_var_value("x", f)
-  expect_equal(result$b, 99)
+  expect_equal(result$b, 99L)
 })
 
 test_that("get_var_value uses caller environment for function calls", {
-  f <- function(n = 3) {
+  f <- function(n = 3L) {
     x <- runif(n)
     x
   }
   result <- rpkgkit:::get_var_value("x", f)
-  expect_length(result, 3)
+  expect_length(result, 3L)
 })
 
 test_that("get_var_value can resolve string operations with file.path", {

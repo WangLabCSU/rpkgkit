@@ -45,7 +45,7 @@ test_that("create_caller_cli_env wraps functions to prepend caller prefix", {
 })
 
 test_that("create_caller_cli_env with empty character vector returns empty env", {
-  env <- rpkgkit:::create_caller_cli_env(character(0))
+  env <- rpkgkit:::create_caller_cli_env(character(0L))
   expect_length(ls(env), 0L)
 })
 

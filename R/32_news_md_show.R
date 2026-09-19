@@ -40,7 +40,7 @@ news_md_show <- function(path = NULL, version = NULL, max_versions = NULL) {
   version_pattern <- "^#\\s+"
   version_starts <- grep(version_pattern, lines)
 
-  if (length(version_starts) == 0) {
+  if (length(version_starts) == 0L) {
     cli::cli_warn("No version sections found in NEWS.md")
     return(invisible(lines))
   }
@@ -48,9 +48,9 @@ news_md_show <- function(path = NULL, version = NULL, max_versions = NULL) {
   # Determine which versions to show
   if (!is.null(version)) {
     if (version == "latest") {
-      start_idx <- version_starts[1]
-      end_idx <- if (length(version_starts) > 1) {
-        version_starts[2] - 1
+      start_idx <- version_starts[1L]
+      end_idx <- if (length(version_starts) > 1L) {
+        version_starts[2L] - 1L
       } else {
         length(lines)
       }
@@ -61,7 +61,7 @@ news_md_show <- function(path = NULL, version = NULL, max_versions = NULL) {
         if (grepl(version, lines[version_starts[i]])) {
           start_idx <- version_starts[i]
           end_idx <- if (i < length(version_starts)) {
-            version_starts[i + 1] - 1
+            version_starts[i + 1L] - 1L
           } else {
             length(lines)
           }

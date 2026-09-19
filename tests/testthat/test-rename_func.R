@@ -159,7 +159,7 @@ test_that("detect_func_defs: duplicate definitions deduplicated", {
 
 test_that("detect_func_defs: no definitions returns empty", {
   lines <- c("x <- 1", "y <- x + 2")
-  expect_equal(rpkgkit:::detect_func_defs(lines), character(0))
+  expect_equal(rpkgkit:::detect_func_defs(lines), character(0L))
 })
 
 test_that("detect_func_defs: backtick-quoted name", {
@@ -174,7 +174,7 @@ test_that("detect_func_defs: dot-separated name", {
 
 test_that("detect_func_defs: ignores plain function calls", {
   lines <- c("x <- my_function_call(1, 2)")
-  expect_equal(rpkgkit:::detect_func_defs(lines), character(0))
+  expect_equal(rpkgkit:::detect_func_defs(lines), character(0L))
 })
 
 test_that("detect_func_defs: no-space assignment to function(", {
@@ -329,7 +329,7 @@ test_that("rename_func: uses rstudioapi when path is NULL", {
     .package = "rstudioapi"
   )
 
-  readLines_paths <- character(0)
+  readLines_paths <- character(0L)
   local_mocked_bindings(
     readLines = function(path, ...) {
       readLines_paths <<- c(readLines_paths, path)
@@ -380,7 +380,7 @@ test_that("rename_func: extra ... args pass through (check_dots_empty0 checks ca
   writeLines("MyFunc <- function(x) x", tmp)
   on.exit(unlink(tmp))
 
-  expect_error(rename_func(tmp, extra_arg = 1))
+  expect_error(rename_func(tmp, extra_arg = 1L))
 })
 
 test_that("rename_func: invalid style falls back to default (snake_case)", {

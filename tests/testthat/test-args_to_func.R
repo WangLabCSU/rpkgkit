@@ -5,41 +5,41 @@
 
 test_that("filter_args_for_func keeps only arguments matching function formals", {
   f <- function(a, b, c) a + b + c
-  args <- list(a = 1, b = 2, c = 3, d = 4, e = 5)
+  args <- list(a = 1L, b = 2L, c = 3L, d = 4L, e = 5L)
 
   result <- filter_args_for_func(args, f)
   expect_named(result, c("a", "b", "c"))
-  expect_equal(result$a, 1)
-  expect_equal(result$b, 2)
-  expect_equal(result$c, 3)
+  expect_equal(result$a, 1L)
+  expect_equal(result$b, 2L)
+  expect_equal(result$c, 3L)
 })
 
 test_that("filter_args_for_func returns empty list when no args match", {
   f <- function(x, y) x + y
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   result <- filter_args_for_func(args, f)
   expect_type(result, "list")
-  expect_length(result, 0)
+  expect_length(result, 0L)
 })
 
 test_that("filter_args_for_func preserves additional arguments via keep", {
   f <- function(a, b) a + b
-  args <- list(a = 1, b = 2, extra = 99, another = 100)
+  args <- list(a = 1L, b = 2L, extra = 99L, another = 100L)
 
   result <- filter_args_for_func(args, f, keep = c("extra", "another"))
   expect_named(result, c("a", "b", "extra", "another"))
-  expect_equal(result$extra, 99)
-  expect_equal(result$another, 100)
+  expect_equal(result$extra, 99L)
+  expect_equal(result$another, 100L)
 })
 
 test_that("filter_args_for_func: keep works even when args don't match formals at all", {
   f <- function(x, y) x + y
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   result <- filter_args_for_func(args, f, keep = "a")
   expect_named(result, "a")
-  expect_equal(result$a, 1)
+  expect_equal(result$a, 1L)
 })
 
 test_that("filter_args_for_func handles empty args_list", {
@@ -48,12 +48,12 @@ test_that("filter_args_for_func handles empty args_list", {
 
   result <- filter_args_for_func(args, f)
   expect_type(result, "list")
-  expect_length(result, 0)
+  expect_length(result, 0L)
 })
 
 test_that("filter_args_for_func handles NULL keep (default)", {
   f <- function(a, b) a + b
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   result <- filter_args_for_func(args, f)
   expect_named(result, c("a", "b"))
@@ -61,7 +61,7 @@ test_that("filter_args_for_func handles NULL keep (default)", {
 
 test_that("filter_args_for_func excludes ... from function formals", {
   f <- function(a, b, ...) a + b
-  args <- list(a = 1, b = 2, ... = "dots")
+  args <- list(a = 1L, b = 2L, ... = "dots")
 
   result <- filter_args_for_func(args, f)
   expect_named(result, c("a", "b"))
@@ -69,17 +69,17 @@ test_that("filter_args_for_func excludes ... from function formals", {
 })
 
 test_that("filter_args_for_func handles function with no formal parameters", {
-  f <- function() 42
-  args <- list(a = 1, b = 2)
+  f <- function() 42L
+  args <- list(a = 1L, b = 2L)
 
   result <- filter_args_for_func(args, f)
   expect_type(result, "list")
-  expect_length(result, 0)
+  expect_length(result, 0L)
 })
 
 test_that("filter_args_for_func: keep does not duplicate matched formals", {
   f <- function(a, b) a + b
-  args <- list(a = 1, b = 2, c = 3)
+  args <- list(a = 1L, b = 2L, c = 3L)
 
   # keep includes 'a' which is already in formals — should not duplicate
   result <- filter_args_for_func(args, f, keep = c("a", "c"))
@@ -93,21 +93,21 @@ test_that("match_func_to_args: strict matching returns only compatible functions
   f2 <- function(x, y) x * y
   f3 <- function(p, q) p - q
 
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   result <- match_func_to_args(args, f1, f2, f3)
-  expect_length(result, 1)
-  expect_true(is.function(result[[1]]))
+  expect_length(result, 1L)
+  expect_true(is.function(result[[1L]]))
 })
 
 test_that("match_func_to_args returns empty when no function matches", {
   f1 <- function(x, y) x + y
   f2 <- function(p, q) p * q
 
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   result <- match_func_to_args(args, f1, f2)
-  expect_length(result, 0)
+  expect_length(result, 0L)
 })
 
 test_that("match_func_to_args: dots_enabled=TRUE includes functions with ...", {
@@ -115,28 +115,28 @@ test_that("match_func_to_args: dots_enabled=TRUE includes functions with ...", {
   f2 <- function(x, y, ...) x * y
   f3 <- function(p, q) p - q
 
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   result <- match_func_to_args(args, f1, f2, f3, dots_enabled = TRUE)
-  expect_length(result, 2)
+  expect_length(result, 2L)
 })
 
 test_that("match_func_to_args: dots_enabled=TRUE and first function matches all args", {
   f1 <- function(a, b) a + b
   f2 <- function(x, y, ...) x * y
 
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   result <- match_func_to_args(args, f1, f2, dots_enabled = TRUE)
   # f1 matches all args, so first_hold=TRUE preserves f1
-  expect_true(any(vapply(result, identical, logical(1), f1)))
+  expect_true(any(vapply(result, identical, logical(1L), f1)))
 })
 
 test_that("match_func_to_args: name_only=TRUE returns names", {
   f1 <- function(a, b) a + b
   f2 <- function(x, y) x * y
 
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   result <- match_func_to_args(args, f1, f2, name_only = TRUE)
   expect_type(result, "character")
@@ -146,11 +146,11 @@ test_that("match_func_to_args: name_only=TRUE returns names", {
 test_that("match_func_to_args: name_only=TRUE with no match returns empty character", {
   f1 <- function(x, y) x + y
 
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   result <- match_func_to_args(args, f1, name_only = TRUE)
   expect_type(result, "character")
-  expect_length(result, 0)
+  expect_length(result, 0L)
 })
 
 test_that("match_func_to_args: top_one_only=TRUE returns single best match", {
@@ -160,7 +160,7 @@ test_that("match_func_to_args: top_one_only=TRUE returns single best match", {
   f1 <- function(a, b) a + b
   f2 <- function(a, c, b) a + b + c
 
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   result <- match_func_to_args(args, f1, f2, top_one_only = TRUE)
   expect_true(is.function(result))
@@ -171,37 +171,37 @@ test_that("match_func_to_args: aborts on unnamed args_list", {
 
   # Named but some empty names
   expect_error(
-    match_func_to_args(setNames(list(1, 2), c("a", "")), f1),
+    match_func_to_args(setNames(list(1L, 2L), c("a", "")), f1),
     "named list"
   )
 
   # Completely unnamed
   expect_error(
-    match_func_to_args(list(1, 2), f1),
+    match_func_to_args(list(1L, 2L), f1),
     "named list"
   )
 })
 
 test_that("match_func_to_args handles empty ... (no functions)", {
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   result <- match_func_to_args(args)
-  expect_length(result, 0)
+  expect_length(result, 0L)
 })
 
 test_that("match_func_to_args: empty ... with name_only=TRUE returns empty character", {
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   result <- match_func_to_args(args, name_only = TRUE)
   expect_type(result, "character")
-  expect_length(result, 0)
+  expect_length(result, 0L)
 })
 
 test_that("match_func_to_args: top_one_only with tie warns", {
   f1 <- function(a, b) a + b
   f2 <- function(a, b) a - b
 
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   expect_warning(
     match_func_to_args(args, f1, f2, top_one_only = TRUE),
@@ -216,7 +216,7 @@ test_that("match_func_to_args: top_one_only with name_only=TRUE returns name", {
   f1 <- function(a, b) a + b
   f2 <- function(a, c, b) a + b + c
 
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   result <- match_func_to_args(
     args,
@@ -233,21 +233,21 @@ test_that("match_func_to_args: strict matching excludes function missing an arg"
   f1 <- function(a) a
   f2 <- function(a, b) a + b
 
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   result <- match_func_to_args(args, f1, f2)
   # f1 is missing 'b', so only f2 should match
-  expect_length(result, 1)
+  expect_length(result, 1L)
 })
 
 test_that("match_func_to_args matches function with extra formals (beyond args)", {
-  f1 <- function(a, b, c = 10) a + b + c
+  f1 <- function(a, b, c = 10L) a + b + c
 
-  args <- list(a = 1, b = 2)
+  args <- list(a = 1L, b = 2L)
 
   # f1 has all args (a, b) even though it also has c
   result <- match_func_to_args(args, f1)
-  expect_length(result, 1)
+  expect_length(result, 1L)
 })
 
 # ── get_func_args ────────────────────────────────────────────────────────────
@@ -257,20 +257,20 @@ test_that("get_func_args retrieves all arguments from calling context", {
     get_func_args()
   }
 
-  result <- tester(1, 2, 3)
+  result <- tester(1L, 2L, 3L)
   expect_type(result, "list")
   expect_named(result, c("a", "b", "c"))
-  expect_equal(result$a, 1)
-  expect_equal(result$b, 2)
-  expect_equal(result$c, 3)
+  expect_equal(result$a, 1L)
+  expect_equal(result$b, 2L)
+  expect_equal(result$c, 3L)
 })
 
 test_that("get_func_args: name_only=TRUE returns argument names", {
-  tester <- function(a, b, c = 10) {
+  tester <- function(a, b, c = 10L) {
     get_func_args(name_only = TRUE)
   }
 
-  result <- tester(1, 2)
+  result <- tester(1L, 2L)
   expect_type(result, "character")
   expect_setequal(result, c("a", "b", "c"))
 })
@@ -280,7 +280,7 @@ test_that("get_func_args: name_only=TRUE with ... and dots_expand=TRUE", {
     get_func_args(name_only = TRUE, dots_expand = TRUE)
   }
 
-  result <- tester(1, 2, 3)
+  result <- tester(1L, 2L, 3L)
   expect_true("a" %in% result)
   expect_true("..." %in% result)
 })
@@ -290,17 +290,17 @@ test_that("get_func_args excludes arguments by character vector", {
     get_func_args(exclude = "b")
   }
 
-  result <- tester(1, 2, 3)
+  result <- tester(1L, 2L, 3L)
   expect_named(result, c("a", "c"))
   expect_false("b" %in% names(result))
 })
 
 test_that("get_func_args excludes arguments by numeric index", {
   tester <- function(a, b, c) {
-    get_func_args(exclude = 2)
+    get_func_args(exclude = 2L)
   }
 
-  result <- tester(1, 2, 3)
+  result <- tester(1L, 2L, 3L)
   expect_named(result, c("a", "c"))
   expect_false("b" %in% names(result))
 })
@@ -310,7 +310,7 @@ test_that("get_func_args: exclude with name_only=TRUE", {
     get_func_args(exclude = "a", name_only = TRUE)
   }
 
-  result <- tester(1, 2, 3)
+  result <- tester(1L, 2L, 3L)
   expect_false("a" %in% result)
   expect_true("b" %in% result)
   expect_true("c" %in% result)
@@ -321,18 +321,18 @@ test_that("get_func_args aborts on invalid exclude type", {
     get_func_args(exclude = TRUE)
   }
 
-  expect_error(tester(1), "logical")
+  expect_error(tester(1L), "logical")
 })
 
 test_that("get_func_args handles defaults correctly", {
-  tester <- function(a, b = 10) {
+  tester <- function(a, b = 10L) {
     get_func_args()
   }
 
-  result <- tester(1)
+  result <- tester(1L)
   expect_named(result, c("a", "b"))
-  expect_equal(result$a, 1)
-  expect_equal(result$b, 10)
+  expect_equal(result$a, 1L)
+  expect_equal(result$b, 10L)
 })
 
 test_that("get_func_args: exclude by name with name_only=TRUE and ...", {
@@ -340,7 +340,7 @@ test_that("get_func_args: exclude by name with name_only=TRUE and ...", {
     get_func_args(exclude = "b", name_only = TRUE, dots_expand = TRUE)
   }
 
-  result <- tester(1, 2, 3, 4)
+  result <- tester(1L, 2L, 3L, 4L)
   expect_false("b" %in% result)
   expect_true("a" %in% result)
   expect_true("..." %in% result)

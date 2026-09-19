@@ -41,7 +41,7 @@ add_global_rbuildignore <- function(..., path = NULL) {
   if (file.exists(ignore_file)) {
     existing <- readLines(ignore_file, warn = FALSE)
   } else {
-    existing <- character(0)
+    existing <- character(0L)
   }
 
   # Extract existing patterns (non-comment, non-empty lines)
@@ -114,16 +114,16 @@ add_global_rbuildignore <- function(..., path = NULL) {
 
   # Handle user-provided patterns
   user_pats <- unlist(list(...))
-  if (length(user_pats) > 0) {
+  if (length(user_pats) > 0L) {
     new_user <- user_pats[!(user_pats %in% existing_pats)]
-    if (length(new_user) > 0) {
+    if (length(new_user) > 0L) {
       new_lines <- c(new_lines, "", "# Additional patterns", new_user)
     }
   }
 
   # Nothing to add
   pat_count <- sum(!grepl("^\\s*(#|$)", new_lines))
-  if (pat_count == 0) {
+  if (pat_count == 0L) {
     cli::cli_alert_info(
       "All patterns already present in {.file .Rbuildignore}."
     )

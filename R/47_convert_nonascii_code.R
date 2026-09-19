@@ -47,7 +47,7 @@ convert_nonascii_code <- function(
     val <- tryCatch(eval(expr, envir = parent.frame()), error = function(e) {
       NULL
     })
-    if (is.character(val) && length(val) == 1 && file.exists(val)) {
+    if (is.character(val) && length(val) == 1L && file.exists(val)) {
       return(convert_nonascii_code_path(
         val,
         reverse = reverse,
@@ -57,9 +57,9 @@ convert_nonascii_code <- function(
     convert_nonascii_code_expr(expr, reverse = reverse)
   } else if (is.call(expr) || is.expression(expr) || is.pairlist(expr)) {
     convert_nonascii_code_expr(expr, reverse = reverse)
-  } else if (is.character(code) && length(code) == 1 && file.exists(code)) {
+  } else if (is.character(code) && length(code) == 1L && file.exists(code)) {
     convert_nonascii_code_path(code, reverse = reverse, overwrite = overwrite)
-  } else if (is.character(code) && length(code) == 1) {
+  } else if (is.character(code) && length(code) == 1L) {
     convert_nonascii_code_expr(expr, reverse = reverse)
   } else {
     cli::cli_abort(c(
@@ -151,7 +151,7 @@ convert_nonascii_code_expr <- function(code, reverse = FALSE) {
 #' @return A character string with non-ASCII characters escaped.
 #' @keywords internal
 encode_nonascii <- function(x) {
-  chars <- strsplit(x, NULL)[[1]]
+  chars <- strsplit(x, NULL)[[1L]]
   ints <- utf8ToInt(x)
   result <- vapply(
     seq_along(chars),
@@ -162,7 +162,7 @@ encode_nonascii <- function(x) {
         chars[i]
       }
     },
-    character(1)
+    character(1L)
   )
   paste(result, collapse = "")
 }
@@ -183,7 +183,7 @@ restore_unicode_escapes <- function(x) {
       function(e) {
         intToUtf8(strtoi(substr(e, 3L, 6L), 16L))
       },
-      character(1),
+      character(1L),
       USE.NAMES = FALSE
     )
   })

@@ -41,7 +41,7 @@ convert_func_syntax <- function(
   direction = c("to_lambda", "to_explicit"),
   ...
 ) {
-  rlang::check_dots_empty0()
+  rlang::check_dots_empty0(...)
 
   path <- if (is.null(path) && rlang::is_installed("rstudioapi")) {
     rstudioapi::getActiveDocumentContext()$path

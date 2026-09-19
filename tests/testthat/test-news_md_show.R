@@ -137,7 +137,7 @@ test_that("news_md_show limits to max_versions", {
 
   output <- capture.output(
     type = "message",
-    news_md_show(path = tmp, max_versions = 2)
+    news_md_show(path = tmp, max_versions = 2L)
   )
 
   expect_true(any(grepl("v3 feature", output)))
@@ -256,6 +256,6 @@ test_that("md_colorfully_show returns invisibly", {
 })
 
 test_that("md_colorfully_show handles empty content gracefully", {
-  lines <- character(0)
+  lines <- character(0L)
   expect_no_condition(md_colorfully_show(lines))
 })

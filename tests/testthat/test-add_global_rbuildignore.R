@@ -149,7 +149,7 @@ test_that("creates .Rbuildignore when it is empty", {
     file.path(tmp, "DESCRIPTION")
   )
 
-  writeLines(character(0), file.path(tmp, ".Rbuildignore"))
+  writeLines(character(0L), file.path(tmp, ".Rbuildignore"))
 
   suppressMessages(add_global_rbuildignore(path = tmp))
 

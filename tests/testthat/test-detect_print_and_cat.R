@@ -10,7 +10,7 @@ test_that("detect_print_and_cat resolves path from rstudioapi when NULL", {
   local_mocked_bindings(
     readLines = function(con, ...) {
       expect_equal(con, "/mock/file.R")
-      character(0)
+      character(0L)
     },
     .package = "base"
   )
@@ -124,7 +124,7 @@ test_that("print passed as function reference is detected", {
 
 test_that("empty file returns TRUE", {
   local_mocked_bindings(
-    readLines = function(con, ...) character(0),
+    readLines = function(con, ...) character(0L),
     .package = "base"
   )
   expect_true(detect_print_and_cat("empty.R"))
@@ -231,14 +231,14 @@ test_that("fix emits success message with file name", {
 # ---------------------------------------------------------------------------
 
 test_that("find_print_cat_calls returns empty list for empty parse data", {
-  expect_length(find_print_cat_calls(data.frame()), 0)
+  expect_length(find_print_cat_calls(data.frame()), 0L)
 })
 
 test_that("find_print_cat_calls returns empty list when no target calls", {
   text <- "x <- 1\ny <- x + 2\nmessage(y)"
   exprs <- parse(text = text, keep.source = TRUE)
   pd <- utils::getParseData(exprs)
-  expect_length(find_print_cat_calls(pd), 0)
+  expect_length(find_print_cat_calls(pd), 0L)
 })
 
 test_that("find_print_cat_calls finds print() call", {
@@ -246,9 +246,9 @@ test_that("find_print_cat_calls finds print() call", {
   exprs <- parse(text = text, keep.source = TRUE)
   pd <- utils::getParseData(exprs)
   res <- find_print_cat_calls(pd)
-  expect_length(res, 1)
-  expect_equal(res[[1]]$text, "print")
-  expect_equal(res[[1]]$line1, 1)
+  expect_length(res, 1L)
+  expect_equal(res[[1L]]$text, "print")
+  expect_equal(res[[1L]]$line1, 1L)
 })
 
 test_that("find_print_cat_calls finds cat() call", {
@@ -256,8 +256,8 @@ test_that("find_print_cat_calls finds cat() call", {
   exprs <- parse(text = text, keep.source = TRUE)
   pd <- utils::getParseData(exprs)
   res <- find_print_cat_calls(pd)
-  expect_length(res, 1)
-  expect_equal(res[[1]]$text, "cat")
+  expect_length(res, 1L)
+  expect_equal(res[[1L]]$text, "cat")
 })
 
 test_that("find_print_cat_calls finds both print and cat", {
@@ -265,15 +265,15 @@ test_that("find_print_cat_calls finds both print and cat", {
   exprs <- parse(text = text, keep.source = TRUE)
   pd <- utils::getParseData(exprs)
   res <- find_print_cat_calls(pd)
-  expect_length(res, 2)
-  expect_setequal(vapply(res, `[[`, character(1), "text"), c("print", "cat"))
+  expect_length(res, 2L)
+  expect_setequal(vapply(res, `[[`, character(1L), "text"), c("print", "cat"))
 })
 
 test_that("find_print_cat_calls ignores sprintf and print.myclass", {
   text <- 'sprintf("hello %s", name)\nprint.myclass(x)'
   exprs <- parse(text = text, keep.source = TRUE)
   pd <- utils::getParseData(exprs)
-  expect_length(find_print_cat_calls(pd), 0)
+  expect_length(find_print_cat_calls(pd), 0L)
 })
 
 test_that("find_print_cat_calls detects print inside nested call", {
@@ -281,8 +281,8 @@ test_that("find_print_cat_calls detects print inside nested call", {
   exprs <- parse(text = text, keep.source = TRUE)
   pd <- utils::getParseData(exprs)
   res <- find_print_cat_calls(pd)
-  expect_length(res, 1)
-  expect_equal(res[[1]]$text, "print")
+  expect_length(res, 1L)
+  expect_equal(res[[1L]]$text, "print")
 })
 
 # ---------------------------------------------------------------------------
@@ -418,7 +418,7 @@ test_that("scan_file_print_cat returns ok=TRUE for clean file", {
 
   res <- scan_file_print_cat(tmp)
   expect_true(res$ok)
-  expect_length(res$errors, 0)
+  expect_length(res$errors, 0L)
 })
 
 test_that("scan_file_print_cat returns ok=FALSE for file with print()", {
@@ -427,8 +427,8 @@ test_that("scan_file_print_cat returns ok=FALSE for file with print()", {
 
   res <- scan_file_print_cat(tmp)
   expect_false(res$ok)
-  expect_length(res$errors, 1)
-  expect_equal(res$errors[[1]]$line, 1)
+  expect_length(res$errors, 1L)
+  expect_equal(res$errors[[1L]]$line, 1L)
 })
 
 test_that("scan_file_print_cat with fix = TRUE modifies file", {
@@ -444,7 +444,7 @@ test_that("scan_file_print_cat error uses original line content", {
   writeLines('print("bad")', tmp)
 
   res <- scan_file_print_cat(tmp, fix = TRUE)
-  expect_match(res$errors[[1]]$caret, "print", fixed = TRUE)
-  expect_match(res$errors[[1]]$caret, "bad", fixed = TRUE)
-  expect_no_match(res$errors[[1]]$caret, "message", fixed = TRUE)
+  expect_match(res$errors[[1L]]$caret, "print", fixed = TRUE)
+  expect_match(res$errors[[1L]]$caret, "bad", fixed = TRUE)
+  expect_no_match(res$errors[[1L]]$caret, "message", fixed = TRUE)
 })

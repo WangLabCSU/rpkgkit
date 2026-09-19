@@ -60,7 +60,7 @@ update_time_in_standalone <- function(path = NULL) {
       writeLines(lines, con = f)
       TRUE
     },
-    FUN.VALUE = logical(1)
+    FUN.VALUE = logical(1L)
   )
 
   cli::cli_alert_success(

@@ -109,7 +109,7 @@ test_that("package_lost_glue_brace resolves path from rstudioapi when NULL", {
     .package = "rpkgkit"
   )
   local_mocked_bindings(
-    list.files = function(...) character(0),
+    list.files = function(...) character(0L),
     .package = "base"
   )
   expect_error(package_lost_glue_brace())
@@ -124,7 +124,7 @@ test_that("scan_file_braces returns ok=TRUE for clean file with no glue/cli", {
   writeLines('message("ok")', tmp)
   res <- scan_file_braces(tmp)
   expect_true(res$ok)
-  expect_length(res$errors, 0)
+  expect_length(res$errors, 0L)
   expect_equal(res$file, tmp)
 })
 
@@ -133,7 +133,7 @@ test_that("scan_file_braces returns ok=TRUE for file with balanced braces", {
   writeLines('glue::glue("Hello {name}!")', tmp)
   res <- scan_file_braces(tmp)
   expect_true(res$ok)
-  expect_length(res$errors, 0)
+  expect_length(res$errors, 0L)
 })
 
 test_that("scan_file_braces returns ok=FALSE for file with missing closing brace", {
@@ -141,8 +141,8 @@ test_that("scan_file_braces returns ok=FALSE for file with missing closing brace
   writeLines('glue::glue("Hello {name")', tmp)
   res <- scan_file_braces(tmp)
   expect_false(res$ok)
-  expect_length(res$errors, 1)
-  expect_equal(res$errors[[1]]$line, 1)
+  expect_length(res$errors, 1L)
+  expect_equal(res$errors[[1L]]$line, 1L)
 })
 
 test_that("scan_file_braces returns ok=FALSE for file with extra closing brace", {
@@ -150,7 +150,7 @@ test_that("scan_file_braces returns ok=FALSE for file with extra closing brace",
   writeLines('glue::glue("Hello name}")', tmp)
   res <- scan_file_braces(tmp)
   expect_false(res$ok)
-  expect_length(res$errors, 1)
+  expect_length(res$errors, 1L)
 })
 
 test_that("scan_file_braces reports errors for multiple issues in same file", {
@@ -161,25 +161,25 @@ test_that("scan_file_braces reports errors for multiple issues in same file", {
   )
   res <- scan_file_braces(tmp)
   expect_false(res$ok)
-  expect_length(res$errors, 2)
-  expect_setequal(vapply(res$errors, `[[`, integer(1), "line"), c(1L, 2L))
+  expect_length(res$errors, 2L)
+  expect_setequal(vapply(res$errors, `[[`, integer(1L), "line"), c(1L, 2L))
 })
 
 test_that("scan_file_braces caret references original source line", {
   tmp <- withr::local_tempfile(fileext = ".R")
   writeLines('glue::glue("Hello {name")', tmp)
   res <- scan_file_braces(tmp)
-  expect_match(res$errors[[1]]$caret, "glue::glue", fixed = TRUE)
-  expect_match(res$errors[[1]]$caret, "Hello {name", fixed = TRUE)
-  expect_true(grepl("\\^", res$errors[[1]]$caret))
+  expect_match(res$errors[[1L]]$caret, "glue::glue", fixed = TRUE)
+  expect_match(res$errors[[1L]]$caret, "Hello {name", fixed = TRUE)
+  expect_true(grepl("\\^", res$errors[[1L]]$caret))
 })
 
 test_that("scan_file_braces handles empty file", {
   tmp <- withr::local_tempfile(fileext = ".R")
-  writeLines(character(0), tmp)
+  writeLines(character(0L), tmp)
   res <- scan_file_braces(tmp)
   expect_true(res$ok)
-  expect_length(res$errors, 0)
+  expect_length(res$errors, 0L)
 })
 
 test_that("scan_file_braces handles file with only comments", {
@@ -187,5 +187,5 @@ test_that("scan_file_braces handles file with only comments", {
   writeLines(c("# just a comment", "# glue::glue(\"something\")"), tmp)
   res <- scan_file_braces(tmp)
   expect_true(res$ok)
-  expect_length(res$errors, 0)
+  expect_length(res$errors, 0L)
 })

@@ -24,7 +24,7 @@ test_that("make_func_call_explicit reads file, adds colons, and writes back", {
     .package = "rstudioapi"
   )
 
-  readLines_paths <- character(0)
+  readLines_paths <- character(0L)
   local_mocked_bindings(
     readLines = function(path, ...) {
       readLines_paths <<- c(readLines_paths, path)

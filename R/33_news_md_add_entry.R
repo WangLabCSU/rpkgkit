@@ -113,7 +113,7 @@ news_md_add_entry <- function(
   if (file.exists(news_path)) {
     lines <- readLines(news_path, warn = FALSE)
   } else {
-    lines <- character(0)
+    lines <- character(0L)
   }
 
   # Create version header
@@ -128,7 +128,7 @@ news_md_add_entry <- function(
   )
   version_idx <- grep(version_pattern, lines)
 
-  if (length(version_idx) == 0) {
+  if (length(version_idx) == 0L) {
     # No existing version section - create new one at the top
     category_header <- sprintf("## %s", category)
     new_lines <- c(
@@ -138,54 +138,54 @@ news_md_add_entry <- function(
       "",
       entry,
       "",
-      if (length(lines) > 0) "" else NULL,
+      if (length(lines) > 0L) "" else NULL,
       lines
     )
   } else {
     # Version section exists
-    idx <- version_idx[1]
+    idx <- version_idx[1L]
 
     # Check if this section has content (not just header)
     # Find next version header or end of file
-    next_version_idx <- grep("^#\\s+", lines[(idx + 1):length(lines)])
-    if (length(next_version_idx) == 0) {
+    next_version_idx <- grep("^#\\s+", lines[(idx + 1L):length(lines)])
+    if (length(next_version_idx) == 0L) {
       section_end <- length(lines)
     } else {
-      section_end <- idx + next_version_idx[1] - 1
+      section_end <- idx + next_version_idx[1L] - 1L
     }
 
     # Check if section is "open" (last meaningful content is a category we can add to)
-    section_content <- lines[(idx + 1):section_end]
+    section_content <- lines[(idx + 1L):section_end]
     non_empty_idx <- which(nzchar(trimws(section_content)))
 
-    if (length(non_empty_idx) == 0 || !open_section) {
+    if (length(non_empty_idx) == 0L || !open_section) {
       # Section is empty or we want a new section - add new category
       category_header <- sprintf("## %s", category)
 
       # Insert after version header
-      insert_pos <- idx + 1
+      insert_pos <- idx + 1L
 
       # Check if category already exists right after version header
       existing_cat_pattern <- sprintf("^##\\s+%s\\s*$", category)
       cat_idx <- grep(existing_cat_pattern, lines)
 
       if (
-        length(cat_idx) > 0 &&
-          cat_idx[1] > idx &&
-          (length(next_version_idx) == 0 ||
-            cat_idx[1] < idx + next_version_idx[1])
+        length(cat_idx) > 0L &&
+          cat_idx[1L] > idx &&
+          (length(next_version_idx) == 0L ||
+            cat_idx[1L] < idx + next_version_idx[1L])
       ) {
         # Category exists, add entry there
         # Find where to insert (after category header and blank line)
-        insert_pos <- cat_idx[1] + 1
+        insert_pos <- cat_idx[1L] + 1L
         while (
           insert_pos <= section_end && !nzchar(trimws(lines[insert_pos]))
         ) {
-          insert_pos <- insert_pos + 1
+          insert_pos <- insert_pos + 1L
         }
 
         new_lines <- c(
-          lines[1:(insert_pos - 1)],
+          lines[1L:(insert_pos - 1L)],
           entry,
           "",
           lines[insert_pos:length(lines)]
@@ -193,13 +193,13 @@ news_md_add_entry <- function(
       } else {
         # Add new category section
         new_lines <- c(
-          lines[1:idx],
+          lines[1L:idx],
           "",
           category_header,
           "",
           entry,
           "",
-          lines[(idx + 1):length(lines)]
+          lines[(idx + 1L):length(lines)]
         )
       }
     } else {
@@ -207,19 +207,19 @@ news_md_add_entry <- function(
       existing_cat_pattern <- sprintf("^##\\s+%s\\s*$", category)
       cat_idx <- grep(existing_cat_pattern, lines[idx:section_end])
 
-      if (length(cat_idx) > 0) {
+      if (length(cat_idx) > 0L) {
         # Category exists in this section
-        cat_pos <- idx + cat_idx[1] - 1
+        cat_pos <- idx + cat_idx[1L] - 1L
         # Find position to insert (after category header and blank lines)
-        insert_pos <- cat_pos + 1
+        insert_pos <- cat_pos + 1L
         while (
           insert_pos <= section_end && !nzchar(trimws(lines[insert_pos]))
         ) {
-          insert_pos <- insert_pos + 1
+          insert_pos <- insert_pos + 1L
         }
 
         new_lines <- c(
-          lines[1:(insert_pos - 1)],
+          lines[1L:(insert_pos - 1L)],
           entry,
           "",
           lines[insert_pos:length(lines)]
@@ -227,16 +227,16 @@ news_md_add_entry <- function(
       } else {
         # Add new category to existing version section
         category_header <- sprintf("## %s", category)
-        insert_pos <- idx + 1
+        insert_pos <- idx + 1L
 
         new_lines <- c(
-          lines[1:idx],
+          lines[1L:idx],
           "",
           category_header,
           "",
           entry,
           "",
-          lines[(idx + 1):length(lines)]
+          lines[(idx + 1L):length(lines)]
         )
       }
     }

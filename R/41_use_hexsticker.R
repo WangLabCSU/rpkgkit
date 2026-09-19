@@ -59,7 +59,7 @@ use_hexsticker <- function(
   extra_attrs <- list(...)
   if (length(extra_attrs) > 0L) {
     extra_named <- stats::setNames(
-      vapply(extra_attrs, as.character, character(1)),
+      vapply(extra_attrs, as.character, character(1L)),
       names(extra_attrs)
     )
     img_attrs <- c(img_attrs, extra_named)

@@ -8,7 +8,7 @@ test_that("generate_color_theme returns a list", {
 test_that("generate_color_theme returns a large list (all R color names)", {
   theme <- rpkgkit:::generate_color_theme()
   # R has 657 built-in color names
-  expect_gt(length(theme), 600)
+  expect_gt(length(theme), 600L)
 })
 
 test_that("generate_color_theme names follow span.<color> pattern", {
@@ -23,7 +23,7 @@ test_that("generate_color_theme each element is list(color = <color>)", {
   theme <- rpkgkit:::generate_color_theme()
 
   # Spot check first few elements
-  for (name in names(theme)[1:5]) {
+  for (name in names(theme)[1L:5L]) {
     el <- theme[[name]]
     expect_type(el, "list")
     expect_named(el, "color")

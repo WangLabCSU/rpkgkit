@@ -131,7 +131,7 @@ find_glue_cli_strings <- function(parse_data) {
     # expression that contains both the function reference and arguments.
     func_ref_parent <- target_calls$parent[k]
     call_expr_id <- parent_map[[as.character(func_ref_parent)]]
-    if (is.na(call_expr_id) || call_expr_id <= 0) {
+    if (is.na(call_expr_id) || call_expr_id <= 0L) {
       next
     }
 

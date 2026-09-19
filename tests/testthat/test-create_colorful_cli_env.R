@@ -25,7 +25,7 @@ test_that("create_colorful_cli_env with custom list only contains requested func
 })
 
 test_that("create_colorful_cli_env with empty character vector returns empty env", {
-  env <- rpkgkit:::create_colorful_cli_env(character(0))
+  env <- rpkgkit:::create_colorful_cli_env(character(0L))
   expect_length(ls(env), 0L)
 })
 

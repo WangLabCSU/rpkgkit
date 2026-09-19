@@ -23,7 +23,7 @@
     rlang::abort("The left-hand side of `%<-%` must be a call to `c()`.")
   }
 
-  vars <- as.list(lhs[-1])
+  vars <- as.list(lhs[-1L])
 
   if (length(value) != length(vars)) {
     rlang::abort("The left- and right-hand sides of `%<-%` must be the same length.")

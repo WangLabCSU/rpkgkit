@@ -329,9 +329,7 @@ test_that("convert_func_syntax resolves path from rstudioapi when path=NULL", {
   expect_error(convert_func_syntax(path = NULL))
 })
 
-test_that("convert_func_syntax: check_dots_empty0 inspects caller dots, not own ...", {
-  # check_dots_empty0() inspects the caller's ..., not convert_func_syntax's own
-  # ..., so passing extra args to convert_func_syntax does not error.
+test_that("convert_func_syntax aborts when ... is not empty", {
   local_mocked_bindings(
     readLines = function(path, ...) c("f <- function(x) x"),
     .package = "base"
@@ -340,9 +338,9 @@ test_that("convert_func_syntax: check_dots_empty0 inspects caller dots, not own 
     writeLines = function(text, path, ...) invisible(),
     .package = "base"
   )
-  expect_message(
-    convert_func_syntax(path = "dummy.R", direction = "to_lambda", 42),
-    "Converted"
+  expect_error(
+    convert_func_syntax(path = "dummy.R", direction = "to_lambda", 42L),
+    "must be empty"
   )
 })
 
@@ -469,7 +467,7 @@ test_that("convert_func_syntax: handles file with only comments", {
 
 test_that("convert_func_syntax: handles empty file", {
   tmp <- tempfile(fileext = ".R")
-  writeLines(character(0), tmp)
+  writeLines(character(0L), tmp)
   on.exit(unlink(tmp))
 
   expect_message(

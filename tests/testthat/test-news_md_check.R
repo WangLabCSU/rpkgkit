@@ -6,8 +6,8 @@ test_that("news_md_check detects missing NEWS.md", {
   result <- news_md_check(path = tmp, verbose = FALSE)
   expect_false(result$valid)
   expect_match(result$errors, "NEWS.md file not found")
-  expect_length(result$warnings, 0)
-  expect_length(result$suggestions, 0)
+  expect_length(result$warnings, 0L)
+  expect_length(result$suggestions, 0L)
 })
 
 test_that("news_md_check passes on well-formatted NEWS.md", {
@@ -32,7 +32,7 @@ test_that("news_md_check passes on well-formatted NEWS.md", {
 
   result <- news_md_check(path = tmp, verbose = FALSE)
   expect_true(result$valid)
-  expect_length(result$errors, 0)
+  expect_length(result$errors, 0L)
 })
 
 test_that("news_md_check detects missing version headers", {
@@ -180,10 +180,10 @@ test_that("news_md_check: strict=TRUE turns warnings into errors", {
 
   # Under strict, format warning becomes error and valid becomes FALSE
   expect_false(result_strict$valid)
-  expect_true(length(result_strict$errors) > 0)
+  expect_true(length(result_strict$errors) > 0L)
 
   # Under lax, same issue is a warning
-  expect_true(length(result_lax$warnings) > 0)
+  expect_true(length(result_lax$warnings) > 0L)
 })
 
 test_that("news_md_check returns correct list structure", {

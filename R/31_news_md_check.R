@@ -35,9 +35,9 @@ news_md_check <- function(path = NULL, strict = FALSE, verbose = TRUE) {
 
   result <- list(
     valid = TRUE,
-    errors = character(0),
-    warnings = character(0),
-    suggestions = character(0)
+    errors = character(0L),
+    warnings = character(0L),
+    suggestions = character(0L)
   )
 
   # Check if file exists
@@ -60,7 +60,7 @@ news_md_check <- function(path = NULL, strict = FALSE, verbose = TRUE) {
   current_version <- NULL
 
   prev_line <- ""
-  line_num <- 0
+  line_num <- 0L
 
   for (i in seq_along(lines)) {
     line <- lines[i]
@@ -95,12 +95,12 @@ news_md_check <- function(path = NULL, strict = FALSE, verbose = TRUE) {
         line,
         regexpr("[0-9]+\\.[0-9]+\\.[0-9]+[^\\)]*", line)
       )
-      if (length(matches) > 0) {
+      if (length(matches) > 0L) {
         current_version <- matches
       }
 
       # Check blank line before version header (except first)
-      if (line_num > 1 && nzchar(trimws(prev_line))) {
+      if (line_num > 1L && nzchar(trimws(prev_line))) {
         msg <- sprintf(
           "Line %d: Blank line recommended before version header",
           line_num
@@ -170,7 +170,7 @@ news_md_check <- function(path = NULL, strict = FALSE, verbose = TRUE) {
 
       # Check for period at end (if not a short phrase)
       trimmed <- trimws(sub("^\\s*\\*\\s+", "", line))
-      if (nchar(trimmed) > 50 && !grepl("[.!?]\\s*$", trimmed)) {
+      if (nchar(trimmed) > 50L && !grepl("[.!?]\\s*$", trimmed)) {
         msg <- sprintf(
           "Line %d: Longer entries should end with punctuation",
           line_num
@@ -227,7 +227,7 @@ news_md_check <- function(path = NULL, strict = FALSE, verbose = TRUE) {
 
   # Check for trailing whitespace
   trailing_ws <- grep("\\s+$", lines)
-  if (length(trailing_ws) > 0) {
+  if (length(trailing_ws) > 0L) {
     msg <- sprintf(
       "Lines with trailing whitespace: %s",
       toString(trailing_ws)
@@ -236,7 +236,7 @@ news_md_check <- function(path = NULL, strict = FALSE, verbose = TRUE) {
   }
 
   # Check file ends with newline
-  if (length(lines) > 0 && !grepl("^\\s*$", lines[length(lines)])) {
+  if (length(lines) > 0L && !grepl("^\\s*$", lines[length(lines)])) {
     result$suggestions <- c(
       result$suggestions,
       "File should end with a blank line"
@@ -251,11 +251,11 @@ news_md_check <- function(path = NULL, strict = FALSE, verbose = TRUE) {
       cli::cli_alert_danger("NEWS.md has {length(result$errors)} error(s)")
     }
 
-    if (length(result$warnings) > 0) {
+    if (length(result$warnings) > 0L) {
       cli::cli_alert_warning("{length(result$warnings)} warning(s)")
     }
 
-    if (length(result$suggestions) > 0) {
+    if (length(result$suggestions) > 0L) {
       cli::cli_alert_info(
         "{length(result$suggestions)} suggestion(s) for improvement"
       )

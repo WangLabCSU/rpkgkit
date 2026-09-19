@@ -186,7 +186,7 @@ add_global_gitgnore <- function(pkg = NULL) {
   # gitignore quarto articles and vignettes
   pth <- file.path(pkg, "vignettes")
 
-  if (length(list.files(pth, pattern = "qmd$")) > 0) {
+  if (length(list.files(pth, pattern = "qmd$")) > 0L) {
     usethis::use_git_ignore(
       c(
         "/.quarto/",
@@ -203,7 +203,7 @@ add_global_gitgnore <- function(pkg = NULL) {
 
   pth <- file.path(pkg, "vignettes", "articles")
 
-  if (length(list.files(pth, pattern = "qmd$")) > 0) {
+  if (length(list.files(pth, pattern = "qmd$")) > 0L) {
     usethis::use_git_ignore(
       c(
         "/.quarto/",

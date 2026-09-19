@@ -12,7 +12,7 @@ test_that("air_format calls system2 with air format and the given path", {
     system2 = function(command, args, ...) {
       captured_cmd <<- command
       captured_args <<- args
-      invisible(0)
+      invisible(0L)
     },
     .package = "base"
   )
@@ -32,7 +32,7 @@ test_that("air_format passes additional arguments to system2 via ...", {
   local_mocked_bindings(
     system2 = function(command, args, ...) {
       captured_dots <<- list(...)
-      invisible(0)
+      invisible(0L)
     },
     .package = "base"
   )
@@ -48,12 +48,12 @@ test_that("air_format returns exit status invisibly", {
     check_air_installed = function() invisible(TRUE)
   )
   local_mocked_bindings(
-    system2 = function(command, args, ...) invisible(0),
+    system2 = function(command, args, ...) invisible(0L),
     .package = "base"
   )
 
   result <- air_format(path = "test.R")
-  expect_equal(result, 0)
+  expect_equal(result, 0L)
 })
 
 test_that("air_format aborts when path is NULL and rstudioapi is not installed", {
@@ -88,7 +88,7 @@ test_that("air_format uses rstudioapi when path is NULL and rstudioapi is availa
   local_mocked_bindings(
     system2 = function(command, args, ...) {
       captured_args <<- args
-      invisible(0)
+      invisible(0L)
     },
     .package = "base"
   )
@@ -107,7 +107,7 @@ test_that("air_format calls check_air_installed before proceeding", {
     }
   )
   local_mocked_bindings(
-    system2 = function(command, args, ...) invisible(0),
+    system2 = function(command, args, ...) invisible(0L),
     .package = "base"
   )
 

@@ -5,26 +5,26 @@
 test_that("capture_inline_comments extracts trailing inline comment", {
   lines <- c("x <- 1  # a comment", "y <- 2")
   res <- .mfae_capture_inline_comments(lines)
-  expect_length(res, 1)
+  expect_length(res, 1L)
   expect_equal(res[["1"]], "# a comment")
 })
 
 test_that("capture_inline_comments ignores full-line comments", {
   lines <- c("# full line comment", "x <- 1")
   res <- .mfae_capture_inline_comments(lines)
-  expect_length(res, 0)
+  expect_length(res, 0L)
 })
 
 test_that("capture_inline_comments returns empty for comment-free lines", {
   lines <- c("x <- 1", "y <- 2")
   res <- .mfae_capture_inline_comments(lines)
-  expect_length(res, 0)
+  expect_length(res, 0L)
 })
 
 test_that("capture_inline_comments captures only lines with code before hash", {
   lines <- c("  # indented comment", "z <- 3  # inline")
   res <- .mfae_capture_inline_comments(lines)
-  expect_length(res, 1)
+  expect_length(res, 1L)
   expect_equal(res[["2"]], "# inline")
 })
 
@@ -36,11 +36,11 @@ test_that("mfae_walk_expr returns expression of walked children", {
   expr <- parse(text = "mean(1:10)")
   res <- .mfae_walk_expr(expr)
   expect_type(res, "expression")
-  expect_length(res, 1)
+  expect_length(res, 1L)
 })
 
 test_that("mfae_walk_expr passes non-expression to .mfae_walk", {
-  cl <- quote(mean(1:10))
+  cl <- quote(mean(1L:10L))
   res <- .mfae_walk_expr(cl)
   expect_true(is.call(res))
 })
@@ -62,8 +62,8 @@ test_that("mfae_walk returns atomic values as-is", {
 })
 
 test_that("mfae_walk returns pairlist as-is", {
-  res <- .mfae_walk(pairlist(a = 1, b = 2))
-  expect_equal(res, pairlist(a = 1, b = 2))
+  res <- .mfae_walk(pairlist(a = 1L, b = 2L))
+  expect_equal(res, pairlist(a = 1L, b = 2L))
 })
 
 test_that("mfae_walk does not transform operator +", {
@@ -79,7 +79,7 @@ test_that("mfae_walk does not transform $ operator", {
 })
 
 test_that("mfae_walk does not transform subset [", {
-  expr <- quote(x[1])
+  expr <- quote(x[1L])
   res <- .mfae_walk(expr)
   expect_equal(res, expr)
 })
@@ -92,7 +92,7 @@ test_that("mfae_walk does not transform if", {
 
 test_that("mfae_walk does not transform for loop", {
   expr <- quote(
-    for (i in 1:10) {
+    for (i in 1L:10L) {
       print(i)
     }
   )
@@ -107,28 +107,28 @@ test_that("mfae_walk does not transform infix operators", {
 })
 
 test_that("mfae_walk transforms a normal call", {
-  expr <- quote(mean(1:10))
+  expr <- quote(mean(1L:10L))
   res <- .mfae_walk(expr)
-  expect_equal(res, quote(mean(x = 1:10)))
+  expect_equal(res, quote(mean(x = 1L:10L)))
 })
 
 test_that("mfae_walk respects skip_functions", {
-  expr <- quote(mean(1:10))
+  expr <- quote(mean(1L:10L))
   res <- .mfae_walk(expr, skip_fns = "mean")
   expect_equal(res, expr)
 })
 
 test_that("mfae_walk transforms nested calls", {
-  expr <- quote(vapply(1:9, function(x) x * 2, numeric(1)))
+  expr <- quote(vapply(1L:9L, function(x) x * 2L, numeric(1L)))
   res <- .mfae_walk(expr)
   # vapply formals: X, FUN, FUN.VALUE, ..., USE.NAMES
   # numeric(1) formals: length = 1
   expect_equal(
     res,
     quote(vapply(
-      X = 1:9,
-      FUN = function(x) x * 2,
-      FUN.VALUE = numeric(length = 1)
+      X = 1L:9L,
+      FUN = function(x) x * 2L,
+      FUN.VALUE = numeric(length = 1L)
     ))
   )
 })
@@ -198,28 +198,28 @@ test_that("mfae_resolve_function returns NULL for complex non-symbol call", {
 # ---------------------------------------------------------------------------
 
 test_that("mfae_match_args converts positional args to named", {
-  expr <- quote(seq(1, 10))
+  expr <- quote(seq(1L, 10L))
   fmls <- formals(seq.default)
   res <- .mfae_match_args(expr, fmls)
-  expect_equal(res[[2L]], 1)
+  expect_equal(res[[2L]], 1L)
   expect_equal(names(res)[2L], "from")
-  expect_equal(res[[3L]], 10)
+  expect_equal(res[[3L]], 10L)
   expect_equal(names(res)[3L], "to")
 })
 
 test_that("mfae_match_args preserves order of explicitly named args", {
-  expr <- quote(seq(to = 10, from = 1))
+  expr <- quote(seq(to = 10L, from = 1L))
   fmls <- formals(seq.default)
   res <- .mfae_match_args(expr, fmls)
   # Original order in the call is: to, from
-  expect_equal(res[[2L]], 10)
+  expect_equal(res[[2L]], 10L)
   expect_equal(names(res)[2L], "to")
-  expect_equal(res[[3L]], 1)
+  expect_equal(res[[3L]], 1L)
   expect_equal(names(res)[3L], "from")
 })
 
 test_that("mfae_match_args handles dots - unmatched args unnamed", {
-  expr <- quote(c(1, 2, 3))
+  expr <- quote(c(1L, 2L, 3L))
   fmls <- formals(c)
   res <- .mfae_match_args(expr, fmls)
   # c() only has dots, so all args remain unnamed → names are dropped (NULL)
@@ -227,7 +227,7 @@ test_that("mfae_match_args handles dots - unmatched args unnamed", {
 })
 
 test_that("mfae_match_args handles primitive without dots", {
-  expr <- quote(`+`(1, 2))
+  expr <- quote(`+`(1L, 2L))
   fmls <- pairlist(e1 = NULL, e2 = NULL)
   res <- .mfae_match_args(expr, fmls)
   expect_equal(names(res), c("", "e1", "e2"))
@@ -246,7 +246,7 @@ test_that("mfae_match_args does not name positional args when dots exist", {
 
 test_that("mfae_match_args names non-dots only when there are no dots", {
   # `+` has formals (e1, e2) — no dots, so positional args get named
-  expr <- quote(`+`(1, 2))
+  expr <- quote(`+`(1L, 2L))
   fmls <- pairlist(e1 = NULL, e2 = NULL)
   res <- .mfae_match_args(expr, fmls)
   expect_equal(names(res), c("", "e1", "e2"))
@@ -264,7 +264,7 @@ test_that("make_func_arg_explicit resolves path from rstudioapi when NULL", {
   local_mocked_bindings(
     readLines = function(con, ...) {
       expect_equal(con, "/mock/file.R")
-      character(0)
+      character(0L)
     },
     .package = "base"
   )
@@ -305,7 +305,7 @@ test_that("already explicit call leaves file unchanged", {
 
 test_that("empty file produces info message", {
   tf <- withr::local_tempfile(fileext = ".R")
-  writeLines(character(0), tf)
+  writeLines(character(0L), tf)
   expect_message(make_func_arg_explicit(tf), "No R expressions found")
 })
 

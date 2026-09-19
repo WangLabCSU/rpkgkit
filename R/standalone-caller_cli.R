@@ -40,7 +40,7 @@ get_caller_name <- function(offset = 2L) {
   # We subtract offset to find the target frame index.
   target_frame <- sys.nframe() - offset
 
-  if (target_frame < 1) {
+  if (target_frame < 1L) {
     return("global")
   }
 
@@ -79,10 +79,10 @@ add_caller_to_cli <- function(cli_func, offset = 2L) {
 
     messages <- list(...)
 
-    if (length(messages) > 0 && is.character(messages[[1]])) {
+    if (length(messages) > 0L && is.character(messages[[1L]])) {
       # Construct the prefix: [caller]:
       prefix <- paste0("[", caller_name, "]: ")
-      messages[[1]] <- paste0(prefix, messages[[1]])
+      messages[[1L]] <- paste0(prefix, messages[[1L]])
     }
 
     do.call(cli_func, messages)

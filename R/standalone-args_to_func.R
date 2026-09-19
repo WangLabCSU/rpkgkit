@@ -116,7 +116,7 @@ filter_args_for_func <- function(args_list, fun, keep = NULL) {
   fun_formals <- fun_formals[fun_formals != "..."]
 
   # Combine function formals with explicitly preserved arguments
-  keep_names <- if (is.null(keep)) character(0) else keep
+  keep_names <- if (is.null(keep)) character(0L) else keep
   valid_names <- unique(c(fun_formals, keep_names))
 
   # Filter args_list to retain only valid names
@@ -181,7 +181,7 @@ match_func_to_args <- function(
 ) {
   # Validate args_list has proper names when non-empty
   if (
-    length(args_list) > 0 &&
+    length(args_list) > 0L &&
       is.null(names(args_list)) ||
       !all(nzchar(names(args_list)))
   ) {
@@ -260,15 +260,15 @@ match_func_to_args <- function(
   if (top_one_only) {
     if (
       nrow(guess_df) >= 2L &&
-        guess_df$position_sum[1] == guess_df$position_sum[2] &&
-        guess_df$arg_count[1] == guess_df$arg_count[2]
+        guess_df$position_sum[1L] == guess_df$position_sum[2L] &&
+        guess_df$arg_count[1L] == guess_df$arg_count[2L]
     ) {
       rlang::warn(
         "Arguments provided is not enough to select a function, still return the first function but result may differ from expected"
       )
     }
     if (name_only) {
-      return(guess_df$func_name[1])
+      return(guess_df$func_name[1L])
     } else {
       return(dots_funcs[[guess_df$func_name[1L]]])
     }
