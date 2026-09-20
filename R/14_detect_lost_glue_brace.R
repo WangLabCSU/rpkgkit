@@ -109,7 +109,12 @@ detect_lost_glue_brace <- function(path = NULL, verbose = TRUE, ...) {
 parse_safely <- function(text, path) {
   tryCatch(
     parse(text = text, keep.source = TRUE),
-    error = function(e) cli::cli_abort("Could not parse {.path {path}}.")
+    error = function(e) {
+      cli::cli_abort(c(
+        "x" = "Could not parse {.path {path}}.)",
+        "i" = "{e$message}"
+      ))
+    }
   )
 }
 

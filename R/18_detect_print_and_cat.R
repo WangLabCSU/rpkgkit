@@ -37,18 +37,18 @@
 #' @param dirs Character vector of package-relative directories scanned by
 #'   \code{package_print_and_cat()}. Defaults to \code{"R"} and
 #'   \code{"tests/testthat"}.
-#' @param string_fns Character vector of function names whose return value
-#'   is treated as a diagnostic string. A `print()` whose first argument is
-#'   a string literal or a call to one of these functions is flagged as a
-#'   message. Extra names are appended to the default set unless
-#'   \code{replace_string_fns = TRUE}.
+#' @param pattern_fn_names Character vector of regular expressions matching function
+#'   names whose return value is treated as a diagnostic string. A `print()`
+#'   whose first argument is a string literal or calls a matching function is
+#'   flagged as a message. Extra patterns are appended to the default set unless
+#'   \code{replace_default_pattern = TRUE}.
 #'
-#'   To obtain the default set, use `rpkgkit:::DEFAULT_STRING_FNS`
-#' @param replace_string_fns Logical. If \code{TRUE}, \code{string_fns}
+#'   To obtain the default patterns, use `rpkgkit:::DEFAULT_PATTERN_FN_NAMES`.
+#' @param replace_default_pattern Logical. If \code{TRUE}, \code{pattern_fn_names}
 #'   fully replaces the default set instead of extending it.
-#' @param include_s3 Logical. If \code{TRUE}, also report `print()` calls
-#'   whose first argument is not string-like (S3 object printing). Default
-#'   \code{FALSE}.
+#' @param include_s3 Logical. If \code{TRUE}, report `print()` calls whose
+#'   first argument is not string-like (S3 object printing). Default
+#'   \code{TRUE}.
 #' @param include_refs Logical. If \code{TRUE}, also report bare
 #'   \code{print}/\code{cat} symbols (e.g. \code{lapply(x, print)}).
 #'   Default \code{FALSE}.
@@ -91,28 +91,19 @@ NULL
 detect_print_and_cat <- function(
   path = NULL,
   fix = FALSE,
-  string_fns = c(
-    "paste",
-    "paste0",
-    "sprintf",
-    "gettext",
-    "gettextf",
-    "ngettext",
-    "glue",
-    "str_c",
-    "str_glue",
-    "as.character",
-    "toString",
-    "strrep"
-  ),
-  replace_string_fns = FALSE,
-  include_s3 = FALSE,
+  pattern_fn_names = DEFAULT_PATTERN_FN_NAMES,
+  replace_default_pattern = FALSE,
+  include_s3 = TRUE,
   include_refs = FALSE,
   verbose = TRUE,
   ...
 ) {
   path <- path %||% rstudioapi::getActiveDocumentContext()$path
-  string_fns <- resolve_string_fns(string_fns, replace_string_fns)
+  # validate pattern
+  pattern_fn_names <- resolve_pattern_fn_names(
+    pattern_fn_names,
+    replace_default_pattern
+  )
 
   lines <- readLines(con = path, warn = FALSE)
   text <- paste(lines, collapse = "\n")
@@ -121,7 +112,7 @@ detect_print_and_cat <- function(
 
   calls_info <- find_print_cat_calls(
     parse_data = parse_data,
-    string_fns = string_fns,
+    pattern_fn_names = pattern_fn_names,
     include_s3 = include_s3,
     include_refs = include_refs
   )
@@ -185,30 +176,57 @@ detect_print_and_cat <- function(
 }
 
 
-DEFAULT_STRING_FNS <- c(
-  "paste",
-  "paste0",
-  "sprintf",
-  "gettext",
-  "gettextf",
-  "ngettext",
-  "glue",
-  "str_c",
-  "str_glue",
-  "as.character",
-  "toString",
-  "strrep"
+DEFAULT_PATTERN_FN_NAMES <- c(
+  "^paste$",
+  "^paste0$",
+  "^sprintf$",
+  "^gettext$",
+  "^gettextf$",
+  "^ngettext$",
+  "^glue$",
+  "^str_c$",
+  "^str_glue$",
+  "^as\\.character$",
+  "^as\\.numeric$",
+  "^as\\.factor$",
+  "^toString$",
+  "^strrep$"
 )
 
-resolve_string_fns <- function(string_fns, replace_string_fns = FALSE) {
-  if (is.null(string_fns) || length(string_fns) == 0L) {
-    return(DEFAULT_STRING_FNS)
+resolve_pattern_fn_names <- function(
+  pattern_fn_names = NULL,
+  replace_default_pattern = FALSE
+) {
+  if (is.null(pattern_fn_names) || length(pattern_fn_names) == 0L) {
+    return(DEFAULT_PATTERN_FN_NAMES)
   }
-  string_fns <- unique(as.character(string_fns))
-  if (isTRUE(replace_string_fns)) {
-    string_fns
+
+  pattern_fn_names <- unique(as.character(pattern_fn_names))
+
+  invalid <- !vapply(
+    pattern_fn_names,
+    function(x) {
+      tryCatch(
+        {
+          grepl(x, "", perl = TRUE)
+          TRUE
+        },
+        error = function(e) FALSE
+      )
+    },
+    logical(1)
+  )
+
+  if (any(invalid)) {
+    cli::cli_abort(
+      "`pattern_fn_names` contains invalid regular expressions: {.val {pattern_fn_names[invalid]}}"
+    )
+  }
+
+  if (isTRUE(replace_default_pattern)) {
+    pattern_fn_names
   } else {
-    unique(c(DEFAULT_STRING_FNS, string_fns))
+    unique(c(DEFAULT_PATTERN_FN_NAMES, pattern_fn_names))
   }
 }
 
@@ -220,7 +238,7 @@ get_children <- function(parse_data, id) {
   parse_data[parse_data$parent == id, , drop = FALSE]
 }
 
-is_stringy_expr <- function(parse_data, expr_id, string_fns) {
+is_stringy_expr <- function(parse_data, expr_id, pattern_fn_names) {
   kids <- get_children(parse_data, expr_id)
   if (nrow(kids) == 0L) {
     return(FALSE)
@@ -234,10 +252,14 @@ is_stringy_expr <- function(parse_data, expr_id, string_fns) {
     nkids <- get_children(parse_data, nid)
     fns <- c(fns, nkids$text[nkids$token == "SYMBOL_FUNCTION_CALL"])
   }
-  any(fns %in% string_fns)
+  any(vapply(
+    pattern_fn_names,
+    function(pattern) any(grepl(pattern = pattern, x = fns)),
+    logical(1L)
+  ))
 }
 
-classify_print_cat <- function(parse_data, func_row, string_fns) {
+classify_print_cat <- function(parse_data, func_row, pattern_fn_names) {
   function_expr <- parse_data[parse_data$id == func_row$parent, , drop = FALSE]
   children <- get_children(parse_data, function_expr$parent)
   fn <- func_row$text
@@ -251,7 +273,7 @@ classify_print_cat <- function(parse_data, func_row, string_fns) {
   if (length(expr_ids) < 2L) {
     return("empty")
   }
-  if (is_stringy_expr(parse_data, expr_ids[[2L]], string_fns)) {
+  if (is_stringy_expr(parse_data, expr_ids[[2L]], pattern_fn_names)) {
     "message"
   } else {
     "s3-print"
@@ -260,8 +282,8 @@ classify_print_cat <- function(parse_data, func_row, string_fns) {
 
 find_print_cat_calls <- function(
   parse_data,
-  string_fns,
-  include_s3 = FALSE,
+  pattern_fn_names,
+  include_s3 = TRUE,
   include_refs = FALSE
 ) {
   direct <- parse_data[
@@ -270,7 +292,7 @@ find_print_cat_calls <- function(
   ]
   out <- list()
   for (i in seq_len(nrow(direct))) {
-    kind <- classify_print_cat(parse_data, direct[i, ], string_fns)
+    kind <- classify_print_cat(parse_data, direct[i, ], pattern_fn_names)
     if (identical(kind, "s3-print") && !include_s3) {
       next
     }

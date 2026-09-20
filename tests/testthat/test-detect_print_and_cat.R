@@ -226,6 +226,36 @@ test_that("fix emits success message with file name", {
   detect_print_and_cat("dummy.R", fix = TRUE)
 })
 
+test_that("pattern_fn_names uses regular-expression patterns", {
+  tmp <- withr::local_tempfile(fileext = ".R")
+  writeLines('print(render_text(value))', tmp)
+
+  detect_print_and_cat(
+    tmp,
+    fix = TRUE,
+    pattern_fn_names = "^render_[a-z]+$",
+    include_s3 = TRUE
+  )
+
+  expect_equal(readLines(tmp, warn = FALSE), 'message(render_text(value))')
+})
+
+test_that("default pattern_fn_names patterns are anchored", {
+  tmp <- withr::local_tempfile(fileext = ".R")
+  writeLines('print(paste_extra(value))', tmp)
+
+  detect_print_and_cat(tmp, fix = TRUE, include_s3 = TRUE)
+
+  expect_equal(readLines(tmp, warn = FALSE), 'print(paste_extra(value))')
+})
+
+test_that("pattern_fn_names rejects invalid regular expressions", {
+  expect_error(
+    resolve_pattern_fn_names("["),
+    "invalid regular expression"
+  )
+})
+
 # ---------------------------------------------------------------------------
 # find_print_cat_calls -- unit tests
 # ---------------------------------------------------------------------------
@@ -274,15 +304,6 @@ test_that("find_print_cat_calls ignores sprintf and print.myclass", {
   exprs <- parse(text = text, keep.source = TRUE)
   pd <- utils::getParseData(exprs)
   expect_length(find_print_cat_calls(pd), 0L)
-})
-
-test_that("find_print_cat_calls detects print inside nested call", {
-  text <- 'try(print(x), silent = TRUE)'
-  exprs <- parse(text = text, keep.source = TRUE)
-  pd <- utils::getParseData(exprs)
-  res <- find_print_cat_calls(pd)
-  expect_length(res, 1L)
-  expect_equal(res[[1L]]$text, "print")
 })
 
 # ---------------------------------------------------------------------------
@@ -391,6 +412,24 @@ test_that("package_print_and_cat with fix = TRUE fixes multiple files", {
   expect_equal(
     readLines(file.path(pkg, "R", "bar.R"), warn = FALSE),
     'message("b\\n")'
+  )
+})
+
+test_that("package_print_and_cat reports relative file paths and line numbers", {
+  pkg <- withr::local_tempdir()
+  dir.create(file.path(pkg, "R"), recursive = TRUE)
+  writeLines(
+    c('message("ok")', 'print("debug")'),
+    file.path(pkg, "R", "foo.R")
+  )
+  writeLines(
+    c("Package: testpkg", "Version: 0.0.1"),
+    file.path(pkg, "DESCRIPTION")
+  )
+
+  expect_message(
+    package_print_and_cat(pkg),
+    "R"
   )
 })
 

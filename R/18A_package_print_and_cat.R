@@ -62,10 +62,10 @@ package_print_and_cat <- function(
 
   for (i in seq_along(files)) {
     cli::cli_progress_update(status = basename(files[[i]]))
-    results[[i]] <- detect_print_and_cat(
+    results[[i]] <- package_detect_print_and_cat(
       path = files[[i]],
+      package_path = path,
       fix = fix,
-      verbose = FALSE,
       ...
     )
   }
@@ -76,13 +76,85 @@ package_print_and_cat <- function(
   n_fail <- n - n_ok
   if (n_fail == 0L) {
     cli::cli_alert_success(
-      "All {n_ok} file{?s} have no {.fn print} or {.fn cat} calls."
+      "All {.val {n_ok}} file{?s} have no {.fn print} or {.fn cat} calls."
     )
   } else {
     cli::cli_alert_danger(
-      "Found {.fn print}/{.fn cat} calls in {n_fail} of {n} file{?s}."
+      "Found {.fn print}/{.fn cat} calls in {.val {n_fail}} of {.val {n}} file{?s}."
     )
   }
 
   invisible(n_fail == 0L)
+}
+
+package_detect_print_and_cat <- function(
+  path,
+  package_path,
+  fix,
+  pattern_fn_names = DEFAULT_PATTERN_FN_NAMES,
+  replace_default_pattern = FALSE,
+  include_s3 = TRUE,
+  include_refs = FALSE,
+  ...
+) {
+  lines <- readLines(con = path, warn = FALSE)
+  exprs <- parse_safely(text = paste(lines, collapse = "\n"), path = path)
+  calls_info <- find_print_cat_calls(
+    parse_data = utils::getParseData(exprs),
+    pattern_fn_names = resolve_pattern_fn_names(
+      pattern_fn_names,
+      replace_default_pattern
+    ),
+    include_s3 = include_s3,
+    include_refs = include_refs
+  )
+
+  if (length(calls_info) == 0L) {
+    return(TRUE)
+  }
+
+  report_lines <- lines
+  if (fix) {
+    to_fix <- Filter(
+      f = function(x) x$type == "call" && identical(x$kind, "message"),
+      x = calls_info
+    )
+    if (length(to_fix) > 0L) {
+      ord <- order(
+        vapply(to_fix, `[[`, integer(1L), "line1"),
+        vapply(to_fix, `[[`, integer(1L), "col1"),
+        decreasing = TRUE
+      )
+      for (info in to_fix[ord]) {
+        lines[[info$line1]] <- replace_fn_at(
+          line = lines[[info$line1]],
+          col1 = info$col1,
+          col2 = info$col2,
+          new = "message"
+        )
+      }
+      writeLines(text = lines, con = path)
+    }
+  }
+
+  relative_path <- substring(path, nchar(package_path) + 2L)
+  for (info in calls_info) {
+    caret_width <- nchar(x = info$text) + if (info$type == "call") 1L else 0L
+    caret <- paste0(
+      strrep(x = " ", times = info$col1 - 1L),
+      strrep(x = "^", times = caret_width)
+    )
+    tag <- if (!is.null(info$kind)) paste0(" [", info$kind, "]") else ""
+    cli::cli_text(
+      "{.file {relative_path}}: {.val {info$line1}}:"
+    )
+    message(paste0(
+      report_lines[[info$line1]],
+      cli::col_grey(tag),
+      "\n",
+      caret
+    ))
+  }
+
+  FALSE
 }

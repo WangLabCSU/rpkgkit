@@ -47,3 +47,5 @@ inst/actions/*/lib/
 # !inst/actions/*/action.yml
 .DS_Store
 .quarto
+/.uvr/library/
+/.uvr/activate*

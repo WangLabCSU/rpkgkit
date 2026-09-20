@@ -17,10 +17,9 @@ package_print_and_cat(
 detect_print_and_cat(
   path = NULL,
   fix = FALSE,
-  string_fns = c("paste", "paste0", "sprintf", "gettext", "gettextf", "ngettext", "glue",
-    "str_c", "str_glue", "as.character", "toString", "strrep"),
-  replace_string_fns = FALSE,
-  include_s3 = FALSE,
+  pattern_fn_names = DEFAULT_PATTERN_FN_NAMES,
+  replace_default_pattern = FALSE,
+  include_s3 = TRUE,
   include_refs = FALSE,
   verbose = TRUE,
   ...
@@ -48,20 +47,20 @@ default directories.}
 
 \item{...}{Additional arguments passed to utils::methods (currently unused).}
 
-\item{string_fns}{Character vector of function names whose return value
-is treated as a diagnostic string. A \code{print()} whose first argument is
-a string literal or a call to one of these functions is flagged as a
-message. Extra names are appended to the default set unless
-\code{replace_string_fns = TRUE}.
+\item{pattern_fn_names}{Character vector of regular expressions matching function
+names whose return value is treated as a diagnostic string. A \code{print()}
+whose first argument is a string literal or calls a matching function is
+flagged as a message. Extra patterns are appended to the default set unless
+\code{replace_default_pattern = TRUE}.
 
-To obtain the default set, use \code{rpkgkit:::DEFAULT_STRING_FNS}}
+To obtain the default patterns, use \code{rpkgkit:::DEFAULT_PATTERN_FN_NAMES}.}
 
-\item{replace_string_fns}{Logical. If \code{TRUE}, \code{string_fns}
+\item{replace_default_pattern}{Logical. If \code{TRUE}, \code{pattern_fn_names}
 fully replaces the default set instead of extending it.}
 
-\item{include_s3}{Logical. If \code{TRUE}, also report \code{print()} calls
-whose first argument is not string-like (S3 object printing). Default
-\code{FALSE}.}
+\item{include_s3}{Logical. If \code{TRUE}, report \code{print()} calls whose
+first argument is not string-like (S3 object printing). Default
+\code{TRUE}.}
 
 \item{include_refs}{Logical. If \code{TRUE}, also report bare
 \code{print}/\code{cat} symbols (e.g. \code{lapply(x, print)}).
