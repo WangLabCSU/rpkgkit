@@ -19,9 +19,24 @@ other identifiers (e.g. `sprintf` or `print.myclass`).
 ## Usage
 
 ``` r
-package_print_and_cat(path = NULL, test_included = TRUE, fix = FALSE, ...)
+package_print_and_cat(
+  path = NULL,
+  dirs = c("R", file.path("tests", "testthat")),
+  test_included = lifecycle::deprecated(),
+  fix = FALSE,
+  ...
+)
 
-detect_print_and_cat(path = NULL, fix = FALSE, ...)
+detect_print_and_cat(
+  path = NULL,
+  fix = FALSE,
+  pattern_fn_names = DEFAULT_PATTERN_FN_NAMES,
+  replace_default_pattern = FALSE,
+  include_s3 = TRUE,
+  include_refs = FALSE,
+  verbose = TRUE,
+  ...
+)
 ```
 
 ## Arguments
@@ -35,10 +50,17 @@ detect_print_and_cat(path = NULL, fix = FALSE, ...)
   package. If `NULL`, the function walks up from the active document to
   find the package root.
 
+- dirs:
+
+  Character vector of package-relative directories scanned by
+  `package_print_and_cat()`. Defaults to `"R"` and `"tests/testthat"`.
+
 - test_included:
 
-  Logical, used only by `package_print_and_cat()`. If `TRUE` (the
-  default), `.R` files under `tests/testthat/` are also scanned.
+  **\[deprecated\]**. Logical indicating whether to scan
+  `tests/testthat/` in addition to `R/`. Use `dirs` instead. When
+  supplied, `FALSE` scans only `R/`; `TRUE` scans both default
+  directories.
 
 - fix:
 
@@ -49,16 +71,43 @@ detect_print_and_cat(path = NULL, fix = FALSE, ...)
 
   Additional arguments passed to utils::methods (currently unused).
 
+- pattern_fn_names:
+
+  Character vector of regular expressions matching function names whose
+  return value is treated as a diagnostic string. A
+  [`print()`](https://rdrr.io/r/base/print.html) whose first argument is
+  a string literal or calls a matching function is flagged as a message.
+  Extra patterns are appended to the default set unless
+  `replace_default_pattern = TRUE`.
+
+  To obtain the default patterns, use
+  `rpkgkit:::DEFAULT_PATTERN_FN_NAMES`.
+
+- replace_default_pattern:
+
+  Logical. If `TRUE`, `pattern_fn_names` fully replaces the default set
+  instead of extending it.
+
+- include_s3:
+
+  Logical. If `TRUE`, report
+  [`print()`](https://rdrr.io/r/base/print.html) calls whose first
+  argument is not string-like (S3 object printing). Default `TRUE`.
+
+- include_refs:
+
+  Logical. If `TRUE`, also report bare `print`/`cat` symbols (e.g.
+  `lapply(x, print)`). Default `FALSE`.
+
+- verbose:
+
+  Whether to output information in console
+
 ## Value
 
 Invisibly returns `TRUE` if no calls were found, `FALSE` otherwise.
 Side-effect messages and caret markers are emitted via cli and
 [`message`](https://rdrr.io/r/base/message.html).
-
-## Functions
-
-- `package_print_and_cat()`: Scans all `.R` files in an R package (and
-  optionally `tests/testthat/`), aggregated with per-file reporting.
 
 ## Single file vs package scope
 
@@ -81,18 +130,16 @@ Side-effect messages and caret markers are emitted via cli and
 tmp <- tempfile(fileext = ".R")
 writeLines('print("hello")', tmp)
 detect_print_and_cat(tmp)
-#> print("hello")
+#> print("hello") [message]
 #> ^^^^^^
-#> ✖ Found 1 unsupported call on line 
-#> 1.
+#> ✖ Found 1 unsupported call on line 1.
 
 # --- With auto-fix ---
 detect_print_and_cat(tmp, fix = TRUE)
-#> ✔ Fixed 1 line in file19df48a57784.R.
-#> print("hello")
+#> ✔ Fixed 1 line in file5f0a2f37e418.R.
+#> print("hello") [message]
 #> ^^^^^^
-#> ✖ Found 1 unsupported call on line 
-#> 1.
+#> ✖ Found 1 unsupported call on line 1.
 
 # --- Entire package ---
 pkg <- tempfile()
@@ -101,12 +148,9 @@ writeLines('cat("debug\\n")', file.path(pkg, "R", "example.R"))
 writeLines(c("Package: example", "Version: 0.0.1"),
            file.path(pkg, "DESCRIPTION"))
 package_print_and_cat(pkg)
-#> ℹ Scanning 1 file...
-#> ✖ Found `print()`/`cat()` calls in 1 of 1 file:
-#> example.R
-#> Line 1:
-#>     cat("debug\n")
-#>  ^^^^
-#> 
+#> R/example.R: 1:
+#> cat("debug\n") [message]
+#> ^^^^
+#> ✖ Found `print()`/`cat()` calls in 1 of 1 file.
 # }
 ```

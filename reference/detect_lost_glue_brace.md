@@ -1,53 +1,79 @@
 # Detect Lost Glue Brace in `glue` and `cli` Expressions
 
 Check whether `{` and `}` are balanced in all `glue()` / `glue_data()`
-and `cli_*()` string arguments within an R file. The file is parsed into
-an AST, then each string literal that is an argument to a target
-function is checked with a stack-based brace matcher. Any mismatches are
-reported with line number and a visual caret (`^^^^`) marker under the
-problematic region.
+and `cli_*()` string arguments within R source files. Each file is
+parsed into an AST, then every string literal passed to a target
+function is checked with a stack-based brace matcher. Any mismatch is
+reported with its line number and a visual caret (`^^^^`) marker under
+the problematic region.
 
 ## Usage
 
 ``` r
-package_lost_glue_brace(path = NULL, test_included = TRUE, ...)
+package_lost_glue_brace(
+  path = NULL,
+  dirs = c("R", file.path("tests", "testthat")),
+  test_included = lifecycle::deprecated(),
+  ...
+)
 
-detect_lost_glue_brace(path = NULL, ...)
+detect_lost_glue_brace(path = NULL, verbose = TRUE, ...)
 ```
 
 ## Arguments
 
 - path:
 
-  A character string specifying the path to the R file to inspect. If
-  `NULL` and RStudio is available, the currently active document path is
-  used.
+  For `detect_lost_glue_brace()`: path to an R file. If `NULL` and
+  RStudio is available, the active document path is used.
+
+  For `package_lost_glue_brace()`: path to the root directory of an R
+  package. Defaults to the current directory.
+
+- dirs:
+
+  Character vector of package-relative directories scanned by
+  `package_lost_glue_brace()`. Defaults to `"R"` and `"tests/testthat"`.
 
 - test_included:
 
-  Whether to include test (`test/testthat/*`) files in the check.
+  **\[deprecated\]**. Logical indicating whether to scan
+  `tests/testthat/` in addition to `R/`. Use `dirs` instead. When
+  supplied, `FALSE` scans only `R/`; `TRUE` scans both default
+  directories.
 
 - ...:
 
-  unused
+  Unused.
+
+- verbose:
+
+  Whether to emit detection results to the console. Package scanning
+  disables this and supplies its own progress and summary output.
 
 ## Value
 
 Invisibly returns `TRUE` if all expressions are balanced, `FALSE`
-otherwise. Side-effect messages are emitted via
-[cli](https://cli.r-lib.org/reference/cli.html).
+otherwise.
 
-## Functions
+## Single file vs package scope
 
-- `package_lost_glue_brace()`: Scans all `.R` files in an R package (and
-  optionally `tests/testthat/`), aggregated with per-file reporting.
+- `detect_lost_glue_brace()`:
+
+  Operates on one R file. When `path` is `NULL` and RStudio is
+  available, the currently active document path is used.
+
+- `package_lost_glue_brace()`:
+
+  Scans `.R` files under the configured package-relative directories. By
+  default, these are `R/` and `tests/testthat/`.
 
 ## Examples
 
 ``` r
 # \donttest{
-file <- tempfile()
-writeLines("glue(\"{a\")", file)
+file <- tempfile(fileext = ".R")
+writeLines('glue("{a")', file)
 detect_lost_glue_brace(file)
 #> glue("{a")
 #>       ^^

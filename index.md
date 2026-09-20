@@ -483,7 +483,7 @@ cat(readLines(tf), sep = "\n")
 # x <- seq_len(10L) # length 10
 ```
 
-- [`package_convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/package_convert_int_literals.md) -
+- [`package_convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.md) -
   Apply
   [`convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.md)
   to every `.R` / `.r` file under the `R/` and `tests/` directories of a

@@ -5,7 +5,7 @@
 ### BUG FIXES
 
 - [`convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.md),
-  [`package_convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/package_convert_int_literals.md),
+  [`package_convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.md),
   and
   [`convert_func_syntax()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_func_syntax.md)
   now forward `...` to

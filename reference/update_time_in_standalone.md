@@ -27,6 +27,6 @@ Invisibly returns a character vector of updated file paths.
 ``` r
 # \donttest{
 update_time_in_standalone(tempdir())
-#> No standalone files found.
+#> ✔ Updated last-updated to "2026-09-20" in 1 file.
 # }
 ```

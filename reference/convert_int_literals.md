@@ -1,12 +1,24 @@
 # Add Explicit Integer Suffix `L` to Integer Literals
 
-Converts bare integer literals in an R file to the explicit integer form
-with an `L` suffix, e.g. `seq_len(10)` becomes `seq_len(10L)`. Strings
-and comments are left unchanged.
+Converts bare integer literals to explicit integer form with an `L`
+suffix, e.g. `seq_len(10)` becomes `seq_len(10L)`. Strings and comments
+are left unchanged.
+
+`convert_int_literals()` operates on one R file. When `path` is `NULL`
+and RStudio is available, it uses the currently active document.
+`package_convert_int_literals()` walks selected directories of an R
+package and applies the same conversion to every `.R` / `.r` file found.
 
 ## Usage
 
 ``` r
+package_convert_int_literals(
+  path = NULL,
+  dirs = c("R", "tests"),
+  recursive = TRUE,
+  ...
+)
+
 convert_int_literals(path = NULL, verbose = TRUE, ...)
 ```
 
@@ -14,21 +26,38 @@ convert_int_literals(path = NULL, verbose = TRUE, ...)
 
 - path:
 
-  A character string specifying the path to the R file to modify. If
-  `NULL` and RStudio is available, the currently active document path is
-  used.
+  For `convert_int_literals()`, a character string specifying the R file
+  to modify. If `NULL` and RStudio is available, the currently active
+  document path is used.
 
-- verbose:
+  For `package_convert_int_literals()`, a character string specifying
+  the package root. If `NULL`, the current working directory is used.
 
-  Logical; enable or disable per-file messages. Default `TRUE`.
+- dirs:
+
+  Character vector of subdirectories relative to `path` to search. Used
+  only by `package_convert_int_literals()`. Defaults to
+  `c("R", "tests")`.
+
+- recursive:
+
+  Logical; recurse into subdirectories. Used only by
+  `package_convert_int_literals()`. Default `TRUE`.
 
 - ...:
 
   Additional arguments. Currently unused and must be empty.
 
+- verbose:
+
+  Logical; enable or disable per-file messages. Used only by
+  `convert_int_literals()`. Default `TRUE`.
+
 ## Value
 
-Invisibly returns the path to the modified file.
+`convert_int_literals()` invisibly returns the modified file path.
+`package_convert_int_literals()` invisibly returns a character vector of
+modified file paths.
 
 ## Details
 
@@ -54,12 +83,38 @@ and it is **not**:
 
 ``` r
 # \donttest{
+# --- Single file ---
 temp <- tempfile(fileext = ".R")
 writeLines("tmp <- seq_len(10)", temp)
 convert_int_literals(temp)
-#> ✔ Added explicit integer suffixes in /tmp/RtmpJHVjaU/file19df92bb10e.R
+#> ✔ Added explicit integer suffixes in /tmp/Rtmp7tuIfB/file5f0a5fa7af14.R
 readLines(temp)
 #> [1] "tmp <- seq_len(10L)"
 # "tmp <- seq_len(10L)"
+
+# --- Entire package ---
+tmp_pkg <- tempdir()
+usethis::create_package(tmp_pkg, open = FALSE)
+#> ✔ Setting active project to "/tmp/Rtmp7tuIfB".
+#> ✔ Creating R/.
+#> ✔ Writing DESCRIPTION.
+#> Package: Rtmp7tuIfB
+#> Title: What the Package Does (One Line, Title Case)
+#> Version: 0.0.0.9000
+#> Authors@R (parsed):
+#>     * First Last <first.last@example.com> [aut, cre]
+#> Description: What the package does (one paragraph).
+#> License: `use_mit_license()`, `use_gpl3_license()` or friends to
+#>     pick a license
+#> Config/roxygen2/version: 8.1.0
+#> Encoding: UTF-8
+#> Roxygen: list(markdown = TRUE)
+#> ✔ Writing NAMESPACE.
+#> ✔ Setting active project to "<no active project>".
+writeLines("foo <- seq_len(42)", file.path(tmp_pkg, "R/foo.R"))
+package_convert_int_literals(tmp_pkg)
+#> ✔ Processed 1 file, updated 1
+readLines(file.path(tmp_pkg, "R/foo.R"))
+#> [1] "foo <- seq_len(42L)"
 # }
 ```
