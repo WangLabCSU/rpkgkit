@@ -8,12 +8,13 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN-status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
 [![R-CMD-check](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml)
-[![Devel-version](https://img.shields.io/badge/devel%20version-0.1.9-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
+[![Devel-version](https://img.shields.io/badge/devel%20version-0.1.15-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
 [![Codesize](https://img.shields.io/github/languages/code-size/WangLabCSU/rpkgkit.svg)](https://github.com/WangLabCSU/rpkgkit)
 [![Codecov-testcoverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
 [![Ask-DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WangLabCSU/rpkgkit)
 [![Dependencies](https://tinyverse.netlify.app/badge/rpkgkit)](https://cran.r-project.org/package=rpkgkit)
-[![English](https://img.shields.io/badge/README-English-blue)](../README.md)
+[![English](https://img.shields.io/badge/README-English-blue)](../../README.md)
+[![Español](https://img.shields.io/badge/README-Espa%C3%B1ol-blue)](README.es.md)
 [![简体中文](https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue)]()
 <!-- badges: end -->
 
@@ -27,6 +28,12 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 
 ``` r
 install.packages("rpkgkit")
+```
+
+从 R-universe 安装：
+
+``` r
+install.packages("rpkgkit", repos = c("https://wanglabcsu.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
 从 GitHub 安装：
@@ -416,6 +423,40 @@ message(readLines(f), sep = "\n")
 # f <- function(x) x^2
 ```
 
+- `convert_knitr_chunk_header()` — 将 R Markdown 文件中的旧式 knitr 代码块头转换为当前语法。
+
+``` r
+tf <- tempfile(fileext = ".Rmd")
+writeLines(
+  c("```{r, echo=TRUE, fig.width=10}", "x <- 1", "```"),
+  tf
+)
+convert_knitr_chunk_header(tf)
+cat(readLines(tf), sep = "\n")
+# ```{r}
+# #| echo = TRUE,
+# #| fig.width = 10
+# x <- 1
+# ```
+```
+
+- `convert_int_literals()` — 为 R 文件中的普通整数字面量添加显式整数后缀 `L`，例如将 `seq_len(10)` 转换为 `seq_len(10L)`。字符串、注释、已有后缀的字面量、浮点数、科学计数法和复数字面量保持不变。
+
+``` r
+tf <- tempfile(fileext = ".R")
+writeLines("x <- seq_len(10) # length 10", tf)
+convert_int_literals(tf)
+cat(readLines(tf), sep = "\n")
+# x <- seq_len(10L) # length 10
+```
+
+- `package_convert_int_literals()` — 对包中 `R/` 和 `tests/` 目录下的所有 `.R` / `.r` 文件应用 `convert_int_literals()`，并返回已修改文件的路径。
+
+``` r
+package_convert_int_literals(".")
+# ✔ Processed 12 files, updated 3
+```
+
 ### R 包维护
 
 - `use_zzz()` — 在 `R/` 目录下创建 `{pkgname}-package.R` 文件，包含 `.onLoad`、`.onAttach`、`%||%` 以及包描述信息。类似于 `usethis::use_package_doc()` 但功能更强大。
@@ -532,12 +573,20 @@ badge_translated_by_ai("es")
 # 从文件转换
 tmp <- tempfile()
 writeLines("foo <- \\() message('滚滚长江东逝水')", tmp)
+tools::showNonASCIIfile(tmp)
+# 1: foo <- \\() message('<e6><bb><9a><e6><bb><9a><e9><95><bf><e6><b1><9f><e4><b8><9c><e9><80><9d><e6><b0><b4>')
+
 convert_nonascii_code(tmp)
 # ☐ Overwrite file /tmp/Rtmp72DzrV/file1e2ec6cc2d66c with converted content? (yes/No/cancel) 
 # yes
 # ℹ Converted content written to /tmp/Rtmp72DzrV/file1e2ec6cc2d66c
 message(readLines(tmp))
 # foo <- \() message('\u6eda\u6eda\u957f\u6c5f\u4e1c\u901d\u6c34')
+
+tools::showNonASCIIfile(tmp) # empty
+source(tmp)
+foo()
+# 滚滚长江东逝水
 ```
 
 ``` r

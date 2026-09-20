@@ -8,14 +8,14 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN-status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
 [![R-CMD-check](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml)
-[![Devel-version](https://img.shields.io/badge/devel%20version-0.1.9-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
+[![Devel-version](https://img.shields.io/badge/devel%20version-0.1.15-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
 [![Codesize](https://img.shields.io/github/languages/code-size/WangLabCSU/rpkgkit.svg)](https://github.com/WangLabCSU/rpkgkit)
 [![Codecov-testcoverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
 [![Ask-DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WangLabCSU/rpkgkit)
 [![Dependencies](https://tinyverse.netlify.app/badge/rpkgkit)](https://cran.r-project.org/package=rpkgkit)
-[![English](https://img.shields.io/badge/README-English-blue)](../README.md)
+[![English](https://img.shields.io/badge/README-English-blue)](../../README.md)
 [![Español](https://img.shields.io/badge/README-Espa%C3%B1ol-blue)]()
-[![简体中文](https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue)](inst/translations/README.zh-cn.md)
+[![简体中文](https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue)](README.zh-cn.md)
 <!-- badges: end -->
 
 ## Prácticas Recomendadas
@@ -28,6 +28,12 @@ Desde CRAN:
 
 ``` r
 install.packages("rpkgkit")
+```
+
+Desde R-universe:
+
+``` r
+install.packages("rpkgkit", repos = c("https://wanglabcsu.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
 Desde GitHub:
@@ -417,6 +423,40 @@ message(readLines(f), sep = "\n")
 # f <- function(x) x^2
 ```
 
+- `convert_knitr_chunk_header()` — Convierte las cabeceras de bloque knitr heredadas de archivos R Markdown a la sintaxis de cabecera actual.
+
+``` r
+tf <- tempfile(fileext = ".Rmd")
+writeLines(
+  c("```{r, echo=TRUE, fig.width=10}", "x <- 1", "```"),
+  tf
+)
+convert_knitr_chunk_header(tf)
+cat(readLines(tf), sep = "\n")
+# ```{r}
+# #| echo = TRUE,
+# #| fig.width = 10
+# x <- 1
+# ```
+```
+
+- `convert_int_literals()` — Añade el sufijo de entero explícito `L` a los literales enteros sin sufijo de un archivo R; por ejemplo, convierte `seq_len(10)` en `seq_len(10L)`. Las cadenas, los comentarios y los literales ya sufijados, de punto flotante, notación científica y complejos no se modifican.
+
+``` r
+tf <- tempfile(fileext = ".R")
+writeLines("x <- seq_len(10) # length 10", tf)
+convert_int_literals(tf)
+cat(readLines(tf), sep = "\n")
+# x <- seq_len(10L) # length 10
+```
+
+- `package_convert_int_literals()` — Aplica `convert_int_literals()` a todos los archivos `.R` / `.r` de los directorios `R/` y `tests/` de un paquete. Devuelve las rutas de los archivos modificados.
+
+``` r
+package_convert_int_literals(".")
+# ✔ Processed 12 files, updated 3
+```
+
 ### Mantenimiento de Paquetes R
 
 - `use_zzz()` — Crea el archivo `{pkgname}-package.R` en la carpeta `R/`, con `.onLoad`, `.onAttach`, `%||%` y la descripción del paquete. Similar a `usethis::use_package_doc()` pero más potente.
@@ -533,12 +573,20 @@ badge_translated_by_ai("es")
 # desde un archivo
 tmp <- tempfile()
 writeLines("foo <- \\() message('En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor.')", tmp)
+tools::showNonASCIIfile(tmp)
+# 1: foo <- \\() message('<...>')
+
 convert_nonascii_code(tmp)
 # ☐ Overwrite file /tmp/Rtmp72DzrV/file1e2ec6cc2d66c with converted content? (yes/No/cancel) 
 # yes
 # ℹ Converted content written to /tmp/Rtmp72DzrV/file1e2ec6cc2d66c
 message(readLines(tmp))
 # foo <- \() message('En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que viv\u00eda un hidalgo de los de lanza en astillero, adarga antigua, roc\u00edn flaco y galgo corredor.')
+
+tools::showNonASCIIfile(tmp) # empty
+source(tmp)
+foo()
+# En un lugar de la Mancha, de cuyo nombre no quiero acordarme, no ha mucho tiempo que vivía un hidalgo de los de lanza en astillero, adarga antigua, rocín flaco y galgo corredor.
 ```
 
 ``` r
