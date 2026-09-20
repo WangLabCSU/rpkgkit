@@ -6,9 +6,25 @@
 \alias{detect_print_and_cat}
 \title{Detect \code{print()} and \code{cat()} Calls (CRAN-Unsafe)}
 \usage{
-package_print_and_cat(path = NULL, test_included = TRUE, fix = FALSE, ...)
+package_print_and_cat(
+  path = NULL,
+  dirs = c("R", file.path("tests", "testthat")),
+  test_included = lifecycle::deprecated(),
+  fix = FALSE,
+  ...
+)
 
-detect_print_and_cat(path = NULL, fix = FALSE, ...)
+detect_print_and_cat(
+  path = NULL,
+  fix = FALSE,
+  string_fns = c("paste", "paste0", "sprintf", "gettext", "gettextf", "ngettext", "glue",
+    "str_c", "str_glue", "as.character", "toString", "strrep"),
+  replace_string_fns = FALSE,
+  include_s3 = FALSE,
+  include_refs = FALSE,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{path}{For \code{detect_print_and_cat()}: path to an \R file. If
@@ -18,14 +34,40 @@ For \code{package_print_and_cat()}: path to the root directory of an
 \R package. If \code{NULL}, the function walks up from the active document
 to find the package root.}
 
-\item{test_included}{Logical, used only by
-\code{package_print_and_cat()}. If \code{TRUE} (the default), \code{.R}
-files under \code{tests/testthat/} are also scanned.}
+\item{dirs}{Character vector of package-relative directories scanned by
+\code{package_print_and_cat()}. Defaults to \code{"R"} and
+\code{"tests/testthat"}.}
+
+\item{test_included}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}. Logical indicating whether to scan
+\code{tests/testthat/} in addition to \code{R/}. Use \code{dirs} instead.
+When supplied, \code{FALSE} scans only \code{R/}; \code{TRUE} scans both
+default directories.}
 
 \item{fix}{Logical. If \code{TRUE}, replace \code{print(}/\code{cat(} with
 \code{message(} directly in the source file(s). Default is \code{FALSE}.}
 
 \item{...}{Additional arguments passed to utils::methods (currently unused).}
+
+\item{string_fns}{Character vector of function names whose return value
+is treated as a diagnostic string. A \code{print()} whose first argument is
+a string literal or a call to one of these functions is flagged as a
+message. Extra names are appended to the default set unless
+\code{replace_string_fns = TRUE}.
+
+To obtain the default set, use \code{rpkgkit:::DEFAULT_STRING_FNS}}
+
+\item{replace_string_fns}{Logical. If \code{TRUE}, \code{string_fns}
+fully replaces the default set instead of extending it.}
+
+\item{include_s3}{Logical. If \code{TRUE}, also report \code{print()} calls
+whose first argument is not string-like (S3 object printing). Default
+\code{FALSE}.}
+
+\item{include_refs}{Logical. If \code{TRUE}, also report bare
+\code{print}/\code{cat} symbols (e.g. \code{lapply(x, print)}).
+Default \code{FALSE}.}
+
+\item{verbose}{Whether to output information in console}
 }
 \value{
 Invisibly returns \code{TRUE} if no calls were found, \code{FALSE}
@@ -47,12 +89,6 @@ When \code{fix = TRUE}, the function performs a simple text replacement of
 The replacement uses word-boundary matching to avoid false positives inside
 other identifiers (e.g. \code{sprintf} or \code{print.myclass}).
 }
-\section{Functions}{
-\itemize{
-\item \code{package_print_and_cat()}: Scans all \code{.R} files in an R package
-(and optionally \code{tests/testthat/}), aggregated with per-file reporting.
-
-}}
 \section{Single file vs package scope}{
 
 \describe{

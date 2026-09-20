@@ -119,7 +119,7 @@ test_that("print passed as function reference is detected", {
     readLines = function(con, ...) 'lapply(1:3, print)',
     .package = "base"
   )
-  expect_false(detect_print_and_cat("dummy.R"))
+  expect_false(detect_print_and_cat("dummy.R", include_refs = TRUE))
 })
 
 test_that("empty file returns TRUE", {
@@ -406,45 +406,4 @@ test_that("package_print_and_cat reports multiple files with issues", {
   )
 
   expect_false(package_print_and_cat(pkg))
-})
-
-# ---------------------------------------------------------------------------
-# scan_file_print_cat -- unit tests
-# ---------------------------------------------------------------------------
-
-test_that("scan_file_print_cat returns ok=TRUE for clean file", {
-  tmp <- withr::local_tempfile(fileext = ".R")
-  writeLines('message("ok")', tmp)
-
-  res <- scan_file_print_cat(tmp)
-  expect_true(res$ok)
-  expect_length(res$errors, 0L)
-})
-
-test_that("scan_file_print_cat returns ok=FALSE for file with print()", {
-  tmp <- withr::local_tempfile(fileext = ".R")
-  writeLines('print("bad")', tmp)
-
-  res <- scan_file_print_cat(tmp)
-  expect_false(res$ok)
-  expect_length(res$errors, 1L)
-  expect_equal(res$errors[[1L]]$line, 1L)
-})
-
-test_that("scan_file_print_cat with fix = TRUE modifies file", {
-  tmp <- withr::local_tempfile(fileext = ".R")
-  writeLines('cat("bad\\n")', tmp)
-
-  scan_file_print_cat(tmp, fix = TRUE)
-  expect_equal(readLines(tmp, warn = FALSE), 'message("bad\\n")')
-})
-
-test_that("scan_file_print_cat error uses original line content", {
-  tmp <- withr::local_tempfile(fileext = ".R")
-  writeLines('print("bad")', tmp)
-
-  res <- scan_file_print_cat(tmp, fix = TRUE)
-  expect_match(res$errors[[1L]]$caret, "print", fixed = TRUE)
-  expect_match(res$errors[[1L]]$caret, "bad", fixed = TRUE)
-  expect_no_match(res$errors[[1L]]$caret, "message", fixed = TRUE)
 })

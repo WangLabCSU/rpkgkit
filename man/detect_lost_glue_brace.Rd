@@ -6,40 +6,63 @@
 \alias{detect_lost_glue_brace}
 \title{Detect Lost Glue Brace in \code{glue} and \code{cli} Expressions}
 \usage{
-package_lost_glue_brace(path = NULL, test_included = TRUE, ...)
+package_lost_glue_brace(
+  path = NULL,
+  dirs = c("R", file.path("tests", "testthat")),
+  test_included = lifecycle::deprecated(),
+  ...
+)
 
-detect_lost_glue_brace(path = NULL, ...)
+detect_lost_glue_brace(path = NULL, verbose = TRUE, ...)
 }
 \arguments{
-\item{path}{A character string specifying the path to the R file to inspect.
-If \code{NULL} and RStudio is available, the currently active document path is used.}
+\item{path}{For \code{detect_lost_glue_brace()}: path to an \R file. If
+\code{NULL} and RStudio is available, the active document path is used.
 
-\item{test_included}{Whether to include test (\verb{test/testthat/*}) files in the check.}
+For \code{package_lost_glue_brace()}: path to the root directory of an
+\R package. Defaults to the current directory.}
 
-\item{...}{unused}
+\item{dirs}{Character vector of package-relative directories scanned by
+\code{package_lost_glue_brace()}. Defaults to \code{"R"} and
+\code{"tests/testthat"}.}
+
+\item{test_included}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}. Logical indicating whether to scan
+\code{tests/testthat/} in addition to \code{R/}. Use \code{dirs} instead.
+When supplied, \code{FALSE} scans only \code{R/}; \code{TRUE} scans both
+default directories.}
+
+\item{...}{Unused.}
+
+\item{verbose}{Whether to emit detection results to the console. Package
+scanning disables this and supplies its own progress and summary output.}
 }
 \value{
-Invisibly returns \code{TRUE} if all expressions are balanced, \code{FALSE}
-otherwise. Side-effect messages are emitted via \link[cli:cli]{cli}.
+Invisibly returns \code{TRUE} if all expressions are balanced,
+\code{FALSE} otherwise.
 }
 \description{
 Check whether \verb{\{} and \verb{\}} are balanced in all \code{glue()} / \code{glue_data()}
-and \verb{cli_*()} string arguments within an R file. The file is parsed into
-an AST, then each string literal that is an argument to a target function
-is checked with a stack-based brace matcher. Any mismatches are reported
-with line number and a visual caret (\verb{^^^^}) marker under the problematic
-region.
+and \verb{cli_*()} string arguments within R source files. Each file is parsed
+into an AST, then every string literal passed to a target function is checked
+with a stack-based brace matcher. Any mismatch is reported with its line
+number and a visual caret (\verb{^^^^}) marker under the problematic region.
 }
-\section{Functions}{
-\itemize{
-\item \code{package_lost_glue_brace()}: Scans all \code{.R} files in an R package
-(and optionally \code{tests/testthat/}), aggregated with per-file reporting.
+\section{Single file vs package scope}{
 
-}}
+\describe{
+\item{\code{detect_lost_glue_brace()}}{Operates on one \R file. When
+\code{path} is \code{NULL} and RStudio is available, the currently active
+document path is used.}
+\item{\code{package_lost_glue_brace()}}{Scans \code{.R} files under the
+configured package-relative directories. By default, these are \code{R/}
+and \code{tests/testthat/}.}
+}
+}
+
 \examples{
 \donttest{
-file <- tempfile()
-writeLines("glue(\"{a\")", file)
+file <- tempfile(fileext = ".R")
+writeLines('glue("{a")', file)
 detect_lost_glue_brace(file)
 }
 

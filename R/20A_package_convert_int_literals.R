@@ -1,29 +1,4 @@
-#' Apply `convert_int_literals()` to an R Package
-#'
-#' @description
-#' Walks the `R/` and `tests/` directories of an R package and runs
-#' [convert_int_literals()] on every `.R` / `.r` file.
-#'
-#' @param path Character path to the package root. If `NULL` and RStudio is
-#'   available, the active document's project / working directory is used
-#'   only when it looks like a package root (`DESCRIPTION` present).
-#' @param dirs Character vector of subdirectories relative to `path` to
-#'   search. Defaults to `c("R", "tests")`.
-#' @param recursive Logical; recurse into subdirectories. Default `TRUE`.
-#' @param ... Additional arguments. Currently unused and must be empty.
-#'
-#' @return
-#' Invisibly returns a character vector of modified file paths.
-#'
-#' @examples
-#' \donttest{
-#' tmp_pkg <- tempdir()
-#' usethis::create_package(tmp_pkg, open = FALSE)
-#' writeLines("foo <- seq_len(42)", file.path(tmp_pkg, "R/foo.R"))
-#' package_convert_int_literals(tmp_pkg)
-#' message(readLines(file.path(tmp_pkg, "R/foo.R")))
-#' }
-#'
+#' @rdname convert_int_literals
 #' @export
 package_convert_int_literals <- function(
   path = NULL,

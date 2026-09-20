@@ -2,29 +2,53 @@
 #'
 #' @description
 #' Check whether `{` and `}` are balanced in all `glue()` / `glue_data()`
-#' and `cli_*()` string arguments within an R file. The file is parsed into
-#' an AST, then each string literal that is an argument to a target function
-#' is checked with a stack-based brace matcher. Any mismatches are reported
-#' with line number and a visual caret (`^^^^`) marker under the problematic
-#' region.
+#' and `cli_*()` string arguments within R source files. Each file is parsed
+#' into an AST, then every string literal passed to a target function is checked
+#' with a stack-based brace matcher. Any mismatch is reported with its line
+#' number and a visual caret (`^^^^`) marker under the problematic region.
 #'
-#' @param path A character string specifying the path to the R file to inspect.
-#'   If `NULL` and RStudio is available, the currently active document path is used.
-#' @param test_included Whether to include test (`test/testthat/*`) files in the check.
-#' @param ... unused
+#' @section Single file vs package scope:
+#' \describe{
+#'   \item{\code{detect_lost_glue_brace()}}{Operates on one \R file. When
+#'   \code{path} is \code{NULL} and RStudio is available, the currently active
+#'   document path is used.}
+#'   \item{\code{package_lost_glue_brace()}}{Scans \code{.R} files under the
+#'   configured package-relative directories. By default, these are \code{R/}
+#'   and \code{tests/testthat/}.}
+#' }
 #'
-#' @return Invisibly returns `TRUE` if all expressions are balanced, `FALSE`
-#'   otherwise. Side-effect messages are emitted via [cli].
+#' @param path For \code{detect_lost_glue_brace()}: path to an \R file. If
+#'   \code{NULL} and RStudio is available, the active document path is used.
+#'
+#'   For \code{package_lost_glue_brace()}: path to the root directory of an
+#'   \R package. Defaults to the current directory.
+#' @param dirs Character vector of package-relative directories scanned by
+#'   \code{package_lost_glue_brace()}. Defaults to \code{"R"} and
+#'   \code{"tests/testthat"}.
+#' @param test_included `r lifecycle::badge('deprecated')`. Logical indicating whether to scan
+#'   \code{tests/testthat/} in addition to \code{R/}. Use \code{dirs} instead.
+#'   When supplied, \code{FALSE} scans only \code{R/}; \code{TRUE} scans both
+#'   default directories.
+#' @param verbose Whether to emit detection results to the console. Package
+#'   scanning disables this and supplies its own progress and summary output.
+#' @param ... Unused.
+#'
+#' @return Invisibly returns \code{TRUE} if all expressions are balanced,
+#' \code{FALSE} otherwise.
 #'
 #' @examples
 #' \donttest{
-#' file <- tempfile()
-#' writeLines("glue(\"{a\")", file)
+#' file <- tempfile(fileext = ".R")
+#' writeLines('glue("{a")', file)
 #' detect_lost_glue_brace(file)
 #' }
 #'
+#' @name detect_lost_glue_brace
+NULL
+
+#' @rdname detect_lost_glue_brace
 #' @export
-detect_lost_glue_brace <- function(path = NULL, ...) {
+detect_lost_glue_brace <- function(path = NULL, verbose = TRUE, ...) {
   rlang::check_dots_empty()
   path <- path %||% rstudioapi::getActiveDocumentContext()$path
   lines <- readLines(path, warn = FALSE)
@@ -35,7 +59,9 @@ detect_lost_glue_brace <- function(path = NULL, ...) {
   strings_info <- find_glue_cli_strings(parse_data)
 
   if (length(strings_info) == 0L) {
-    cli::cli_alert_success("No need to fix")
+    if (verbose) {
+      cli::cli_alert_success("No need to fix")
+    }
     return(invisible(TRUE))
   }
 
@@ -47,25 +73,31 @@ detect_lost_glue_brace <- function(path = NULL, ...) {
     if (!result$balanced) {
       error_lines <- c(error_lines, info$line1)
 
-      message(
-        format_brace_error(
-          line_content = lines[info$line1],
-          str_content = info$content,
-          line_num = info$line1,
-          col_offset = info$col1,
-          result = result
+      if (verbose) {
+        message(
+          format_brace_error(
+            line_content = lines[info$line1],
+            str_content = info$content,
+            line_num = info$line1,
+            col_offset = info$col1,
+            result = result
+          )
         )
-      )
+      }
     }
   }
 
   if (length(error_lines) == 0L) {
-    cli::cli_alert_success("No need to fix")
+    if (verbose) {
+      cli::cli_alert_success("No need to fix")
+    }
     invisible(TRUE)
   } else {
-    cli::cli_alert_danger(
-      "Found {length(error_lines)} line{?s} with mismatched braces: {.val {error_lines}}"
-    )
+    if (verbose) {
+      cli::cli_alert_danger(
+        "Found {length(error_lines)} line{?s} with mismatched braces: {.val {error_lines}}"
+      )
+    }
     invisible(FALSE)
   }
 }

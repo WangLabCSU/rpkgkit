@@ -1,17 +1,34 @@
 #' Add Explicit Integer Suffix `L` to Integer Literals
 #'
 #' @description
-#' Converts bare integer literals in an R file to the explicit integer form
-#' with an `L` suffix, e.g. `seq_len(10)` becomes `seq_len(10L)`.
-#' Strings and comments are left unchanged.
+#' Converts bare integer literals to explicit integer form with an `L` suffix,
+#' e.g. `seq_len(10)` becomes `seq_len(10L)`. Strings and comments are left
+#' unchanged.
 #'
-#' @param path A character string specifying the path to the R file to modify.
-#'   If `NULL` and RStudio is available, the currently active document path is used.
-#' @param verbose Logical; enable or disable per-file messages. Default `TRUE`.
+#' [convert_int_literals()] operates on one R file. When `path` is `NULL` and
+#' RStudio is available, it uses the currently active document.
+#' [package_convert_int_literals()] walks selected directories of an R package
+#' and applies the same conversion to every `.R` / `.r` file found.
+#'
+#' @param path For [convert_int_literals()], a character string specifying the
+#'   R file to modify. If `NULL` and RStudio is available, the currently active
+#'   document path is used.
+#'
+#'   For [package_convert_int_literals()], a character string specifying the
+#'   package root. If `NULL`, the current working directory is used.
+#' @param verbose Logical; enable or disable per-file messages. Used only by
+#'   [convert_int_literals()]. Default `TRUE`.
+#' @param dirs Character vector of subdirectories relative to `path` to search.
+#'   Used only by [package_convert_int_literals()]. Defaults to
+#'   `c("R", "tests")`.
+#' @param recursive Logical; recurse into subdirectories. Used only by
+#'   [package_convert_int_literals()]. Default `TRUE`.
 #' @param ... Additional arguments. Currently unused and must be empty.
 #'
 #' @return
-#' Invisibly returns the path to the modified file.
+#' [convert_int_literals()] invisibly returns the modified file path.
+#' [package_convert_int_literals()] invisibly returns a character vector of
+#' modified file paths.
 #'
 #' @details
 #' A token is treated as an integer literal when it is:
@@ -27,13 +44,25 @@
 #'
 #' @examples
 #' \donttest{
+#' # --- Single file ---
 #' temp <- tempfile(fileext = ".R")
 #' writeLines("tmp <- seq_len(10)", temp)
 #' convert_int_literals(temp)
 #' readLines(temp)
 #' # "tmp <- seq_len(10L)"
+#'
+#' # --- Entire package ---
+#' tmp_pkg <- tempdir()
+#' usethis::create_package(tmp_pkg, open = FALSE)
+#' writeLines("foo <- seq_len(42)", file.path(tmp_pkg, "R/foo.R"))
+#' package_convert_int_literals(tmp_pkg)
+#' readLines(file.path(tmp_pkg, "R/foo.R"))
 #' }
 #'
+#' @name convert_int_literals
+NULL
+
+#' @rdname convert_int_literals
 #' @export
 convert_int_literals <- function(path = NULL, verbose = TRUE, ...) {
   rlang::check_dots_empty0(...)
