@@ -87,7 +87,7 @@ and it is **not**:
 temp <- tempfile(fileext = ".R")
 writeLines("tmp <- seq_len(10)", temp)
 convert_int_literals(temp)
-#> ✔ Added explicit integer suffixes in /tmp/Rtmp7tuIfB/file5f0a5fa7af14.R
+#> ✔ Added explicit integer suffixes in /tmp/RtmpNgvY8q/file19281ab4e04.R
 readLines(temp)
 #> [1] "tmp <- seq_len(10L)"
 # "tmp <- seq_len(10L)"
@@ -95,10 +95,10 @@ readLines(temp)
 # --- Entire package ---
 tmp_pkg <- tempdir()
 usethis::create_package(tmp_pkg, open = FALSE)
-#> ✔ Setting active project to "/tmp/Rtmp7tuIfB".
+#> ✔ Setting active project to "/tmp/RtmpNgvY8q".
 #> ✔ Creating R/.
 #> ✔ Writing DESCRIPTION.
-#> Package: Rtmp7tuIfB
+#> Package: RtmpNgvY8q
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):

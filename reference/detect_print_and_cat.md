@@ -136,7 +136,7 @@ detect_print_and_cat(tmp)
 
 # --- With auto-fix ---
 detect_print_and_cat(tmp, fix = TRUE)
-#> ✔ Fixed 1 line in file5f0a2f37e418.R.
+#> ✔ Fixed 1 line in file19284bd12c2e.R.
 #> print("hello") [message]
 #> ^^^^^^
 #> ✖ Found 1 unsupported call on line 1.
