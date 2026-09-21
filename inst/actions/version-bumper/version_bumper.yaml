@@ -54,17 +54,6 @@ jobs:
           version_type: "${{ github.event.inputs.version_type || 'patch' }}"
           custom_version: "${{ github.event.inputs.custom_version }}"
 
-      - name: Update README badges
-        if: steps.version_bump.outputs.bumped == 'true'
-        run: |
-          NEW_VER="${{ steps.version_bump.outputs.new_version }}"
-          for file in README.md README.Rmd; do
-            if [ -f "$file" ]; then
-              sed -i "s|\\(badge/devel%20version-\\)[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+|\\1${NEW_VER}|g" "$file"
-              echo "✅ Updated $file"
-            fi
-          done
-
       - name: Commit and tag
         if: steps.version_bump.outputs.bumped == 'true'
         run: |
@@ -76,7 +65,7 @@ jobs:
           fi
 
           NEW_VER="${{ steps.version_bump.outputs.new_version }}"
-          git commit -m "chore: bump version to ${NEW_VER} [skip ci]"
+          git commit -m "chore: bump version to ${NEW_VER}"
           git tag -a "v${NEW_VER}" -m "Release v${NEW_VER}"
 
           git push origin "${{ github.ref_name }}"

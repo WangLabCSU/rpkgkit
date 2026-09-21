@@ -1,5 +1,5 @@
 name: "R Package Version Bumper"
-description: "Automatically bump version in R package DESCRIPTION with smart commit detection"
+description: "Automatically bump the R package version and update development badges"
 author: "Exceret"
 branding:
   icon: "package"

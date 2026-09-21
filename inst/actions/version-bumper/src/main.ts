@@ -227,7 +227,10 @@ async function run(): Promise<void> {
         // 7. Update DESCRIPTION
         await setVersion(newVersion);
 
-        // 8. Set outputs
+        // 8. Update badges before the version commit triggers CI
+        await updateReadmeBadges(newVersion);
+
+        // 9. Set outputs
         core.setOutput('new_version', newVersion);
         core.setOutput('bumped', 'true');
 

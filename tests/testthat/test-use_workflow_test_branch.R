@@ -63,6 +63,17 @@ test_that("creates workflow directory and copies template", {
 
   lines <- readLines(expected_path, warn = FALSE)
   expect_match(lines[1L], "name: Sync Main to Test Branch", fixed = TRUE)
+  expect_true(any(grepl("workflow_run:", lines, fixed = TRUE)))
+  expect_true(any(grepl(
+    'workflows: ["R-CMD-check.yaml"]',
+    lines,
+    fixed = TRUE
+  )))
+  expect_true(any(grepl(
+    "github.event.workflow_run.head_sha",
+    lines,
+    fixed = TRUE
+  )))
 })
 
 test_that("copies action files to .github/actions/sync-test-branch/", {
@@ -97,6 +108,17 @@ test_that("overwrite = TRUE replaces existing workflow file", {
 
   lines <- readLines(workflow_file, warn = FALSE)
   expect_match(lines[1L], "name: Sync Main to Test Branch", fixed = TRUE)
+  expect_true(any(grepl("workflow_run:", lines, fixed = TRUE)))
+  expect_true(any(grepl(
+    'workflows: ["R-CMD-check.yaml"]',
+    lines,
+    fixed = TRUE
+  )))
+  expect_true(any(grepl(
+    "github.event.workflow_run.head_sha",
+    lines,
+    fixed = TRUE
+  )))
   expect_equal(result, workflow_file)
 })
 

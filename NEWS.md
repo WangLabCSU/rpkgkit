@@ -1,7 +1,25 @@
-# rpkgkit 0.1.16 (2026-9-21)
+# rpkgkit 0.1.17 (2026-9-22)
 
-* `use_vendor` now only add authors whose role is `aut` or `cre`
-* refactor `detect_*` and `package_*` functions
+## BUG FIXES
+
+* `use_vendor()` now adds only people with an `aut` or `cre` role to
+  `Authors@R`.
+* `package_convert_int_literals()` now skips automatically generated
+  `RcppExports.R` files, which should not be edited manually.
+
+## MINOR IMPROVEMENTS
+
+* The version-bumper action now updates development-version badges before
+  committing a release version. Its version commits now run CI before test
+  branch synchronization.
+
+# rpkgkit 0.1.16 
+
+## MINOR IMPROVEMENTS
+
+* Refactored `detect_*` and `package_*` functions.
+* Test-branch synchronization now runs only after `R-CMD-check.yaml` succeeds
+  for a push to `main` or `master`, and syncs the exact checked commit.
 
 # rpkgkit 0.1.15
 
