@@ -8,7 +8,8 @@
 #' [convert_int_literals()] operates on one R file. When `path` is `NULL` and
 #' RStudio is available, it uses the currently active document.
 #' [package_convert_int_literals()] walks selected directories of an R package
-#' and applies the same conversion to every `.R` / `.r` file found.
+#' and applies the same conversion to every `.R` / `.r` file found, except
+#' automatically generated `RcppExports.R` files.
 #'
 #' @param path For [convert_int_literals()], a character string specifying the
 #'   R file to modify. If `NULL` and RStudio is available, the currently active
@@ -20,7 +21,7 @@
 #'   [convert_int_literals()]. Default `TRUE`.
 #' @param dirs Character vector of subdirectories relative to `path` to search.
 #'   Used only by [package_convert_int_literals()]. Defaults to
-#'   `c("R", "tests")`.
+#'   `c("R")`.
 #' @param recursive Logical; recurse into subdirectories. Used only by
 #'   [package_convert_int_literals()]. Default `TRUE`.
 #' @param ... Additional arguments. Currently unused and must be empty.
