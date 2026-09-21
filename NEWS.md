@@ -1,3 +1,8 @@
+# rpkgkit 0.1.16 (2026-9-21)
+
+* `use_vendor` now only add authors whose role is `aut` or `cre`
+* refactor `detect_*` and `package_*` functions
+
 # rpkgkit 0.1.15
 
 ## BUG FIXES

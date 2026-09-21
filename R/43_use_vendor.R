@@ -452,32 +452,20 @@ vendor_update_desc <- function(
   } else {
     for (p in author_info$author_field) {
       p_roles <- p$role %||% character(0L)
-      if (length(p_roles) == 0L) {
-        p_roles <- "aut"
-      }
-
-      if ("cre" %in% p_roles || "aut" %in% p_roles) {
-        new_role <- c("aut", "cph")
-        new_comment <- sprintf(
-          "Author of the included %s code (%s)",
-          repo,
-          repo_url
-        )
-      } else {
-        new_role <- c("ctb", "cph")
-        new_comment <- sprintf(
-          "Contributor to the included %s code (%s)",
-          repo,
-          repo_url
-        )
+      if (!("cre" %in% p_roles || "aut" %in% p_roles)) {
+        next
       }
 
       desc$add_author(
         given = p$given %||% "",
         family = p$family %||% "",
         email = p$email %||% NULL,
-        role = new_role,
-        comment = new_comment
+        role = c("aut", "cph"),
+        comment = sprintf(
+          "Author of the included %s code (%s)",
+          repo,
+          repo_url
+        )
       )
     }
     cli::cli_alert_success("Added {.pkg {repo}} authors to {.field Authors@R}.")
