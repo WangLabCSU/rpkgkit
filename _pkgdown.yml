@@ -43,6 +43,15 @@ navbar:
       href: https://github.com/WangLabCSU/rpkgkit/
       aria-label: GitHub
 
+articles:
+  - title: Vignettes
+    contents:
+      - code_convertion
+      - news
+      - pkg_maintain
+      - readme_and_doc
+      - standalone_tools
+
 reference:
   - title: Functions
     desc: |
@@ -92,3 +101,6 @@ reference:
       - convert_knitr_chunk_header
       - convert_int_literals
       - package_convert_int_literals
+      - badge_to_readme
+      - GLOBAL_RBUILDIGNORE_PATTERN
+      - PERMISSIVE_LICENSE

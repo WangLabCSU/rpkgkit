@@ -4,12 +4,24 @@
 \alias{add_global_rbuildignore}
 \title{Add global .Rbuildignore patterns}
 \usage{
-add_global_rbuildignore(..., path = NULL)
+add_global_rbuildignore(
+  ...,
+  pattern = GLOBAL_RBUILDIGNORE_PATTERN,
+  replace_default = FALSE,
+  path = NULL
+)
 }
 \arguments{
 \item{...}{Additional regex patterns (character strings) to add beyond
-the curated defaults. Each must already be in \code{.Rbuildignore} regex
+the selected patterns. Each must already be in \code{.Rbuildignore} regex
 format (e.g. \code{"^\\\\.myfile$"}).}
+
+\item{pattern}{Character vector of \code{.Rbuildignore} patterns. By default,
+uses \link{GLOBAL_RBUILDIGNORE_PATTERN}.}
+
+\item{replace_default}{Logical. If \code{FALSE} (the default), \code{pattern} is
+appended to \link{GLOBAL_RBUILDIGNORE_PATTERN}. If \code{TRUE}, \code{pattern} is used instead
+of the defaults.}
 
 \item{path}{Character. Path to the package root directory. If \code{NULL}
 (the default), uses the current working directory.}
@@ -33,5 +45,11 @@ add_global_rbuildignore()
 
 # With additional custom patterns
 add_global_rbuildignore("^\\\\.myconfig$", "^data-raw$")
+
+# Use only a custom pattern set
+add_global_rbuildignore(
+  pattern = c("^\\\\.github$", "^docs$"),
+  replace_default = TRUE
+)
 }
 }

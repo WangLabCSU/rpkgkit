@@ -19,8 +19,9 @@ Invisibly returns the path to the created workflow file.
 \description{
 Copies the built-in \code{sync_test_branch.yml} workflow template and the
 corresponding \code{sync-test-branch} composite action to the target package's
-\verb{.github/} directory. The workflow triggers on push to \code{main}/\code{master} and
-force-pushes the main branch contents onto the \code{test} branch.
+\verb{.github/} directory. The workflow runs only after \code{R-CMD-check.yaml}
+successfully completes for a push to \code{main}/\code{master}, then force-pushes the
+checked commit onto the \code{test} branch.
 
 \strong{Safety mechanism}: If the \code{test} branch contains commits that are not
 reachable from \code{main} (i.e., unmerged work-in-progress), the sync is

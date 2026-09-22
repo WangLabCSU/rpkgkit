@@ -1,0 +1,180 @@
+---
+title: "Code Convertion"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Code Convertion}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include = FALSE
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+#| label = "setup"
+library(rpkgkit)
+```
+
+# Qualify package function calls
+
+`make_func_call_explicit()` adds namespace qualifiers to calls from selected
+packages. `package_func_call_explicit()` applies the same operation throughout
+a package.
+
+```{r}
+#| label = "make_func_call_explicit"
+file <- tempfile(fileext = ".R")
+writeLines(
+  c(
+    "starwars |>",
+    "  mutate(name, bmi = mass / ((height / 100)^2)) |>",
+    "  select(name:mass, bmi)"
+  ),
+  file
+)
+
+make_func_call_explicit(file, use_packages = "dplyr")
+readLines(file) |> cli::cli_code()
+```
+
+# Find unmatched glue braces
+
+`detect_lost_glue_brace()` checks one file; `package_lost_glue_brace()` checks
+an entire package. Both support `glue` and `cli` expressions.
+
+```{r}
+#| label = "detect_lost_glue_brace"
+file <- tempfile(fileext = ".R")
+writeLines(
+  c(
+    'name <- "world"',
+    'msg <- glue::glue("Hello, {name!")',
+    'cli::cli_alert_warning("{.field warning}}")'
+  ),
+  file
+)
+
+detect_lost_glue_brace(file)
+```
+
+# Name positional arguments
+
+`make_func_arg_explicit()` makes arguments in one file explicit, and
+`package_func_arg_explicit()` applies this transformation across a package.
+
+```{r}
+#| label = "make_func_arg_explicit"
+file <- tempfile(fileext = ".R")
+writeLines("vapply(1:9, function(x) x * 2, numeric(1))", file)
+make_func_arg_explicit(file)
+readLines(file) |> cli::cli_code()
+```
+
+# Rename functions
+
+Use `rename_func()` to apply a naming style to function definitions in a file.
+
+```{r}
+#| label = "rename_func"
+file <- tempfile(fileext = ".R")
+writeLines("this_is_a_function <- function() message('Hello, world')", file)
+rename_func(file, style = "camelCase")
+readLines(file) |> cli::cli_code()
+```
+
+# Detect print() and cat()
+
+`detect_print_and_cat()` reports `print()` and `cat()` calls in one file.
+`package_print_and_cat()` checks an entire package. Set `fix = TRUE` to replace
+those calls in the selected file with `message()`.
+
+```{r}
+#| label = "detect_print_and_cat"
+file <- tempfile(fileext = ".R")
+writeLines("print('Hello, world')", file)
+detect_print_and_cat(file)
+```
+
+```{r}
+#| label = "detect_print_and_cat_fix"
+detect_print_and_cat(file, fix = TRUE)
+readLines(file) |> cli::cli_code()
+```
+
+# Convert function syntax
+
+Convert between `function()` and the short `\()` syntax.
+
+```{r}
+#| label = "convert_func_syntax"
+file <- tempfile(fileext = ".R")
+writeLines("f <- function(x) x^2", file)
+convert_func_syntax(file, "to_lambda")
+readLines(file) |> cli::cli_code()
+```
+
+```{r}
+#| label = "convert_func_syntax_to_explicit"
+convert_func_syntax(file, "to_explicit")
+readLines(file) |> cli::cli_code()
+```
+
+# Modernize knitr chunk headers
+
+`convert_knitr_chunk_header()` converts legacy R Markdown chunk options to the
+current comment-based syntax.
+
+```{r}
+#| label = "convert_knitr_chunk_header"
+file <- tempfile(fileext = ".Rmd")
+writeLines(c("```{r, echo=TRUE, fig.width=10}", "x <- 1", "```"), file)
+convert_knitr_chunk_header(file)
+readLines(file) |> cli::cli_code()
+```
+
+# Add integer suffixes
+
+`convert_int_literals()` adds `L` to bare integer literals while leaving
+strings, comments, floating-point values, and existing suffixes unchanged.
+
+```{r}
+#| label = "convert_int_literals"
+file <- tempfile(fileext = ".R")
+writeLines("x <- seq_len(10) # length 10", file)
+convert_int_literals(file)
+readLines(file) |> cli::cli_code()
+```
+
+Use `package_convert_int_literals()` to process `.R` and `.r` files below a
+package's `R/` and `tests/` directories.
+
+```r
+package_convert_int_literals(".")
+```
+
+# Convert non-ASCII source code
+
+`convert_nonascii_code()` converts non-ASCII source to Unicode escape sequences
+when needed for CRAN-compatible source files. It accepts either a file path or
+an R expression.
+
+```{r}
+#| label = "convert_nonascii_code"
+file <- tempfile()
+writeLines("foo <- \\() message('滚滚长江东逝水')", file)
+convert_nonascii_code(file, overwrite = TRUE)
+readLines(file) |> cli::cli_code()
+```
+
+```{r}
+#| label = "convert_nonascii_code_expr"
+convert_nonascii_code({
+  cli::cli_alert_info("明月几时有")
+  cli::cli_alert_warning("把酒问青天")
+})
+```

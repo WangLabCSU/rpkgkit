@@ -1,0 +1,83 @@
+---
+title: "Edit NEWS"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Edit NEWS}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include = FALSE
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+
+# Maintain NEWS.md
+
+Here we create a template for editing NEWS.md
+
+```{r}
+#| label = "setup"
+#| echo = FALSE
+library(rpkgkit)
+tmpdir <- tempdir()
+usethis::create_package(tmpdir, open = FALSE)
+writeLines(
+  c("# pkgname v0.0.0.9000", "", "* This is a template for editing NEWS.md"),
+  file.path(tmpdir, "NEWS.md")
+)
+```
+
+```{r}
+#| label = "show_raw"
+news_md_show(path = tmpdir)
+```
+
+Add a new entry using the package version in `DESCRIPTION`:
+
+```{r}
+#| label = "add-entry"
+news_md_add_entry(
+  entry = "Add foo function",
+  category = "NEW FEATURES",
+  path = tmpdir
+)
+```
+
+```{r}
+#| label = "show_updated"
+news_md_show(path = tmpdir)
+```
+
+Specify a different category when needed:
+
+```{r}
+#| label = "add-entry-with-version"
+news_md_add_entry(
+  entry = "Fixed bugs in `foo()`",
+  category = "BUG FIXES",
+  contributor = "Jack",
+  path = tmpdir
+)
+```
+
+```{r}
+#| label = "show_updated2"
+news_md_show(path = tmpdir)
+```
+
+As you can see, different categories belong to the same version are grouped together.
+
+Validate the resulting file against the package's NEWS formatting rules:
+
+```{r}
+#| label = "news_check"
+news_md_check(path = tmpdir)
+```
+
+`"File should end with a blank line"` just follows the same rule as `DESCRIPTION`. But generally, there are very few items that need to be checked for NEWS.md compared with other files in an R package, and these requirements are not mandatory; however, they can indeed standardize NEWS writing.

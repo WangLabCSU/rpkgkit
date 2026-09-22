@@ -140,23 +140,25 @@ repo_spec_parse <- function(pkg, branch = "main") {
   )
 }
 
+#' Project License Allowing Copying
+#'
+#' @export
+PERMISSIVE_LICENSE <- c(
+  "MIT",
+  "Apache-2.0",
+  "Apache 2.0",
+  "BSD-2-Clause",
+  "BSD-3-Clause",
+  "Unlicense",
+  "CC0-1.0",
+  "CC0"
+)
 
 #' Helper: read license SPDX from the vendor's DESCRIPTION License field
 #' @keywords internal
-vendor_desc_license <- function(desc) {
+vendor_desc_license <- function(desc, permissive = PERMISSIVE_LICENSE) {
   # Extract the primary SPDX identifier (first token before "|" or "+")
   spdx <- trimws(strsplit(desc$get_field("License"), "[|+]")[[1L]][1L])
-
-  permissive <- c(
-    "MIT",
-    "Apache-2.0",
-    "Apache 2.0",
-    "BSD-2-Clause",
-    "BSD-3-Clause",
-    "Unlicense",
-    "CC0-1.0",
-    "CC0"
-  )
 
   if (!(spdx %in% permissive)) {
     cli::cli_abort(c(
@@ -170,10 +172,19 @@ vendor_desc_license <- function(desc) {
 }
 
 
-#' Helper: extract author info from vendor DESCRIPTION
+#' Helper: extract creator and author information from vendor DESCRIPTION
 #' @keywords internal
 vendor_desc_authors <- function(desc) {
   author_field <- desc$get_authors()
+  is_author <- vapply(
+    X = author_field,
+    FUN = function(p) {
+      roles <- p$role %||% character(0L)
+      "cre" %in% roles || "aut" %in% roles
+    },
+    FUN.VALUE = logical(1L)
+  )
+  author_field <- author_field[is_author]
 
   author_names <- vapply(
     X = author_field,
@@ -184,7 +195,9 @@ vendor_desc_authors <- function(desc) {
     FUN.VALUE = character(1L)
   )
 
-  author_str <- if (length(author_names) == 1L) {
+  author_str <- if (length(author_names) == 0L) {
+    ""
+  } else if (length(author_names) == 1L) {
     author_names
   } else {
     paste(
@@ -460,7 +473,7 @@ vendor_update_desc <- function(
         given = p$given %||% "",
         family = p$family %||% "",
         email = p$email %||% NULL,
-        role = c("aut", "cph"),
+        role = c("ctb", "cph"),
         comment = sprintf(
           "Author of the included %s code (%s)",
           repo,
@@ -472,18 +485,20 @@ vendor_update_desc <- function(
   }
 
   # -- Update Copyright field --
-  copyright_val <- sprintf(
-    "%s (for the %s code included in R/vendor-%s.R)",
-    author_info$author_str,
-    repo,
-    repo
-  )
+  if (length(author_info$author_names) > 0L) {
+    copyright_val <- sprintf(
+      "%s (for the %s code included in R/vendor-%s.R)",
+      author_info$author_str,
+      repo,
+      repo
+    )
 
-  if (desc$has_fields("Copyright")) {
-    existing <- desc$get("Copyright")
-    desc$set("Copyright", paste0(existing[1L], "; ", copyright_val))
-  } else {
-    desc$set("Copyright", copyright_val)
+    if (desc$has_fields("Copyright")) {
+      existing <- desc$get("Copyright")
+      desc$set("Copyright", paste0(existing[1L], "; ", copyright_val))
+    } else {
+      desc$set("Copyright", copyright_val)
+    }
   }
 
   desc$write()

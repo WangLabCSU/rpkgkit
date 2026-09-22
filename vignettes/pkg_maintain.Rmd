@@ -1,0 +1,132 @@
+---
+title: "Package Setup & Maintenace"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Package Setup & Maintenace}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include = FALSE
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+#| label = "setup"
+#| echo = FALSE
+library(rpkgkit)
+dir <- tempdir()
+usethis::create_package(path = dir, open = FALSE)
+```
+
+# Create package infrastructure
+
+## A spinner startup message
+
+`use_zzz()` creates a package documentation file with `.onLoad`, `.onAttach`,
+and `%||%`. It is similar to `usethis::use_package_doc()` while also providing
+a useful starting template.
+
+```{r}
+#| label = "use_zzz"
+use_zzz(path = dir, open = FALSE)
+```
+
+## Check missing function in `_pkgdown` reference
+
+`check_pkgdown_reference()` identifies exported functions that are absent from
+the `reference` section of `_pkgdown.yml`.
+
+```{r}
+#| label = "check_pkgdown_reference"
+#| eval = FALSE
+check_pkgdown_reference(pkg = dir)
+```
+
+# Vendor permissively licensed code
+
+`use_vendor()` records attribution and licensing information when incorporating
+selected source files from a permissively licensed GitHub R package. It creates
+an `inst/vendor/` directory, a `R/vendor-*.R` file, and updates relevant
+`DESCRIPTION` fields.
+
+```{r}
+#| label = "use_vendor"
+use_vendor(
+  pkg = "WangLabCSU/rpkgkit",
+  "43_use_vendor.R",
+  branch = "main",
+  path = dir
+)
+```
+
+Only packages with a supported permissive license can be vendored. Review the
+acknowledgement text printed by the function and add it to your README when
+appropriate.
+
+```{r}
+rpkgkit::PERMISSIVE_LICENSE
+```
+
+# `usethis` extensions
+
+Use the following helpers from the package root:
+
+## Use R 4.1.0 version
+
+R 4.1.0 introduced the pipe (`|>`) and anonymous function `\()`. If these syntaxes need to be used in a package, the R package must require at least R version 4.1.0.
+
+```{r}
+#| label = "use_r_v4.1.0"
+use_r_v4.1.0(path = dir)
+```
+
+## Add URL in `DESCRIPTION`
+
+```{r}
+#| label = "use_url"
+#| eval = FALSE
+use_url(dir)
+```
+
+## Add bug reports URL in `DESCRIPTION`
+
+```{r}
+#| label = "use_bugreports"
+#| eval = FALSE
+use_bugreports(dir)
+```
+
+# Open CFF
+
+CITATION.cff files are plain text files with human- and machine-readable citation information for software and datasets.
+
+Code developers can include such files in their source code repositories to let others know how to correctly cite their software.
+
+```{r}
+#| label = "use_cff"
+#| eval = FALSE
+open_cffinit()
+```
+
+**This cannot replace `usethis::use_citation()`**, it just complements project.
+
+
+# Global ignore-file templates
+
+Use `add_global_rbuildignore()` and `add_global_gitgnore()` to add the
+corresponding global ignore-file templates to a package.
+
+```{r}
+#| label = "add_global_rbuildignore"
+add_global_rbuildignore(path = dir)
+```
+
+```{r}
+#| label = "add_global_gitgnore"
+add_global_gitgnore(pkg = dir)
+```

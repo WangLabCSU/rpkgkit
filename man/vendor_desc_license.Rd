@@ -4,7 +4,7 @@
 \alias{vendor_desc_license}
 \title{Helper: read license SPDX from the vendor's DESCRIPTION License field}
 \usage{
-vendor_desc_license(desc)
+vendor_desc_license(desc, permissive = PERMISSIVE_LICENSE)
 }
 \description{
 Helper: read license SPDX from the vendor's DESCRIPTION License field

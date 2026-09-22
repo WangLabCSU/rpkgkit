@@ -134,14 +134,41 @@ test_that("vendor_desc_authors uses family name when given is missing", {
   expect_equal(result$author_str, "Smith")
 })
 
-test_that("vendor_desc_authors handles author with cre role", {
+test_that("vendor_desc_authors retains only creators and authors", {
   desc <- desc::description$new(
-    text = sprintf(
-      "Package: x\nAuthors@R: c(person(\"Alice\", \"Smith\", role = c(\"aut\", \"cre\")))\n"
+    text = paste0(
+      "Package: x\n",
+      "Authors@R: c(",
+      "person(\"Alice\", \"Smith\", role = c(\"aut\", \"cre\")), ",
+      "person(\"Bob\", \"Jones\", role = \"ctb\"), ",
+      "person(\"Carol\", \"Lee\", role = \"aut\"))\n"
     )
   )
+
   result <- rpkgkit:::vendor_desc_authors(desc)
-  expect_equal(result$author_str, "Alice Smith")
+
+  expect_equal(result$author_names, c("Alice Smith", "Carol Lee"))
+  expect_equal(result$author_str, "Alice Smith and Carol Lee")
+  expect_true(all(vapply(
+    result$author_field,
+    function(p) {
+      roles <- p$role %||% character(0L)
+      "cre" %in% roles || "aut" %in% roles
+    },
+    logical(1L)
+  )))
+})
+
+test_that("vendor_desc_authors returns empty author information for contributors", {
+  desc <- desc::description$new(
+    text = "Package: x\nAuthors@R: c(person(\"Bob\", \"Jones\", role = \"ctb\"))\n"
+  )
+
+  result <- rpkgkit:::vendor_desc_authors(desc)
+
+  expect_length(result$author_field, 0L)
+  expect_identical(result$author_names, character(0L))
+  expect_identical(result$author_str, "")
 })
 
 test_that("vendor_desc_authors skips author with neither given nor family", {
@@ -518,7 +545,7 @@ test_that("vendor_create_r_file falls back to 'unknown' when no desc_vendor give
 # vendor_update_desc()
 # ---------------------------------------------------------------------------
 
-test_that("vendor_update_desc adds authors to DESCRIPTION", {
+test_that("vendor_update_desc adds vendor authors as contributors and copyright holders", {
   tmp <- withr::local_tempdir()
   writeLines(
     c(
@@ -546,20 +573,16 @@ test_that("vendor_update_desc adds authors to DESCRIPTION", {
   )
 
   desc <- desc::desc(file = file.path(tmp, "DESCRIPTION"))
-  authors <- desc$get_authors()
-  expect_true(any(vapply(
-    authors,
-    function(p) {
-      "aut" %in%
-        (p$role %||% character(0L)) &&
-        "cph" %in% (p$role %||% character(0L)) &&
-        grepl("pedant", p$comment %||% "", fixed = TRUE)
-    },
-    logical(1L)
-  )))
+  vendor_authors <- Filter(
+    function(p) grepl("pedant", p$comment %||% "", fixed = TRUE),
+    desc$get_authors()
+  )
+
+  expect_length(vendor_authors, 1L)
+  expect_setequal(vendor_authors[[1L]]$role, c("ctb", "cph"))
 })
 
-test_that("vendor_update_desc assigns ctb (not aut) for non-cre/non-aut vendors", {
+test_that("vendor_update_desc does not add contributor-only vendors", {
   tmp <- withr::local_tempdir()
   writeLines(
     c(
@@ -571,7 +594,6 @@ test_that("vendor_update_desc assigns ctb (not aut) for non-cre/non-aut vendors"
     file.path(tmp, "DESCRIPTION")
   )
 
-  # Vendor author with only "ctb" role
   author_info <- rpkgkit:::vendor_desc_authors(
     desc::description$new(
       text = "Package: x\nAuthors@R: c(person(\"Bob\", \"Jones\", role = \"ctb\"))\n"
@@ -588,28 +610,11 @@ test_that("vendor_update_desc assigns ctb (not aut) for non-cre/non-aut vendors"
   )
 
   desc <- desc::desc(file = file.path(tmp, "DESCRIPTION"))
-  authors <- desc$get_authors()
-  # New author should have ctb and cph, not aut
-  new_authors <- Filter(
-    function(p) {
-      grepl("pedant", p$comment %||% "", fixed = TRUE)
-    },
-    authors
+  vendor_authors <- Filter(
+    function(p) grepl("pedant", p$comment %||% "", fixed = TRUE),
+    desc$get_authors()
   )
-  expect_true(all(vapply(
-    new_authors,
-    function(p) {
-      "ctb" %in% (p$role %||% character(0L))
-    },
-    logical(1L)
-  )))
-  expect_false(any(vapply(
-    new_authors,
-    function(p) {
-      "aut" %in% (p$role %||% character(0L))
-    },
-    logical(1L)
-  )))
+  expect_length(vendor_authors, 0L)
 })
 
 test_that("vendor_update_desc skips already-present authors", {

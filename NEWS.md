@@ -1,7 +1,16 @@
 # rpkgkit 0.1.17 (2026-9-22)
 
+## NEW FEATURES
+
+* Added `badge_to_readme()` to insert a Markdown badge into the badges block of
+  `README.Rmd` or `README.md`.
+* Added exported `GLOBAL_RBUILDIGNORE_PATTERN` and `PERMISSIVE_LICENSE`
+  constants for customizing package-maintenance workflows.
+
 ## BUG FIXES
 
+* `add_global_gitgnore()` now correctly updates a package specified with an
+  absolute path.
 * `use_vendor()` now adds only people with an `aut` or `cre` role to
   `Authors@R`.
 * `package_convert_int_literals()` now skips automatically generated
@@ -9,9 +18,18 @@
 
 ## MINOR IMPROVEMENTS
 
+* `add_global_rbuildignore()` now supports supplying custom patterns and
+  replacing its default pattern set.
+* `use_vendor()` records vendored-code authors as contributors and copyright
+  holders, rather than package authors.
 * The version-bumper action now updates development-version badges before
   committing a release version. Its version commits now run CI before test
   branch synchronization.
+
+## DOCUMENTATION
+
+* Added pkgdown articles for the package vignettes and reorganized the README
+  around the package website guides.
 
 # rpkgkit 0.1.16 
 

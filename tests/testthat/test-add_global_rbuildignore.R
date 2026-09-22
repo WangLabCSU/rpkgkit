@@ -33,6 +33,51 @@ test_that("creates .Rbuildignore with default patterns when file does not exist"
   expect_true(any(grepl("Global rbuildignore patterns", lines, fixed = TRUE)))
 })
 
+test_that("GLOBAL_RBUILDIGNORE_PATTERN is the default pattern set", {
+  expect_type(GLOBAL_RBUILDIGNORE_PATTERN, "character")
+  expect_true("^\\.Rhistory$" %in% GLOBAL_RBUILDIGNORE_PATTERN)
+})
+
+test_that("custom patterns are appended to defaults by default", {
+  tmp <- tempfile("pkg")
+  dir.create(tmp)
+  on.exit(unlink(tmp, recursive = TRUE))
+
+  writeLines(
+    "Package: testpkg\nTitle: Test\nDescription: Testing.\nLicense: MIT",
+    file.path(tmp, "DESCRIPTION")
+  )
+
+  suppressMessages(
+    add_global_rbuildignore(pattern = "^custom-pattern$", path = tmp)
+  )
+
+  lines <- readLines(file.path(tmp, ".Rbuildignore"), warn = FALSE)
+  expect_true("^\\.Rhistory$" %in% lines)
+  expect_true("^custom-pattern$" %in% lines)
+})
+
+test_that("replace_default uses only supplied patterns", {
+  tmp <- tempfile("pkg")
+  dir.create(tmp)
+  on.exit(unlink(tmp, recursive = TRUE))
+
+  writeLines(
+    "Package: testpkg\nTitle: Test\nDescription: Testing.\nLicense: MIT",
+    file.path(tmp, "DESCRIPTION")
+  )
+
+  suppressMessages(add_global_rbuildignore(
+    pattern = c("# Custom patterns", "^custom-pattern$"),
+    replace_default = TRUE,
+    path = tmp
+  ))
+
+  lines <- readLines(file.path(tmp, ".Rbuildignore"), warn = FALSE)
+  expect_true("^custom-pattern$" %in% lines)
+  expect_false("^\\.Rhistory$" %in% lines)
+})
+
 test_that("appends only new patterns when some already exist", {
   tmp <- tempfile("pkg")
   dir.create(tmp)

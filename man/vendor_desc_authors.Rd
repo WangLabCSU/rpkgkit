@@ -2,11 +2,11 @@
 % Please edit documentation in R/43_use_vendor.R
 \name{vendor_desc_authors}
 \alias{vendor_desc_authors}
-\title{Helper: extract author info from vendor DESCRIPTION}
+\title{Helper: extract creator and author information from vendor DESCRIPTION}
 \usage{
 vendor_desc_authors(desc)
 }
 \description{
-Helper: extract author info from vendor DESCRIPTION
+Helper: extract creator and author information from vendor DESCRIPTION
 }
 \keyword{internal}

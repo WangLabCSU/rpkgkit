@@ -1,3 +1,66 @@
+#' Global `.Rbuildignore` patterns
+#'
+#' Default regular-expression patterns used by [add_global_rbuildignore()].
+#'
+#' @export
+GLOBAL_RBUILDIGNORE_PATTERN <- c(
+  "",
+  "# ---- Global rbuildignore patterns ----",
+  "",
+  "# R build artifacts",
+  "^\\.Rhistory$",
+  "^\\.Rdata$",
+  "^\\.Rcheck$",
+  "^\\.Rapp\\.Rproj$",
+  "^\\.Rapp\\.Rproj\\.user$",
+  "^\\.Rapp\\.history$",
+  "",
+  "# Git",
+  "^\\.git$",
+  "^\\.gitignore$",
+  "^\\.gitattributes$",
+  "",
+  "# IDE / dev tools",
+  "^\\.codebuddy$",
+  "^\\.fresh$",
+  "^\\.vscode$",
+  "^\\.lintr$",
+  "^\\.positai$",
+  "^\\.claude$",
+  "^\\..Rcheck$",
+  "^AGENTS\\.md",
+  "",
+  "# CI/CD",
+  "^\\.github$",
+  "^codecov\\.yml$",
+  "",
+  "# Documentation build artifacts",
+  "^docs$",
+  "^pkgdown$",
+  "^_pkgdown\\.yml$",
+  "^_pkgdown\\.yaml$",
+  "^pkgdown\\.yaml$",
+  "^pkgdown\\.yml$",
+  "^README\\.Rmd$",
+  "^cran-comments\\.md$",
+  "",
+  "# CRAN / development",
+  "^CRAN-SUBMISSION$",
+  "^revdep$",
+  "^codemeta\\.json$",
+  "^CITATION\\.cff$",
+  "",
+  "# Other common files",
+  "^\\.imgbotconfig$",
+  "^CODE_OF_CONDUCT\\.md$",
+  "^CONTRIBUTING\\.md$",
+  "^Rplots\\.pdf$",
+  "^jarl\\.toml$",
+  "^index\\.qmd$",
+  "^index\\.html$",
+  "^index\\.md$"
+)
+
 #' Add global .Rbuildignore patterns
 #'
 #' @description
@@ -11,8 +74,13 @@
 #' files that should not be shipped with a package.
 #'
 #' @param ... Additional regex patterns (character strings) to add beyond
-#'   the curated defaults. Each must already be in `.Rbuildignore` regex
+#'   the selected patterns. Each must already be in `.Rbuildignore` regex
 #'   format (e.g. `"^\\.myfile$"`).
+#' @param pattern Character vector of `.Rbuildignore` patterns. By default,
+#'   uses [rpkgkit::GLOBAL_RBUILDIGNORE_PATTERN].
+#' @param replace_default Logical. If `FALSE` (the default), `pattern` is
+#'   appended to [rpkgkit::GLOBAL_RBUILDIGNORE_PATTERN]. If `TRUE`, `pattern` is used instead
+#'   of the defaults.
 #' @param path Character. Path to the package root directory. If \code{NULL}
 #'   (the default), uses the current working directory.
 #'
@@ -25,8 +93,19 @@
 #'
 #' # With additional custom patterns
 #' add_global_rbuildignore("^\\.myconfig$", "^data-raw$")
+#'
+#' # Use only a custom pattern set
+#' add_global_rbuildignore(
+#'   pattern = c("^\\.github$", "^docs$"),
+#'   replace_default = TRUE
+#' )
 #' }
-add_global_rbuildignore <- function(..., path = NULL) {
+add_global_rbuildignore <- function(
+  ...,
+  pattern = GLOBAL_RBUILDIGNORE_PATTERN,
+  replace_default = FALSE,
+  path = NULL
+) {
   path <- path %||% "."
   if (!is_pkg(path)) {
     cli::cli_abort(c(
@@ -47,62 +126,24 @@ add_global_rbuildignore <- function(..., path = NULL) {
   # Extract existing patterns (non-comment, non-empty lines)
   existing_pats <- existing[!grepl("^\\s*(#|$)", existing)]
 
-  # Curated default entries as a formatted block
-  default_block <- c(
-    "",
-    "# ---- Global rbuildignore patterns ----",
-    "",
-    "# R build artifacts",
-    "^\\.Rhistory$",
-    "^\\.Rdata$",
-    "^\\.Rcheck$",
-    "^\\.Rapp\\.Rproj$",
-    "^\\.Rapp\\.Rproj\\.user$",
-    "^\\.Rapp\\.history$",
-    "",
-    "# Git",
-    "^\\.git$",
-    "^\\.gitignore$",
-    "^\\.gitattributes$",
-    "",
-    "# IDE / dev tools",
-    "^\\.codebuddy$",
-    "^\\.fresh$",
-    "^\\.vscode$",
-    "^\\.lintr$",
-    "^\\.positai$",
-    "^\\.claude$",
-    "",
-    "# CI/CD",
-    "^\\.github$",
-    "^codecov\\.yml$",
-    "",
-    "# Documentation build artifacts",
-    "^docs$",
-    "^pkgdown$",
-    "^_pkgdown\\.yml$",
-    "^_pkgdown\\.yaml$",
-    "^pkgdown\\.yaml$",
-    "^pkgdown\\.yml$",
-    "^README\\.Rmd$",
-    "^cran-comments\\.md$",
-    "",
-    "# CRAN / development",
-    "^CRAN-SUBMISSION$",
-    "^revdep$",
-    "^codemeta\\.json$",
-    "^CITATION\\.cff$",
-    "",
-    "# Other common files",
-    "^\\.imgbotconfig$",
-    "^CODE_OF_CONDUCT\\.md$",
-    "^CONTRIBUTING\\.md$",
-    "^Rplots\\.pdf$",
-    "^jarl\\.toml$",
-    "^index\\.qmd$",
-    "^index\\.html$",
-    "^index\\.md$"
-  )
+  if (!is.character(pattern)) {
+    cli::cli_abort("{.arg pattern} must be a character vector.")
+  }
+  if (
+    !is.logical(replace_default) ||
+      length(replace_default) != 1L ||
+      is.na(replace_default)
+  ) {
+    cli::cli_abort(
+      "{.arg replace_default} must be a single non-missing logical value."
+    )
+  }
+
+  default_block <- if (replace_default) {
+    pattern
+  } else {
+    unique(c(GLOBAL_RBUILDIGNORE_PATTERN, pattern))
+  }
 
   # Filter default block: keep blanks/headers, drop already-present patterns
   keep <- vapply(

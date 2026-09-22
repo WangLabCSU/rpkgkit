@@ -49,3 +49,4 @@ inst/actions/*/lib/
 .quarto
 /.uvr/library/
 /.uvr/activate*
+inst/doc

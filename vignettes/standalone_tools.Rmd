@@ -1,0 +1,132 @@
+---
+title: "rpkgkit standalone scripts"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{rpkgkit standalone scripts}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include = FALSE
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+#| label = "setup"
+library(rpkgkit)
+dir <- file.path(tempdir(), "example")
+usethis::create_package(dir, open = FALSE)
+usethis::local_project(dir)
+usethis::use_readme_md(open = FALSE)
+```
+
+
+# Import standalone helpers
+
+`rpkgkit` includes utilities that can also be imported directly into another
+project with `usethis::use_standalone()`.
+
+```r
+usethis::use_standalone("WangLabCSU/rpkgkit", "args_to_func")
+```
+
+## Match arguments to functions
+
+The `args_to_func.R` standalone script provides helpers for matching a list of
+arguments to compatible functions.
+
+```r
+f1 <- function(a, b) a + b
+f2 <- function(x, y, ...) x * y
+f3 <- function(p, q) p - q
+
+args <- list(a = 1, b = 2)
+match_func_to_args(args, f1, f2, f3)
+```
+
+```r
+args <- list(a = 1, b = 2, x = 3, y = 4)
+foo <- function(x, y = 1) x + y
+filter_args_for_func(args, foo)
+```
+
+## Show the caller of a cli message
+
+The `caller_cli.R` standalone script decorates a `cli` function so its output
+identifies the caller.
+
+```r
+decorated <- add_caller_to_cli(cli::cli_alert_info)
+foo1 <- \() {
+  decorated("<- where is this called from?")
+}
+foo2 <- \() foo1()
+bar <- function() foo2()
+bar()
+```
+
+## Use colored cli output
+
+The `colorful_cli.R` standalone script creates a `cli` environment with
+convenient color classes.
+
+```r
+color_cli <- create_colorful_cli_env()
+color_cli$cli_alert_danger("{.red This is a red message}")
+color_cli$cli_alert_info("{.blue This is a blue message}")
+color_cli$cli_alert_info("{.orange This is an orange message}")
+
+color_cli2 <- create_colorful_cli_env(cli_theme = generate_color_theme())
+color_cli2$cli_alert_success(
+  "{.violetred3 R}{.orange a}{.yellow i}{.green n}{.cyan b}{.blue o}{.purple w}"
+)
+```
+
+## Add timestamps to cli output
+
+The `ts_cli.R` standalone script creates timestamped `cli` functions.
+
+```r
+ts_cli <- create_ts_cli_env()
+ts_cli$cli_alert_info("Hello, world!")
+```
+
+# Manage standalone files in a package
+
+Use `inquire_standalone()` to inspect standalone files in a GitHub repository
+and `browse_standalone()` to search supported repositories.
+
+```{r}
+#| label = "inquire"
+inquire_standalone("r-lib/rlang")
+```
+
+```{r}
+#| label = "browse"
+browse_standalone()
+```
+
+Create a local standalone file with a standard metadata header:
+
+```{r}
+#| label = "create"
+create_standalone("foo", open = FALSE)
+```
+
+After editing standalone files, refresh their `last-updated` field:
+
+```{r}
+#| label = "update timestamp"
+update_time_in_standalone(path = "./R/standalone-foo.R")
+```
+
+Add a dated changelog entry to one or more standalone files:
+
+```{r}
+#| label = "add changelog"
+add_changelog_in_standalone("R/standalone-foo.R", "Added foo function")
+```

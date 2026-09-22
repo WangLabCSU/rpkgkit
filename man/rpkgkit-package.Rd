@@ -20,8 +20,7 @@ MIT + file LICENSE
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/WangLabCSU/rpkgkit}
-  \item \url{https://wanglabcsu.github.io/rpkgkit/}
+  \item /tmp/RtmpUiud0E
   \item Report bugs at \url{https://github.com/WangLabCSU/rpkgkit/issues}
 }
 
@@ -32,14 +31,14 @@ Useful links:
 Authors:
 \itemize{
   \item Yuxi Yang \email{15364051195@163.com}
-  \item Jacob Scott (Author of the included pedant code (https://github.com/wurli/pedant)) [copyright holder]
-  \item Diego Hernangómez \email{diego.hernangomezherrero@gmail.com} (Author of the included pkgdev code (https://github.com/dieghernan/pkgdev)) [copyright holder]
 }
 
 Other contributors:
 \itemize{
+  \item Jacob Scott (Author of the included pedant code (https://github.com/wurli/pedant)) [contributor, copyright holder]
   \item Christopher T. Kenny (Contributor to the included pedant code) [contributor, copyright holder]
   \item Sebastian Lammers (Contributor to the included pedant code) [contributor, copyright holder]
+  \item Diego Hernangómez \email{diego.hernangomezherrero@gmail.com} (Author of the included pkgdev code (https://github.com/dieghernan/pkgdev)) [contributor, copyright holder]
 }
 
 }

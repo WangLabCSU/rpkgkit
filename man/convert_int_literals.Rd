@@ -6,12 +6,7 @@
 \alias{convert_int_literals}
 \title{Add Explicit Integer Suffix \code{L} to Integer Literals}
 \usage{
-package_convert_int_literals(
-  path = NULL,
-  dirs = c("R", "tests"),
-  recursive = TRUE,
-  ...
-)
+package_convert_int_literals(path = NULL, dirs = c("R"), recursive = TRUE, ...)
 
 convert_int_literals(path = NULL, verbose = TRUE, ...)
 }
@@ -25,7 +20,7 @@ package root. If \code{NULL}, the current working directory is used.}
 
 \item{dirs}{Character vector of subdirectories relative to \code{path} to search.
 Used only by \code{\link[=package_convert_int_literals]{package_convert_int_literals()}}. Defaults to
-\code{c("R", "tests")}.}
+\code{c("R")}.}
 
 \item{recursive}{Logical; recurse into subdirectories. Used only by
 \code{\link[=package_convert_int_literals]{package_convert_int_literals()}}. Default \code{TRUE}.}
@@ -48,7 +43,8 @@ unchanged.
 \code{\link[=convert_int_literals]{convert_int_literals()}} operates on one R file. When \code{path} is \code{NULL} and
 RStudio is available, it uses the currently active document.
 \code{\link[=package_convert_int_literals]{package_convert_int_literals()}} walks selected directories of an R package
-and applies the same conversion to every \code{.R} / \code{.r} file found.
+and applies the same conversion to every \code{.R} / \code{.r} file found, except
+automatically generated \code{RcppExports.R} files.
 }
 \details{
 A token is treated as an integer literal when it is:
