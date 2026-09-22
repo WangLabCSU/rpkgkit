@@ -29,6 +29,7 @@ Imports:
     rlang (>= 1.0.0),
     rstudioapi
 Suggests: 
+    badger,
     desc,
     devtools,
     dplyr,

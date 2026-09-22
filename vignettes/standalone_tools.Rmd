@@ -16,7 +16,8 @@ knitr::opts_chunk$set(
 ```
 
 ```{r}
-#| label = "setup"
+#| label = "setup",
+#| eval = FALSE
 library(rpkgkit)
 dir <- file.path(tempdir(), "example")
 usethis::create_package(dir, open = FALSE)
@@ -24,6 +25,13 @@ usethis::local_project(dir)
 usethis::use_readme_md(open = FALSE)
 ```
 
+```{r}
+#| label = "setup_bg",
+#| include = FALSE,
+#| echo = FALSE,
+#| message = FALSE
+library(rpkgkit)
+```
 
 # Import standalone helpers
 
@@ -102,31 +110,34 @@ and `browse_standalone()` to search supported repositories.
 
 ```{r}
 #| label = "inquire"
-inquire_standalone("r-lib/rlang")
+try(inquire_standalone("r-lib/rlang"))
 ```
 
 ```{r}
 #| label = "browse"
-browse_standalone()
+try(browse_standalone())
 ```
 
 Create a local standalone file with a standard metadata header:
 
 ```{r}
-#| label = "create"
+#| label = "create",
+#| eval = FALSE
 create_standalone("foo", open = FALSE)
 ```
 
 After editing standalone files, refresh their `last-updated` field:
 
 ```{r}
-#| label = "update timestamp"
+#| label = "update timestamp",
+#| eval = FALSE
 update_time_in_standalone(path = "./R/standalone-foo.R")
 ```
 
 Add a dated changelog entry to one or more standalone files:
 
 ```{r}
-#| label = "add changelog"
+#| label = "add changelog",
+#| eval = FALSE
 add_changelog_in_standalone("R/standalone-foo.R", "Added foo function")
 ```

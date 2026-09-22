@@ -20,7 +20,8 @@ MIT + file LICENSE
 \seealso{
 Useful links:
 \itemize{
-  \item /tmp/RtmpUiud0E
+  \item \url{https://github.com/WangLabCSU/rpkgkit}
+  \item \url{https://wanglabcsu.github.io/rpkgkit/}
   \item Report bugs at \url{https://github.com/WangLabCSU/rpkgkit/issues}
 }
 

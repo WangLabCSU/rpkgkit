@@ -29,6 +29,7 @@ If both files exist, only \code{README.Rmd} is updated.
 \donttest{
 tmpdir <- tempdir()
 usethis::create_package(path = tmpdir, open = FALSE)
-badger::badge_last_commit(alt = "last-commit") |> badge_to_readme()
+usethis::proj_set(path = tmpdir)
+badger::badge_last_commit(alt = "last-commit") |> badge_to_readme(path = tmpdir)
 }
 }

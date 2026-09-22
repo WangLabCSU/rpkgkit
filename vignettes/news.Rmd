@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 Here we create a template for editing NEWS.md
 
 ```{r}
-#| label = "setup"
+#| label = "setup",
 #| echo = FALSE
 library(rpkgkit)
 tmpdir <- tempdir()

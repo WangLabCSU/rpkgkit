@@ -17,10 +17,11 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' tmpdir <- tempdir()
 #' usethis::create_package(path = tmpdir, open = FALSE)
-#' badger::badge_last_commit(alt = "last-commit") |> badge_to_readme()
+#' usethis::proj_set(path = tmpdir)
+#' badger::badge_last_commit(alt = "last-commit") |> badge_to_readme(path = tmpdir)
 #' }
 badge_to_readme <- function(badge, path = NULL, ...) {
   rlang::check_dots_empty()
