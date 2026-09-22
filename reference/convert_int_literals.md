@@ -82,7 +82,7 @@ and it is **not**:
 temp <- tempfile(fileext = ".R")
 writeLines("tmp <- seq_len(10)", temp)
 convert_int_literals(temp)
-#> ✔ Added explicit integer suffixes in /tmp/RtmpoUhW6Z/file1a6e3fb284eb.R
+#> ✔ Added explicit integer suffixes in /tmp/RtmpEsKggO/file19a44d399870.R
 readLines(temp)
 #> [1] "tmp <- seq_len(10L)"
 # "tmp <- seq_len(10L)"
@@ -90,8 +90,10 @@ readLines(temp)
 # --- Entire package ---
 tmp_pkg <- tempdir()
 usethis::create_package(tmp_pkg, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmpoUhW6Z".
-#> Package: RtmpoUhW6Z
+#> ✔ Setting active project to "/tmp/RtmpEsKggO".
+#> ✔ Creating R/.
+#> ✔ Writing DESCRIPTION.
+#> Package: RtmpEsKggO
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):
@@ -102,7 +104,8 @@ usethis::create_package(tmp_pkg, open = FALSE)
 #> Config/roxygen2/version: 8.1.0
 #> Encoding: UTF-8
 #> Roxygen: list(markdown = TRUE)
-#> ✔ Setting active project to "/tmp/RtmpoUhW6Z".
+#> ✔ Writing NAMESPACE.
+#> ✔ Setting active project to "<no active project>".
 writeLines("foo <- seq_len(42)", file.path(tmp_pkg, "R/foo.R"))
 package_convert_int_literals(tmp_pkg)
 #> ✔ Processed 1 file, updated 1

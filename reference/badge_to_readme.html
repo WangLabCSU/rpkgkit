@@ -82,31 +82,14 @@ If both files exist, only README.Rmd is updated."><meta property="og:image" cont
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="va">tmpdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/create_package.html" class="external-link">create_package</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">tmpdir</span>, open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/tmp/RtmpoUhW6Z"</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Creating <span style="color: #0000BB;">R/</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Writing <span style="color: #0000BB;">DESCRIPTION</span>.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Package</span>: RtmpoUhW6Z</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Title</span>: What the Package Does (One Line, Title Case)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Version</span>: 0.0.0.9000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Authors@R</span> (parsed):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     * First Last &lt;first.last@example.com&gt; [aut, cre]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Description</span>: What the package does (one paragraph).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">License</span>: `use_mit_license()`, `use_gpl3_license()` or friends to</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     pick a license</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Config/roxygen2/version</span>: 8.1.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Encoding</span>: UTF-8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Roxygen</span>: list(markdown = TRUE)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Writing <span style="color: #0000BB;">NAMESPACE</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"&lt;no active project&gt;"</span>.</span>
-<span class="r-in"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/proj_utils.html" class="external-link">proj_set</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">tmpdir</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/tmp/RtmpoUhW6Z"</span>.</span>
-<span class="r-in"><span><span class="fu">badger</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/badger/man/badge_last_commit.html" class="external-link">badge_last_commit</a></span><span class="op">(</span>alt <span class="op">=</span> <span class="st">"last-commit"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">badge_to_readme</span><span class="op">(</span>path <span class="op">=</span> <span class="va">tmpdir</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in check_uses_git():</span> <span style="color: #BB0000;">✖</span> Cannot detect that project is already a Git repository.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Do you need to run `usethis::use_git()`?</span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">tmpdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/create_package.html" class="external-link">create_package</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">tmpdir</span>, open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/proj_utils.html" class="external-link">proj_set</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">tmpdir</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">badger</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/badger/man/badge_last_commit.html" class="external-link">badge_last_commit</a></span><span class="op">(</span>alt <span class="op">=</span> <span class="st">"last-commit"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">badge_to_readme</span><span class="op">(</span>path <span class="op">=</span> <span class="va">tmpdir</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

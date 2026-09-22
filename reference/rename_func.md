@@ -59,11 +59,11 @@ and normalizes function names to the target style.
 temp <- tempfile(fileext = ".R")
 writeLines("foo_bar <- function(){message('foo_bar')}", temp)
 rename_func(temp, style = "camelCase")
-#> ✔ Renamed 1 function to "camelCase" style in /tmp/RtmpoUhW6Z/file1a6e1020b8da.R
+#> ✔ Renamed 1 function to "camelCase" style in /tmp/RtmpEsKggO/file19a4746576dd.R
 readLines(temp)
 #> [1] "fooBar <- function(){message('fooBar')}"
 rename_func(temp, style = "snake_case")
-#> ✔ Renamed 1 function to "snake_case" style in /tmp/RtmpoUhW6Z/file1a6e1020b8da.R
+#> ✔ Renamed 1 function to "snake_case" style in /tmp/RtmpEsKggO/file19a4746576dd.R
 readLines(temp)
 #> [1] "foo_bar <- function(){message('foo_bar')}"
 # }
