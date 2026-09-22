@@ -7,17 +7,13 @@ are left unchanged.
 `convert_int_literals()` operates on one R file. When `path` is `NULL`
 and RStudio is available, it uses the currently active document.
 `package_convert_int_literals()` walks selected directories of an R
-package and applies the same conversion to every `.R` / `.r` file found.
+package and applies the same conversion to every `.R` / `.r` file found,
+except automatically generated `RcppExports.R` files.
 
 ## Usage
 
 ``` r
-package_convert_int_literals(
-  path = NULL,
-  dirs = c("R", "tests"),
-  recursive = TRUE,
-  ...
-)
+package_convert_int_literals(path = NULL, dirs = c("R"), recursive = TRUE, ...)
 
 convert_int_literals(path = NULL, verbose = TRUE, ...)
 ```
@@ -36,8 +32,7 @@ convert_int_literals(path = NULL, verbose = TRUE, ...)
 - dirs:
 
   Character vector of subdirectories relative to `path` to search. Used
-  only by `package_convert_int_literals()`. Defaults to
-  `c("R", "tests")`.
+  only by `package_convert_int_literals()`. Defaults to `c("R")`.
 
 - recursive:
 
@@ -87,7 +82,7 @@ and it is **not**:
 temp <- tempfile(fileext = ".R")
 writeLines("tmp <- seq_len(10)", temp)
 convert_int_literals(temp)
-#> ✔ Added explicit integer suffixes in /tmp/Rtmp2FpQDd/file19221995e0b2.R
+#> ✔ Added explicit integer suffixes in /tmp/RtmpksCWwR/file1ba526d023a4.R
 readLines(temp)
 #> [1] "tmp <- seq_len(10L)"
 # "tmp <- seq_len(10L)"
@@ -95,10 +90,8 @@ readLines(temp)
 # --- Entire package ---
 tmp_pkg <- tempdir()
 usethis::create_package(tmp_pkg, open = FALSE)
-#> ✔ Setting active project to "/tmp/Rtmp2FpQDd".
-#> ✔ Creating R/.
-#> ✔ Writing DESCRIPTION.
-#> Package: Rtmp2FpQDd
+#> ✔ Setting active project to "/tmp/RtmpksCWwR".
+#> Package: RtmpksCWwR
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):
@@ -109,8 +102,7 @@ usethis::create_package(tmp_pkg, open = FALSE)
 #> Config/roxygen2/version: 8.1.0
 #> Encoding: UTF-8
 #> Roxygen: list(markdown = TRUE)
-#> ✔ Writing NAMESPACE.
-#> ✔ Setting active project to "<no active project>".
+#> ✔ Setting active project to "/tmp/RtmpksCWwR".
 writeLines("foo <- seq_len(42)", file.path(tmp_pkg, "R/foo.R"))
 package_convert_int_literals(tmp_pkg)
 #> ✔ Processed 1 file, updated 1

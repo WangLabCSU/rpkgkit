@@ -28,17 +28,17 @@ Authors:
 
 - Yuxi Yang <15364051195@163.com>
 
-- Jacob Scott (Author of the included pedant code
-  (https://github.com/wurli/pedant)) \[copyright holder\]
-
-- Diego Hernangómez <diego.hernangomezherrero@gmail.com> (Author of the
-  included pkgdev code (https://github.com/dieghernan/pkgdev))
-  \[copyright holder\]
-
 Other contributors:
+
+- Jacob Scott (Author of the included pedant code
+  (https://github.com/wurli/pedant)) \[contributor, copyright holder\]
 
 - Christopher T. Kenny (Contributor to the included pedant code)
   \[contributor, copyright holder\]
 
 - Sebastian Lammers (Contributor to the included pedant code)
+  \[contributor, copyright holder\]
+
+- Diego Hernangómez <diego.hernangomezherrero@gmail.com> (Author of the
+  included pkgdev code (https://github.com/dieghernan/pkgdev))
   \[contributor, copyright holder\]

@@ -1,6 +1,6 @@
-# Helper: extract author info from vendor DESCRIPTION
+# Helper: extract creator and author information from vendor DESCRIPTION
 
-Helper: extract author info from vendor DESCRIPTION
+Helper: extract creator and author information from vendor DESCRIPTION
 
 ## Usage
 

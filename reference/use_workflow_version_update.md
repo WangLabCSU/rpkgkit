@@ -47,7 +47,8 @@ use_workflow_version_update(
 
 - ...:
 
-  pass to `badger::badge_devel`
+  pass to
+  [`badger::badge_devel`](https://rdrr.io/pkg/badger/man/badge_devel.html)
 
 ## Value
 

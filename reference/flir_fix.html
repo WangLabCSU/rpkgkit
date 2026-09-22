@@ -9,7 +9,7 @@ apply the appropriate flir fix function."><meta property="og:image" content="htt
 
     <a class="navbar-brand me-2" href="../index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.16</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,6 +18,7 @@ apply the appropriate flir fix function."><meta property="og:image" content="htt
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -36,7 +37,7 @@ apply the appropriate flir fix function."><meta property="og:image" content="htt
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Fix R code or package using flir</h1>
-      <small class="dont-index">Source: <a href="https://github.com/WangLabCSU/rpkgkit/blob/main/R/11_flir_fix.R" class="external-link"><code>R/11_flir_fix.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/WangLabCSU/rpkgkit/blob/main/R/71_flir_fix.R" class="external-link"><code>R/71_flir_fix.R</code></a></small>
       <div class="d-none name"><code>flir_fix.Rd</code></div>
     </div>
 
@@ -79,7 +80,7 @@ running in RStudio, uses the active document path.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".R"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="st">"a&lt;-1+1"</span>, <span class="va">tmp</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">flir_fix</span><span class="op">(</span><span class="va">tmp</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fixing R code in <span style="color: #0000BB;">/tmp/Rtmp2FpQDd/file19221c8529e6.R</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fixing R code in <span style="color: #0000BB;">/tmp/RtmpksCWwR/file1ba54d15e2d9.R</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Going to check 1 file.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> No fixes needed.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">tmp</span>, warn <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span></span>
@@ -91,7 +92,7 @@ running in RStudio, uses the active document path.</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Yuxi Yang, Jacob Scott, Diego Hernangómez.</p>
+  <p>Developed by Yuxi Yang.</p>
 </div>
 
 <div class="pkgdown-footer-right">

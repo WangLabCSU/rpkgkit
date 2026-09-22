@@ -1,9 +1,51 @@
 # Changelog
 
-## rpkgkit 0.1.16 (2026-9-21)
+## rpkgkit 0.1.17 (2026-9-22)
 
-- `use_vendor` now only add authors whose role is `aut` or `cre`
-- refactor `detect_*` and `package_*` functions
+### NEW FEATURES
+
+- Added
+  [`badge_to_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/badge_to_readme.md)
+  to insert a Markdown badge into the badges block of `README.Rmd` or
+  `README.md`.
+- Added exported `GLOBAL_RBUILDIGNORE_PATTERN` and `PERMISSIVE_LICENSE`
+  constants for customizing package-maintenance workflows.
+
+### BUG FIXES
+
+- [`add_global_gitgnore()`](https://wanglabcsu.github.io/rpkgkit/reference/add_global_gitgnore.md)
+  now correctly updates a package specified with an absolute path.
+- [`use_vendor()`](https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.md)
+  now adds only people with an `aut` or `cre` role to `Authors@R`.
+- [`package_convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.md)
+  now skips automatically generated `RcppExports.R` files, which should
+  not be edited manually.
+
+### MINOR IMPROVEMENTS
+
+- [`add_global_rbuildignore()`](https://wanglabcsu.github.io/rpkgkit/reference/add_global_rbuildignore.md)
+  now supports supplying custom patterns and replacing its default
+  pattern set.
+- [`use_vendor()`](https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.md)
+  records vendored-code authors as contributors and copyright holders,
+  rather than package authors.
+- The version-bumper action now updates development-version badges
+  before committing a release version. Its version commits now run CI
+  before test branch synchronization.
+
+### DOCUMENTATION
+
+- Added pkgdown articles for the package vignettes and reorganized the
+  README around the package website guides.
+
+## rpkgkit 0.1.16
+
+### MINOR IMPROVEMENTS
+
+- Refactored `detect_*` and `package_*` functions.
+- Test-branch synchronization now runs only after `R-CMD-check.yaml`
+  succeeds for a push to `main` or `master`, and syncs the exact checked
+  commit.
 
 ## rpkgkit 0.1.15
 

@@ -134,3 +134,14 @@ The following functions help you to create and maintain an R package.
   :
 
   Add Explicit Integer Suffix `L` to Integer Literals
+
+- [`badge_to_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/badge_to_readme.md)
+  : Insert a badge into README badges block
+
+- [`GLOBAL_RBUILDIGNORE_PATTERN`](https://wanglabcsu.github.io/rpkgkit/reference/GLOBAL_RBUILDIGNORE_PATTERN.md)
+  :
+
+  Global `.Rbuildignore` patterns
+
+- [`PERMISSIVE_LICENSE`](https://wanglabcsu.github.io/rpkgkit/reference/PERMISSIVE_LICENSE.md)
+  : Project License Allowing Copying

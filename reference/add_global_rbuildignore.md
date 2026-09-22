@@ -13,7 +13,12 @@ files that should not be shipped with a package.
 ## Usage
 
 ``` r
-add_global_rbuildignore(..., path = NULL)
+add_global_rbuildignore(
+  ...,
+  pattern = GLOBAL_RBUILDIGNORE_PATTERN,
+  replace_default = FALSE,
+  path = NULL
+)
 ```
 
 ## Arguments
@@ -21,8 +26,19 @@ add_global_rbuildignore(..., path = NULL)
 - ...:
 
   Additional regex patterns (character strings) to add beyond the
-  curated defaults. Each must already be in `.Rbuildignore` regex format
-  (e.g. `"^\\.myfile$"`).
+  selected patterns. Each must already be in `.Rbuildignore` regex
+  format (e.g. `"^\\.myfile$"`).
+
+- pattern:
+
+  Character vector of `.Rbuildignore` patterns. By default, uses
+  [GLOBAL_RBUILDIGNORE_PATTERN](https://wanglabcsu.github.io/rpkgkit/reference/GLOBAL_RBUILDIGNORE_PATTERN.md).
+
+- replace_default:
+
+  Logical. If `FALSE` (the default), `pattern` is appended to
+  [GLOBAL_RBUILDIGNORE_PATTERN](https://wanglabcsu.github.io/rpkgkit/reference/GLOBAL_RBUILDIGNORE_PATTERN.md).
+  If `TRUE`, `pattern` is used instead of the defaults.
 
 - path:
 
@@ -41,5 +57,11 @@ add_global_rbuildignore()
 
 # With additional custom patterns
 add_global_rbuildignore("^\\.myconfig$", "^data-raw$")
+
+# Use only a custom pattern set
+add_global_rbuildignore(
+  pattern = c("^\\.github$", "^docs$"),
+  replace_default = TRUE
+)
 } # }
 ```

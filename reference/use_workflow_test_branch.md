@@ -2,9 +2,9 @@
 
 Copies the built-in `sync_test_branch.yml` workflow template and the
 corresponding `sync-test-branch` composite action to the target
-package's `.github/` directory. The workflow triggers on push to
-`main`/`master` and force-pushes the main branch contents onto the
-`test` branch.
+package's `.github/` directory. The workflow runs only after
+`R-CMD-check.yaml` successfully completes for a push to `main`/`master`,
+then force-pushes the checked commit onto the `test` branch.
 
 **Safety mechanism**: If the `test` branch contains commits that are not
 reachable from `main` (i.e., unmerged work-in-progress), the sync is

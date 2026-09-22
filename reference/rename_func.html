@@ -13,7 +13,7 @@ functions within the file are also updated.'><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.16</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@ functions within the file are also updated.'><meta property="og:image" content="
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -101,11 +102,11 @@ and normalizes function names to the target style.</p>
 <span class="r-in"><span><span class="va">temp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".R"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="st">"foo_bar &lt;- function(){message('foo_bar')}"</span>, <span class="va">temp</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">rename_func</span><span class="op">(</span><span class="va">temp</span>, style <span class="op">=</span> <span class="st">"camelCase"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Renamed 1 function to <span style="color: #0000BB;">"camelCase"</span> style in <span style="color: #0000BB;">/tmp/Rtmp2FpQDd/file19222017ea10.R</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Renamed 1 function to <span style="color: #0000BB;">"camelCase"</span> style in <span style="color: #0000BB;">/tmp/RtmpksCWwR/file1ba535c5cdd2.R</span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">temp</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "fooBar &lt;- function(){message('fooBar')}"</span>
 <span class="r-in"><span><span class="fu">rename_func</span><span class="op">(</span><span class="va">temp</span>, style <span class="op">=</span> <span class="st">"snake_case"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Renamed 1 function to <span style="color: #0000BB;">"snake_case"</span> style in <span style="color: #0000BB;">/tmp/Rtmp2FpQDd/file19222017ea10.R</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Renamed 1 function to <span style="color: #0000BB;">"snake_case"</span> style in <span style="color: #0000BB;">/tmp/RtmpksCWwR/file1ba535c5cdd2.R</span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">temp</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "foo_bar &lt;- function(){message('foo_bar')}"</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
@@ -117,7 +118,7 @@ and normalizes function names to the target style.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Yuxi Yang, Jacob Scott, Diego Hernangómez.</p>
+  <p>Developed by Yuxi Yang.</p>
 </div>
 
 <div class="pkgdown-footer-right">

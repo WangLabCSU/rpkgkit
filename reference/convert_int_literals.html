@@ -5,13 +5,15 @@ unchanged.
 convert_int_literals() operates on one R file. When path is NULL and
 RStudio is available, it uses the currently active document.
 package_convert_int_literals() walks selected directories of an R package
-and applies the same conversion to every .R / .r file found."><meta property="og:description" content="Converts bare integer literals to explicit integer form with an L suffix,
+and applies the same conversion to every .R / .r file found, except
+automatically generated RcppExports.R files."><meta property="og:description" content="Converts bare integer literals to explicit integer form with an L suffix,
 e.g. seq_len(10) becomes seq_len(10L). Strings and comments are left
 unchanged.
 convert_int_literals() operates on one R file. When path is NULL and
 RStudio is available, it uses the currently active document.
 package_convert_int_literals() walks selected directories of an R package
-and applies the same conversion to every .R / .r file found."><meta property="og:image" content="https://wanglabcsu.github.io/rpkgkit/logo.png"></head><body>
+and applies the same conversion to every .R / .r file found, except
+automatically generated RcppExports.R files."><meta property="og:image" content="https://wanglabcsu.github.io/rpkgkit/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -19,7 +21,7 @@ and applies the same conversion to every .R / .r file found."><meta property="og
 
     <a class="navbar-brand me-2" href="../index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.16</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +30,7 @@ and applies the same conversion to every .R / .r file found."><meta property="og
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/index.html">Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -57,17 +60,13 @@ unchanged.</p>
 <p><code>convert_int_literals()</code> operates on one R file. When <code>path</code> is <code>NULL</code> and
 RStudio is available, it uses the currently active document.
 <code>package_convert_int_literals()</code> walks selected directories of an R package
-and applies the same conversion to every <code>.R</code> / <code>.r</code> file found.</p>
+and applies the same conversion to every <code>.R</code> / <code>.r</code> file found, except
+automatically generated <code>RcppExports.R</code> files.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">package_convert_int_literals</span><span class="op">(</span></span>
-<span>  path <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  dirs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"tests"</span><span class="op">)</span>,</span>
-<span>  recursive <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">package_convert_int_literals</span><span class="op">(</span>path <span class="op">=</span> <span class="cn">NULL</span>, dirs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"R"</span><span class="op">)</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">convert_int_literals</span><span class="op">(</span>path <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -87,7 +86,7 @@ package root. If <code>NULL</code>, the current working directory is used.</p></
 <dt id="arg-dirs">dirs<a class="anchor" aria-label="anchor" href="#arg-dirs"></a></dt>
 <dd><p>Character vector of subdirectories relative to <code>path</code> to search.
 Used only by <code>package_convert_int_literals()</code>. Defaults to
-<code>c("R", "tests")</code>.</p></dd>
+<code>c("R")</code>.</p></dd>
 
 
 <dt id="arg-recursive">recursive<a class="anchor" aria-label="anchor" href="#arg-recursive"></a></dt>
@@ -128,7 +127,7 @@ modified file paths.</p>
 <span class="r-in"><span><span class="va">temp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".R"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="st">"tmp &lt;- seq_len(10)"</span>, <span class="va">temp</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">convert_int_literals</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Added explicit integer suffixes in <span style="color: #0000BB;">/tmp/Rtmp2FpQDd/file19221995e0b2.R</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Added explicit integer suffixes in <span style="color: #0000BB;">/tmp/RtmpksCWwR/file1ba526d023a4.R</span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">temp</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "tmp &lt;- seq_len(10L)"</span>
 <span class="r-in"><span><span class="co"># "tmp &lt;- seq_len(10L)"</span></span></span>
@@ -136,10 +135,8 @@ modified file paths.</p>
 <span class="r-in"><span><span class="co"># --- Entire package ---</span></span></span>
 <span class="r-in"><span><span class="va">tmp_pkg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/create_package.html" class="external-link">create_package</a></span><span class="op">(</span><span class="va">tmp_pkg</span>, open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/tmp/Rtmp2FpQDd"</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Creating <span style="color: #0000BB;">R/</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Writing <span style="color: #0000BB;">DESCRIPTION</span>.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Package</span>: Rtmp2FpQDd</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/tmp/RtmpksCWwR"</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Package</span>: RtmpksCWwR</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Title</span>: What the Package Does (One Line, Title Case)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Version</span>: 0.0.0.9000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Authors@R</span> (parsed):</span>
@@ -150,8 +147,7 @@ modified file paths.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Config/roxygen2/version</span>: 8.1.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Encoding</span>: UTF-8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Roxygen</span>: list(markdown = TRUE)</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Writing <span style="color: #0000BB;">NAMESPACE</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"&lt;no active project&gt;"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/tmp/RtmpksCWwR"</span>.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="st">"foo &lt;- seq_len(42)"</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">tmp_pkg</span>, <span class="st">"R/foo.R"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">package_convert_int_literals</span><span class="op">(</span><span class="va">tmp_pkg</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Processed 1 file, updated 1</span>
@@ -166,7 +162,7 @@ modified file paths.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Yuxi Yang, Jacob Scott, Diego Hernangómez.</p>
+  <p>Developed by Yuxi Yang.</p>
 </div>
 
 <div class="pkgdown-footer-right">
