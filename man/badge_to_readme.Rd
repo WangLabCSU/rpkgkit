@@ -26,10 +26,12 @@ Adds a markdown badge (typically from \pkg{badger}) to the
 If both files exist, only \code{README.Rmd} is updated.
 }
 \examples{
-\donttest{
-tmpdir <- tempdir()
-usethis::create_package(path = tmpdir, open = FALSE)
-usethis::proj_set(path = tmpdir)
-badger::badge_last_commit(alt = "last-commit") |> badge_to_readme(path = tmpdir)
+\dontrun{
+try({
+  tmpdir <- tempdir()
+  usethis::create_package(path = tmpdir, open = FALSE)
+  usethis::proj_set(path = tmpdir)
+  badger::badge_last_commit(alt = "last-commit") |> badge_to_readme(path = tmpdir)
+})
 }
 }
