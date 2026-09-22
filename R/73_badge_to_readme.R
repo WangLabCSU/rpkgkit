@@ -18,10 +18,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' tmpdir <- tempdir()
-#' usethis::create_package(path = tmpdir, open = FALSE)
-#' usethis::proj_set(path = tmpdir)
-#' badger::badge_last_commit(alt = "last-commit") |> badge_to_readme(path = tmpdir)
+#' try({
+#'   tmpdir <- tempdir()
+#'   usethis::create_package(path = tmpdir, open = FALSE)
+#'   usethis::proj_set(path = tmpdir)
+#'   badger::badge_last_commit(alt = "last-commit") |> badge_to_readme(path = tmpdir)
+#' })
 #' }
 badge_to_readme <- function(badge, path = NULL, ...) {
   rlang::check_dots_empty()
