@@ -43,8 +43,8 @@ Invisibly returns the URL that was written.
 # \donttest{
 tmpdir <- tempdir()
 usethis::create_package(path = tmpdir)
-#> ✔ Setting active project to "/tmp/RtmpksCWwR".
-#> Package: RtmpksCWwR
+#> ✔ Setting active project to "/tmp/RtmpoUhW6Z".
+#> Package: RtmpoUhW6Z
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):
@@ -55,7 +55,7 @@ usethis::create_package(path = tmpdir)
 #> Config/roxygen2/version: 8.1.0
 #> Encoding: UTF-8
 #> Roxygen: list(markdown = TRUE)
-#> ✔ Setting active project to "/tmp/RtmpksCWwR".
+#> ✔ Setting active project to "/tmp/RtmpoUhW6Z".
 use_bugreports(
   url = "https://github.com/WangLabCSU/rpkgkit/issues",
   path = tmpdir

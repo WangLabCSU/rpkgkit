@@ -4,10 +4,10 @@
 
 Here we create a template for editing NEWS.md
 
-    #> ✔ Setting active project to "/tmp/Rtmpz6Q0N6".
+    #> ✔ Setting active project to "/tmp/RtmpHLwHPe".
     #> ✔ Creating R/.
     #> ✔ Writing DESCRIPTION.
-    #> Package: Rtmpz6Q0N6
+    #> Package: RtmpHLwHPe
     #> Title: What the Package Does (One Line, Title Case)
     #> Version: 0.0.0.9000
     #> Authors@R (parsed):
@@ -38,14 +38,14 @@ news_md_add_entry(
   category = "NEW FEATURES",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/Rtmpz6Q0N6/NEWS.md
+#> ✔ Added 1 entry to /tmp/RtmpHLwHPe/NEWS.md
 #> → Version: 0.0.0.9000, Category: NEW FEATURES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # Rtmpz6Q0N6 0.0.0.9000 (2026-09-22)
+#> # RtmpHLwHPe 0.0.0.9000 (2026-09-22)
 #> 
 #> ## NEW FEATURES
 #> 
@@ -67,14 +67,14 @@ news_md_add_entry(
   contributor = "Jack",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/Rtmpz6Q0N6/NEWS.md
+#> ✔ Added 1 entry to /tmp/RtmpHLwHPe/NEWS.md
 #> → Version: 0.0.0.9000, Category: BUG FIXES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # Rtmpz6Q0N6 0.0.0.9000 (2026-09-22)
+#> # RtmpHLwHPe 0.0.0.9000 (2026-09-22)
 #> 
 #> ## BUG FIXES
 #> 

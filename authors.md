@@ -23,12 +23,12 @@ Source:
 [`DESCRIPTION`](https://github.com/WangLabCSU/rpkgkit/blob/main/DESCRIPTION)
 
 Yang Y (2026). *rpkgkit: Create and Maintain R Packages*. R package
-version 0.1.16, <https://github.com/WangLabCSU/rpkgkit>.
+version 0.1.17, <https://github.com/WangLabCSU/rpkgkit>.
 
     @Manual{,
       title = {rpkgkit: Create and Maintain R Packages},
       author = {Yuxi Yang},
       year = {2026},
-      note = {R package version 0.1.16},
+      note = {R package version 0.1.17},
       url = {https://github.com/WangLabCSU/rpkgkit},
     }

@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.16</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -171,22 +171,9 @@ supported repositories.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/browse_standalone.html">browse_standalone</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Searching GitHub for standalone-*.R files</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>  50% | 100/200 items, page 1/2 | ETA  0s</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100% | 200/200 items, page 2/2 | ETA  0s</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 180 × 9</span></span></span>
-<span><span class="co">#&gt;    repo       name  path  sha   url   html_url git_url repo_url repo_description</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> tidymodel… stan… R/st… 3f38… http… https:/… https:… https:/… A tidy unified …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> r-lib/rla… stan… R/st… 14c6… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> r-lib/rla… stan… R/st… a789… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> r-lib/rla… stan… R/st… 4da3… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> r-lib/rla… stan… R/st… 03ee… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> r-lib/rla… stan… R/st… 0c1d… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> r-lib/rla… stan… R/st… 5e9d… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> r-lib/rla… stan… R/st… e9c3… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> r-lib/rla… stan… R/st… 50ce… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> r-lib/rla… stan… R/st… 70f0… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 170 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; Error in gh::gh("/search/code", q = "filename:standalone- language:R -filename:import-",  : </span></span>
+<span><span class="co">#&gt;   GitHub API error (429): try again in 520.435583658s</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Read more at <span style="color: #0000BB; font-style: italic;">&lt;https://docs.github.com/rest/search/search#search-code&gt;</span></span></span></code></pre></div>
 <p>Create a local standalone file with a standard metadata header:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/create_standalone.html">create_standalone</a></span><span class="op">(</span><span class="st">"foo"</span>, open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>

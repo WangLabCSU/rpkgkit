@@ -1,9 +1,9 @@
 # Package Setup & Maintenace
 
-    #> ✔ Setting active project to "/tmp/RtmpUjjQDu".
+    #> ✔ Setting active project to "/tmp/RtmprMLUdM".
     #> ✔ Creating R/.
     #> ✔ Writing DESCRIPTION.
-    #> Package: RtmpUjjQDu
+    #> Package: RtmprMLUdM
     #> Title: What the Package Does (One Line, Title Case)
     #> Version: 0.0.0.9000
     #> Authors@R (parsed):
@@ -30,8 +30,8 @@ while also providing a useful starting template.
 ``` r
 
 use_zzz(path = dir, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmpUjjQDu".
-#> ✔ Created /tmp/RtmpUjjQDu/R/RtmpUjjQDu-package.R from template.
+#> ✔ Setting active project to "/tmp/RtmprMLUdM".
+#> ✔ Created /tmp/RtmprMLUdM/R/RtmprMLUdM-package.R from template.
 #> ✔ Adding cli to Imports field in DESCRIPTION.
 #> 
 #> ☐ Refer to functions with `cli::fun()`.
@@ -66,11 +66,11 @@ try(use_vendor(
 ))
 #> ℹ Fetching repository information for WangLabCSU/rpkgkit...
 #> ✔ Vendor package uses MIT license.
-#> ✔ Created directory /tmp/RtmpUjjQDu/inst/vendor/rpkgkit.
+#> ✔ Created directory /tmp/RtmprMLUdM/inst/vendor/rpkgkit.
 #> ✔ Copied LICENSE.
 #> ✔ Copied LICENSE.md.
 #> ✔ Created inst/vendor/rpkgkit/README.md.
-#> ✔ Created /tmp/RtmpUjjQDu/R/vendor-rpkgkit.R.
+#> ✔ Created /tmp/RtmprMLUdM/R/vendor-rpkgkit.R.
 #> ✔ Added rpkgkit authors to Authors@R.
 #> ✔ Updated DESCRIPTION.
 #> ☐ Consider pasting the following statement into README.md

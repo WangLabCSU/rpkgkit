@@ -38,10 +38,10 @@ Invisibly returns the path to the modified README file.
 # \donttest{
 tmpdir <- tempdir()
 usethis::create_package(path = tmpdir, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmpksCWwR".
+#> ✔ Setting active project to "/tmp/RtmpoUhW6Z".
 #> ✔ Creating R/.
 #> ✔ Writing DESCRIPTION.
-#> Package: RtmpksCWwR
+#> Package: RtmpoUhW6Z
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):
@@ -55,7 +55,7 @@ usethis::create_package(path = tmpdir, open = FALSE)
 #> ✔ Writing NAMESPACE.
 #> ✔ Setting active project to "<no active project>".
 usethis::proj_set(path = tmpdir)
-#> ✔ Setting active project to "/tmp/RtmpksCWwR".
+#> ✔ Setting active project to "/tmp/RtmpoUhW6Z".
 badger::badge_last_commit(alt = "last-commit") |> badge_to_readme(path = tmpdir)
 #> Error in check_uses_git(): ✖ Cannot detect that project is already a Git repository.
 #> ℹ Do you need to run `usethis::use_git()`?
