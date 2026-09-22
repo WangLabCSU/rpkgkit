@@ -56,12 +56,12 @@ an `inst/vendor/` directory, a `R/vendor-*.R` file, and updates relevant
 
 ```{r}
 #| label = "use_vendor"
-use_vendor(
+try(use_vendor(
   pkg = "WangLabCSU/rpkgkit",
   "43_use_vendor.R",
   branch = "main",
   path = dir
-)
+))
 ```
 
 Only packages with a supported permissive license can be vendored. Review the
