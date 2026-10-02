@@ -121,7 +121,7 @@ try(browse_standalone())
 #> ℹ Searching GitHub for standalone-*.R files
 #> ■■■■■■■■■■■■■■■■                  50% | 100/200 items, page 1/2 | ETA  0s
 #> ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | 200/200 items, page 2/2 | ETA  0s
-#> # A tibble: 180 × 9
+#> # A tibble: 199 × 9
 #>    repo       name  path  sha   url   html_url git_url repo_url repo_description
 #>    <chr>      <chr> <chr> <chr> <chr> <chr>    <chr>   <chr>    <chr>           
 #>  1 tidymodel… stan… R/st… 3f38… http… https:/… https:… https:/… A tidy unified …
@@ -134,7 +134,7 @@ try(browse_standalone())
 #>  8 r-lib/rla… stan… R/st… e9c3… http… https:/… https:… https:/… Low-level API f…
 #>  9 r-lib/rla… stan… R/st… 50ce… http… https:/… https:… https:/… Low-level API f…
 #> 10 r-lib/rla… stan… R/st… 70f0… http… https:/… https:… https:/… Low-level API f…
-#> # ℹ 170 more rows
+#> # ℹ 189 more rows
 ```
 
 Create a local standalone file with a standard metadata header:
