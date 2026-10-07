@@ -1,5 +1,11 @@
 # rpkgkit 0.1.18
 
+## BUG FIXES
+
+* `convert_int_literals()` and `package_convert_int_literals()` no longer
+  rewrite the exponent of a numeric literal such as `1e-3` / `1E-3`, which
+  previously produced invalid code like `1e-3L`.
+
 ## MINOR IMPROVEMENTS
 
 * `check_air_installed()` now offers to install `air` in interactive sessions

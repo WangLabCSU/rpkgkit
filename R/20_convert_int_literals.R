@@ -39,7 +39,7 @@
 #' and it is **not**:
 #' - already suffixed with `L` / `l`,
 #' - a floating-point number (`10.`, `1.0`, `.5`),
-#' - scientific notation (`1e5`, `1E-3`),
+#' - scientific notation, including a signed exponent (`1e5`, `1e-3`, `1E-3`),
 #' - a complex literal (`10i`),
 #' - adjacent to an identifier character (`a-zA-Z0-9._`).
 #'
@@ -118,6 +118,29 @@ convert_int_literals <- function(path = NULL, verbose = TRUE, ...) {
 
   is_ident <- function(ch) {
     grepl("[a-zA-Z0-9._]", ch)
+  }
+
+  # Are the digits starting at `pos` the exponent of a numeric literal? Covers
+  # signed exponents (`1e-3`, `1.5e+3`), whose leading mantissa scan ends before
+  # the sign, as well as float mantissas (`1.5e3`), where the scan ends at `e`.
+  is_exp_digits <- function(pos) {
+    if (pos < 3L) {
+      return(FALSE)
+    }
+    k <- if (chars[pos - 1L] %in% c("+", "-")) pos - 2L else pos - 1L
+    if (k < 2L || !chars[k] %in% c("e", "E")) {
+      return(FALSE)
+    }
+    mantissa_end <- k - 1L
+    if (!grepl("[0-9.]", chars[mantissa_end])) {
+      return(FALSE)
+    }
+    # `0x1e-3` is a hex literal minus an integer, not a numeric exponent.
+    b <- mantissa_end
+    while (b >= 1L && grepl("[0-9]", chars[b])) {
+      b <- b - 1L
+    }
+    !(b > 1L && chars[b] %in% c("x", "X") && chars[b - 1L] == "0")
   }
 
   while (i <= nc) {
@@ -255,6 +278,14 @@ convert_int_literals <- function(path = NULL, verbose = TRUE, ...) {
       is_complex <- nxt == "i"
       has_l <- nxt %in% c("L", "l")
       next_ident <- is_ident(nxt) && !has_l && !is_complex && !is_exp
+
+      # Digits that complete a numeric literal (signed exponent, or an exponent
+      # after a float mantissa) must not be treated as integers on their own.
+      if (is_exp_digits(i)) {
+        result <- c(result, chars[i:(j - 1L)])
+        i <- j
+        next
+      }
 
       # 1.2 or 1e3 or 10i or glued identifier -> leave as-is
       if (!is_float && !is_exp && !is_complex && !next_ident) {

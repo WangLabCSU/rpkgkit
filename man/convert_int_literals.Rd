@@ -57,7 +57,7 @@ and it is \strong{not}:
 \itemize{
 \item already suffixed with \code{L} / \code{l},
 \item a floating-point number (\code{10.}, \code{1.0}, \code{.5}),
-\item scientific notation (\code{1e5}, \code{1E-3}),
+\item scientific notation, including a signed exponent (\code{1e5}, \code{1e-3}, \code{1E-3}),
 \item a complex literal (\code{10i}),
 \item adjacent to an identifier character (\verb{a-zA-Z0-9._}).
 }

@@ -45,7 +45,9 @@ test_that("convert_int_literals leaves floats, scientific, complex and dot-numbe
       "b <- .5",
       "c <- 10.",
       "d <- 10i",
-      "e <- 1_000"
+      "e <- 1_000",
+      "f <- 1e-3",
+      "g <- 1E-3"
     ),
     path
   )
@@ -54,7 +56,15 @@ test_that("convert_int_literals leaves floats, scientific, complex and dot-numbe
 
   expect_equal(
     readLines(path, warn = FALSE),
-    c("a <- 1.5", "b <- .5", "c <- 10.", "d <- 10i", "e <- 1_000")
+    c(
+      "a <- 1.5",
+      "b <- .5",
+      "c <- 10.",
+      "d <- 10i",
+      "e <- 1_000",
+      "f <- 1e-3",
+      "g <- 1E-3"
+    )
   )
 })
 
@@ -234,6 +244,22 @@ test_that(".cil_process_text leaves floating point numbers", {
 test_that(".cil_process_text leaves scientific notation", {
   expect_equal(rpkgkit:::.cil_process_text("x <- 1e5"), "x <- 1e5")
   expect_equal(rpkgkit:::.cil_process_text("x <- 1E5"), "x <- 1E5")
+})
+
+test_that(".cil_process_text leaves scientific notation with a signed exponent", {
+  expect_equal(rpkgkit:::.cil_process_text("x <- 1e-3"), "x <- 1e-3")
+  expect_equal(rpkgkit:::.cil_process_text("x <- 1E-3"), "x <- 1E-3")
+  expect_equal(rpkgkit:::.cil_process_text("x <- 1e+3"), "x <- 1e+3")
+  expect_equal(rpkgkit:::.cil_process_text("x <- 1.5e-3"), "x <- 1.5e-3")
+  expect_equal(rpkgkit:::.cil_process_text("x <- .5e-3"), "x <- .5e-3")
+  expect_equal(rpkgkit:::.cil_process_text("x <- 1e-3L"), "x <- 1e-3L")
+  expect_equal(rpkgkit:::.cil_process_text("f(1e-3)"), "f(1e-3)")
+})
+
+test_that(".cil_process_text still converts integers around signed exponents", {
+  expect_equal(rpkgkit:::.cil_process_text("x <- 2e-3 + 4"), "x <- 2e-3 + 4L")
+  expect_equal(rpkgkit:::.cil_process_text("x <- 1e3-1e2"), "x <- 1e3-1e2")
+  expect_equal(rpkgkit:::.cil_process_text("x <- 0x1e-3"), "x <- 0x1eL-3L")
 })
 
 test_that(".cil_process_text leaves complex literals", {
