@@ -1,5 +1,18 @@
 # Changelog
 
+## rpkgkit 0.1.18
+
+### MINOR IMPROVEMENTS
+
+- [`check_air_installed()`](https://wanglabcsu.github.io/rpkgkit/reference/check_air_installed.md)
+  now offers to install `air` in interactive sessions when it is
+  missing, skipping the prompt during tests. On macOS it now uses the
+  official installer script instead of Homebrew or `uv`.
+- The package startup message now reports the load time
+  (e.g. `loaded [12.34 ms]`) instead of showing a progress spinner, and
+  the same template is used by
+  [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md).
+
 ## rpkgkit 0.1.17 (2026-9-22)
 
 ### NEW FEATURES

@@ -1,9 +1,10 @@
 # Package Setup & Maintenace
 
-    #> ✔ Setting active project to "/tmp/RtmpxyEH9K".
+    #> ✔ rpkgkit v0.1.17 loaded [2.23 ms]
+    #> ✔ Setting active project to "/tmp/Rtmp8S6JmW".
     #> ✔ Creating R/.
     #> ✔ Writing DESCRIPTION.
-    #> Package: RtmpxyEH9K
+    #> Package: Rtmp8S6JmW
     #> Title: What the Package Does (One Line, Title Case)
     #> Version: 0.0.0.9000
     #> Authors@R (parsed):
@@ -30,8 +31,8 @@ while also providing a useful starting template.
 ``` r
 
 use_zzz(path = dir, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmpxyEH9K".
-#> ✔ Created /tmp/RtmpxyEH9K/R/RtmpxyEH9K-package.R from template.
+#> ✔ Setting active project to "/tmp/Rtmp8S6JmW".
+#> ✔ Created /tmp/Rtmp8S6JmW/R/Rtmp8S6JmW-package.R from template.
 #> ✔ Adding cli to Imports field in DESCRIPTION.
 #> 
 #> ☐ Refer to functions with `cli::fun()`.
@@ -66,11 +67,11 @@ try(use_vendor(
 ))
 #> ℹ Fetching repository information for WangLabCSU/rpkgkit...
 #> ✔ Vendor package uses MIT license.
-#> ✔ Created directory /tmp/RtmpxyEH9K/inst/vendor/rpkgkit.
+#> ✔ Created directory /tmp/Rtmp8S6JmW/inst/vendor/rpkgkit.
 #> ✔ Copied LICENSE.
 #> ✔ Copied LICENSE.md.
 #> ✔ Created inst/vendor/rpkgkit/README.md.
-#> ✔ Created /tmp/RtmpxyEH9K/R/vendor-rpkgkit.R.
+#> ✔ Created /tmp/Rtmp8S6JmW/R/vendor-rpkgkit.R.
 #> ✔ Added rpkgkit authors to Authors@R.
 #> ✔ Updated DESCRIPTION.
 #> ☐ Consider pasting the following statement into README.md
