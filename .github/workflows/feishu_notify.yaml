@@ -5,14 +5,10 @@ on:
         types: [rerequested, completed]
     check_suite:
         types: [completed]
-    create:
-    delete:
-    deployment_status:
     discussion:
         types: [created, edited, answered]
     discussion_comment:
         types: [created, deleted]
-    gollum:
     issues:
         types: [opened, edited, milestoned, pinned, reopened]
     issue_comment:
@@ -21,7 +17,6 @@ on:
         types: [checks_requested]
     milestone:
         types: [opened, deleted]
-    page_build:
     project:
         types: [created, deleted, reopened]
     project_card:
