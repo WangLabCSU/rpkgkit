@@ -4,6 +4,7 @@
 ^\.Rproj\.user$
 ^README\.Rmd$
 ^cran-comments\.md$
+^\.posit$
 
 # flir files
 ^flir$

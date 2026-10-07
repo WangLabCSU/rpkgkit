@@ -50,3 +50,4 @@ inst/actions/*/lib/
 /.uvr/library/
 /.uvr/activate*
 inst/doc
+.posit/assistant/skills/r-lib

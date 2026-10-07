@@ -10,6 +10,7 @@ test_that("check_air_installed returns invisible TRUE when air is on PATH", {
 test_that("check_air_installed aborts when air is not found", {
   local_mocked_bindings(
     Sys.which = function(x) "",
+    interactive = function() FALSE,
     .package = "base"
   )
   expect_error(check_air_installed(), "air is not installed")
@@ -18,6 +19,7 @@ test_that("check_air_installed aborts when air is not found", {
 test_that("check_air_installed gives Linux-specific instructions", {
   local_mocked_bindings(
     Sys.which = function(x) "",
+    interactive = function() FALSE,
     .package = "base"
   )
   local_mocked_bindings(
@@ -31,19 +33,21 @@ test_that("check_air_installed gives Linux-specific instructions", {
 test_that("check_air_installed gives macOS-specific instructions", {
   local_mocked_bindings(
     Sys.which = function(x) "",
+    interactive = function() FALSE,
     .package = "base"
   )
   local_mocked_bindings(
     Sys.info = function() c(sysname = "Darwin"),
     .package = "base"
   )
-  expect_error(check_air_installed(), "brew install air")
-  expect_error(check_air_installed(), "uv tool install")
+  expect_error(check_air_installed(), "curl --proto '=https' --tlsv1.2")
+  expect_error(check_air_installed(), "air-installer.sh")
 })
 
 test_that("check_air_installed gives Windows-specific instructions", {
   local_mocked_bindings(
     Sys.which = function(x) "",
+    interactive = function() FALSE,
     .package = "base"
   )
   local_mocked_bindings(
@@ -57,6 +61,7 @@ test_that("check_air_installed gives Windows-specific instructions", {
 test_that("check_air_installed gives generic instructions for unknown OS", {
   local_mocked_bindings(
     Sys.which = function(x) "",
+    interactive = function() FALSE,
     .package = "base"
   )
   local_mocked_bindings(
@@ -64,4 +69,21 @@ test_that("check_air_installed gives generic instructions for unknown OS", {
     .package = "base"
   )
   expect_error(check_air_installed(), "github.com/posit-dev/air")
+})
+
+test_that("check_air_installed skips the prompt while testing", {
+  local_mocked_bindings(
+    Sys.which = function(x) "",
+    Sys.info = function() c(sysname = "Linux"),
+    interactive = function() TRUE,
+    .package = "base"
+  )
+  local_mocked_bindings(
+    askYesNo = function(question) {
+      stop("The installation prompt must be skipped.")
+    },
+    .package = "utils"
+  )
+
+  expect_error(check_air_installed(), "air is not installed")
 })

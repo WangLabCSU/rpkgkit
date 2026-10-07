@@ -11,22 +11,20 @@ Invisibly returns \code{TRUE} if \code{air} is found.
 }
 \description{
 Verifies that \code{air} (the R code formatter from Posit) is available on the
-system PATH. If not, provides OS-specific installation instructions and
-aborts with an informative error.
+system PATH. In an interactive session, offers to install it when missing.
+This prompt is skipped while tests are running. Otherwise, it aborts with
+OS-specific installation instructions.
 }
 \details{
 Installation methods per OS:
 
 \strong{Linux:}
-\verb{curl -LsSf https://github.com/posit-dev/air/releases/latest/download/air-installer.sh | sh}
+\verb{curl --proto '=https' --tlsv1.2 -LsSf https://github.com/posit-dev/air/releases/latest/download/air-installer.sh | sh}
 
 \strong{Windows:}
 \verb{powershell -ExecutionPolicy Bypass -c "irm https://github.com/posit-dev/air/releases/latest/download/air-installer.ps1 | iex"}
 
-\strong{macOS (Homebrew):}
-\verb{brew install air}
-
-\strong{All platforms (uv):}
-\verb{uv tool install air-formatter}
+\strong{macOS:}
+\verb{curl --proto '=https' --tlsv1.2 -LsSf https://github.com/posit-dev/air/releases/latest/download/air-installer.sh | sh}
 }
 \keyword{internal}
