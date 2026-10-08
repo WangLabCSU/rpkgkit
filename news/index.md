@@ -2,6 +2,14 @@
 
 ## rpkgkit 0.1.18
 
+### BUG FIXES
+
+- [`convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.md)
+  and
+  [`package_convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.md)
+  no longer rewrite the exponent of a numeric literal such as `1e-3` /
+  `1E-3`, which previously produced invalid code like `1e-3L`.
+
 ### MINOR IMPROVEMENTS
 
 - [`check_air_installed()`](https://wanglabcsu.github.io/rpkgkit/reference/check_air_installed.md)

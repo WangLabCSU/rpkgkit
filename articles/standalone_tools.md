@@ -120,7 +120,7 @@ try(inquire_standalone("r-lib/rlang"))
 try(browse_standalone())
 #> ℹ Searching GitHub for standalone-*.R files
 #> Error in gh::gh("/search/code", q = "filename:standalone- language:R -filename:import-",  : 
-#>   GitHub API error (429): try again in 11.1457646s
+#>   GitHub API error (429): try again in 5.344093469s
 #> ℹ Read more at <https://docs.github.com/rest/search/search#search-code>
 ```
 

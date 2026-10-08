@@ -68,7 +68,8 @@ and it is **not**:
 
 - a floating-point number (`10.`, `1.0`, `.5`),
 
-- scientific notation (`1e5`, `1E-3`),
+- scientific notation, including a signed exponent (`1e5`, `1e-3`,
+  `1E-3`),
 
 - a complex literal (`10i`),
 
@@ -82,7 +83,7 @@ and it is **not**:
 temp <- tempfile(fileext = ".R")
 writeLines("tmp <- seq_len(10)", temp)
 convert_int_literals(temp)
-#> ✔ Added explicit integer suffixes in /tmp/Rtmp2plM8R/file19f34a3571bd.R
+#> ✔ Added explicit integer suffixes in /tmp/RtmpQl8bBw/file1988c091c76.R
 readLines(temp)
 #> [1] "tmp <- seq_len(10L)"
 # "tmp <- seq_len(10L)"
@@ -90,10 +91,10 @@ readLines(temp)
 # --- Entire package ---
 tmp_pkg <- tempdir()
 usethis::create_package(tmp_pkg, open = FALSE)
-#> ✔ Setting active project to "/tmp/Rtmp2plM8R".
+#> ✔ Setting active project to "/tmp/RtmpQl8bBw".
 #> ✔ Creating R/.
 #> ✔ Writing DESCRIPTION.
-#> Package: Rtmp2plM8R
+#> Package: RtmpQl8bBw
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):

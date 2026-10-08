@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.18</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,6 +40,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.18" id="rpkgkit-0118">rpkgkit 0.1.18<a class="anchor" aria-label="anchor" href="#rpkgkit-0118"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-0-1-18">BUG FIXES<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-18"></a></h3>
+<ul><li>
+<code><a href="../reference/convert_int_literals.html">convert_int_literals()</a></code> and <code><a href="../reference/convert_int_literals.html">package_convert_int_literals()</a></code> no longer rewrite the exponent of a numeric literal such as <code>1e-3</code> / <code>1E-3</code>, which previously produced invalid code like <code>1e-3L</code>.</li>
+</ul></div>
 <div class="section level3">
 <h3 id="minor-improvements-0-1-18">MINOR IMPROVEMENTS<a class="anchor" aria-label="anchor" href="#minor-improvements-0-1-18"></a></h3>
 <ul><li>
