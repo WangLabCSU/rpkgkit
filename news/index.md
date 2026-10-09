@@ -1,5 +1,22 @@
 # Changelog
 
+## rpkgkit 0.1.19 (2026-10-08)
+
+### MINOR IMPROVEMENTS
+
+- [`make_func_call_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_call_explicit.md),
+  [`package_func_call_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_call_explicit.md),
+  and
+  [`add_double_colons()`](https://wanglabcsu.github.io/rpkgkit/reference/add_double_colons.md)
+  no longer truncate function names that contain digits. Function calls
+  such as [`r2dtable()`](https://rdrr.io/r/stats/r2dtable.html) and
+  `scale_x_log10()` were matched only from their longest digit-free
+  suffix ([`r2dtable()`](https://rdrr.io/r/stats/r2dtable.html) was
+  treated as `dtable()`), which either produced invalid namespacing or
+  triggered a spurious “Couldn’t find packages exporting” warning.
+- Added pattern detection for exported datasets, e.g., `starwars` from
+  `dplyr` will be detected.
+
 ## rpkgkit 0.1.18
 
 ### BUG FIXES

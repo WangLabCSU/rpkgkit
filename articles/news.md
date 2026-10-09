@@ -4,11 +4,11 @@
 
 Here we create a template for editing NEWS.md
 
-    #> ✔ rpkgkit v0.1.18 loaded [1.32 ms]
-    #> ✔ Setting active project to "/tmp/RtmpnHtcpi".
+    #> ✔ rpkgkit v0.1.18 loaded [1 ms]
+    #> ✔ Setting active project to "/tmp/Rtmp0iqmTH".
     #> ✔ Creating R/.
     #> ✔ Writing DESCRIPTION.
-    #> Package: RtmpnHtcpi
+    #> Package: Rtmp0iqmTH
     #> Title: What the Package Does (One Line, Title Case)
     #> Version: 0.0.0.9000
     #> Authors@R (parsed):
@@ -39,14 +39,14 @@ news_md_add_entry(
   category = "NEW FEATURES",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/RtmpnHtcpi/NEWS.md
+#> ✔ Added 1 entry to /tmp/Rtmp0iqmTH/NEWS.md
 #> → Version: 0.0.0.9000, Category: NEW FEATURES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # RtmpnHtcpi 0.0.0.9000 (2026-10-08)
+#> # Rtmp0iqmTH 0.0.0.9000 (2026-10-09)
 #> 
 #> ## NEW FEATURES
 #> 
@@ -68,14 +68,14 @@ news_md_add_entry(
   contributor = "Jack",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/RtmpnHtcpi/NEWS.md
+#> ✔ Added 1 entry to /tmp/Rtmp0iqmTH/NEWS.md
 #> → Version: 0.0.0.9000, Category: BUG FIXES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # RtmpnHtcpi 0.0.0.9000 (2026-10-08)
+#> # Rtmp0iqmTH 0.0.0.9000 (2026-10-09)
 #> 
 #> ## BUG FIXES
 #> 

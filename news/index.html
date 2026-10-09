@@ -39,6 +39,15 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.19" id="rpkgkit-0119-2026-10-08">rpkgkit 0.1.19 (2026-10-08)<a class="anchor" aria-label="anchor" href="#rpkgkit-0119-2026-10-08"></a></h2>
+<div class="section level3">
+<h3 id="minor-improvements-0-1-19">MINOR IMPROVEMENTS<a class="anchor" aria-label="anchor" href="#minor-improvements-0-1-19"></a></h3>
+<ul><li>
+<code><a href="../reference/make_func_call_explicit.html">make_func_call_explicit()</a></code>, <code><a href="../reference/make_func_call_explicit.html">package_func_call_explicit()</a></code>, and <code><a href="../reference/add_double_colons.html">add_double_colons()</a></code> no longer truncate function names that contain digits. Function calls such as <code><a href="https://rdrr.io/r/stats/r2dtable.html" class="external-link">r2dtable()</a></code> and <code>scale_x_log10()</code> were matched only from their longest digit-free suffix (<code><a href="https://rdrr.io/r/stats/r2dtable.html" class="external-link">r2dtable()</a></code> was treated as <code>dtable()</code>), which either produced invalid namespacing or triggered a spurious “Couldn’t find packages exporting” warning.</li>
+<li>Added pattern detection for exported datasets, e.g., <code>starwars</code> from <code>dplyr</code> will be detected.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.18" id="rpkgkit-0118">rpkgkit 0.1.18<a class="anchor" aria-label="anchor" href="#rpkgkit-0118"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-0-1-18">BUG FIXES<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-18"></a></h3>
