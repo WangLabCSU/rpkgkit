@@ -1,10 +1,6 @@
 name: 📬 Notify New Issue to Feishu
 
 on:
-    check_run:
-        types: [rerequested, completed]
-    check_suite:
-        types: [completed]
     discussion:
         types: [created, edited, answered]
     discussion_comment:
@@ -12,16 +8,6 @@ on:
     issues:
         types: [opened, edited, milestoned, pinned, reopened]
     issue_comment:
-        types: [created, deleted]
-    merge_group:
-        types: [checks_requested]
-    milestone:
-        types: [opened, deleted]
-    project:
-        types: [created, deleted, reopened]
-    project_card:
-        types: [created, deleted]
-    project_column:
         types: [created, deleted]
     public:
     pull_request:

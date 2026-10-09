@@ -10,6 +10,13 @@
 #
 # ## Changelog
 #
+# 2026-10-08:
+# * Fixed `add_double_colons()` silently truncating function names that contain
+#   digits, e.g. `r2dtable()` was treated as `dtable()`. The `syntactic_fns`
+#   character class now allows digits after the first character, matching the
+#   `data_regex` class below.
+# * Added pattern detection for exported datasets
+#
 # 2026-06-25:
 # * Added `@return property to meet CRAN policies
 #
@@ -93,8 +100,11 @@ add_double_colons <- function(
   code <- protected$code
 
   # Regular expression to extract function calls
+  # `syntactic_fns` must accept digits after the first character (e.g.
+  # `r2dtable()`, `scale_x_log10()`); otherwise the identifier is silently
+  # truncated to its longest digit-free suffix (`r2dtable()` -> `dtable()`).
   backticks_fns <- "`[^`]+`(?= *[(])"
-  syntactic_fns <- "(?<=[^a-zA-Z._]|^)[a-zA-Z._]+(?= *[(])"
+  syntactic_fns <- "(?<=[^a-zA-Z0-9._]|^)[a-zA-Z_.][a-zA-Z0-9._]*(?= *[(])"
   exclude_dcs <- "(?<!::)"
   funs_regex <- sprintf("%s(%s|%s)", exclude_dcs, backticks_fns, syntactic_fns)
 
@@ -102,8 +112,11 @@ add_double_colons <- function(
   called_funs <- unique(all_calls)
 
   # Get a lookup list of names = packages, values = namespace exports
-  pkg_lookup <- lapply(use_packages, getNamespaceExports)
+  pkg_lookup <- lapply(use_packages, base::getNamespaceExports)
   names(pkg_lookup) <- use_packages
+
+  data_lookup <- lapply(use_packages, get_package_datasets)
+  names(data_lookup) <- use_packages
 
   # Helper to retrieve the `pkg::fun` text for a function `fun`
   get_pkg <- function(fun) {
@@ -148,6 +161,89 @@ add_double_colons <- function(
     )
   ]
   out <- str_replace_all(code, funs_regex, replacements)
+
+  # Datasets: identifiers not already namespaced and not function calls
+  data_regex <- paste0(
+    "(?<![:$])",
+    "(?<=[^a-zA-Z0-9._]|^)",
+    "([a-zA-Z.][a-zA-Z0-9._]*)",
+    "(?!\\s*[(])",
+    "(?!::)"
+  )
+
+  skip_names <- c(
+    "TRUE",
+    "FALSE",
+    "T",
+    "F",
+    "NA",
+    "NA_integer_",
+    "NA_real_",
+    "NA_character_",
+    "NA_complex_",
+    "NULL",
+    "Inf",
+    "NaN",
+    "if",
+    "else",
+    "for",
+    "while",
+    "repeat",
+    "function",
+    "in",
+    "next",
+    "break"
+  )
+
+  get_data_pkg <- function(nm) {
+    if (nm %in% skip_names) {
+      return(NA_character_)
+    }
+    for (pkg in use_packages) {
+      if (nm %in% data_lookup[[pkg]]) {
+        if (pkg == "base") {
+          return(nm)
+        }
+        return(paste0(pkg, "::", nm))
+      }
+    }
+    NA_character_
+  }
+
+  all_data <- str_extract_all(out, data_regex)
+  called_data <- unique(all_data)
+  called_data_pkgs <- vapply(called_data, get_data_pkg, character(1L))
+  found <- !is.na(called_data_pkgs)
+
+  if (any(found)) {
+    data_repl <- called_data_pkgs[found]
+    names(data_repl) <- called_data[found]
+    data_matches <- all_data[all_data %in% names(data_repl)]
+    if (length(data_matches)) {
+      # Only replace names that map to a dataset
+      # Rebuild regex restricted to known dataset names
+      known <- unique(data_matches)
+      known_esc <- vapply(
+        known,
+        function(x) gsub("([][{}()+*^$.|?\\])", "\\\\\\1", x),
+        character(1L)
+      )
+      known_regex <- paste0(
+        "(?<![:$])",
+        "(?<=[^a-zA-Z0-9._]|^)",
+        "(",
+        paste(known_esc, collapse = "|"),
+        ")",
+        "(?!\\s*[(])",
+        "(?!::)"
+      )
+      known_repl <- unname(data_repl[known])
+      # str_replace_all replaces all matches in order; expand per match
+      all_known <- str_extract_all(out, known_regex)
+      repl_vec <- unname(data_repl[all_known])
+      out <- str_replace_all(out, known_regex, repl_vec)
+    }
+  }
 
   # Restore the protected comments
   out <- restore_comments(out, protected$comments)
@@ -268,6 +364,21 @@ get_dependencies <- function(
 
   deps$package[deps$type %in% types]
 }
+
+# Helper: exported dataset names from a package
+get_package_datasets <- function(pkg) {
+  res <- as.data.frame(
+    utils::data(package = pkg)$results,
+    stringsAsFactors = FALSE
+  )
+  if (nrow(res) <= 0L) {
+    return(character(0L))
+  }
+  items <- res[["Item"]]
+  # e.g. "foo (bar)" -> "foo"
+  sub("\\s.*$", "", items)
+}
+
 
 #' @rdname current_packages
 #' @return `TRUE` if the current context is package development, `FALSE` otherwise.

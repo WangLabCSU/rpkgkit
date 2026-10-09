@@ -1,3 +1,16 @@
+# rpkgkit 0.1.19 (2026-10-08)
+
+## MINOR IMPROVEMENTS
+
+* `make_func_call_explicit()`, `package_func_call_explicit()`, and
+  `add_double_colons()` no longer truncate function names that contain digits.
+  Function calls such as `r2dtable()` and `scale_x_log10()` were matched only
+  from their longest digit-free suffix (`r2dtable()` was treated as `dtable()`),
+  which either produced invalid namespacing or triggered a spurious
+  "Couldn't find packages exporting" warning.
+* Added pattern detection for exported datasets, e.g., `starwars` from `dplyr` will be
+  detected.
+
 # rpkgkit 0.1.18
 
 ## BUG FIXES
