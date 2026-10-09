@@ -11,6 +11,7 @@ functions within the file are also updated.
 rename_func(
   path = NULL,
   style = c("snake_case", "camelCase", "PascalCase", "google"),
+  num_to_word = c(`for` = 4, to = 2),
   ...
 )
 ```
@@ -35,6 +36,14 @@ rename_func(
 
   - `"google"`: dot-separated lowercase (e.g., `my.function`)
 
+- num_to_word:
+
+  An optional named vector used to expand digit abbreviations inside
+  function names into words. Names give the replacement word and values
+  give the digit abbreviation, defaulting to `c("for" = 4, "to" = 2)`.
+  Any input other than a named vector, `NULL`, or `FALSE` is an error.
+  Supply `NULL` or `FALSE` to disable the expansion.
+
 - ...:
 
   Additional arguments. Currently unused and must be empty.
@@ -52,6 +61,16 @@ sites / references within the file are updated. The conversion handles
 mixed existing styles (snake_case, camelCase, PascalCase, dot.separated)
 and normalizes function names to the target style.
 
+Digit abbreviations are expanded into words before the target style is
+applied, so [`list2env()`](https://rdrr.io/r/base/list2env.html) becomes
+`list_to_env()` and `wait4result()` becomes `wait_for_result()` under
+`style = "snake_case"`. The expanded words are formatted following
+`style`, e.g. [`list2env()`](https://rdrr.io/r/base/list2env.html)
+becomes `listToEnv()` under `style = "camelCase"` and `ListToEnv()`
+under `style = "PascalCase"`. Only digit runs that appear in
+`num_to_word` are expanded: an identifier that contains an unmapped
+digit run (for example `scale_x_log10()`) is left untouched.
+
 ## Examples
 
 ``` r
@@ -59,12 +78,19 @@ and normalizes function names to the target style.
 temp <- tempfile(fileext = ".R")
 writeLines("foo_bar <- function(){message('foo_bar')}", temp)
 rename_func(temp, style = "camelCase")
-#> ✔ Renamed 1 function to "camelCase" style in /tmp/RtmprcegCB/file195559c75f82.R
+#> ✔ Renamed 1 function to "camelCase" style in /tmp/Rtmp99TYuU/file19472a32ba1a.R
 readLines(temp)
 #> [1] "fooBar <- function(){message('fooBar')}"
 rename_func(temp, style = "snake_case")
-#> ✔ Renamed 1 function to "snake_case" style in /tmp/RtmprcegCB/file195559c75f82.R
+#> ✔ Renamed 1 function to "snake_case" style in /tmp/Rtmp99TYuU/file19472a32ba1a.R
 readLines(temp)
 #> [1] "foo_bar <- function(){message('foo_bar')}"
+
+writeLines("list2env <- function(x) x", temp)
+rename_func(temp, style = "snake_case")
+#> ✔ Renamed 1 function to "snake_case" style in /tmp/Rtmp99TYuU/file19472a32ba1a.R
+readLines(temp)
+#> [1] "list_to_env <- function(x) x"
+# "list_to_env <- function(x) x"
 # }
 ```

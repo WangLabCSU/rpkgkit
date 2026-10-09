@@ -1,10 +1,10 @@
 # Package Setup & Maintenace
 
-    #> ✔ rpkgkit v0.1.18 loaded [1 ms]
-    #> ✔ Setting active project to "/tmp/Rtmpx70N7C".
+    #> ✔ rpkgkit v0.1.19 loaded [1 ms]
+    #> ✔ Setting active project to "/tmp/RtmpZwvhmu".
     #> ✔ Creating R/.
     #> ✔ Writing DESCRIPTION.
-    #> Package: Rtmpx70N7C
+    #> Package: RtmpZwvhmu
     #> Title: What the Package Does (One Line, Title Case)
     #> Version: 0.0.0.9000
     #> Authors@R (parsed):
@@ -12,7 +12,7 @@
     #> Description: What the package does (one paragraph).
     #> License: `use_mit_license()`, `use_gpl3_license()` or friends to
     #>     pick a license
-    #> Config/roxygen2/version: 8.1.0
+    #> Config/roxygen2/version: 8.1.1
     #> Encoding: UTF-8
     #> Roxygen: list(markdown = TRUE)
     #> ✔ Writing NAMESPACE.
@@ -31,8 +31,8 @@ while also providing a useful starting template.
 ``` r
 
 use_zzz(path = dir, open = FALSE)
-#> ✔ Setting active project to "/tmp/Rtmpx70N7C".
-#> ✔ Created /tmp/Rtmpx70N7C/R/Rtmpx70N7C-package.R from template.
+#> ✔ Setting active project to "/tmp/RtmpZwvhmu".
+#> ✔ Created /tmp/RtmpZwvhmu/R/RtmpZwvhmu-package.R from template.
 #> ✔ Adding cli to Imports field in DESCRIPTION.
 #> 
 #> ☐ Refer to functions with `cli::fun()`.
@@ -67,11 +67,11 @@ try(use_vendor(
 ))
 #> ℹ Fetching repository information for WangLabCSU/rpkgkit...
 #> ✔ Vendor package uses MIT license.
-#> ✔ Created directory /tmp/Rtmpx70N7C/inst/vendor/rpkgkit.
+#> ✔ Created directory /tmp/RtmpZwvhmu/inst/vendor/rpkgkit.
 #> ✔ Copied LICENSE.
 #> ✔ Copied LICENSE.md.
 #> ✔ Created inst/vendor/rpkgkit/README.md.
-#> ✔ Created /tmp/Rtmpx70N7C/R/vendor-rpkgkit.R.
+#> ✔ Created /tmp/RtmpZwvhmu/R/vendor-rpkgkit.R.
 #> ✔ Added rpkgkit authors to Authors@R.
 #> ✔ Updated DESCRIPTION.
 #> ☐ Consider pasting the following statement into README.md

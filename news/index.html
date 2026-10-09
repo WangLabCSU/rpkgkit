@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.18</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.19</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,10 +41,16 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.19" id="rpkgkit-0119-2026-10-08">rpkgkit 0.1.19 (2026-10-08)<a class="anchor" aria-label="anchor" href="#rpkgkit-0119-2026-10-08"></a></h2>
 <div class="section level3">
+<h3 id="new-features-0-1-19">NEW FEATURES<a class="anchor" aria-label="anchor" href="#new-features-0-1-19"></a></h3>
+<ul><li>
+<code><a href="../reference/rename_func.html">rename_func()</a></code> gains a <code>num_to_word</code> argument that expands digit abbreviations in function names into words, defaulting to <code>c("for" = 4, "to" = 2)</code>. With the default mapping <code><a href="https://rdrr.io/r/base/list2env.html" class="external-link">list2env()</a></code> becomes <code>list_to_env()</code> and <code>wait4result()</code> becomes <code>wait_for_result()</code>, and the expanded words are formatted following the <code>style</code> argument, e.g. <code><a href="https://rdrr.io/r/base/list2env.html" class="external-link">list2env()</a></code> becomes <code>listToEnv()</code> under <code>style = "camelCase"</code>. The argument accepts a named vector, <code>NULL</code>, or <code>FALSE</code>; any other input is an error. Only digit runs present in the mapping are expanded, so identifiers such as <code>scale_x_log10()</code> are left untouched.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="minor-improvements-0-1-19">MINOR IMPROVEMENTS<a class="anchor" aria-label="anchor" href="#minor-improvements-0-1-19"></a></h3>
 <ul><li>
 <code><a href="../reference/make_func_call_explicit.html">make_func_call_explicit()</a></code>, <code><a href="../reference/make_func_call_explicit.html">package_func_call_explicit()</a></code>, and <code><a href="../reference/add_double_colons.html">add_double_colons()</a></code> no longer truncate function names that contain digits. Function calls such as <code><a href="https://rdrr.io/r/stats/r2dtable.html" class="external-link">r2dtable()</a></code> and <code>scale_x_log10()</code> were matched only from their longest digit-free suffix (<code><a href="https://rdrr.io/r/stats/r2dtable.html" class="external-link">r2dtable()</a></code> was treated as <code>dtable()</code>), which either produced invalid namespacing or triggered a spurious “Couldn’t find packages exporting” warning.</li>
 <li>Added pattern detection for exported datasets, e.g., <code>starwars</code> from <code>dplyr</code> will be detected.</li>
+<li>Faster <code><a href="../reference/make_func_arg_explicit.html">make_func_arg_explicit()</a></code> and <code><a href="../reference/make_func_arg_explicit.html">package_func_arg_explicit()</a></code>: large files are now planned several times faster, because the parse table is indexed once and child nodes are looked up in constant time instead of being rescanned for every node. Planning a whole package therefore no longer grows quadratically with its size.</li>
 </ul></div>
 </div>
     <div class="section level2">

@@ -2,6 +2,21 @@
 
 ## rpkgkit 0.1.19 (2026-10-08)
 
+### NEW FEATURES
+
+- [`rename_func()`](https://wanglabcsu.github.io/rpkgkit/reference/rename_func.md)
+  gains a `num_to_word` argument that expands digit abbreviations in
+  function names into words, defaulting to `c("for" = 4, "to" = 2)`.
+  With the default mapping
+  [`list2env()`](https://rdrr.io/r/base/list2env.html) becomes
+  `list_to_env()` and `wait4result()` becomes `wait_for_result()`, and
+  the expanded words are formatted following the `style` argument, e.g.
+  [`list2env()`](https://rdrr.io/r/base/list2env.html) becomes
+  `listToEnv()` under `style = "camelCase"`. The argument accepts a
+  named vector, `NULL`, or `FALSE`; any other input is an error. Only
+  digit runs present in the mapping are expanded, so identifiers such as
+  `scale_x_log10()` are left untouched.
+
 ### MINOR IMPROVEMENTS
 
 - [`make_func_call_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_call_explicit.md),
@@ -16,6 +31,14 @@
   triggered a spurious “Couldn’t find packages exporting” warning.
 - Added pattern detection for exported datasets, e.g., `starwars` from
   `dplyr` will be detected.
+- Faster
+  [`make_func_arg_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_arg_explicit.md)
+  and
+  [`package_func_arg_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_arg_explicit.md):
+  large files are now planned several times faster, because the parse
+  table is indexed once and child nodes are looked up in constant time
+  instead of being rescanned for every node. Planning a whole package
+  therefore no longer grows quadratically with its size.
 
 ## rpkgkit 0.1.18
 

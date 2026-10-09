@@ -38,9 +38,9 @@ Invisibly returns `NULL`, called for side effects.
 # \donttest{
 tmpdir <- tempdir()
 usethis::create_package(path = tmpdir)
-#> ✔ Setting active project to "/tmp/RtmprcegCB".
+#> ✔ Setting active project to "/tmp/Rtmp99TYuU".
 #> ℹ Leaving DESCRIPTION unchanged.
-#> Package: RtmprcegCB
+#> Package: Rtmp99TYuU
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):
@@ -48,10 +48,10 @@ usethis::create_package(path = tmpdir)
 #> Description: What the package does (one paragraph).
 #> License: `use_mit_license()`, `use_gpl3_license()` or friends to
 #>     pick a license
-#> Config/roxygen2/version: 8.1.0
+#> Config/roxygen2/version: 8.1.1
 #> Encoding: UTF-8
 #> Roxygen: list(markdown = TRUE)
-#> ✔ Setting active project to "/tmp/RtmprcegCB".
+#> ✔ Setting active project to "/tmp/Rtmp99TYuU".
 use_r_v4.1.0(path = tmpdir)
 #> ✔ Adding R to Depends field in DESCRIPTION.
 # }

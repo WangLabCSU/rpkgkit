@@ -3,7 +3,7 @@
 ``` r
 
 library(rpkgkit)
-#> ✔ rpkgkit v0.1.18 loaded [1 ms]
+#> ✔ rpkgkit v0.1.19 loaded [1 ms]
 ```
 
 ## Qualify package function calls
@@ -27,7 +27,7 @@ writeLines(
 
 make_func_call_explicit(file, use_packages = "dplyr")
 #> ℹ Retrieving function calls from dplyr
-#> ✔ Successfully made function call explicit in /tmp/RtmpHLH8HV/file1d5f139dd07.R
+#> ✔ Successfully made function call explicit in /tmp/RtmpnANtth/file1d38712f1b09.R
 readLines(file) |> cli::cli_code()
 #> dplyr::starwars |>
 #>   dplyr::mutate(name, bmi = mass / ((height / 100)^2)) |>
@@ -73,7 +73,7 @@ applies this transformation across a package.
 file <- tempfile(fileext = ".R")
 writeLines("vapply(1:9, function(x) x * 2, numeric(1))", file)
 make_func_arg_explicit(file)
-#> ✔ Made function arguments explicit in /tmp/RtmpHLH8HV/file1d5f71bdff3a.R
+#> ✔ Made function arguments explicit in /tmp/RtmpnANtth/file1d3841bc935d.R
 readLines(file) |> cli::cli_code()
 #> vapply(X = 1:9, FUN = function(x) x * 2, FUN.VALUE = numeric(length = 1))
 ```
@@ -89,7 +89,7 @@ to apply a naming style to function definitions in a file.
 file <- tempfile(fileext = ".R")
 writeLines("this_is_a_function <- function() message('Hello, world')", file)
 rename_func(file, style = "camelCase")
-#> ✔ Renamed 1 function to "camelCase" style in /tmp/RtmpHLH8HV/file1d5f48b0cc20.R
+#> ✔ Renamed 1 function to "camelCase" style in /tmp/RtmpnANtth/file1d3812064438.R
 readLines(file) |> cli::cli_code()
 #> thisIsAFunction <- function() message('Hello, world')
 ```
@@ -116,7 +116,7 @@ detect_print_and_cat(file)
 ``` r
 
 detect_print_and_cat(file, fix = TRUE)
-#> ✔ Fixed 1 line in file1d5f4fd69656.R.
+#> ✔ Fixed 1 line in file1d3816e7a73b.R.
 #> print('Hello, world') [message]
 #> ^^^^^^
 #> ✖ Found 1 unsupported call on line 1.
@@ -133,7 +133,7 @@ Convert between `function()` and the short `\()` syntax.
 file <- tempfile(fileext = ".R")
 writeLines("f <- function(x) x^2", file)
 convert_func_syntax(file, "to_lambda")
-#> ✔ Converted function definitions in /tmp/RtmpHLH8HV/file1d5ff791d58.R to "to_lambda"
+#> ✔ Converted function definitions in /tmp/RtmpnANtth/file1d387ec38ab1.R to "to_lambda"
 readLines(file) |> cli::cli_code()
 #> f <- \(x) x^2
 ```
@@ -141,7 +141,7 @@ readLines(file) |> cli::cli_code()
 ``` r
 
 convert_func_syntax(file, "to_explicit")
-#> ✔ Converted function definitions in /tmp/RtmpHLH8HV/file1d5ff791d58.R to "to_explicit"
+#> ✔ Converted function definitions in /tmp/RtmpnANtth/file1d387ec38ab1.R to "to_explicit"
 readLines(file) |> cli::cli_code()
 #> f <- function(x) x^2
 ```
@@ -159,7 +159,7 @@ writeLines(c("```{r, echo=TRUE, fig.width=10}", "x <- 1", "```"), file)
 convert_knitr_chunk_header(file)
 ```
 
-    #> ℹ Converting knitr chunk headers in /tmp/RtmpHLH8HV/file1d5f55cea667.Rmd
+    #> ℹ Converting knitr chunk headers in /tmp/RtmpnANtth/file1d38592badfa.Rmd
     readLines(file) |> cli::cli_code()
 
     #> ```{r}
@@ -179,7 +179,7 @@ floating-point values, and existing suffixes unchanged.
 file <- tempfile(fileext = ".R")
 writeLines("x <- seq_len(10) # length 10", file)
 convert_int_literals(file)
-#> ✔ Added explicit integer suffixes in /tmp/RtmpHLH8HV/file1d5f5012a618.R
+#> ✔ Added explicit integer suffixes in /tmp/RtmpnANtth/file1d3834c0d33e.R
 readLines(file) |> cli::cli_code()
 #> x <- seq_len(10L) # length 10
 ```
@@ -206,7 +206,7 @@ expression.
 file <- tempfile()
 writeLines("foo <- \\() message('滚滚长江东逝水')", file)
 convert_nonascii_code(file, overwrite = TRUE)
-#> ℹ Converted content written to /tmp/RtmpHLH8HV/file1d5f7993293b
+#> ℹ Converted content written to /tmp/RtmpnANtth/file1d385c21a582
 readLines(file) |> cli::cli_code()
 #> foo <- \() message('\u6eda\u6eda\u957f\u6c5f\u4e1c\u901d\u6c34')
 ```

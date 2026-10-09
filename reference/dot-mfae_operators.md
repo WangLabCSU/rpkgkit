@@ -1,9 +1,9 @@
 # Built-in R operators that are never transformed into named-arg calls.
 
-These are pure operators/syntax, not control flow (`if`, `for`, `while`,
-`repeat`, `function`, `{`, `(`) — those are dispatched by dedicated
-handlers in `.mfae_walk`. This list is used for the remaining operators
-where simply walking children suffices.
+These are pure operators/syntax, not control flow. Control flow is
+excluded structurally: `if`, `for`, `while`, `repeat`, `function`, `{`
+and `(` never look like a `name(...)` call node in the parse data, so
+they need no entry here.
 
 ## Usage
 

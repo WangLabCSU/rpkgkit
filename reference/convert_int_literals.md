@@ -83,7 +83,7 @@ and it is **not**:
 temp <- tempfile(fileext = ".R")
 writeLines("tmp <- seq_len(10)", temp)
 convert_int_literals(temp)
-#> ✔ Added explicit integer suffixes in /tmp/RtmprcegCB/file1955788664a5.R
+#> ✔ Added explicit integer suffixes in /tmp/Rtmp99TYuU/file1947646142ca.R
 readLines(temp)
 #> [1] "tmp <- seq_len(10L)"
 # "tmp <- seq_len(10L)"
@@ -91,10 +91,10 @@ readLines(temp)
 # --- Entire package ---
 tmp_pkg <- tempdir()
 usethis::create_package(tmp_pkg, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmprcegCB".
+#> ✔ Setting active project to "/tmp/Rtmp99TYuU".
 #> ✔ Creating R/.
 #> ✔ Writing DESCRIPTION.
-#> Package: RtmprcegCB
+#> Package: Rtmp99TYuU
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):
@@ -102,7 +102,7 @@ usethis::create_package(tmp_pkg, open = FALSE)
 #> Description: What the package does (one paragraph).
 #> License: `use_mit_license()`, `use_gpl3_license()` or friends to
 #>     pick a license
-#> Config/roxygen2/version: 8.1.0
+#> Config/roxygen2/version: 8.1.1
 #> Encoding: UTF-8
 #> Roxygen: list(markdown = TRUE)
 #> ✔ Writing NAMESPACE.

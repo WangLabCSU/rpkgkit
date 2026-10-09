@@ -1,17 +1,17 @@
 # Make Function Arguments Explicit
 
 Transform function calls in R source code so that all arguments are
-passed with explicit parameter names. Uses a recursive tree-walking
-approach: every function call node is inspected, the called function's
-formals are retrieved, and positional arguments are given their formal
-parameter name.
+passed with explicit parameter names.
 
-Transformation preserves all content outside the expression boundaries
-(roxygen docs, section comments, blank lines). Inline comments on the
-last line of a transformed expression are re-attached to the output.
+The transformation is a minimal, position-based text edit: only the
+missing `argument = ` prefixes are inserted into the original source.
+Everything else is preserved verbatim, including comments inside
+function bodies, blank lines, indentation and operator spacing.
 
-If the function has a `...` formal, unmatched positional and named
-arguments are left in place as-is (they are captured by `...`).
+If the function has a `...` formal, positional arguments that are
+captured by `...` are left in place as-is. Calls that forward `...`
+literally (e.g. `g(...)`) are skipped, because the number of arguments
+that `...` expands to cannot be known statically.
 
 Operators (`+`, `-`, `*`, `/`, etc.), subset operators (`[`, `[[`, `$`),
 assignment (`<-`, `=`, `<<-`), and special syntax (`if`, `for`, `while`,
@@ -66,9 +66,9 @@ the currently active document is used automatically.
 tf <- tempfile(fileext = ".R")
 writeLines("vapply(1:9, function(x) x*2, numeric(1))", tf)
 make_func_arg_explicit(tf)
-#> ✔ Made function arguments explicit in /tmp/RtmprcegCB/file195543df12a3.R
+#> ✔ Made function arguments explicit in /tmp/Rtmp99TYuU/file1947440b86e0.R
 cat(readLines(tf), sep = "\n")
-#> vapply(X = 1:9, FUN = function(x) x * 2, FUN.VALUE = numeric(length = 1))
-# vapply(X = 1:9, FUN = function(x) x*2, FUN.VALUE = numeric(1))
+#> vapply(X = 1:9, FUN = function(x) x*2, FUN.VALUE = numeric(length = 1))
+# vapply(X = 1:9, FUN = function(x) x*2, FUN.VALUE = numeric(length = 1))
 # }
 ```

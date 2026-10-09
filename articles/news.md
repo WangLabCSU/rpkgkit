@@ -4,11 +4,11 @@
 
 Here we create a template for editing NEWS.md
 
-    #> ✔ rpkgkit v0.1.18 loaded [1 ms]
-    #> ✔ Setting active project to "/tmp/Rtmp0iqmTH".
+    #> ✔ rpkgkit v0.1.19 loaded [2 ms]
+    #> ✔ Setting active project to "/tmp/RtmpzzIG5U".
     #> ✔ Creating R/.
     #> ✔ Writing DESCRIPTION.
-    #> Package: Rtmp0iqmTH
+    #> Package: RtmpzzIG5U
     #> Title: What the Package Does (One Line, Title Case)
     #> Version: 0.0.0.9000
     #> Authors@R (parsed):
@@ -16,7 +16,7 @@ Here we create a template for editing NEWS.md
     #> Description: What the package does (one paragraph).
     #> License: `use_mit_license()`, `use_gpl3_license()` or friends to
     #>     pick a license
-    #> Config/roxygen2/version: 8.1.0
+    #> Config/roxygen2/version: 8.1.1
     #> Encoding: UTF-8
     #> Roxygen: list(markdown = TRUE)
     #> ✔ Writing NAMESPACE.
@@ -39,14 +39,14 @@ news_md_add_entry(
   category = "NEW FEATURES",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/Rtmp0iqmTH/NEWS.md
+#> ✔ Added 1 entry to /tmp/RtmpzzIG5U/NEWS.md
 #> → Version: 0.0.0.9000, Category: NEW FEATURES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # Rtmp0iqmTH 0.0.0.9000 (2026-10-09)
+#> # RtmpzzIG5U 0.0.0.9000 (2026-10-09)
 #> 
 #> ## NEW FEATURES
 #> 
@@ -68,14 +68,14 @@ news_md_add_entry(
   contributor = "Jack",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/Rtmp0iqmTH/NEWS.md
+#> ✔ Added 1 entry to /tmp/RtmpzzIG5U/NEWS.md
 #> → Version: 0.0.0.9000, Category: BUG FIXES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # Rtmp0iqmTH 0.0.0.9000 (2026-10-09)
+#> # RtmpzzIG5U 0.0.0.9000 (2026-10-09)
 #> 
 #> ## BUG FIXES
 #> 
