@@ -1,136 +1,60 @@
 # ---------------------------------------------------------------------------
-# .mfae_capture_inline_comments -- unit tests
+# .mfae_assign_arg_names -- unit tests
 # ---------------------------------------------------------------------------
 
-test_that("capture_inline_comments extracts trailing inline comment", {
-  lines <- c("x <- 1  # a comment", "y <- 2")
-  res <- .mfae_capture_inline_comments(lines)
-  expect_length(res, 1L)
-  expect_equal(res[["1"]], "# a comment")
+test_that("assign_arg_names fills positional args from the formals", {
+  res <- .mfae_assign_arg_names(c("", ""), c("from", "to", "by", "..."))
+  expect_equal(res, c("from", "to"))
 })
 
-test_that("capture_inline_comments ignores full-line comments", {
-  lines <- c("# full line comment", "x <- 1")
-  res <- .mfae_capture_inline_comments(lines)
-  expect_length(res, 0L)
+test_that("assign_arg_names keeps explicitly named args in source order", {
+  res <- .mfae_assign_arg_names(c("to", "from"), c("from", "to", "..."))
+  expect_equal(res, c("to", "from"))
 })
 
-test_that("capture_inline_comments returns empty for comment-free lines", {
-  lines <- c("x <- 1", "y <- 2")
-  res <- .mfae_capture_inline_comments(lines)
-  expect_length(res, 0L)
+test_that("assign_arg_names skips formals already claimed by name", {
+  # `to` is claimed by name, so the positional arg picks up `from`
+  res <- .mfae_assign_arg_names(c("to", ""), c("from", "to"))
+  expect_equal(res, c("to", "from"))
 })
 
-test_that("capture_inline_comments captures only lines with code before hash", {
-  lines <- c("  # indented comment", "z <- 3  # inline")
-  res <- .mfae_capture_inline_comments(lines)
-  expect_length(res, 1L)
-  expect_equal(res[["2"]], "# inline")
+test_that("assign_arg_names leaves args for `...` unnamed when dots come first", {
+  # any(..., na.rm) — positional args fall into `...`
+  res <- .mfae_assign_arg_names(c(""), c("...", "na.rm"))
+  expect_equal(res, "")
 })
 
-# ---------------------------------------------------------------------------
-# .mfae_walk_expr -- unit tests
-# ---------------------------------------------------------------------------
-
-test_that("mfae_walk_expr returns expression of walked children", {
-  expr <- parse(text = "mean(1:10)")
-  res <- .mfae_walk_expr(expr)
-  expect_type(res, "expression")
-  expect_length(res, 1L)
+test_that("assign_arg_names stops at dots in the middle", {
+  # f(a, ..., b): after `a`, positional args go to `...` and never reach `b`
+  res <- .mfae_assign_arg_names(c("", "", ""), c("a", "...", "b"))
+  expect_equal(res, c("a", "", ""))
 })
 
-test_that("mfae_walk_expr passes non-expression to .mfae_walk", {
-  cl <- quote(mean(1L:10L))
-  res <- .mfae_walk_expr(cl)
-  expect_true(is.call(res))
+test_that("assign_arg_names leaves args unnamed when there are only dots", {
+  res <- .mfae_assign_arg_names(c("", "", ""), c("..."))
+  expect_equal(res, c("", "", ""))
 })
 
-# ---------------------------------------------------------------------------
-# .mfae_walk -- unit tests
-# ---------------------------------------------------------------------------
-
-test_that("mfae_walk returns symbols as-is", {
-  res <- .mfae_walk(quote(x))
-  expect_equal(res, quote(x))
+test_that("assign_arg_names handles the no-dots case", {
+  res <- .mfae_assign_arg_names(c("", ""), c("e1", "e2"))
+  expect_equal(res, c("e1", "e2"))
 })
 
-test_that("mfae_walk returns atomic values as-is", {
-  res <- .mfae_walk(42L)
-  expect_equal(res, 42L)
-  res <- .mfae_walk("hello")
-  expect_equal(res, "hello")
+test_that("assign_arg_names matches partial names", {
+  # `na.r` partially matches `na.rm`, so the positional arg gets `x`
+  res <- .mfae_assign_arg_names(c("na.r", ""), c("x", "...", "na.rm"))
+  expect_equal(res, c("na.r", "x"))
 })
 
-test_that("mfae_walk returns pairlist as-is", {
-  res <- .mfae_walk(pairlist(a = 1L, b = 2L))
-  expect_equal(res, pairlist(a = 1L, b = 2L))
+test_that("assign_arg_names ignores ambiguous partial names", {
+  # `a` prefixes both `alpha` and `amount`, so neither is claimed
+  res <- .mfae_assign_arg_names(c("a", ""), c("alpha", "amount", "zzz"))
+  expect_equal(res, c("a", "alpha"))
 })
 
-test_that("mfae_walk does not transform operator +", {
-  expr <- quote(a + b)
-  res <- .mfae_walk(expr)
-  expect_equal(res, expr)
-})
-
-test_that("mfae_walk does not transform $ operator", {
-  expr <- quote(x$y)
-  res <- .mfae_walk(expr)
-  expect_equal(res, expr)
-})
-
-test_that("mfae_walk does not transform subset [", {
-  expr <- quote(x[1L])
-  res <- .mfae_walk(expr)
-  expect_equal(res, expr)
-})
-
-test_that("mfae_walk does not transform if", {
-  expr <- quote(if (x) y else z)
-  res <- .mfae_walk(expr)
-  expect_equal(res, expr)
-})
-
-test_that("mfae_walk does not transform for loop", {
-  expr <- quote(
-    for (i in 1L:10L) {
-      print(i)
-    }
-  )
-  res <- .mfae_walk(expr)
-  expect_equal(res[[1L]], quote(`for`))
-})
-
-test_that("mfae_walk does not transform infix operators", {
-  expr <- quote(a %in% b)
-  res <- .mfae_walk(expr)
-  expect_equal(res, expr)
-})
-
-test_that("mfae_walk transforms a normal call", {
-  expr <- quote(mean(1L:10L))
-  res <- .mfae_walk(expr)
-  expect_equal(res, quote(mean(x = 1L:10L)))
-})
-
-test_that("mfae_walk respects skip_functions", {
-  expr <- quote(mean(1L:10L))
-  res <- .mfae_walk(expr, skip_fns = "mean")
-  expect_equal(res, expr)
-})
-
-test_that("mfae_walk transforms nested calls", {
-  expr <- quote(vapply(1L:9L, function(x) x * 2L, numeric(1L)))
-  res <- .mfae_walk(expr)
-  # vapply formals: X, FUN, FUN.VALUE, ..., USE.NAMES
-  # numeric(1) formals: length = 1
-  expect_equal(
-    res,
-    quote(vapply(
-      X = 1L:9L,
-      FUN = function(x) x * 2L,
-      FUN.VALUE = numeric(length = 1L)
-    ))
-  )
+test_that("assign_arg_names leaves overflow args unnamed", {
+  res <- .mfae_assign_arg_names(c("", "", ""), c("x"))
+  expect_equal(res, c("x", "", ""))
 })
 
 # ---------------------------------------------------------------------------
@@ -143,7 +67,8 @@ test_that("mfae_operators contains core operators (not control flow)", {
   expect_true("$" %in% .mfae_operators)
   expect_true("<-" %in% .mfae_operators)
   expect_true("::" %in% .mfae_operators)
-  # Control flow constructs are NOT in .mfae_operators — they have dedicated handlers
+  # Control flow is excluded structurally (it never parses as a `name(...)`
+  # call node), so it must not appear in the operator list
   expect_false("if" %in% .mfae_operators)
   expect_false("for" %in% .mfae_operators)
   expect_false("while" %in% .mfae_operators)
@@ -253,6 +178,178 @@ test_that("mfae_match_args names non-dots only when there are no dots", {
 })
 
 # ---------------------------------------------------------------------------
+# parse-data helpers -- unit tests
+# ---------------------------------------------------------------------------
+
+pd_of <- function(code) {
+  .mfae_parse_data(utils::getParseData(parse(text = code, keep.source = TRUE)))
+}
+
+# Row of the outermost expression, i.e. the one whose parent is the root.
+top_row_of <- function(pd) {
+  which(pd$parent == 0L)[[1L]]
+}
+
+# Children of the outermost expression, i.e. the call node's own children.
+call_kids_of <- function(pd) {
+  .mfae_children(pd, pd$id[[top_row_of(pd)]])
+}
+
+plan_of <- function(code, skip_fns = NULL) {
+  .mfae_plan_edits(parse(text = code, keep.source = TRUE), skip_fns = skip_fns)
+}
+
+test_that("children returns the direct children of a node", {
+  pd <- pd_of("mean(1L)")
+  top_id <- pd$id[[top_row_of(pd)]]
+  kids <- .mfae_children(pd, top_id)
+  expect_gt(length(kids), 0L)
+  expect_true(all(pd$parent[kids] == top_id))
+})
+
+test_that("children returns nothing for an unknown node id", {
+  pd <- pd_of("mean(1L)")
+  expect_length(.mfae_children(pd, 999999L), 0L)
+})
+
+test_that("callee resolves simple and namespace-qualified heads", {
+  pd <- pd_of("mean(1L)")
+  head_row <- call_kids_of(pd)[[1L]]
+  expect_equal(.mfae_callee(pd, head_row)$name, "mean")
+
+  pd2 <- pd_of("stats::filter(1L)")
+  head2 <- call_kids_of(pd2)[[1L]]
+  callee <- .mfae_callee(pd2, head2)
+  expect_equal(callee$name, "filter")
+  expect_true(is.call(callee$expr))
+})
+
+test_that("callee returns NULL for anonymous and grouped heads", {
+  # `(f)(1)` — head is a parenthesis, not a function name
+  pd <- pd_of("(f)(1L)")
+  head_row <- call_kids_of(pd)[[1L]]
+  expect_null(.mfae_callee(pd, head_row))
+})
+
+test_that("arg_slots records names and positions in source order", {
+  pd <- pd_of("f(a, b = 2, c)")
+  slots <- .mfae_arg_slots(pd, call_kids_of(pd))
+
+  expect_length(slots, 3L)
+  expect_equal(vapply(slots, function(s) s$name, character(1L)), c("", "b", ""))
+  expect_equal(slots[[1L]]$col, 3) # start of `a`
+  expect_equal(slots[[3L]]$col, 13) # start of `c`
+})
+
+test_that("arg_slots keeps empty arguments as unnamed slots", {
+  # `f(a, , b)` — the empty argument emits no token, only an extra comma
+  pd <- pd_of("f(a, , b)")
+  slots <- .mfae_arg_slots(pd, call_kids_of(pd))
+
+  expect_length(slots, 3L)
+  expect_equal(vapply(slots, function(s) s$name, character(1L)), c("", "", ""))
+  expect_true(is.na(slots[[2L]]$line)) # nothing to insert before
+  expect_false(is.na(slots[[3L]]$line))
+})
+
+test_that("arg_slots returns no slot for an empty call", {
+  pd <- pd_of("f()")
+  expect_length(.mfae_arg_slots(pd, call_kids_of(pd)), 0L)
+})
+
+test_that("is_dots detects a literal ...", {
+  pd <- pd_of("f(x, ...)")
+  slots <- .mfae_arg_slots(pd, call_kids_of(pd))
+  expect_false(isTRUE(slots[[1L]]$dots))
+  expect_true(isTRUE(slots[[2L]]$dots))
+})
+
+test_that("plan_edits reports the insertion position and text", {
+  edits <- plan_of("mean(1L:10L)")
+  expect_length(edits, 1L)
+  expect_equal(edits[[1L]]$line, 1)
+  expect_equal(edits[[1L]]$col, 6) # `1L:10L` starts at column 6
+  expect_equal(edits[[1L]]$text, "x = ")
+})
+
+test_that("plan_edits returns nothing for already explicit calls", {
+  expect_length(plan_of("mean(x = 1L:10L)"), 0L)
+})
+
+test_that("plan_edits skips named arguments", {
+  # Only the first and third arguments are positional; `FUN = identity` keeps
+  # its name. The nested `numeric(1L)` is a call of its own and gains `length`.
+  edits <- plan_of("vapply(1L:9L, FUN = identity, numeric(1L))")
+  expect_length(edits, 3L)
+  expect_setequal(
+    vapply(edits, `[[`, character(1L), "text"),
+    c("X = ", "FUN.VALUE = ", "length = ")
+  )
+})
+
+test_that("plan_edits skips operators, control flow and special syntax", {
+  for (code in c(
+    "a + b",
+    "x$y",
+    "lst[1L]",
+    "lst[[1L]]",
+    "x %% y",
+    "if (x) y else z",
+    "for (i in 1L:3L) print(i)",
+    "while (TRUE) break",
+    "(x + y)",
+    "!x",
+    "x <- 1L"
+  )) {
+    edits <- plan_of(code)
+    # `print(i)` is a real call and is expected to gain `x = `
+    if (grepl("print\\(", code)) {
+      expect_length(edits, 1L)
+    } else {
+      expect_length(edits, 0L)
+    }
+  }
+})
+
+test_that("plan_edits skips infix operators and user-skipped functions", {
+  expect_length(plan_of("x %in% y"), 0L)
+  expect_length(plan_of("mean(1L:10L)", skip_fns = "mean"), 0L)
+})
+
+test_that("plan_edits skips calls that forward ... literally", {
+  # The whole call is left alone, but nested calls are still handled
+  expect_length(plan_of('substr("abcdef", 1L, ...)'), 0L)
+  edits <- plan_of("vapply(1L:9L, identity, numeric(1L), ...)")
+  expect_equal(vapply(edits, `[[`, character(1L), "text"), "length = ")
+})
+
+test_that("plan_edits skips unresolvable callees", {
+  expect_length(plan_of("no_such_function_xyz(1L)"), 0L)
+  expect_length(plan_of("(function(x) x)(1L)"), 0L)
+})
+
+test_that("plan_edits handles empty positional arguments", {
+  # substr(x, start, stop): the empty middle argument still consumes `start`
+  edits <- plan_of('substr("abcdef", , 2L)')
+  expect_equal(vapply(edits, `[[`, character(1L), "text"), c("x = ", "stop = "))
+  expect_equal(vapply(edits, `[[`, numeric(1L), "col"), c(8, 20))
+})
+
+test_that("apply_edits leaves lines untouched when there is nothing to do", {
+  lines <- c("# comment", "mean(1L)", "")
+  expect_equal(.mfae_apply_edits(lines, list()), lines)
+})
+
+test_that("apply_edits applies same-line insertions right to left", {
+  lines <- "mean(1L)"
+  edits <- list(
+    list(line = 1, col = 6, text = "x = "),
+    list(line = 1, col = 1, text = "stats::")
+  )
+  expect_equal(.mfae_apply_edits(lines, edits), "stats::mean(x = 1L)")
+})
+
+# ---------------------------------------------------------------------------
 # make_func_arg_explicit -- integration tests with temp files
 # ---------------------------------------------------------------------------
 
@@ -268,13 +365,7 @@ test_that("make_func_arg_explicit resolves path from rstudioapi when NULL", {
     },
     .package = "base"
   )
-  local_mocked_bindings(
-    writeLines = function(text, con) {
-      expect_equal(con, "/mock/file.R")
-    },
-    .package = "base"
-  )
-  expect_invisible(make_func_arg_explicit())
+  expect_error(make_func_arg_explicit(), "No R expressions found")
 })
 
 test_that("basic transformation: vapply", {
@@ -282,7 +373,7 @@ test_that("basic transformation: vapply", {
   writeLines("vapply(1:9, function(x) x*2, numeric(1))", tf)
   make_func_arg_explicit(tf)
   result <- readLines(tf, warn = FALSE)
-  expected <- "vapply(X = 1:9, FUN = function(x) x * 2, FUN.VALUE = numeric(length = 1))"
+  expected <- "vapply(X = 1:9, FUN = function(x) x*2, FUN.VALUE = numeric(length = 1))"
   expect_match(result, expected, fixed = TRUE)
 })
 
@@ -303,10 +394,16 @@ test_that("already explicit call leaves file unchanged", {
   expect_equal(readLines(tf, warn = FALSE), input)
 })
 
-test_that("empty file produces info message", {
+test_that("empty file aborts", {
   tf <- withr::local_tempfile(fileext = ".R")
   writeLines(character(0L), tf)
-  expect_message(make_func_arg_explicit(tf), "No R expressions found")
+  expect_error(make_func_arg_explicit(tf), "No R expressions found")
+})
+
+test_that("file with only comments aborts", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  writeLines(c("# just a comment", "# another one"), tf)
+  expect_error(make_func_arg_explicit(tf), "No R expressions found")
 })
 
 test_that("operators are not transformed", {
@@ -403,6 +500,117 @@ test_that("non-expression content (roxygen docs) is preserved", {
   result <- readLines(tf, warn = FALSE)
   expect_true(any(grepl("#' My function", result, fixed = TRUE)))
   expect_true(any(grepl("mean\\(x = x, TRUE\\)", result)))
+})
+
+test_that("comments inside a function body are preserved", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  input_lines <- c(
+    "my_fun <- function(x) {",
+    "  # step 1: coerce to numeric",
+    "  x <- as.numeric(x)   # inline note",
+    "",
+    "  # step 2: average",
+    "  mean(x, TRUE)  # result",
+    "}"
+  )
+  expected_lines <- c(
+    "my_fun <- function(x) {",
+    "  # step 1: coerce to numeric",
+    "  x <- as.numeric(x)   # inline note",
+    "",
+    "  # step 2: average",
+    "  mean(x = x, TRUE)  # result",
+    "}"
+  )
+  writeLines(input_lines, tf)
+  make_func_arg_explicit(tf)
+  expect_equal(readLines(tf, warn = FALSE), expected_lines)
+})
+
+test_that("indentation and operator spacing are not reformatted", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  input_lines <- c(
+    "\tmy_fun <- function(x) {",
+    "\t\t# keep my tabs",
+    "\t\tmean(1 : 10,   TRUE) # keep my spaces",
+    "\t}"
+  )
+  expected_lines <- c(
+    "\tmy_fun <- function(x) {",
+    "\t\t# keep my tabs",
+    "\t\tmean(x = 1 : 10,   TRUE) # keep my spaces",
+    "\t}"
+  )
+  writeLines(input_lines, tf)
+  make_func_arg_explicit(tf)
+  expect_equal(readLines(tf, warn = FALSE), expected_lines)
+})
+
+test_that("comments between cross-line arguments are preserved", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  input_lines <- c(
+    "res <- vapply(",
+    "  1:9,  # the input",
+    "  function(x) x,  # the fun",
+    "  numeric(1)  # the type",
+    ")"
+  )
+  writeLines(input_lines, tf)
+  make_func_arg_explicit(tf)
+  expect_equal(
+    readLines(tf, warn = FALSE),
+    c(
+      "res <- vapply(",
+      "  X = 1:9,  # the input",
+      "  FUN = function(x) x,  # the fun",
+      "  FUN.VALUE = numeric(length = 1)  # the type",
+      ")"
+    )
+  )
+})
+
+test_that("several calls on one line are all handled", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  writeLines("foo <- mean(1:10, TRUE); bar <- sd(1:5, TRUE)  # two calls", tf)
+  make_func_arg_explicit(tf)
+  expect_equal(
+    readLines(tf, warn = FALSE),
+    "foo <- mean(x = 1:10, TRUE); bar <- sd(x = 1:5, na.rm = TRUE)  # two calls"
+  )
+})
+
+test_that("existing argument names are never duplicated", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  writeLines("vapply(1:9, FUN = identity, numeric(1))", tf)
+  make_func_arg_explicit(tf)
+  expect_equal(
+    readLines(tf, warn = FALSE),
+    "vapply(X = 1:9, FUN = identity, FUN.VALUE = numeric(length = 1))"
+  )
+})
+
+test_that("empty arguments keep positional alignment", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  writeLines('substr("abcdef", , 2)', tf)
+  make_func_arg_explicit(tf)
+  expect_equal(readLines(tf, warn = FALSE), 'substr(x = "abcdef", , stop = 2)')
+})
+
+test_that("calls forwarding ... are left alone", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  input_lines <- c(
+    "res <- vapply(1:9, identity, numeric(1), ...)",
+    "other <- mean(1:10, TRUE)"
+  )
+  writeLines(input_lines, tf)
+  make_func_arg_explicit(tf)
+  expect_equal(
+    readLines(tf, warn = FALSE),
+    c(
+      "res <- vapply(1:9, identity, numeric(length = 1), ...)",
+      "other <- mean(x = 1:10, TRUE)"
+    )
+  )
 })
 
 test_that("returns invisibly", {

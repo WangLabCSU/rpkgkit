@@ -7,9 +7,9 @@
 .mfae_operators
 }
 \description{
-These are pure operators/syntax, not control flow (\code{if}, \code{for},
-\code{while}, \code{repeat}, \code{function}, \code{\{}, \code{(}) — those
-are dispatched by dedicated handlers in \code{.mfae_walk}. This list is
-used for the remaining operators where simply walking children suffices.
+These are pure operators/syntax, not control flow. Control flow is excluded
+structurally: \code{if}, \code{for}, \code{while}, \code{repeat},
+\code{function}, \code{\{} and \code{(} never look like a
+\code{name(...)} call node in the parse data, so they need no entry here.
 }
 \keyword{internal}

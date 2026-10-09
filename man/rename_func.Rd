@@ -7,6 +7,7 @@
 rename_func(
   path = NULL,
   style = c("snake_case", "camelCase", "PascalCase", "google"),
+  num_to_word = c(`for` = 4, to = 2),
   ...
 )
 }
@@ -21,6 +22,12 @@ If \code{NULL} and RStudio is available, the currently active document path is u
 \item \code{"PascalCase"}: upper camel case (e.g., \code{MyFunction})
 \item \code{"google"}: dot-separated lowercase (e.g., \code{my.function})
 }}
+
+\item{num_to_word}{An optional named vector used to expand digit
+abbreviations inside function names into words. Names give the replacement
+word and values give the digit abbreviation, defaulting to
+\code{c("for" = 4, "to" = 2)}. Any input other than a named vector, \code{NULL}, or
+\code{FALSE} is an error. Supply \code{NULL} or \code{FALSE} to disable the expansion.}
 
 \item{...}{Additional arguments. Currently unused and must be empty.}
 }
@@ -40,6 +47,15 @@ Function definitions are identified using the pattern
 call sites / references within the file are updated. The conversion handles
 mixed existing styles (snake_case, camelCase, PascalCase, dot.separated)
 and normalizes function names to the target style.
+
+Digit abbreviations are expanded into words before the target style is
+applied, so \code{list2env()} becomes \code{list_to_env()} and \code{wait4result()} becomes
+\code{wait_for_result()} under \code{style = "snake_case"}. The expanded words are
+formatted following \code{style}, e.g. \code{list2env()} becomes \code{listToEnv()} under
+\code{style = "camelCase"} and \code{ListToEnv()} under \code{style = "PascalCase"}. Only
+digit runs that appear in \code{num_to_word} are expanded: an identifier that
+contains an unmapped digit run (for example \code{scale_x_log10()}) is left
+untouched.
 }
 \examples{
 \donttest{
@@ -49,6 +65,11 @@ rename_func(temp, style = "camelCase")
 readLines(temp)
 rename_func(temp, style = "snake_case")
 readLines(temp)
+
+writeLines("list2env <- function(x) x", temp)
+rename_func(temp, style = "snake_case")
+readLines(temp)
+# "list_to_env <- function(x) x"
 }
 
 }

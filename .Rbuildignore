@@ -57,6 +57,8 @@
 ^\.positai$
 ^\.claude$
 ^index\.qmd$
+^testthat-problems\.rds$
+^_problems/$
 
 # GitHub Actions development files (exclude from package build)
 ^inst/actions/.*/src/

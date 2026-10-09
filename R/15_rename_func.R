@@ -13,6 +13,11 @@
 #'   - `"camelCase"`: lower camel case (e.g., `myFunction`)
 #'   - `"PascalCase"`: upper camel case (e.g., `MyFunction`)
 #'   - `"google"`: dot-separated lowercase (e.g., `my.function`)
+#' @param num_to_word An optional named vector used to expand digit
+#'   abbreviations inside function names into words. Names give the replacement
+#'   word and values give the digit abbreviation, defaulting to
+#'   `c("for" = 4, "to" = 2)`. Any input other than a named vector, `NULL`, or
+#'   `FALSE` is an error. Supply `NULL` or `FALSE` to disable the expansion.
 #' @param ... Additional arguments. Currently unused and must be empty.
 #'
 #' @return
@@ -26,6 +31,15 @@
 #' mixed existing styles (snake_case, camelCase, PascalCase, dot.separated)
 #' and normalizes function names to the target style.
 #'
+#' Digit abbreviations are expanded into words before the target style is
+#' applied, so `list2env()` becomes `list_to_env()` and `wait4result()` becomes
+#' `wait_for_result()` under `style = "snake_case"`. The expanded words are
+#' formatted following `style`, e.g. `list2env()` becomes `listToEnv()` under
+#' `style = "camelCase"` and `ListToEnv()` under `style = "PascalCase"`. Only
+#' digit runs that appear in `num_to_word` are expanded: an identifier that
+#' contains an unmapped digit run (for example `scale_x_log10()`) is left
+#' untouched.
+#'
 #' @examples
 #' \donttest{
 #' temp <- tempfile(fileext = ".R")
@@ -34,12 +48,18 @@
 #' readLines(temp)
 #' rename_func(temp, style = "snake_case")
 #' readLines(temp)
+#'
+#' writeLines("list2env <- function(x) x", temp)
+#' rename_func(temp, style = "snake_case")
+#' readLines(temp)
+#' # "list_to_env <- function(x) x"
 #' }
 #'
 #' @export
 rename_func <- function(
   path = NULL,
   style = c("snake_case", "camelCase", "PascalCase", "google"),
+  num_to_word = c("for" = 4, "to" = 2),
   ...
 ) {
   rlang::check_dots_empty()
@@ -57,6 +77,8 @@ rename_func <- function(
     c("snake_case", "camelCase", "PascalCase", "google")
   )
 
+  num_lookup <- num_to_word_lookup(num_to_word)
+
   lines <- readLines(path, warn = FALSE)
 
   # Detect function definitions: `?name`? <- function(  or  `?name`? = function(
@@ -73,6 +95,7 @@ rename_func <- function(
     to_style,
     character(1L),
     style = style,
+    num_lookup = num_lookup,
     USE.NAMES = FALSE
   )
 
@@ -148,7 +171,7 @@ detect_func_defs <- function(lines) {
 # Helper: convert an R identifier to a target naming style
 # ---------------------------------------------------------------------------
 
-to_style <- function(name, style) {
+to_style <- function(name, style, num_lookup = NULL) {
   # Step 1 -- insert underscore before uppercase-letter transitions
   # e.g. "myFunctionName" -> "my_Function_Name"
   name <- gsub("([a-z0-9])([A-Z])", "\\1_\\2", name, perl = TRUE)
@@ -162,6 +185,14 @@ to_style <- function(name, style) {
 
   if (length(words) == 0L) {
     return(name)
+  }
+
+  # Step 4 -- expand digit abbreviations such as `list2env` -> `list to env`
+  if (length(num_lookup) > 0L) {
+    words <- unlist(
+      lapply(words, split_word_numbers, num_lookup = num_lookup),
+      use.names = FALSE
+    )
   }
 
   switch(
@@ -187,4 +218,67 @@ to_style <- function(name, style) {
     ),
     google = paste(words, collapse = ".")
   )
+}
+
+# ---------------------------------------------------------------------------
+# Helper: validate and normalize the `num_to_word` mapping
+# ---------------------------------------------------------------------------
+# Returns `NULL` when the expansion is disabled, otherwise a named character
+# vector whose names are digit abbreviations and whose values are the words
+# they stand for, e.g. `c("2" = "to", "4" = "for")`.
+num_to_word_lookup <- function(num_to_word, call = rlang::caller_env()) {
+  if (is.null(num_to_word) || isFALSE(num_to_word)) {
+    return(NULL)
+  }
+
+  nms <- names(num_to_word)
+  digits <- trimws(as.character(num_to_word))
+
+  if (
+    !is.atomic(num_to_word) ||
+      !is.vector(num_to_word) ||
+      length(num_to_word) == 0L ||
+      is.null(nms) ||
+      anyNA(nms) ||
+      !all(grepl("^[a-zA-Z]+$", nms)) ||
+      anyNA(digits) ||
+      !all(grepl("^[0-9]+$", digits)) ||
+      anyDuplicated(digits) > 0L
+  ) {
+    cli::cli_abort(c(
+      "x" = "{.arg num_to_word} must be a named vector, {.val NULL}, or {.val FALSE}.",
+      "i" = "Names give the replacement word and values the digit abbreviation, e.g. {.code c(\"for\" = 4, \"to\" = 2)}."
+    ))
+  }
+
+  lookup <- nms
+  names(lookup) <- digits
+  lookup
+}
+
+# ---------------------------------------------------------------------------
+# Helper: expand digit abbreviations inside a single word
+# ---------------------------------------------------------------------------
+# `word` is a single lower-case token such as "list2env". Each digit run found
+# in `num_lookup` is returned as its own element. A word containing at least
+# one unmapped digit run is returned unchanged as a single element, so that
+# identifiers such as "scale_x_log10" or "x10y" stay intact.
+split_word_numbers <- function(word, num_lookup) {
+  if (length(num_lookup) == 0L || !grepl("[0-9]", word)) {
+    return(word)
+  }
+
+  parts <- regmatches(
+    word,
+    gregexpr("[0-9]+|[^0-9]+", word, perl = TRUE)
+  )[[1L]]
+
+  is_digit <- grepl("^[0-9]+$", parts)
+
+  # All-or-nothing: leave the word alone if any digit run is unmapped
+  if (!all(parts[is_digit] %in% names(num_lookup))) {
+    return(word)
+  }
+
+  ifelse(is_digit, unname(num_lookup[parts]), parts)
 }

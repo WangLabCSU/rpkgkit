@@ -117,6 +117,143 @@ test_that("to_style: consecutive uppercase not split further (design choice)", {
 })
 
 # -----------------------------------------------------------
+# num_to_word_lookup helper tests
+# -----------------------------------------------------------
+
+test_that("num_to_word_lookup: maps digits to words", {
+  expect_equal(
+    rpkgkit:::num_to_word_lookup(c("for" = 4, "to" = 2)),
+    c("4" = "for", "2" = "to")
+  )
+})
+
+test_that("num_to_word_lookup: accepts a named character vector", {
+  expect_equal(
+    rpkgkit:::num_to_word_lookup(c("to" = "2")),
+    c("2" = "to")
+  )
+})
+
+test_that("num_to_word_lookup: supports multi-digit abbreviations", {
+  expect_equal(
+    rpkgkit:::num_to_word_lookup(c("ten" = 10)),
+    c("10" = "ten")
+  )
+})
+
+test_that("num_to_word_lookup: NULL and FALSE disable the expansion", {
+  expect_null(rpkgkit:::num_to_word_lookup(NULL))
+  expect_null(rpkgkit:::num_to_word_lookup(FALSE))
+})
+
+test_that("num_to_word_lookup: rejects invalid input", {
+  expect_error(
+    rpkgkit:::num_to_word_lookup(c(2, 4)),
+    "must be a named vector"
+  )
+  expect_error(rpkgkit:::num_to_word_lookup(TRUE), "must be a named vector")
+  expect_error(
+    rpkgkit:::num_to_word_lookup(list("to" = 2)),
+    "must be a named vector"
+  )
+  expect_error(
+    rpkgkit:::num_to_word_lookup(c("to" = "two")),
+    "must be a named vector"
+  )
+  expect_error(
+    rpkgkit:::num_to_word_lookup(c("for" = 4, "to" = 2, "toward" = 2)),
+    "must be a named vector"
+  )
+  expect_error(
+    rpkgkit:::num_to_word_lookup(c("to!" = 2)),
+    "must be a named vector"
+  )
+  expect_error(
+    rpkgkit:::num_to_word_lookup(character(0L)),
+    "must be a named vector"
+  )
+})
+
+# -----------------------------------------------------------
+# split_word_numbers helper tests
+# -----------------------------------------------------------
+
+test_that("split_word_numbers: expands mapped digit runs", {
+  lookup <- rpkgkit:::num_to_word_lookup(c("for" = 4, "to" = 2))
+  expect_equal(
+    rpkgkit:::split_word_numbers("list2env", lookup),
+    c("list", "to", "env")
+  )
+  expect_equal(
+    rpkgkit:::split_word_numbers("wait4result", lookup),
+    c("wait", "for", "result")
+  )
+})
+
+test_that("split_word_numbers: leaves unmapped digit runs intact", {
+  lookup <- rpkgkit:::num_to_word_lookup(c("for" = 4, "to" = 2))
+  expect_equal(rpkgkit:::split_word_numbers("log10", lookup), "log10")
+  expect_equal(rpkgkit:::split_word_numbers("x10y", lookup), "x10y")
+  # one mapped and one unmapped digit run -> word is left alone entirely
+  expect_equal(rpkgkit:::split_word_numbers("a2b10c", lookup), "a2b10c")
+})
+
+test_that("split_word_numbers: words without digits are untouched", {
+  lookup <- rpkgkit:::num_to_word_lookup(c("for" = 4, "to" = 2))
+  expect_equal(rpkgkit:::split_word_numbers("plain", lookup), "plain")
+  expect_equal(rpkgkit:::split_word_numbers("plain", NULL), "plain")
+})
+
+# -----------------------------------------------------------
+# to_style with num_lookup
+# -----------------------------------------------------------
+
+test_that("to_style: num_lookup expands digits and follows each style", {
+  lookup <- rpkgkit:::num_to_word_lookup(c("for" = 4, "to" = 2))
+
+  expect_equal(
+    rpkgkit:::to_style("list2env", "snake_case", num_lookup = lookup),
+    "list_to_env"
+  )
+  expect_equal(
+    rpkgkit:::to_style("list2env", "camelCase", num_lookup = lookup),
+    "listToEnv"
+  )
+  expect_equal(
+    rpkgkit:::to_style("list2env", "PascalCase", num_lookup = lookup),
+    "ListToEnv"
+  )
+  expect_equal(
+    rpkgkit:::to_style("list2env", "google", num_lookup = lookup),
+    "list.to.env"
+  )
+})
+
+test_that("to_style: num_lookup expansion works with camelCase input names", {
+  lookup <- rpkgkit:::num_to_word_lookup(c("for" = 4, "to" = 2))
+  expect_equal(
+    rpkgkit:::to_style("convert2Json", "snake_case", num_lookup = lookup),
+    "convert_to_json"
+  )
+})
+
+test_that("to_style: num_lookup leaves unmapped digits intact", {
+  lookup <- rpkgkit:::num_to_word_lookup(c("for" = 4, "to" = 2))
+  expect_equal(
+    rpkgkit:::to_style("scale_x_log10", "snake_case", num_lookup = lookup),
+    "scale_x_log10"
+  )
+})
+
+test_that("to_style: num_lookup default keeps previous behaviour", {
+  expect_equal(rpkgkit:::to_style("list2env", "snake_case"), "list2env")
+  expect_equal(
+    rpkgkit:::to_style("list2env", "snake_case", num_lookup = NULL),
+    "list2env"
+  )
+})
+
+# -----------------------------------------------------------
 # detect_func_defs helper tests
 # -----------------------------------------------------------
 
@@ -444,4 +581,112 @@ test_that("rename_func: emits success message with rename count", {
     rename_func(tmp, style = "snake_case"),
     "Renamed 1 function"
   )
+})
+
+# -----------------------------------------------------------
+# rename_func num_to_word tests
+# -----------------------------------------------------------
+
+test_that("rename_func: expands digit abbreviations by default", {
+  tmp <- tempfile(fileext = ".R")
+  writeLines(
+    c(
+      "list2env <- function(x) { x }",
+      "list2env(1)"
+    ),
+    tmp
+  )
+  on.exit(unlink(tmp))
+
+  rename_func(tmp, style = "snake_case")
+
+  result <- readLines(tmp)
+  expect_match(result[1L], "list_to_env <- function")
+  expect_match(result[2L], "list_to_env\\(1\\)")
+})
+
+test_that("rename_func: maps 4 to 'for'", {
+  tmp <- tempfile(fileext = ".R")
+  writeLines("wait4result <- function(x) { x }", tmp)
+  on.exit(unlink(tmp))
+
+  rename_func(tmp, style = "snake_case")
+
+  expect_match(readLines(tmp)[1L], "wait_for_result <- function")
+})
+
+test_that("rename_func: expanded words follow the target style", {
+  tmp <- tempfile(fileext = ".R")
+  writeLines("list2env <- function(x) { x }", tmp)
+
+  rename_func(tmp, style = "camelCase")
+  expect_match(readLines(tmp)[1L], "listToEnv <- function")
+
+  writeLines("list2env <- function(x) { x }", tmp)
+  rename_func(tmp, style = "PascalCase")
+  expect_match(readLines(tmp)[1L], "ListToEnv <- function")
+
+  writeLines("list2env <- function(x) { x }", tmp)
+  rename_func(tmp, style = "google")
+  expect_match(readLines(tmp)[1L], "list.to.env <- function")
+
+  unlink(tmp)
+})
+
+test_that("rename_func: leaves unmapped digit runs untouched", {
+  tmp <- tempfile(fileext = ".R")
+  writeLines("log10Env <- function(x) { x }", tmp)
+  on.exit(unlink(tmp))
+
+  rename_func(tmp, style = "snake_case")
+
+  # The name is converted, but the unmapped "10" is not split into "1"/"0"
+  expect_match(readLines(tmp)[1L], "log10_env <- function")
+})
+
+test_that("rename_func: num_to_word = FALSE disables the expansion", {
+  tmp <- tempfile(fileext = ".R")
+  writeLines("list2env <- function(x) { x }", tmp)
+  on.exit(unlink(tmp))
+
+  expect_message(
+    rename_func(tmp, style = "snake_case", num_to_word = FALSE),
+    "already in"
+  )
+  expect_equal(readLines(tmp)[1L], "list2env <- function(x) { x }")
+})
+
+test_that("rename_func: num_to_word = NULL disables the expansion", {
+  tmp <- tempfile(fileext = ".R")
+  writeLines("list2env <- function(x) { x }", tmp)
+  on.exit(unlink(tmp))
+
+  expect_message(
+    rename_func(tmp, style = "snake_case", num_to_word = NULL),
+    "already in"
+  )
+  expect_equal(readLines(tmp)[1L], "list2env <- function(x) { x }")
+})
+
+test_that("rename_func: accepts a custom num_to_word mapping", {
+  tmp <- tempfile(fileext = ".R")
+  writeLines("df2matrix <- function(x) { x }", tmp)
+  on.exit(unlink(tmp))
+
+  rename_func(tmp, style = "snake_case", num_to_word = c("into" = 2))
+
+  expect_match(readLines(tmp)[1L], "df_into_matrix <- function")
+})
+
+test_that("rename_func: invalid num_to_word aborts before touching the file", {
+  tmp <- tempfile(fileext = ".R")
+  writeLines("list2env <- function(x) { x }", tmp)
+  on.exit(unlink(tmp))
+
+  expect_error(
+    rename_func(tmp, style = "snake_case", num_to_word = c(2, 4)),
+    "must be a named vector"
+  )
+  # File is left unchanged when validation fails
+  expect_equal(readLines(tmp)[1L], "list2env <- function(x) { x }")
 })

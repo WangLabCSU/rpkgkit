@@ -51,3 +51,5 @@ inst/actions/*/lib/
 /.uvr/activate*
 inst/doc
 .posit/assistant/skills/r-lib
+tests/testthat/_problems/
+tests/testthat/testthat-problems.rds
