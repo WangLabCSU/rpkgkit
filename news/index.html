@@ -42,7 +42,8 @@
 <h2 class="pkg-version" data-toc-text="0.1.19" id="rpkgkit-0119-2026-10-08">rpkgkit 0.1.19 (2026-10-08)<a class="anchor" aria-label="anchor" href="#rpkgkit-0119-2026-10-08"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-1-19">NEW FEATURES<a class="anchor" aria-label="anchor" href="#new-features-0-1-19"></a></h3>
-<ul><li>
+<ul><li>Added <code><a href="../reference/convert_pipe.html">convert_pipe()</a></code> and <code><a href="../reference/convert_pipe.html">package_convert_pipe()</a></code> to switch pipe operators between the tidyverse pipe <code>%&gt;%</code> and the base pipe <code>|&gt;</code>. Strings, comments, and raw strings are left unchanged, as are the placeholder pipe <code>%&lt;&gt;%</code> and the exposition pipe <code>%$%</code>.</li>
+<li>
 <code><a href="../reference/rename_func.html">rename_func()</a></code> gains a <code>num_to_word</code> argument that expands digit abbreviations in function names into words, defaulting to <code>c("for" = 4, "to" = 2)</code>. With the default mapping <code><a href="https://rdrr.io/r/base/list2env.html" class="external-link">list2env()</a></code> becomes <code>list_to_env()</code> and <code>wait4result()</code> becomes <code>wait_for_result()</code>, and the expanded words are formatted following the <code>style</code> argument, e.g. <code><a href="https://rdrr.io/r/base/list2env.html" class="external-link">list2env()</a></code> becomes <code>listToEnv()</code> under <code>style = "camelCase"</code>. The argument accepts a named vector, <code>NULL</code>, or <code>FALSE</code>; any other input is an error. Only digit runs present in the mapping are expanded, so identifiers such as <code>scale_x_log10()</code> are left untouched.</li>
 </ul></div>
 <div class="section level3">

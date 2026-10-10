@@ -135,6 +135,12 @@ The following functions help you to create and maintain an R package.
 
   Add Explicit Integer Suffix `L` to Integer Literals
 
+- [`package_convert_pipe()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_pipe.md)
+  [`convert_pipe()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_pipe.md)
+  :
+
+  Switch Between the Tidyverse Pipe `%>%` and the Base Pipe `|>`
+
 - [`badge_to_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/badge_to_readme.md)
   : Insert a badge into README badges block
 

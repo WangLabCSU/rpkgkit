@@ -30,6 +30,7 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_knitr_chunk_header.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_nonascii_code.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_pipe.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/create_standalone.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/current_packages.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.html</loc></url>
@@ -38,6 +39,7 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-cfs_process_text_once.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-cfs_transform_text.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-cil_process_text.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-cp_process_text.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_apply_edits.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_arg_slots.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_assign_arg_names.html</loc></url>

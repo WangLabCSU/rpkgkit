@@ -4,6 +4,13 @@
 
 ### NEW FEATURES
 
+- Added
+  [`convert_pipe()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_pipe.md)
+  and
+  [`package_convert_pipe()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_pipe.md)
+  to switch pipe operators between the tidyverse pipe `%>%` and the base
+  pipe `|>`. Strings, comments, and raw strings are left unchanged, as
+  are the placeholder pipe `%<>%` and the exposition pipe `%$%`.
 - [`rename_func()`](https://wanglabcsu.github.io/rpkgkit/reference/rename_func.md)
   gains a `num_to_word` argument that expands digit abbreviations in
   function names into words, defaulting to `c("for" = 4, "to" = 2)`.
