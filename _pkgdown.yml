@@ -101,6 +101,8 @@ reference:
       - convert_knitr_chunk_header
       - convert_int_literals
       - package_convert_int_literals
+      - convert_pipe
+      - package_convert_pipe
       - badge_to_readme
       - GLOBAL_RBUILDIGNORE_PATTERN
       - PERMISSIVE_LICENSE

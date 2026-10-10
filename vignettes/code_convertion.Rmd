@@ -137,6 +137,26 @@ convert_knitr_chunk_header(file)
 readLines(file) |> cli::cli_code()
 ```
 
+# Switch pipe operators
+
+`convert_pipe()` rewrites pipes in one file between `%>%` and `|>`. Strings,
+comments, and the other magrittr operators (`%<>%`, `%$%`) are left unchanged.
+
+```{r}
+#| label = "convert_pipe"
+file <- tempfile(fileext = ".R")
+writeLines("mtcars %>% dplyr::filter(cyl > 4)", file)
+convert_pipe(file, direction = "to_base")
+readLines(file) |> cli::cli_code()
+```
+
+Use `package_convert_pipe()` to process `.R` and `.r` files below a package's
+`R/` directory.
+
+```r
+package_convert_pipe(".", direction = "to_base")
+```
+
 # Add integer suffixes
 
 `convert_int_literals()` adds `L` to bare integer literals while leaving

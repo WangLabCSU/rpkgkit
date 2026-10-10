@@ -2,6 +2,10 @@
 
 ## NEW FEATURES
 
+* Added `convert_pipe()` and `package_convert_pipe()` to switch pipe operators
+  between the tidyverse pipe `%>%` and the base pipe `|>`. Strings, comments,
+  and raw strings are left unchanged, as are the placeholder pipe `%<>%` and
+  the exposition pipe `%$%`.
 * `rename_func()` gains a `num_to_word` argument that expands digit
   abbreviations in function names into words, defaulting to
   `c("for" = 4, "to" = 2)`. With the default mapping `list2env()` becomes
