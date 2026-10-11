@@ -43,11 +43,10 @@ convert_func_syntax <- function(
 ) {
   rlang::check_dots_empty0(...)
 
-  path <- if (is.null(path) && rlang::is_installed("rstudioapi")) {
-    rstudioapi::getActiveDocumentContext()$path
-  } else {
-    path %||%
-      cli::cli_abort(c("x" = "{.arg path} is required when not in RStudio."))
+  path <- path %||%
+    if (rstudioapi::isAvailable()) rstudioapi::getActiveDocumentContext()$path
+  if (is.null(path)) {
+    cli::cli_abort(c("x" = "{.arg path} is required"))
   }
 
   direction <- match_arg(direction, c("to_lambda", "to_explicit"), NULL)

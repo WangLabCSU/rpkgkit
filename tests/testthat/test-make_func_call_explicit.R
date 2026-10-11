@@ -20,6 +20,7 @@ test_that("make_func_call_explicit reads file, adds colons, and writes back", {
   )
 
   local_mocked_bindings(
+    isAvailable = function() TRUE,
     getActiveDocumentContext = function() list(path = mock_path),
     .package = "rstudioapi"
   )

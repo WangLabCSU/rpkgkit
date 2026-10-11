@@ -64,12 +64,10 @@ rename_func <- function(
 ) {
   rlang::check_dots_empty()
 
-  path <- if (is.null(path) && rlang::is_installed("rstudioapi")) {
-    rstudioapi::getActiveDocumentContext()$path
-  } else if (is.null(path)) {
-    cli::cli_abort(c("x" = "{.arg path} is required when not in RStudio."))
-  } else {
-    path
+  path <- path %||%
+    if (rstudioapi::isAvailable()) rstudioapi::getActiveDocumentContext()$path
+  if (is.null(path)) {
+    cli::cli_abort(c("x" = "{.arg path} is required"))
   }
 
   style <- match_arg(

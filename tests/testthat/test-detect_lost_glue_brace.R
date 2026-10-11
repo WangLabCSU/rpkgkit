@@ -12,6 +12,7 @@ test_that("detect_lost_glue_brace aborts when path is NULL", {
 
 test_that("detect_lost_glue_brace resolves path from rstudioapi", {
   local_mocked_bindings(
+    isAvailable = function() TRUE,
     getActiveDocumentContext = function() list(path = "/mock/file.R"),
     .package = "rstudioapi"
   )

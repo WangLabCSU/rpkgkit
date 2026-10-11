@@ -198,6 +198,7 @@ test_that("convert_int_literals aborts when ... is not empty", {
 
 test_that("convert_int_literals resolves the path from rstudioapi when NULL", {
   local_mocked_bindings(
+    isAvailable = function() TRUE,
     getActiveDocumentContext = function() list(path = "/mock/file.R"),
     .package = "rstudioapi"
   )

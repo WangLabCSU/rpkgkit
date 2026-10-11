@@ -462,6 +462,7 @@ test_that("rename_func: uses rstudioapi when path is NULL", {
     .package = "rlang"
   )
   local_mocked_bindings(
+    isAvailable = function() TRUE,
     getActiveDocumentContext = function() list(path = mock_path),
     .package = "rstudioapi"
   )

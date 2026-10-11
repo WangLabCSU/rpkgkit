@@ -10,6 +10,9 @@ package_convert_int_literals <- function(
   rlang::check_bool(recursive)
 
   path <- path %||% "."
+  if (is.null(path)) {
+    cli::cli_abort(c("x" = "{.arg path} is required"))
+  }
 
   if (!is_pkg(path)) {
     cli::cli_abort(c(

@@ -1,10 +1,3 @@
-test_that("match_arg aborts when choices is empty", {
-  expect_error(
-    rpkgkit:::match_arg("x", character(0L)),
-    "No choices provided"
-  )
-})
-
 test_that("match_arg returns default when arg is NULL", {
   result <- rpkgkit:::match_arg(NULL, c("a", "b", "c"))
   expect_equal(result, "a")

@@ -51,12 +51,10 @@ make_func_call_explicit <- function(
   rlang::check_dots_empty()
   rlang::check_installed("pkgload")
 
-  path <- if (is.null(path) && rlang::is_installed("rstudioapi")) {
-    rstudioapi::getActiveDocumentContext()$path
-  } else if (is.null(path)) {
+  path <- path %||%
+    if (rstudioapi::isAvailable()) rstudioapi::getActiveDocumentContext()$path
+  if (is.null(path)) {
     cli::cli_abort(c("x" = "{.arg path} is required"))
-  } else {
-    path
   }
 
   cli::cli_alert_info("Retrieving function calls from {.pkg {use_packages}}")

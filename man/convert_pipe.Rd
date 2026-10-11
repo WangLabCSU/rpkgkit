@@ -48,9 +48,7 @@ Used only by \code{\link[=package_convert_pipe]{package_convert_pipe()}}. Defaul
 }
 \value{
 Both functions are called for their side effect and invisibly return \code{TRUE}
-when they convert something. When there is nothing to convert,
-\code{\link[=convert_pipe]{convert_pipe()}} returns \code{path} unchanged and \code{\link[=package_convert_pipe]{package_convert_pipe()}}
-returns \code{character(0)}.
+when they convert something. When there is nothing to convert, \code{FALSE} is returned
 }
 \description{
 Rewrites pipe operators in an R file between the magrittr pipe \verb{\%>\%} and the

@@ -4,6 +4,7 @@
 
 test_that("detect_print_and_cat resolves path from rstudioapi when NULL", {
   local_mocked_bindings(
+    isAvailable = function() TRUE,
     getActiveDocumentContext = function() list(path = "/mock/file.R"),
     .package = "rstudioapi"
   )

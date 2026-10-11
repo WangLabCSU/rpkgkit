@@ -48,7 +48,12 @@
 #' @export
 make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
   rlang::check_dots_empty()
-  path <- path %||% rstudioapi::getActiveDocumentContext()$path
+  path <- path %||%
+    if (rstudioapi::isAvailable()) rstudioapi::getActiveDocumentContext()$path
+  if (is.null(path)) {
+    cli::cli_abort(c("x" = "{.arg path} is required"))
+  }
+
   lines <- readLines(con = path, warn = FALSE)
   exprs <- suppressWarnings(
     parse(text = paste(lines, collapse = "\n"), keep.source = TRUE)

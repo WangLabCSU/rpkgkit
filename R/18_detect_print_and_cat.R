@@ -98,7 +98,12 @@ detect_print_and_cat <- function(
   verbose = TRUE,
   ...
 ) {
-  path <- path %||% rstudioapi::getActiveDocumentContext()$path
+  path <- path %||%
+    if (rstudioapi::isAvailable()) rstudioapi::getActiveDocumentContext()$path
+  if (is.null(path)) {
+    cli::cli_abort(c("x" = "{.arg path} is required"))
+  }
+
   # validate pattern
   pattern_fn_names <- resolve_pattern_fn_names(
     pattern_fn_names,

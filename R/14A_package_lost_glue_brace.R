@@ -21,6 +21,9 @@ package_lost_glue_brace <- function(
   }
 
   path <- path %||% "."
+  if (is.null(path)) {
+    cli::cli_abort(c("x" = "{.arg path} is required"))
+  }
   path <- normalizePath(path = path, mustWork = FALSE)
   if (!is_pkg(path = path)) {
     cli::cli_abort("{.path {path}} is not an R package (no DESCRIPTION found).")

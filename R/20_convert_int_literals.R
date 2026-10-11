@@ -68,11 +68,10 @@ NULL
 convert_int_literals <- function(path = NULL, verbose = TRUE, ...) {
   rlang::check_dots_empty0(...)
 
-  path <- if (is.null(path) && rlang::is_installed("rstudioapi")) {
-    rstudioapi::getActiveDocumentContext()$path
-  } else {
-    path %||%
-      cli::cli_abort(c("x" = "{.arg path} is required when not in RStudio."))
+  path <- path %||%
+    if (rstudioapi::isAvailable()) rstudioapi::getActiveDocumentContext()$path
+  if (is.null(path)) {
+    cli::cli_abort(c("x" = "{.arg path} is required"))
   }
 
   text <- readLines(path, warn = FALSE)

@@ -68,16 +68,11 @@ match_arg <- function(
   .frame = .envir,
   ...
 ) {
-  if (length(choices) == 0L) {
-    cli::cli_abort(
-      c(
-        "x" = "No choices provided.",
-        "i" = "Choices must be a non-empty character vector."
-      ),
-      class = "MatchArgError",
-      call = call,
-      .envir = .envir,
-      .frame = .frame
+  if (missing(choices)) {
+    formal.args <- formals(sys.function(sysP <- sys.parent()))
+    choices <- eval(
+      formal.args[[as.character(substitute(arg))]],
+      envir = sys.frame(sysP)
     )
   }
   if (is.null(arg)) {

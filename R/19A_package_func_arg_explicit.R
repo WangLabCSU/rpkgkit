@@ -5,6 +5,10 @@
 package_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
   rlang::check_dots_empty()
   path <- path %||% "."
+  if (is.null(path)) {
+    cli::cli_abort(c("x" = "{.arg path} is required"))
+  }
+
   path <- normalizePath(path = path, mustWork = FALSE)
   if (!is_pkg(path = path)) {
     cli::cli_abort("{.path {path}} is not an R package (no DESCRIPTION found).")

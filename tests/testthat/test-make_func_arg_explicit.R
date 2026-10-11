@@ -355,6 +355,7 @@ test_that("apply_edits applies same-line insertions right to left", {
 
 test_that("make_func_arg_explicit resolves path from rstudioapi when NULL", {
   local_mocked_bindings(
+    isAvailable = function() TRUE,
     getActiveDocumentContext = function() list(path = "/mock/file.R"),
     .package = "rstudioapi"
   )
