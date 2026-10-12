@@ -75,8 +75,7 @@ convert_pipe(
 
 Both functions are called for their side effect and invisibly return
 `TRUE` when they convert something. When there is nothing to convert,
-`convert_pipe()` returns `path` unchanged and `package_convert_pipe()`
-returns `character(0)`.
+`FALSE` is returned
 
 ## Details
 
@@ -102,7 +101,7 @@ Rewriting is a literal match, so only a complete operator is converted:
 temp <- tempfile(fileext = ".R")
 writeLines("mtcars |> dplyr::filter(cyl > 4)", temp)
 convert_pipe(temp, direction = "to_magrittr")
-#> ✔ Converted pipes in /tmp/RtmpdKv0Cw/file1952717b49da.R ("to_magrittr")
+#> ✔ Converted pipes in /tmp/RtmpqwZtyM/file1a0d456c3d2f.R ("to_magrittr")
 readLines(temp)
 #> [1] "mtcars %>% dplyr::filter(cyl > 4)"
 # "mtcars %>% dplyr::filter(cyl > 4)"
@@ -110,8 +109,8 @@ readLines(temp)
 # --- Entire package ---
 tmp_pkg <- tempdir()
 usethis::create_package(tmp_pkg, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmpdKv0Cw".
-#> Package: RtmpdKv0Cw
+#> ✔ Setting active project to "/tmp/RtmpqwZtyM".
+#> Package: RtmpqwZtyM
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):

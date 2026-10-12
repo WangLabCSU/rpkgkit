@@ -131,9 +131,7 @@ Used only by <code>package_convert_pipe()</code>. Defaults to <code>c("R")</code
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Both functions are called for their side effect and invisibly return <code>TRUE</code>
-when they convert something. When there is nothing to convert,
-<code>convert_pipe()</code> returns <code>path</code> unchanged and <code>package_convert_pipe()</code>
-returns <code>character(0)</code>.</p>
+when they convert something. When there is nothing to convert, <code>FALSE</code> is returned</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -154,7 +152,7 @@ unchanged.</p></li>
 <span class="r-in"><span><span class="va">temp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".R"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="st">"mtcars |&gt; dplyr::filter(cyl &gt; 4)"</span>, <span class="va">temp</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">convert_pipe</span><span class="op">(</span><span class="va">temp</span>, direction <span class="op">=</span> <span class="st">"to_magrittr"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Converted pipes in <span style="color: #0000BB;">/tmp/RtmpdKv0Cw/file1952717b49da.R</span> (<span style="color: #0000BB;">"to_magrittr"</span>)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Converted pipes in <span style="color: #0000BB;">/tmp/RtmpqwZtyM/file1a0d456c3d2f.R</span> (<span style="color: #0000BB;">"to_magrittr"</span>)</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">temp</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "mtcars %&gt;% dplyr::filter(cyl &gt; 4)"</span>
 <span class="r-in"><span><span class="co"># "mtcars %&gt;% dplyr::filter(cyl &gt; 4)"</span></span></span>
@@ -162,8 +160,8 @@ unchanged.</p></li>
 <span class="r-in"><span><span class="co"># --- Entire package ---</span></span></span>
 <span class="r-in"><span><span class="va">tmp_pkg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/create_package.html" class="external-link">create_package</a></span><span class="op">(</span><span class="va">tmp_pkg</span>, open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/tmp/RtmpdKv0Cw"</span>.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Package</span>: RtmpdKv0Cw</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/tmp/RtmpqwZtyM"</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Package</span>: RtmpqwZtyM</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Title</span>: What the Package Does (One Line, Title Case)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Version</span>: 0.0.0.9000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Authors@R</span> (parsed):</span>
