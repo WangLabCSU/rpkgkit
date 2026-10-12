@@ -21,7 +21,7 @@ package_lost_glue_brace <- function(
   }
 
   path <- path %||% "."
-  if (is.null(path)) {
+  if (is.null(path) || !nzchar(path)) {
     cli::cli_abort(c("x" = "{.arg path} is required"))
   }
   path <- normalizePath(path = path, mustWork = FALSE)

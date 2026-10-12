@@ -21,7 +21,7 @@ render_rmd <- function(path = NULL, output_format = "md_document", ...) {
     if (rlang::is_installed("rstudioapi")) {
       rstudioapi::getActiveDocumentContext()$path
     }
-  if (is.null(path)) {
+  if (is.null(path) || !nzchar(path)) {
     cli::cli_abort(c("x" = "{.arg path} is required"))
   }
   rmarkdown::render(input = path, output_format = output_format, ...)

@@ -66,7 +66,7 @@ rename_func <- function(
 
   path <- path %||%
     if (rstudioapi::isAvailable()) rstudioapi::getActiveDocumentContext()$path
-  if (is.null(path)) {
+  if (is.null(path) || !nzchar(path)) {
     cli::cli_abort(c("x" = "{.arg path} is required"))
   }
 

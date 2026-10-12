@@ -50,7 +50,7 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
   rlang::check_dots_empty()
   path <- path %||%
     if (rstudioapi::isAvailable()) rstudioapi::getActiveDocumentContext()$path
-  if (is.null(path)) {
+  if (is.null(path) || !nzchar(path)) {
     cli::cli_abort(c("x" = "{.arg path} is required"))
   }
 

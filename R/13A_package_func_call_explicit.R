@@ -12,7 +12,7 @@ package_func_call_explicit <- function(
   rlang::check_installed("pkgload")
   path <- path %||% "."
 
-  if (is.null(path)) {
+  if (is.null(path) || !nzchar(path)) {
     cli::cli_abort(c("x" = "{.arg path} is required"))
   }
   path <- normalizePath(path = path, mustWork = FALSE)

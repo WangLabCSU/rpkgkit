@@ -52,7 +52,7 @@ detect_lost_glue_brace <- function(path = NULL, verbose = TRUE, ...) {
   rlang::check_dots_empty()
   path <- path %||%
     if (rstudioapi::isAvailable()) rstudioapi::getActiveDocumentContext()$path
-  if (is.null(path)) {
+  if (is.null(path) || !nzchar(path)) {
     cli::cli_abort(c("x" = "{.arg path} is required"))
   }
   lines <- readLines(path, warn = FALSE)
