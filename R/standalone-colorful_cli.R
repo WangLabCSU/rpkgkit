@@ -1,13 +1,17 @@
 # ---
 # repo: WangLabCSU/rpkgkit
 # file: standalone-colorful_cli.R
-# last-updated: 2026-07-30
+# last-updated: 2026-10-12
 # license: https://unlicense.org
 # imports: [cli]
 # ---
 #
 #
 # ## Changelog:
+#
+#
+# 2026-10-12:
+# * Added variable checking
 #
 # 2026-07-30:
 # * fixed cli syntax in generate_color_code when generating code
@@ -78,6 +82,9 @@ create_colorful_cli_env <- function(
     span.black = list(color = "black")
   )
 ) {
+  if (!is.character(cli_func)) {
+    cli::cli_abort("`cli_func` must be a {.cls character}")
+  }
   cli_env <- new.env()
   vapply(
     X = cli_func,
@@ -155,6 +162,9 @@ add_colors_to_cli <- function(
     span.black = list(color = "black")
   )
 ) {
+  if (!is.function(cli_func)) {
+    cli::cli_abort(message = "`cli_func` must be a {.cls function}")
+  }
   function(...) {
     messages <- list(...)
     cli::cli_div(theme = cli_theme)

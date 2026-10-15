@@ -1,3 +1,55 @@
+# rpkgkit 0.1.20 (2026-10-15)
+
+## NEW FEATURES
+
+* Added `optimize_rmd_yaml()` to enrich the YAML header of one `README.Rmd` or
+  vignette from the package DESCRIPTION: title, author, date, language, an
+  enriched `output` block and, for vignettes, the `VignetteIndexEntry`. A
+  field that still holds its usethis default value (an "Untitled" title, a bare
+  `output: rmarkdown::html_vignette`) is replaced, a field you changed is kept,
+  and user `output` options are merged on top of the enriched defaults.
+  `package_optimize_rmd_yaml()` applies the same logic to `README.Rmd` and
+  every `.Rmd` under `vignettes/`. Both accept `extra`, `extra_readme` and
+  `extra_vignette` for adding custom fields such as `params` or `bibliography`.
+* Added `use_clangd()` to write a `.clangd` configuration file that wires up
+  system R, `Rcpp`, `RcppEigen`, and `RcppArmadillo` include paths. If `path`
+  is an R package root, an additional `If:` block disables clangd's background
+  indexing for the `R/` source directory. The `include` argument lets users
+  pass any custom package names whose `include/` directory should be added.
+* Added the standalone `standalone-cli_table.R` script, which provides
+  `cli_table()` and `cli_table_oneline()` for printing cli-styled frequency
+  tables of a vector, on two aligned lines or on a single `header: count` line.
+* Added the standalone `standalone-make_arg_validator.R` script, which provides
+  `make_arg_validator()`, a factory that turns an unquoted block of checks and
+  coercions written in terms of argument names into a reusable validator
+  returning the validated arguments as a named list.
+
+## MINOR IMPROVEMENTS
+
+* The standalone CLI helpers `add_caller_to_cli()`
+  (`standalone-caller_cli.R`), `add_colors_to_cli()` and
+  `create_colorful_cli_env()` (`standalone-colorful_cli.R`), and
+  `add_timestamp_to_cli()` and `create_ts_cli_env()` (`standalone-ts_cli.R`)
+  now validate their arguments: `cli_func` must be a function and the
+  `cli_functions` / `cli_func` vector of `create_*_cli_env()` must be a
+  character vector, otherwise the call aborts with a cli error naming the
+  argument instead of failing later with a cryptic one.
+* Calls inside these standalone helpers now pass their arguments by name
+  (e.g. `sys.call(which = ...)`, `do.call(what = ..., args = ...)`).
+
+## DOCUMENTATION
+
+* The `README.Rmd` and vignette YAML headers were enriched with
+  `optimize_rmd_yaml()`, so the vignettes now carry a subtitle with the package
+  version, an author, a date, a `lang`, a richer `output` block (table of
+  contents, numbered sections, figure captions) and RStudio `editor_options`.
+* The README badge block now shows the R-universe version badge; the
+  development-version and last-commit badges were removed.
+* In the `news` vignette, the section about the package startup message is
+  titled "A startup message" instead of "A spinner startup message" and its
+  chunk no longer echoes the message.
+
+
 # rpkgkit 0.1.19 (2026-10-08)
 
 ## NEW FEATURES

@@ -1,7 +1,7 @@
 # ---
 # repo: WangLabCSU/rpkgkit
 # file: standalone-caller_cli.R
-# last-updated: 2026-06-27
+# last-updated: 2026-10-12
 # license: https://unlicense.org
 # imports: [cli, rlang]
 # ---
@@ -9,6 +9,10 @@
 # Retrieve caller name and add caller context to CLI functions.
 #
 # ## Changelog:
+#
+#
+# 2026-10-12:
+# * Added variable checking
 #
 # 2026-06-27:
 # * Fixed lints
@@ -46,10 +50,10 @@ get_caller_name <- function(offset = 2L) {
 
   # Retrieve the call object that initiated the target frame
   # sys.call(target_frame) gets the call expression (e.g., f(1, 2))
-  call_obj <- sys.call(target_frame)
+  call_obj <- sys.call(which = target_frame)
 
   # Extract function name using rlang for robustness against anonymous functions/formulas
-  fn_name <- rlang::call_name(call_obj)
+  fn_name <- rlang::call_name(call = call_obj)
 
   if (is.null(fn_name)) {
     return("expression") # Handling cases like local({ ... }) or anonymous funcs
@@ -70,8 +74,9 @@ get_caller_name <- function(offset = 2L) {
 #'
 #' @noRd
 add_caller_to_cli <- function(cli_func, offset = 2L) {
-  force(cli_func)
-
+  if (!is.function(cli_func)) {
+    cli::cli_abort(message = c("x" = "`cli_func` must be a {.cls function}"))
+  }
   function(...) {
     # offset = 1 because we are inside this anonymous wrapper function.
     # We look back 1 frame to find who called this wrapper.
@@ -85,7 +90,7 @@ add_caller_to_cli <- function(cli_func, offset = 2L) {
       messages[[1L]] <- paste0(prefix, messages[[1L]])
     }
 
-    do.call(cli_func, messages)
+    do.call(what = cli_func, args = messages)
   }
 }
 
@@ -123,17 +128,20 @@ create_caller_cli_env <- function(
     "cli_inform"
   )
 ) {
+  if (!is.character(cli_functions)) {
+    cli::cli_abort(message = "`cli_functions` must be a {.cls character}")
+  }
   cli_env <- new.env()
 
   vapply(
     X = cli_functions,
     FUN = function(func_name) {
-      if (exists(func_name, envir = asNamespace("cli"))) {
-        orig_func <- get0(func_name, envir = asNamespace("cli"))
+      if (exists(x = func_name, envir = asNamespace(ns = "cli"))) {
+        orig_func <- get0(x = func_name, envir = asNamespace(ns = "cli"))
 
-        new_func <- add_caller_to_cli(orig_func, offset = 2L)
+        new_func <- add_caller_to_cli(cli_func = orig_func, offset = 2L)
 
-        assign(func_name, new_func, envir = cli_env)
+        assign(x = func_name, value = new_func, envir = cli_env)
         list(NULL)
       }
     },

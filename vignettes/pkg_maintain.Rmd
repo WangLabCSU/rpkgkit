@@ -1,10 +1,24 @@
 ---
 title: "Package Setup & Maintenace"
-output: rmarkdown::html_vignette
+subtitle: "rpkgkit 0.1.19"
+author: "Yuxi Yang"
+date: "`r Sys.Date()`"
+lang: en-US
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+    fig_caption: true
+    df_print: kable
 vignette: >
   %\VignetteIndexEntry{Package Setup & Maintenace}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+editor_options:
+  markdown:
+    wrap: sentence
+  chunk_output_type: console
 ---
 
 ```{r}
@@ -18,6 +32,7 @@ knitr::opts_chunk$set(
 ```{r}
 #| label = "setup",
 #| echo = FALSE
+#| message = FALSE
 library(rpkgkit)
 dir <- tempdir()
 usethis::create_package(path = dir, open = FALSE)
@@ -25,7 +40,7 @@ usethis::create_package(path = dir, open = FALSE)
 
 # Create package infrastructure
 
-## A spinner startup message
+## A startup message
 
 `use_zzz()` creates a package documentation file with `.onLoad`, `.onAttach`,
 and `%||%`. It is similar to `usethis::use_package_doc()` while also providing

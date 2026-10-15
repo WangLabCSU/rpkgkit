@@ -79,6 +79,7 @@ reference:
       - render_rmd
       - update_time_in_standalone
       - use_bugreports
+      - use_clangd
       - use_hexsticker
       - use_multilanguage_readme
       - use_r_v4.1.0
@@ -106,3 +107,5 @@ reference:
       - badge_to_readme
       - GLOBAL_RBUILDIGNORE_PATTERN
       - PERMISSIVE_LICENSE
+      - optimize_rmd_yaml
+      - package_optimize_rmd_yaml

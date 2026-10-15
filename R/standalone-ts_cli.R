@@ -1,7 +1,7 @@
 # ---
 # repo: WangLabCSU/rpkgkit
 # file: standalone-ts_cli.R
-# last-updated: 2026-06-27
+# last-updated: 2026-10-12
 # license: https://unlicense.org
 # imports: [cli]
 # ---
@@ -9,6 +9,10 @@
 # Add timestamps to CLI function output.
 #
 # ## Changelog:
+#
+#
+# 2026-10-12:
+# * Added variable checking
 #
 # 2026-06-27:
 # * Fixed lints
@@ -55,6 +59,9 @@ add_timestamp_to_cli <- function(
     paste0("[", format(Sys.time(), "%Y/%m/%d %H:%M:%S"), "] ")
   }
 ) {
+  if (!is.function(cli_func)) {
+    cli::cli_abort(c("x" = "`cli_func` must be a {.cls function}"))
+  }
   function(...) {
     messages <- list(...)
     if (length(messages) > 0L && is.character(messages[[1L]])) {
@@ -116,6 +123,9 @@ create_ts_cli_env <- function(
     paste0("[", format(Sys.time(), "%Y/%m/%d %H:%M:%S"), "] ")
   }
 ) {
+  if (!is.character(cli_func)) {
+    cli::cli_abort(c("x" = "`cli_func` must be a {.cls character}"))
+  }
   cli_env <- new.env()
   vapply(
     X = cli_func,
