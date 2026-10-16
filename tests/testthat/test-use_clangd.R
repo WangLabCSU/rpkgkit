@@ -265,7 +265,14 @@ test_that("path defaults to current working directory", {
 
   result <- suppressWarnings(use_clangd())
 
-  expect_equal(result, file.path(tmp, ".clangd"))
+  # `use_clangd()` resolves the default path via `getwd()`, which returns the
+  # canonical form of the directory (`/var` -> `/private/var` on macOS; forward
+  # slashes on Windows), whereas `withr::local_tempdir()` returns the raw
+  # `tempdir()` form. Normalize both sides so the comparison is portable.
+  expect_equal(
+    normalizePath(result, winslash = "/"),
+    normalizePath(file.path(tmp, ".clangd"), winslash = "/")
+  )
   expect_true(file.exists(result))
 })
 
