@@ -6,7 +6,9 @@
 #' packages (`Rcpp`, `RcppEigen`, `RcppArmadillo`). If `path` is the root of an
 #' R package (contains a `DESCRIPTION` file), an additional `If:` block is
 #' appended that disables background indexing for the `R/` source directory,
-#' since it only contains R code, not C++ source.
+#' since it only contains R code, not C++ source. In that case `.clangd` is
+#' also added to `.Rbuildignore` (inside a scoped project, so the active
+#' project of the calling session is restored afterwards).
 #'
 #' * `.clangd` is the configuration file read by the clangd language server.
 #'   It is typically placed in the project root.
@@ -59,10 +61,12 @@ use_clangd <- function(
   if (identical(path, ".")) {
     path <- getwd()
   }
-  is_pkg_root <- is_pkg(path = path)
-  if (is_pkg_root) {
-    usethis::proj_set(path = path)
+  if (file.exists(path) && !dir.exists(path)) {
+    cli::cli_abort(c(
+      x = "{.arg path} must be a directory, not a file: {.path {path}}."
+    ))
   }
+  is_pkg_root <- is_pkg(path = path)
 
   target_path <- file.path(path, ".clangd")
   if (file.exists(target_path)) {
@@ -83,9 +87,21 @@ use_clangd <- function(
 
   dir.create(path = path, showWarnings = FALSE, recursive = TRUE)
   writeLines(text = yaml_lines, con = target_path)
+
+  # Keep `.clangd` out of the built tarball. Run inside a scoped project so the
+  # user's active project is restored afterwards.
+  if (is_pkg_root) {
+    usethis::with_project(
+      path = path,
+      force = TRUE,
+      quiet = TRUE,
+      code = usethis::use_build_ignore(".clangd")
+    )
+  }
+
   cli::cli_inform(c(v = "Created {.file {target_path}}."))
 
-  if (isTRUE(open)) {
+  if (isTRUE(open) && rlang::is_installed("rstudioapi")) {
     rstudioapi::navigateToFile(target_path)
   }
 
@@ -112,9 +128,9 @@ use_clangd <- function(
   paths
 }
 
-# Build the YAML lines for `.clangd`. When `is_pkg_root = TRUE`, an
-# `---`-separated second block is appended that disables indexing for the
-# R source directory.
+# Build the YAML lines for `.clangd` (pure function, no file-system side
+# effects). When `is_pkg_root = TRUE`, an `---`-separated second block is
+# appended that disables indexing for the R source directory.
 .clangd_build_config <- function(include_paths, is_pkg_root) {
   flag_lines <- paste0("    - -I", include_paths)
 
@@ -138,7 +154,6 @@ use_clangd <- function(
       "Index:",
       "  Background: None"
     )
-    usethis::use_build_ignore(".clangd")
   }
 
   unlist(blocks, use.names = FALSE)

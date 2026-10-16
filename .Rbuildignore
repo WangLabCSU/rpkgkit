@@ -75,3 +75,4 @@
 ^uvr\.lock$
 ^\.uvr$
 ^\.clangd$
+^\.build\.timestamp$

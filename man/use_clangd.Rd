@@ -41,7 +41,9 @@ include headers from the system R installation and from common C++ interface
 packages (\code{Rcpp}, \code{RcppEigen}, \code{RcppArmadillo}). If \code{path} is the root of an
 R package (contains a \code{DESCRIPTION} file), an additional \verb{If:} block is
 appended that disables background indexing for the \verb{R/} source directory,
-since it only contains R code, not C++ source.
+since it only contains R code, not C++ source. In that case \code{.clangd} is
+also added to \code{.Rbuildignore} (inside a scoped project, so the active
+project of the calling session is restored afterwards).
 \itemize{
 \item \code{.clangd} is the configuration file read by the clangd language server.
 It is typically placed in the project root.

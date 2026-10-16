@@ -67,6 +67,28 @@ test_that("appends If: ignore block when path is an R package root", {
   expect_match(tail[4L], "^  Background: None$")
 })
 
+test_that("package root also adds .clangd to .Rbuildignore", {
+  tmp <- withr::local_tempdir()
+  # A DESCRIPTION without a `Package:` field is not recognised as a project
+  # root by usethis, but it is still an R package root for this function.
+  file.create(file.path(tmp, "DESCRIPTION"))
+
+  local_mocked_bindings(
+    R.home = function(component) "/fake/R/include",
+    .package = "base"
+  )
+  local_mocked_bindings(
+    system.file = function(...) "/fake/pkg/include",
+    .package = "base"
+  )
+
+  suppressMessages(use_clangd(path = tmp))
+
+  rbuildignore <- file.path(tmp, ".Rbuildignore")
+  expect_true(file.exists(rbuildignore))
+  expect_true("^\\.clangd$" %in% readLines(rbuildignore, warn = FALSE))
+})
+
 test_that("does not append If: ignore block when path is not an R package", {
   tmp <- withr::local_tempdir()
 
