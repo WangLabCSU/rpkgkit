@@ -1,6 +1,6 @@
 # Package Setup & Maintenace
 
-    #> Package: RtmpXLzDib
+    #> Package: Rtmp5tW8K0
     #> Title: What the Package Does (One Line, Title Case)
     #> Version: 0.0.0.9000
     #> Authors@R (parsed):
@@ -25,8 +25,8 @@ while also providing a useful starting template.
 ``` r
 
 use_zzz(path = dir, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmpXLzDib".
-#> ✔ Created /tmp/RtmpXLzDib/R/RtmpXLzDib-package.R from template.
+#> ✔ Setting active project to "/tmp/Rtmp5tW8K0".
+#> ✔ Created /tmp/Rtmp5tW8K0/R/Rtmp5tW8K0-package.R from template.
 #> ✔ Adding cli to Imports field in DESCRIPTION.
 #> 
 #> ☐ Refer to functions with `cli::fun()`.
@@ -58,7 +58,7 @@ use_clangd(path = dir, overwrite = TRUE)
 #> include path.
 #> Warning: Package RcppArmadillo is not installed; skipping its
 #> include path.
-#> ✔ Created /tmp/RtmpXLzDib/.clangd.
+#> ✔ Created /tmp/Rtmp5tW8K0/.clangd.
 ```
 
 When `path` is a package root, the file also disables background
@@ -88,11 +88,11 @@ try(use_vendor(
 ))
 #> ℹ Fetching repository information for WangLabCSU/rpkgkit...
 #> ✔ Vendor package uses MIT license.
-#> ✔ Created directory /tmp/RtmpXLzDib/inst/vendor/rpkgkit.
+#> ✔ Created directory /tmp/Rtmp5tW8K0/inst/vendor/rpkgkit.
 #> ✔ Copied LICENSE.
 #> ✔ Copied LICENSE.md.
 #> ✔ Created inst/vendor/rpkgkit/README.md.
-#> ✔ Created /tmp/RtmpXLzDib/R/vendor-rpkgkit.R.
+#> ✔ Created /tmp/Rtmp5tW8K0/R/vendor-rpkgkit.R.
 #> ✔ Added rpkgkit authors to Authors@R.
 #> ✔ Updated DESCRIPTION.
 #> ☐ Consider pasting the following statement into README.md

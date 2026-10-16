@@ -169,11 +169,24 @@ try(inquire_standalone("r-lib/rlang")) |> head()
 
 try(browse_standalone()) |> head()
 #> ℹ Searching GitHub for standalone-*.R files
-#> ■■■■■■■■■■■■■■■■                  50% | 100/200 items, page 1/2 | ETA  0s
+#> Waiting 18s for retry backoff ■■■                             
+#> Waiting 18s for retry backoff ■■■                             
+#> Waiting 18s for retry backoff ■■■■■■■■                        
+#> Waiting 18s for retry backoff ■■■■■■■■■■■■■                   
+#> Waiting 18s for retry backoff ■■■■■■■■■■■■■■■■■■              
+#> Waiting 18s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■        
+#> Waiting 18s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   
+#> Waiting 18s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 
 #> Error in gh::gh("/search/code", q = "filename:standalone- language:R -filename:import-",  : 
-#>   GitHub API error (429): try again in 11.168037061s
-#> ℹ Read more at <https://docs.github.com/rest/search/search#search-code>
-#> [1] "Error in gh::gh(\"/search/code\", q = \"filename:standalone- language:R -filename:import-\",  : \n  \033[1m\033[22mGitHub API error (429): try again in 11.168037061s\n\033[36mℹ\033[39m Read more at \033[3m\033[34m<https://docs.github.com/rest/search/search#search-code>\033[39m\033[23m\n"
+#>   GitHub API error (403): API rate limit exceeded for installation. If you
+#> reach out to GitHub Support for help, please include the request ID
+#> A400:3B962A:6C6739:162E4CF:6AD22C10 and timestamp 2026-10-16 13:52:16 UTC. For
+#> more on scraping GitHub and how it may affect your rights, please review our
+#> Terms of Service
+#> (https://docs.github.com/en/site-policy/github-terms/github-terms-of-service)
+#> ℹ Read more at
+#>   <https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api#rate-limiting>
+#> [1] "Error in gh::gh(\"/search/code\", q = \"filename:standalone- language:R -filename:import-\",  : \n  \033[1m\033[22mGitHub API error (403): API rate limit exceeded for installation. If you\nreach out to GitHub Support for help, please include the request ID\nA400:3B962A:6C6739:162E4CF:6AD22C10 and timestamp 2026-10-16 13:52:16 UTC. For\nmore on scraping GitHub and how it may affect your rights, please review our\nTerms of Service\n(https://docs.github.com/en/site-policy/github-terms/github-terms-of-service)\n\033[36mℹ\033[39m Read more at\n  \033[3m\033[34m<https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api#rate-limiting>\033[39m\033[23m\n"
 ```
 
 Create a local standalone file with a standard metadata header:
