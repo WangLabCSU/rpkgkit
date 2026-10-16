@@ -5,7 +5,10 @@ to include headers from the system R installation and from common C++
 interface packages (`Rcpp`, `RcppEigen`, `RcppArmadillo`). If `path` is
 the root of an R package (contains a `DESCRIPTION` file), an additional
 `If:` block is appended that disables background indexing for the `R/`
-source directory, since it only contains R code, not C++ source.
+source directory, since it only contains R code, not C++ source. In that
+case `.clangd` is also added to `.Rbuildignore` (inside a scoped
+project, so the active project of the calling session is restored
+afterwards).
 
 - `.clangd` is the configuration file read by the clangd language
   server. It is typically placed in the project root.
@@ -78,8 +81,7 @@ tmp <- tempdir()
 use_clangd(path = tmp)
 #> Warning: Package RcppEigen is not installed; skipping its include path.
 #> Warning: Package RcppArmadillo is not installed; skipping its include path.
-#> ✔ Adding "^\\.clangd$" to .Rbuildignore.
-#> ✔ Created /tmp/Rtmpg8QNyg/.clangd.
+#> ✔ Created /tmp/Rtmpf5tTtu/.clangd.
 
 # Custom include library names
 use_clangd(
@@ -87,8 +89,8 @@ use_clangd(
   include = c("Rcpp", "BH"),
   overwrite = TRUE
 )
-#> ! Overwriting /tmp/Rtmpg8QNyg/.clangd.
+#> ! Overwriting /tmp/Rtmpf5tTtu/.clangd.
 #> Warning: Package BH is not installed; skipping its include path.
-#> ✔ Created /tmp/Rtmpg8QNyg/.clangd.
+#> ✔ Created /tmp/Rtmpf5tTtu/.clangd.
 # }
 ```

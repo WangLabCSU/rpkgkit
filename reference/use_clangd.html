@@ -4,7 +4,9 @@ include headers from the system R installation and from common C++ interface
 packages (Rcpp, RcppEigen, RcppArmadillo). If path is the root of an
 R package (contains a DESCRIPTION file), an additional If: block is
 appended that disables background indexing for the R/ source directory,
-since it only contains R code, not C++ source.
+since it only contains R code, not C++ source. In that case .clangd is
+also added to .Rbuildignore (inside a scoped project, so the active
+project of the calling session is restored afterwards).
 .clangd is the configuration file read by the clangd language server.
 It is typically placed in the project root.
 The system R include directory is obtained via base::R.home() with
@@ -19,7 +21,9 @@ include headers from the system R installation and from common C++ interface
 packages (Rcpp, RcppEigen, RcppArmadillo). If path is the root of an
 R package (contains a DESCRIPTION file), an additional If: block is
 appended that disables background indexing for the R/ source directory,
-since it only contains R code, not C++ source.
+since it only contains R code, not C++ source. In that case .clangd is
+also added to .Rbuildignore (inside a scoped project, so the active
+project of the calling session is restored afterwards).
 .clangd is the configuration file read by the clangd language server.
 It is typically placed in the project root.
 The system R include directory is obtained via base::R.home() with
@@ -75,7 +79,9 @@ include headers from the system R installation and from common C++ interface
 packages (<code>Rcpp</code>, <code>RcppEigen</code>, <code>RcppArmadillo</code>). If <code>path</code> is the root of an
 R package (contains a <code>DESCRIPTION</code> file), an additional <code>If:</code> block is
 appended that disables background indexing for the <code>R/</code> source directory,
-since it only contains R code, not C++ source.</p><ul><li><p><code>.clangd</code> is the configuration file read by the clangd language server.
+since it only contains R code, not C++ source. In that case <code>.clangd</code> is
+also added to <code>.Rbuildignore</code> (inside a scoped project, so the active
+project of the calling session is restored afterwards).</p><ul><li><p><code>.clangd</code> is the configuration file read by the clangd language server.
 It is typically placed in the project root.</p></li>
 <li><p>The system R include directory is obtained via <code><a href="https://rdrr.io/r/base/Rhome.html" class="external-link">base::R.home()</a></code> with
 component <code>"include"</code>.</p></li>
@@ -141,8 +147,7 @@ Defaults to <code><a href="https://rlang.r-lib.org/reference/is_interactive.html
 <span class="r-in"><span><span class="fu">use_clangd</span><span class="op">(</span>path <span class="op">=</span> <span class="va">tmp</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Package <span style="color: #0000BB;">RcppEigen</span> is not installed; skipping its include path.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Package <span style="color: #0000BB;">RcppArmadillo</span> is not installed; skipping its include path.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Adding <span style="color: #0000BB;">"^\\.clangd$"</span> to <span style="color: #0000BB;">.Rbuildignore</span>.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/Rtmpg8QNyg/.clangd</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/Rtmpf5tTtu/.clangd</span>.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Custom include library names</span></span></span>
 <span class="r-in"><span><span class="fu">use_clangd</span><span class="op">(</span></span></span>
@@ -150,9 +155,9 @@ Defaults to <code><a href="https://rlang.r-lib.org/reference/is_interactive.html
 <span class="r-in"><span>  include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Rcpp"</span>, <span class="st">"BH"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Overwriting <span style="color: #0000BB;">/tmp/Rtmpg8QNyg/.clangd</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Overwriting <span style="color: #0000BB;">/tmp/Rtmpf5tTtu/.clangd</span>.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Package <span style="color: #0000BB;">BH</span> is not installed; skipping its include path.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/Rtmpg8QNyg/.clangd</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/Rtmpf5tTtu/.clangd</span>.</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
