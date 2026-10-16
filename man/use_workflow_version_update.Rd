@@ -41,6 +41,16 @@ Version bump rules (from commit messages, case-insensitive):
 
 The \code{workflow_dispatch} input always overrides commit message detection.
 }
+\section{NEWS.md guard}{
+
+Before writing anything, the action compares the version it is about to set
+with the highest version documented in \code{NEWS.md} (heading lines such as
+\verb{# pkg 1.2.3 (2026-01-01)}). The bump is \strong{skipped} when the new version is
+greater than that maximum, so that no release is shipped without a matching
+\code{NEWS.md} entry. When \code{NEWS.md} is missing or holds no version heading, the
+check is bypassed with a warning.
+}
+
 \examples{
 \dontrun{
 temp <- tempdir()

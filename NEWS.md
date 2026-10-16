@@ -14,8 +14,10 @@
 * Added `use_clangd()` to write a `.clangd` configuration file that wires up
   system R, `Rcpp`, `RcppEigen`, and `RcppArmadillo` include paths. If `path`
   is an R package root, an additional `If:` block disables clangd's background
-  indexing for the `R/` source directory. The `include` argument lets users
-  pass any custom package names whose `include/` directory should be added.
+  indexing for the `R/` source directory, and `.clangd` is added to
+  `.Rbuildignore`. The `include` argument lets users pass any custom package
+  names whose `include/` directory should be added; packages that are not
+  installed are skipped with a warning.
 * Added the standalone `standalone-cli_table.R` script, which provides
   `cli_table()` and `cli_table_oneline()` for printing cli-styled frequency
   tables of a vector, on two aligned lines or on a single `header: count` line.
@@ -36,6 +38,11 @@
   argument instead of failing later with a cryptic one.
 * Calls inside these standalone helpers now pass their arguments by name
   (e.g. `sys.call(which = ...)`, `do.call(what = ..., args = ...)`).
+* The version-bumper action now refuses to ship a release without a changelog
+  entry: before writing anything it compares the version it is about to set
+  with the highest version documented in `NEWS.md` and skips the bump (with a
+  warning) when the new version is higher. When `NEWS.md` is missing or holds
+  no version heading, the check is bypassed with a warning.
 
 ## DOCUMENTATION
 
@@ -48,6 +55,13 @@
 * In the `news` vignette, the section about the package startup message is
   titled "A startup message" instead of "A spinner startup message" and its
   chunk no longer echoes the message.
+* The `pkg_maintain` vignette gained a "Configure the clangd language server"
+  section, and the `readme_and_doc` vignette an "Enrich Rmd YAML headers"
+  section covering `optimize_rmd_yaml()` and `package_optimize_rmd_yaml()`,
+  including the `extra`, `extra_readme` and `extra_vignette` arguments.
+* The `standalone_tools` vignette documents the new `cli_table` and
+  `make_arg_validator` scripts, and its examples now run as labelled,
+  unevaluated knitr chunks with trimmed `inquire_standalone()` output.
 
 
 # rpkgkit 0.1.19 (2026-10-08)

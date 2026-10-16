@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
 
 ```{r}
 #| label = "setup",
-#| echo = FALSE
+#| echo = FALSE,
 #| message = FALSE
 library(rpkgkit)
 dir <- tempdir()
@@ -60,6 +60,28 @@ the `reference` section of `_pkgdown.yml`.
 #| label = "check_pkgdown_reference",
 #| eval = FALSE
 check_pkgdown_reference(pkg = dir)
+```
+
+## Configure the clangd language server
+
+`use_clangd()` writes a `.clangd` configuration file that lets the clangd
+language server find the system R headers and the `include/` directory of the
+packages you pass in `include` (`Rcpp`, `RcppEigen` and `RcppArmadillo` by
+default). Packages that are not installed are skipped with a warning.
+
+```{r}
+#| label = "use_clangd"
+use_clangd(path = dir, overwrite = TRUE)
+```
+
+When `path` is a package root, the file also disables background indexing for
+the `R/` directory (which holds no C++ code) and adds `.clangd` to
+`.Rbuildignore`.
+
+```{r}
+#| label = "use_clangd_include",
+#| eval = FALSE
+use_clangd(path = dir, include = c("Rcpp", "BH"), overwrite = TRUE)
 ```
 
 # Vendor permissively licensed code

@@ -100,3 +100,50 @@ AI-translated README files.
 #| label = "badge_translated_by_ai"
 badge_translated_by_ai("es")
 ```
+
+# Enrich Rmd YAML headers
+
+`optimize_rmd_yaml()` rewrites the YAML header of one `README.Rmd` or vignette
+from the package `DESCRIPTION`: `title`, `subtitle`, `author`, `date`, `lang`,
+an enriched `output` block and, for vignettes, the `VignetteIndexEntry`.
+
+Fields that still hold their `usethis` default value (an `"Untitled"` title, a
+bare `output: rmarkdown::html_vignette`) are replaced, fields you have changed
+are kept, and your `output` options are merged on top of the enriched defaults.
+
+```{r}
+#| label = "optimize_rmd_yaml",
+#| eval = FALSE
+optimize_rmd_yaml() # active RStudio document
+optimize_rmd_yaml("vignettes/intro.Rmd")
+optimize_rmd_yaml("README.Rmd", readme_format = "github_document")
+```
+
+`package_optimize_rmd_yaml()` applies the same logic to `README.Rmd` and every
+`.Rmd` below `vignettes/`:
+
+```{r}
+#| label = "package_optimize_rmd_yaml",
+#| eval = FALSE
+package_optimize_rmd_yaml(path = dir)
+```
+
+Both functions accept `extra`, `extra_readme` and `extra_vignette` to add your
+own fields (merged recursively, later values win) and to drop a built-in
+default with `NULL`. `date = "desc"` reuses the `DESCRIPTION` date instead of
+`Sys.Date()`:
+
+```{r}
+#| label = "package_optimize_rmd_yaml_extra",
+#| eval = FALSE
+package_optimize_rmd_yaml(
+  path = dir,
+  date = "desc",
+  extra = list(lang = "zh-CN"),
+  extra_readme = list(always_allow_html = NULL),
+  extra_vignette = list(bibliography = "refs.bib", `link-citations` = TRUE)
+)
+```
+
+Each function returns invisibly whether (or which files) it changed, so it is
+safe to run on every build.

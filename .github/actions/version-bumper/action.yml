@@ -1,5 +1,5 @@
 name: "R Package Version Bumper"
-description: "Automatically bump the R package version and update development badges"
+description: "Automatically bump the R package version and update development badges. Bumps are skipped when the new version is higher than the highest version in NEWS.md."
 author: "Exceret"
 branding:
   icon: "package"

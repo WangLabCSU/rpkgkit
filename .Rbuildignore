@@ -74,3 +74,4 @@
 ^uvr\.toml$
 ^uvr\.lock$
 ^\.uvr$
+^\.clangd$

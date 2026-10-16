@@ -1,5 +1,9 @@
 import * as core from '@actions/core';
 import { exec } from '@actions/exec';
+import * as fs from 'fs';
+
+/** Path of the NEWS file used as the release gate */
+const NEWS_FILE = 'NEWS.md';
 
 /**
  * Parse version string into components
@@ -50,6 +54,59 @@ function bumpVersion(
         default:
             throw new Error(`Invalid bump type: "${type}". Use: major, minor, patch, custom`);
     }
+}
+
+/**
+ * Compare two X.Y.Z version strings
+ * Returns a positive number if `a` is greater than `b`, a negative number if
+ * `a` is lower than `b`, and 0 when both versions are equal.
+ */
+function compareVersions(a: string, b: string): number {
+    const verA = parseVersion(a);
+    const verB = parseVersion(b);
+
+    const keys: Array<'major' | 'minor' | 'patch'> = ['major', 'minor', 'patch'];
+    for (const key of keys) {
+        if (verA[key] !== verB[key]) {
+            return verA[key] - verB[key];
+        }
+    }
+
+    return 0;
+}
+
+/**
+ * Get the highest version documented in NEWS.md
+ *
+ * Reads the markdown headings of NEWS.md (e.g. `# pkg 1.2.3 (2026-01-01)`)
+ * and returns the greatest X.Y.Z version found. Returns `null` when the file
+ * is missing or holds no version heading.
+ */
+function getMaxNewsVersion(): string | null {
+    if (!fs.existsSync(NEWS_FILE)) {
+        return null;
+    }
+
+    const headings = fs
+        .readFileSync(NEWS_FILE, 'utf8')
+        .split(/\r?\n/)
+        .filter((line: string) => /^#{1,6}\s+\S/.test(line));
+
+    const versions: string[] = [];
+    for (const heading of headings) {
+        const match = heading.match(/\b(\d+\.\d+\.\d+)\b/);
+        if (match) {
+            versions.push(match[1]);
+        }
+    }
+
+    if (versions.length === 0) {
+        return null;
+    }
+
+    return versions.reduce((max, version) =>
+        compareVersions(version, max) > 0 ? version : max
+    );
 }
 
 /**
@@ -158,7 +215,6 @@ async function updateReadmeBadges(newVersion: string): Promise<void> {
 
     for (const file of files) {
         try {
-            const fs = require('fs');
             if (!fs.existsSync(file)) {
                 continue;
             }
@@ -224,13 +280,32 @@ async function run(): Promise<void> {
             throw new Error(`Invalid version: ${newVersion}`);
         }
 
-        // 7. Update DESCRIPTION
+        // 7. Release gate: never go beyond what NEWS.md documents
+        const maxNewsVersion = getMaxNewsVersion();
+        if (maxNewsVersion === null) {
+            core.warning(
+                `⏭️  No version found in ${NEWS_FILE}, cannot check the release gate`
+            );
+        } else if (compareVersions(newVersion, maxNewsVersion) > 0) {
+            core.warning(
+                `⏭️  Skipping version bump: v${newVersion} is higher than the ` +
+                `highest version in ${NEWS_FILE} (v${maxNewsVersion}). ` +
+                `Add a ${NEWS_FILE} entry for the new version first.`
+            );
+            core.setOutput('new_version', currentVersion);
+            core.setOutput('bumped', 'false');
+            return;
+        } else {
+            core.info(`✅ ${NEWS_FILE} highest version: v${maxNewsVersion}`);
+        }
+
+        // 8. Update DESCRIPTION
         await setVersion(newVersion);
 
-        // 8. Update badges before the version commit triggers CI
+        // 9. Update badges before the version commit triggers CI
         await updateReadmeBadges(newVersion);
 
-        // 9. Set outputs
+        // 10. Set outputs
         core.setOutput('new_version', newVersion);
         core.setOutput('bumped', 'true');
 
