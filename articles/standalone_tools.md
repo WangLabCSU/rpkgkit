@@ -86,6 +86,63 @@ ts_cli <- create_ts_cli_env()
 ts_cli$cli_alert_info("Hello, world!")
 ```
 
+### Print frequency tables
+
+The `cli_table.R` standalone script prints frequency tables of a vector
+with cli styling. `cli_table()` uses two aligned lines (headers, then
+counts), while `cli_table_oneline()` collapses them into a single
+`header: count` line. Both return the underlying `table` object
+invisibly.
+
+``` r
+
+x <- c("apple", "pear", "apple", NA)
+
+cli_table(x)
+cli_table(x, head_format = ".strong", align = "center")
+
+cli_table_oneline(x)
+cli_table_oneline(mtcars$cyl, sep = " | ", count_format = NULL)
+```
+
+### Validate and transform arguments
+
+The `make_arg_validator.R` standalone script builds reusable validators.
+Give it an unquoted block of checks and coercions written in terms of
+argument names; it returns a function that, called from inside your
+function, returns the validated arguments as a named list.
+
+``` r
+
+validate_add <- make_arg_validator({
+  if (!type %in% c("sum", "product")) {
+    rlang::abort("`type` must be \"sum\" or \"product\".", call = NULL)
+  }
+  n <- as.integer(max(n, 1L))
+})
+
+add <- function(type = c("sum", "product"), n = 1L) {
+  args <- validate_add()
+  switch(args$type, sum = sum(1:args$n), product = prod(1:args$n))
+}
+
+add("sum", 3)
+```
+
+Errors raised inside the block reach the caller unchanged, and an
+assignment to an existing argument is written back through the returned
+list:
+
+``` r
+
+list2env(validate_add(), envir = environment())
+```
+
+Only names that already existed in the caller’s frame are returned, so a
+validator updates arguments but never adds new ones. The same validator
+can be shared by several functions, and `env` can be passed explicitly
+to validate a list of options instead of a function frame.
+
 ## Manage standalone files in a package
 
 Use
@@ -96,45 +153,27 @@ to search supported repositories.
 
 ``` r
 
-try(inquire_standalone("r-lib/rlang"))
-#> # A tibble: 13 × 9
-#>    name              path  sha    size url   html_url git_url download_url type 
-#>    <chr>             <chr> <chr> <int> <chr> <chr>    <chr>   <chr>        <chr>
-#>  1 standalone-cli.R  R/st… 14c6… 18672 http… https:/… https:… https://raw… file 
-#>  2 standalone-downs… R/st… 09b7…  9213 http… https:/… https:… https://raw… file 
-#>  3 standalone-lazye… R/st… 50ce…  2313 http… https:/… https:… https://raw… file 
-#>  4 standalone-lifec… R/st… 70f0…  6411 http… https:/… https:… https://raw… file 
-#>  5 standalone-linke… R/st… 9ab2…  2167 http… https:/… https:… https://raw… file 
-#>  6 standalone-obj-t… R/st… e9c3…  7175 http… https:/… https:… https://raw… file 
-#>  7 standalone-purrr… R/st… 0c1d…  5501 http… https:/… https:… https://raw… file 
-#>  8 standalone-rlang… R/st… 4da3…  1807 http… https:/… https:… https://raw… file 
-#>  9 standalone-s3-re… R/st… 05f0…  6056 http… https:/… https:… https://raw… file 
-#> 10 standalone-sizes… R/st… 03ee…  3069 http… https:/… https:… https://raw… file 
-#> 11 standalone-types… R/st… 42c7…  6843 http… https:/… https:… https://raw… file 
-#> 12 standalone-vctrs… R/st… a789… 14292 http… https:/… https:… https://raw… file 
-#> 13 standalone-zeall… R/st… 5e9d…   843 http… https:/… https:… https://raw… file
+try(inquire_standalone("r-lib/rlang")) |> head()
+#> # A tibble: 6 × 9
+#>   name               path  sha    size url   html_url git_url download_url type 
+#>   <chr>              <chr> <chr> <int> <chr> <chr>    <chr>   <chr>        <chr>
+#> 1 standalone-cli.R   R/st… 14c6… 18672 http… https:/… https:… https://raw… file 
+#> 2 standalone-downst… R/st… 09b7…  9213 http… https:/… https:… https://raw… file 
+#> 3 standalone-lazyev… R/st… 50ce…  2313 http… https:/… https:… https://raw… file 
+#> 4 standalone-lifecy… R/st… 70f0…  6411 http… https:/… https:… https://raw… file 
+#> 5 standalone-linked… R/st… 9ab2…  2167 http… https:/… https:… https://raw… file 
+#> 6 standalone-obj-ty… R/st… e9c3…  7175 http… https:/… https:… https://raw… file
 ```
 
 ``` r
 
-try(browse_standalone())
+try(browse_standalone()) |> head()
 #> ℹ Searching GitHub for standalone-*.R files
 #> ■■■■■■■■■■■■■■■■                  50% | 100/200 items, page 1/2 | ETA  0s
-#> ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | 200/200 items, page 2/2 | ETA  0s
-#> # A tibble: 198 × 9
-#>    repo       name  path  sha   url   html_url git_url repo_url repo_description
-#>    <chr>      <chr> <chr> <chr> <chr> <chr>    <chr>   <chr>    <chr>           
-#>  1 tidymodel… stan… R/st… 3f38… http… https:/… https:… https:/… A tidy unified …
-#>  2 r-lib/rla… stan… R/st… 14c6… http… https:/… https:… https:/… Low-level API f…
-#>  3 r-lib/rla… stan… R/st… a789… http… https:/… https:… https:/… Low-level API f…
-#>  4 r-lib/rla… stan… R/st… 4da3… http… https:/… https:… https:/… Low-level API f…
-#>  5 r-lib/rla… stan… R/st… 03ee… http… https:/… https:… https:/… Low-level API f…
-#>  6 r-lib/rla… stan… R/st… 0c1d… http… https:/… https:… https:/… Low-level API f…
-#>  7 r-lib/rla… stan… R/st… 5e9d… http… https:/… https:… https:/… Low-level API f…
-#>  8 r-lib/rla… stan… R/st… e9c3… http… https:/… https:… https:/… Low-level API f…
-#>  9 r-lib/rla… stan… R/st… 50ce… http… https:/… https:… https:/… Low-level API f…
-#> 10 r-lib/rla… stan… R/st… 70f0… http… https:/… https:… https:/… Low-level API f…
-#> # ℹ 188 more rows
+#> Error in gh::gh("/search/code", q = "filename:standalone- language:R -filename:import-",  : 
+#>   GitHub API error (429): try again in 5.727882143s
+#> ℹ Read more at <https://docs.github.com/rest/search/search#search-code>
+#> [1] "Error in gh::gh(\"/search/code\", q = \"filename:standalone- language:R -filename:import-\",  : \n  \033[1m\033[22mGitHub API error (429): try again in 5.727882143s\n\033[36mℹ\033[39m Read more at \033[3m\033[34m<https://docs.github.com/rest/search/search#search-code>\033[39m\033[23m\n"
 ```
 
 Create a local standalone file with a standard metadata header:

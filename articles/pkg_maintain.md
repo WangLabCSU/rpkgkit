@@ -1,10 +1,6 @@
 # Package Setup & Maintenace
 
-    #> ✔ rpkgkit v0.1.19 loaded [1 ms]
-    #> ✔ Setting active project to "/tmp/RtmpG0zLua".
-    #> ✔ Creating R/.
-    #> ✔ Writing DESCRIPTION.
-    #> Package: RtmpG0zLua
+    #> Package: RtmpCluoo3
     #> Title: What the Package Does (One Line, Title Case)
     #> Version: 0.0.0.9000
     #> Authors@R (parsed):
@@ -15,12 +11,10 @@
     #> Config/roxygen2/version: 8.1.1
     #> Encoding: UTF-8
     #> Roxygen: list(markdown = TRUE)
-    #> ✔ Writing NAMESPACE.
-    #> ✔ Setting active project to "<no active project>".
 
 ## Create package infrastructure
 
-### A spinner startup message
+### A startup message
 
 [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
 creates a package documentation file with `.onLoad`, `.onAttach`, and
@@ -31,8 +25,8 @@ while also providing a useful starting template.
 ``` r
 
 use_zzz(path = dir, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmpG0zLua".
-#> ✔ Created /tmp/RtmpG0zLua/R/RtmpG0zLua-package.R from template.
+#> ✔ Setting active project to "/tmp/RtmpCluoo3".
+#> ✔ Created /tmp/RtmpCluoo3/R/RtmpCluoo3-package.R from template.
 #> ✔ Adding cli to Imports field in DESCRIPTION.
 #> 
 #> ☐ Refer to functions with `cli::fun()`.
@@ -47,6 +41,34 @@ section of `_pkgdown.yml`.
 ``` r
 
 check_pkgdown_reference(pkg = dir)
+```
+
+### Configure the clangd language server
+
+[`use_clangd()`](https://wanglabcsu.github.io/rpkgkit/reference/use_clangd.md)
+writes a `.clangd` configuration file that lets the clangd language
+server find the system R headers and the `include/` directory of the
+packages you pass in `include` (`Rcpp`, `RcppEigen` and `RcppArmadillo`
+by default). Packages that are not installed are skipped with a warning.
+
+``` r
+
+use_clangd(path = dir, overwrite = TRUE)
+#> Warning: Package RcppEigen is not installed; skipping its
+#> include path.
+#> Warning: Package RcppArmadillo is not installed; skipping its
+#> include path.
+#> ✔ Adding "^\\.clangd$" to .Rbuildignore.
+#> ✔ Created /tmp/RtmpCluoo3/.clangd.
+```
+
+When `path` is a package root, the file also disables background
+indexing for the `R/` directory (which holds no C++ code) and adds
+`.clangd` to `.Rbuildignore`.
+
+``` r
+
+use_clangd(path = dir, include = c("Rcpp", "BH"), overwrite = TRUE)
 ```
 
 ## Vendor permissively licensed code
@@ -67,11 +89,11 @@ try(use_vendor(
 ))
 #> ℹ Fetching repository information for WangLabCSU/rpkgkit...
 #> ✔ Vendor package uses MIT license.
-#> ✔ Created directory /tmp/RtmpG0zLua/inst/vendor/rpkgkit.
+#> ✔ Created directory /tmp/RtmpCluoo3/inst/vendor/rpkgkit.
 #> ✔ Copied LICENSE.
 #> ✔ Copied LICENSE.md.
 #> ✔ Created inst/vendor/rpkgkit/README.md.
-#> ✔ Created /tmp/RtmpG0zLua/R/vendor-rpkgkit.R.
+#> ✔ Created /tmp/RtmpCluoo3/R/vendor-rpkgkit.R.
 #> ✔ Added rpkgkit authors to Authors@R.
 #> ✔ Updated DESCRIPTION.
 #> ☐ Consider pasting the following statement into README.md

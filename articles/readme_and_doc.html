@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,10 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Tools for README &amp; Documentation</h1>
+            <h3 data-toc-skip class="subtitle">rpkgkit 0.1.19</h3>
+                        <h4 data-toc-skip class="author">Yuxi Yang</h4>
             
+            <h4 data-toc-skip class="date">2026-10-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/WangLabCSU/rpkgkit/blob/main/vignettes/readme_and_doc.Rmd" class="external-link"><code>vignettes/readme_and_doc.Rmd</code></a></small>
       <div class="d-none name"><code>readme_and_doc.Rmd</code></div>
@@ -133,6 +136,45 @@ statement for AI-translated README files.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; &gt; Este contenido ha sido traducido por IA y no ha sido revisado. No es la lengua materna del autor y es solo para referencia.</span></span></code></pre></div>
 </div>
+</div>
+<div class="section level2">
+<h2 id="enrich-rmd-yaml-headers">Enrich Rmd YAML headers<a class="anchor" aria-label="anchor" href="#enrich-rmd-yaml-headers"></a>
+</h2>
+<p><code><a href="../reference/optimize_rmd_yaml.html">optimize_rmd_yaml()</a></code> rewrites the YAML header of one
+<code>README.Rmd</code> or vignette from the package
+<code>DESCRIPTION</code>: <code>title</code>, <code>subtitle</code>,
+<code>author</code>, <code>date</code>, <code>lang</code>, an enriched
+<code>output</code> block and, for vignettes, the
+<code>VignetteIndexEntry</code>.</p>
+<p>Fields that still hold their <code>usethis</code> default value (an
+<code>"Untitled"</code> title, a bare
+<code>output: rmarkdown::html_vignette</code>) are replaced, fields you
+have changed are kept, and your <code>output</code> options are merged
+on top of the enriched defaults.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/optimize_rmd_yaml.html">optimize_rmd_yaml</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># active RStudio document</span></span>
+<span><span class="fu"><a href="../reference/optimize_rmd_yaml.html">optimize_rmd_yaml</a></span><span class="op">(</span><span class="st">"vignettes/intro.Rmd"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/optimize_rmd_yaml.html">optimize_rmd_yaml</a></span><span class="op">(</span><span class="st">"README.Rmd"</span>, readme_format <span class="op">=</span> <span class="st">"github_document"</span><span class="op">)</span></span></code></pre></div>
+<p><code><a href="../reference/package_optimize_rmd_yaml.html">package_optimize_rmd_yaml()</a></code> applies the same logic to
+<code>README.Rmd</code> and every <code>.Rmd</code> below
+<code>vignettes/</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/package_optimize_rmd_yaml.html">package_optimize_rmd_yaml</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span></code></pre></div>
+<p>Both functions accept <code>extra</code>, <code>extra_readme</code>
+and <code>extra_vignette</code> to add your own fields (merged
+recursively, later values win) and to drop a built-in default with
+<code>NULL</code>. <code>date = "desc"</code> reuses the
+<code>DESCRIPTION</code> date instead of <code><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date()</a></code>:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/package_optimize_rmd_yaml.html">package_optimize_rmd_yaml</a></span><span class="op">(</span></span>
+<span>  path <span class="op">=</span> <span class="va">dir</span>,</span>
+<span>  date <span class="op">=</span> <span class="st">"desc"</span>,</span>
+<span>  extra <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>lang <span class="op">=</span> <span class="st">"zh-CN"</span><span class="op">)</span>,</span>
+<span>  extra_readme <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>always_allow_html <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>,</span>
+<span>  extra_vignette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>bibliography <span class="op">=</span> <span class="st">"refs.bib"</span>, `link-citations` <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Each function returns invisibly whether (or which files) it changed,
+so it is safe to run on every build.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -54,6 +54,15 @@ use_workflow_version_update(
 
 Invisibly returns the path to the created workflow file.
 
+## NEWS.md guard
+
+Before writing anything, the action compares the version it is about to
+set with the highest version documented in `NEWS.md` (heading lines such
+as `# pkg 1.2.3 (2026-01-01)`). The bump is **skipped** when the new
+version is greater than that maximum, so that no release is shipped
+without a matching `NEWS.md` entry. When `NEWS.md` is missing or holds
+no version heading, the check is bypassed with a warning.
+
 ## Examples
 
 ``` r

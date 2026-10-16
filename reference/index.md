@@ -92,6 +92,11 @@ The following functions help you to create and maintain an R package.
 
   Add a `BugReports` field to a package's `DESCRIPTION`
 
+- [`use_clangd()`](https://wanglabcsu.github.io/rpkgkit/reference/use_clangd.md)
+  :
+
+  Create a `.clangd` configuration file
+
 - [`use_hexsticker()`](https://wanglabcsu.github.io/rpkgkit/reference/use_hexsticker.md)
   **\[deprecated\]** : Use Hex Sticker in README
 
@@ -151,3 +156,10 @@ The following functions help you to create and maintain an R package.
 
 - [`PERMISSIVE_LICENSE`](https://wanglabcsu.github.io/rpkgkit/reference/PERMISSIVE_LICENSE.md)
   : Project License Allowing Copying
+
+- [`optimize_rmd_yaml()`](https://wanglabcsu.github.io/rpkgkit/reference/optimize_rmd_yaml.md)
+  : Enrich the YAML header of ONE Rmd file using the package DESCRIPTION
+
+- [`package_optimize_rmd_yaml()`](https://wanglabcsu.github.io/rpkgkit/reference/package_optimize_rmd_yaml.md)
+  : Enrich the YAML headers of README.Rmd and vignettes/\*.Rmd of a
+  package

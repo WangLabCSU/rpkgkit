@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,6 +38,30 @@
       <small>Source: <a href="https://github.com/WangLabCSU/rpkgkit/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.20" id="rpkgkit-0120-2026-10-15">rpkgkit 0.1.20 (2026-10-15)<a class="anchor" aria-label="anchor" href="#rpkgkit-0120-2026-10-15"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-1-20">NEW FEATURES<a class="anchor" aria-label="anchor" href="#new-features-0-1-20"></a></h3>
+<ul><li>Added <code><a href="../reference/optimize_rmd_yaml.html">optimize_rmd_yaml()</a></code> to enrich the YAML header of one <code>README.Rmd</code> or vignette from the package DESCRIPTION: title, author, date, language, an enriched <code>output</code> block and, for vignettes, the <code>VignetteIndexEntry</code>. A field that still holds its usethis default value (an “Untitled” title, a bare <code>output: rmarkdown::html_vignette</code>) is replaced, a field you changed is kept, and user <code>output</code> options are merged on top of the enriched defaults. <code><a href="../reference/package_optimize_rmd_yaml.html">package_optimize_rmd_yaml()</a></code> applies the same logic to <code>README.Rmd</code> and every <code>.Rmd</code> under <code>vignettes/</code>. Both accept <code>extra</code>, <code>extra_readme</code> and <code>extra_vignette</code> for adding custom fields such as <code>params</code> or <code>bibliography</code>.</li>
+<li>Added <code><a href="../reference/use_clangd.html">use_clangd()</a></code> to write a <code>.clangd</code> configuration file that wires up system R, <code>Rcpp</code>, <code>RcppEigen</code>, and <code>RcppArmadillo</code> include paths. If <code>path</code> is an R package root, an additional <code>If:</code> block disables clangd’s background indexing for the <code>R/</code> source directory, and <code>.clangd</code> is added to <code>.Rbuildignore</code>. The <code>include</code> argument lets users pass any custom package names whose <code>include/</code> directory should be added; packages that are not installed are skipped with a warning.</li>
+<li>Added the standalone <code>standalone-cli_table.R</code> script, which provides <code>cli_table()</code> and <code>cli_table_oneline()</code> for printing cli-styled frequency tables of a vector, on two aligned lines or on a single <code>header: count</code> line.</li>
+<li>Added the standalone <code>standalone-make_arg_validator.R</code> script, which provides <code>make_arg_validator()</code>, a factory that turns an unquoted block of checks and coercions written in terms of argument names into a reusable validator returning the validated arguments as a named list.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-improvements-0-1-20">MINOR IMPROVEMENTS<a class="anchor" aria-label="anchor" href="#minor-improvements-0-1-20"></a></h3>
+<ul><li>The standalone CLI helpers <code>add_caller_to_cli()</code> (<code>standalone-caller_cli.R</code>), <code>add_colors_to_cli()</code> and <code>create_colorful_cli_env()</code> (<code>standalone-colorful_cli.R</code>), and <code>add_timestamp_to_cli()</code> and <code>create_ts_cli_env()</code> (<code>standalone-ts_cli.R</code>) now validate their arguments: <code>cli_func</code> must be a function and the <code>cli_functions</code> / <code>cli_func</code> vector of <code>create_*_cli_env()</code> must be a character vector, otherwise the call aborts with a cli error naming the argument instead of failing later with a cryptic one.</li>
+<li>Calls inside these standalone helpers now pass their arguments by name (e.g. <code>sys.call(which = ...)</code>, <code>do.call(what = ..., args = ...)</code>).</li>
+<li>The version-bumper action now refuses to ship a release without a changelog entry: before writing anything it compares the version it is about to set with the highest version documented in <code>NEWS.md</code> and skips the bump (with a warning) when the new version is higher. When <code>NEWS.md</code> is missing or holds no version heading, the check is bypassed with a warning.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-0-1-20">DOCUMENTATION<a class="anchor" aria-label="anchor" href="#documentation-0-1-20"></a></h3>
+<ul><li>The <code>README.Rmd</code> and vignette YAML headers were enriched with <code><a href="../reference/optimize_rmd_yaml.html">optimize_rmd_yaml()</a></code>, so the vignettes now carry a subtitle with the package version, an author, a date, a <code>lang</code>, a richer <code>output</code> block (table of contents, numbered sections, figure captions) and RStudio <code>editor_options</code>.</li>
+<li>The README badge block now shows the R-universe version badge; the development-version and last-commit badges were removed.</li>
+<li>In the <code>news</code> vignette, the section about the package startup message is titled “A startup message” instead of “A spinner startup message” and its chunk no longer echoes the message.</li>
+<li>The <code>pkg_maintain</code> vignette gained a “Configure the clangd language server” section, and the <code>readme_and_doc</code> vignette an “Enrich Rmd YAML headers” section covering <code><a href="../reference/optimize_rmd_yaml.html">optimize_rmd_yaml()</a></code> and <code><a href="../reference/package_optimize_rmd_yaml.html">package_optimize_rmd_yaml()</a></code>, including the <code>extra</code>, <code>extra_readme</code> and <code>extra_vignette</code> arguments.</li>
+<li>The <code>standalone_tools</code> vignette documents the new <code>cli_table</code> and <code>make_arg_validator</code> scripts, and its examples now run as labelled, unevaluated knitr chunks with trimmed <code><a href="../reference/inquire_standalone.html">inquire_standalone()</a></code> output.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.19" id="rpkgkit-0119-2026-10-08">rpkgkit 0.1.19 (2026-10-08)<a class="anchor" aria-label="anchor" href="#rpkgkit-0119-2026-10-08"></a></h2>
 <div class="section level3">

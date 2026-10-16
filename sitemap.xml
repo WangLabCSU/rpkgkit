@@ -61,6 +61,8 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/make_func_call_explicit.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/news_md.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/open_cffinit.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/optimize_rmd_yaml.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/package_optimize_rmd_yaml.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/rename_func.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/render_rmd.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/repo_spec_parse.html</loc></url>
@@ -68,6 +70,7 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/rpkgkit-package.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/update_time_in_standalone.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_bugreports.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_clangd.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_hexsticker.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_multilanguage_readme.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_r_v4.1.0.html</loc></url>

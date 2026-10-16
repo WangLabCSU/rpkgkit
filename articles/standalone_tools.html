@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,10 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>rpkgkit standalone scripts</h1>
+            <h3 data-toc-skip class="subtitle">rpkgkit 0.1.19</h3>
+                        <h4 data-toc-skip class="author">Yuxi Yang</h4>
             
+            <h4 data-toc-skip class="date">2026-10-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/WangLabCSU/rpkgkit/blob/main/vignettes/standalone_tools.Rmd" class="external-link"><code>vignettes/standalone_tools.Rmd</code></a></small>
       <div class="d-none name"><code>standalone_tools.Rmd</code></div>
@@ -143,6 +146,57 @@ for matching a list of arguments to compatible functions.</p>
 <code class="sourceCode R"><span><span class="va">ts_cli</span> <span class="op">&lt;-</span> <span class="fu">create_ts_cli_env</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">ts_cli</span><span class="op">$</span><span class="fu">cli_alert_info</span><span class="op">(</span><span class="st">"Hello, world!"</span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="print-frequency-tables">Print frequency tables<a class="anchor" aria-label="anchor" href="#print-frequency-tables"></a>
+</h3>
+<p>The <code>cli_table.R</code> standalone script prints frequency
+tables of a vector with cli styling. <code>cli_table()</code> uses two
+aligned lines (headers, then counts), while
+<code>cli_table_oneline()</code> collapses them into a single
+<code>header: count</code> line. Both return the underlying
+<code>table</code> object invisibly.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"apple"</span>, <span class="st">"pear"</span>, <span class="st">"apple"</span>, <span class="cn">NA</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">cli_table</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="fu">cli_table</span><span class="op">(</span><span class="va">x</span>, head_format <span class="op">=</span> <span class="st">".strong"</span>, align <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">cli_table_oneline</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="fu">cli_table_oneline</span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span>, sep <span class="op">=</span> <span class="st">" | "</span>, count_format <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="validate-and-transform-arguments">Validate and transform arguments<a class="anchor" aria-label="anchor" href="#validate-and-transform-arguments"></a>
+</h3>
+<p>The <code>make_arg_validator.R</code> standalone script builds
+reusable validators. Give it an unquoted block of checks and coercions
+written in terms of argument names; it returns a function that, called
+from inside your function, returns the validated arguments as a named
+list.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">validate_add</span> <span class="op">&lt;-</span> <span class="fu">make_arg_validator</span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">type</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sum"</span>, <span class="st">"product"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">abort</a></span><span class="op">(</span><span class="st">"`type` must be \"sum\" or \"product\"."</span>, call <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">1L</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">add</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">type</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sum"</span>, <span class="st">"product"</span><span class="op">)</span>, <span class="va">n</span> <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">args</span> <span class="op">&lt;-</span> <span class="fu">validate_add</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span><span class="va">args</span><span class="op">$</span><span class="va">type</span>, sum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">args</span><span class="op">$</span><span class="va">n</span><span class="op">)</span>, product <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/prod.html" class="external-link">prod</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">args</span><span class="op">$</span><span class="va">n</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">add</span><span class="op">(</span><span class="st">"sum"</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p>Errors raised inside the block reach the caller unchanged, and an
+assignment to an existing argument is written back through the returned
+list:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list2env.html" class="external-link">list2env</a></span><span class="op">(</span><span class="fu">validate_add</span><span class="op">(</span><span class="op">)</span>, envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">environment</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Only names that already existed in the caller’s frame are returned,
+so a validator updates arguments but never adds new ones. The same
+validator can be shared by several functions, and <code>env</code> can
+be passed explicitly to validate a list of options instead of a function
+frame.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="manage-standalone-files-in-a-package">Manage standalone files in a package<a class="anchor" aria-label="anchor" href="#manage-standalone-files-in-a-package"></a>
@@ -150,52 +204,34 @@ for matching a list of arguments to compatible functions.</p>
 <p>Use <code><a href="../reference/inquire_standalone.html">inquire_standalone()</a></code> to inspect standalone files in
 a GitHub repository and <code><a href="../reference/browse_standalone.html">browse_standalone()</a></code> to search
 supported repositories.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/inquire_standalone.html">inquire_standalone</a></span><span class="op">(</span><span class="st">"r-lib/rlang"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 13 × 9</span></span></span>
-<span><span class="co">#&gt;    name              path  sha    size url   html_url git_url download_url type </span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> standalone-cli.R  R/st… 14c6… <span style="text-decoration: underline;">18</span>672 http… https:/… https:… https://raw… file </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> standalone-downs… R/st… 09b7…  <span style="text-decoration: underline;">9</span>213 http… https:/… https:… https://raw… file </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> standalone-lazye… R/st… 50ce…  <span style="text-decoration: underline;">2</span>313 http… https:/… https:… https://raw… file </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> standalone-lifec… R/st… 70f0…  <span style="text-decoration: underline;">6</span>411 http… https:/… https:… https://raw… file </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> standalone-linke… R/st… 9ab2…  <span style="text-decoration: underline;">2</span>167 http… https:/… https:… https://raw… file </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> standalone-obj-t… R/st… e9c3…  <span style="text-decoration: underline;">7</span>175 http… https:/… https:… https://raw… file </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> standalone-purrr… R/st… 0c1d…  <span style="text-decoration: underline;">5</span>501 http… https:/… https:… https://raw… file </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> standalone-rlang… R/st… 4da3…  <span style="text-decoration: underline;">1</span>807 http… https:/… https:… https://raw… file </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> standalone-s3-re… R/st… 05f0…  <span style="text-decoration: underline;">6</span>056 http… https:/… https:… https://raw… file </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> standalone-sizes… R/st… 03ee…  <span style="text-decoration: underline;">3</span>069 http… https:/… https:… https://raw… file </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> standalone-types… R/st… 42c7…  <span style="text-decoration: underline;">6</span>843 http… https:/… https:… https://raw… file </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> standalone-vctrs… R/st… a789… <span style="text-decoration: underline;">14</span>292 http… https:/… https:… https://raw… file </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> standalone-zeall… R/st… 5e9d…   843 http… https:/… https:… https://raw… file</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/browse_standalone.html">browse_standalone</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/inquire_standalone.html">inquire_standalone</a></span><span class="op">(</span><span class="st">"r-lib/rlang"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 9</span></span></span>
+<span><span class="co">#&gt;   name               path  sha    size url   html_url git_url download_url type </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> standalone-cli.R   R/st… 14c6… <span style="text-decoration: underline;">18</span>672 http… https:/… https:… https://raw… file </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> standalone-downst… R/st… 09b7…  <span style="text-decoration: underline;">9</span>213 http… https:/… https:… https://raw… file </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> standalone-lazyev… R/st… 50ce…  <span style="text-decoration: underline;">2</span>313 http… https:/… https:… https://raw… file </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> standalone-lifecy… R/st… 70f0…  <span style="text-decoration: underline;">6</span>411 http… https:/… https:… https://raw… file </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> standalone-linked… R/st… 9ab2…  <span style="text-decoration: underline;">2</span>167 http… https:/… https:… https://raw… file </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> standalone-obj-ty… R/st… e9c3…  <span style="text-decoration: underline;">7</span>175 http… https:/… https:… https://raw… file</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/browse_standalone.html">browse_standalone</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Searching GitHub for standalone-*.R files</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■                </span>  50% | 100/200 items, page 1/2 | ETA  0s</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span> 100% | 200/200 items, page 2/2 | ETA  0s</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 198 × 9</span></span></span>
-<span><span class="co">#&gt;    repo       name  path  sha   url   html_url git_url repo_url repo_description</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> tidymodel… stan… R/st… 3f38… http… https:/… https:… https:/… A tidy unified …</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> r-lib/rla… stan… R/st… 14c6… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> r-lib/rla… stan… R/st… a789… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> r-lib/rla… stan… R/st… 4da3… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> r-lib/rla… stan… R/st… 03ee… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> r-lib/rla… stan… R/st… 0c1d… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> r-lib/rla… stan… R/st… 5e9d… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> r-lib/rla… stan… R/st… e9c3… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> r-lib/rla… stan… R/st… 50ce… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> r-lib/rla… stan… R/st… 70f0… http… https:/… https:… https:/… Low-level API f…</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 188 more rows</span></span></span></code></pre></div>
+<span><span class="co">#&gt; Error in gh::gh("/search/code", q = "filename:standalone- language:R -filename:import-",  : </span></span>
+<span><span class="co">#&gt;   GitHub API error (429): try again in 5.727882143s</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Read more at <span style="color: #0000BB; font-style: italic;">&lt;https://docs.github.com/rest/search/search#search-code&gt;</span></span></span>
+<span><span class="co">#&gt; [1] "Error in gh::gh(\"/search/code\", q = \"filename:standalone- language:R -filename:import-\",  : \n  \033[1m\033[22mGitHub API error (429): try again in 5.727882143s\n\033[36mℹ\033[39m Read more at \033[3m\033[34m&lt;https://docs.github.com/rest/search/search#search-code&gt;\033[39m\033[23m\n"</span></span></code></pre></div>
 <p>Create a local standalone file with a standard metadata header:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/create_standalone.html">create_standalone</a></span><span class="op">(</span><span class="st">"foo"</span>, open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>After editing standalone files, refresh their
 <code>last-updated</code> field:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/update_time_in_standalone.html">update_time_in_standalone</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"./R/standalone-foo.R"</span><span class="op">)</span></span></code></pre></div>
 <p>Add a dated changelog entry to one or more standalone files:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/add_changelog_in_standalone.html">add_changelog_in_standalone</a></span><span class="op">(</span><span class="st">"R/standalone-foo.R"</span>, <span class="st">"Added foo function"</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

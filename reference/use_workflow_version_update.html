@@ -29,7 +29,7 @@ The workflow_dispatch input always overrides commit message detection."><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,6 +108,17 @@ Defaults to <code>FALSE</code>.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Invisibly returns the path to the created workflow file.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="news-md-guard">NEWS.md guard<a class="anchor" aria-label="anchor" href="#news-md-guard"></a></h2>
+
+
+<p>Before writing anything, the action compares the version it is about to set
+with the highest version documented in <code>NEWS.md</code> (heading lines such as
+<code># pkg 1.2.3 (2026-01-01)</code>). The bump is <strong>skipped</strong> when the new version is
+greater than that maximum, so that no release is shipped without a matching
+<code>NEWS.md</code> entry. When <code>NEWS.md</code> is missing or holds no version heading, the
+check is bypassed with a warning.</p>
     </div>
 
     <div class="section level2">
