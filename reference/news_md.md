@@ -4,8 +4,9 @@ Functions to help manage the NEWS.md file in R packages according to
 CRAN guidelines. Includes functions to add new entries and check the
 format.
 
-Validates the NEWS.md file against CRAN guidelines and common best
-practices. Reports issues found and provides suggestions for fixes.
+**\[deprecated\]** Validates the NEWS.md file against CRAN guidelines
+and common best practices. Reports issues found and provides suggestions
+for fixes.
 
 Reads and displays the NEWS.md file content with optional filtering.
 

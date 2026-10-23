@@ -63,6 +63,15 @@ version is greater than that maximum, so that no release is shipped
 without a matching `NEWS.md` entry. When `NEWS.md` is missing or holds
 no version heading, the check is bypassed with a warning.
 
+## Rust crate version
+
+When the package ships Rust code, the action also reads the `version`
+key of the `[package]` table in `src/rust/Cargo.toml` and rewrites it to
+the new version. The rest of the manifest is left untouched and the same
+`NEWS.md` guard applies, so the crate version never exceeds the highest
+version documented in `NEWS.md`. The file is skipped when it is absent
+or declares no literal version (for example `version.workspace = true`).
+
 ## Examples
 
 ``` r

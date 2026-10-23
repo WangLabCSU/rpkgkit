@@ -65,10 +65,10 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>rpkgkit standalone scripts</h1>
-            <h3 data-toc-skip class="subtitle">rpkgkit 0.1.19</h3>
+            <h3 data-toc-skip class="subtitle">rpkgkit 0.1.21</h3>
                         <h4 data-toc-skip class="author">Yuxi Yang</h4>
             
-            <h4 data-toc-skip class="date">2026-10-16</h4>
+            <h4 data-toc-skip class="date">2026-10-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/WangLabCSU/rpkgkit/blob/main/vignettes/standalone_tools.Rmd" class="external-link"><code>vignettes/standalone_tools.Rmd</code></a></small>
       <div class="d-none name"><code>standalone_tools.Rmd</code></div>
@@ -218,34 +218,39 @@ supported repositories.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/browse_standalone.html">browse_standalone</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Searching GitHub for standalone-*.R files</span></span>
-<span><span class="co">#&gt; Waiting 18s for retry backoff <span style="color: #00BB00;">■■■                             </span></span></span>
-<span><span class="co">#&gt; Waiting 18s for retry backoff <span style="color: #00BB00;">■■■                             </span></span></span>
-<span><span class="co">#&gt; Waiting 18s for retry backoff <span style="color: #00BB00;">■■■■■■■■                        </span></span></span>
-<span><span class="co">#&gt; Waiting 18s for retry backoff <span style="color: #00BB00;">■■■■■■■■■■■■■                   </span></span></span>
-<span><span class="co">#&gt; Waiting 18s for retry backoff <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■              </span></span></span>
-<span><span class="co">#&gt; Waiting 18s for retry backoff <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■        </span></span></span>
-<span><span class="co">#&gt; Waiting 18s for retry backoff <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   </span></span></span>
-<span><span class="co">#&gt; Waiting 18s for retry backoff <span style="color: #00BB00;">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ </span></span></span>
 <span><span class="co">#&gt; Error in gh::gh("/search/code", q = "filename:standalone- language:R -filename:import-",  : </span></span>
-<span><span class="co">#&gt;   GitHub API error (403): API rate limit exceeded for installation. If you</span></span>
-<span><span class="co">#&gt; reach out to GitHub Support for help, please include the request ID</span></span>
-<span><span class="co">#&gt; A400:3B962A:6C6739:162E4CF:6AD22C10 and timestamp 2026-10-16 13:52:16 UTC. For</span></span>
-<span><span class="co">#&gt; more on scraping GitHub and how it may affect your rights, please review our</span></span>
-<span><span class="co">#&gt; Terms of Service</span></span>
-<span><span class="co">#&gt; (https://docs.github.com/en/site-policy/github-terms/github-terms-of-service)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Read more at</span></span>
-<span><span class="co">#&gt;   <span style="color: #0000BB; font-style: italic;">&lt;https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api#rate-limiting&gt;</span></span></span>
-<span><span class="co">#&gt; [1] "Error in gh::gh(\"/search/code\", q = \"filename:standalone- language:R -filename:import-\",  : \n  \033[1m\033[22mGitHub API error (403): API rate limit exceeded for installation. If you\nreach out to GitHub Support for help, please include the request ID\nA400:3B962A:6C6739:162E4CF:6AD22C10 and timestamp 2026-10-16 13:52:16 UTC. For\nmore on scraping GitHub and how it may affect your rights, please review our\nTerms of Service\n(https://docs.github.com/en/site-policy/github-terms/github-terms-of-service)\n\033[36mℹ\033[39m Read more at\n  \033[3m\033[34m&lt;https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api#rate-limiting&gt;\033[39m\033[23m\n"</span></span></code></pre></div>
+<span><span class="co">#&gt;   GitHub API error (429): try again in 35.264438599s</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Read more at <span style="color: #0000BB; font-style: italic;">&lt;https://docs.github.com/rest/search/search#search-code&gt;</span></span></span>
+<span><span class="co">#&gt; [1] "Error in gh::gh(\"/search/code\", q = \"filename:standalone- language:R -filename:import-\",  : \n  \033[1m\033[22mGitHub API error (429): try again in 35.264438599s\n\033[36mℹ\033[39m Read more at \033[3m\033[34m&lt;https://docs.github.com/rest/search/search#search-code&gt;\033[39m\033[23m\n"</span></span></code></pre></div>
 <p>Create a local standalone file with a standard metadata header:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/create_standalone.html">create_standalone</a></span><span class="op">(</span><span class="st">"foo"</span>, open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="validate-the-standalone-file-layout">Validate the standalone file layout<a class="anchor" aria-label="anchor" href="#validate-the-standalone-file-layout"></a>
+</h3>
+<p><code><a href="../reference/check_standalone.html">check_standalone()</a></code> verifies that a custom standalone
+file follows the layout consumed by
+<code><a href="https://usethis.r-lib.org/reference/use_standalone.html" class="external-link">usethis::use_standalone()</a></code>. It checks the <code># ---</code>
+header (the required <code>repo</code>, <code>file</code>,
+<code>last-updated</code> and <code>license</code> slots, the optional
+<code>imports</code> slot, and the format of each value), that every
+documented function carries <code>@noRd</code>, and that a
+<code># nocov start</code> marker precedes all functions.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/check_standalone.html">check_standalone</a></span><span class="op">(</span><span class="st">"R/standalone-foo.R"</span><span class="op">)</span></span></code></pre></div>
+<p>Findings are printed in the style of <code><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">devtools::check()</a></code>,
+and the counts are returned invisibly as
+<code>list(error = , warning = , note = )</code>. An error in a check
+point skips the remaining ones, while warnings and notes never stop the
+run.</p>
 <p>After editing standalone files, refresh their
 <code>last-updated</code> field:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/update_time_in_standalone.html">update_time_in_standalone</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"./R/standalone-foo.R"</span><span class="op">)</span></span></code></pre></div>
 <p>Add a dated changelog entry to one or more standalone files:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/add_changelog_in_standalone.html">add_changelog_in_standalone</a></span><span class="op">(</span><span class="st">"R/standalone-foo.R"</span>, <span class="st">"Added foo function"</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

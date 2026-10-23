@@ -4,11 +4,11 @@
 
 Here we create a template for editing NEWS.md
 
-    #> ✔ rpkgkit v0.1.20 loaded [2 ms]
-    #> ✔ Setting active project to "/tmp/RtmpRWJ9bG".
+    #> ✔ rpkgkit v0.1.20 loaded [1 ms]
+    #> ✔ Setting active project to "/tmp/RtmpNHSj61".
     #> ✔ Creating R/.
     #> ✔ Writing DESCRIPTION.
-    #> Package: RtmpRWJ9bG
+    #> Package: RtmpNHSj61
     #> Title: What the Package Does (One Line, Title Case)
     #> Version: 0.0.0.9000
     #> Authors@R (parsed):
@@ -39,14 +39,14 @@ news_md_add_entry(
   category = "NEW FEATURES",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/RtmpRWJ9bG/NEWS.md
+#> ✔ Added 1 entry to /tmp/RtmpNHSj61/NEWS.md
 #> → Version: 0.0.0.9000, Category: NEW FEATURES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # RtmpRWJ9bG 0.0.0.9000 (2026-10-16)
+#> # RtmpNHSj61 0.0.0.9000 (2026-10-23)
 #> 
 #> ## NEW FEATURES
 #> 
@@ -68,14 +68,14 @@ news_md_add_entry(
   contributor = "Jack",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/RtmpRWJ9bG/NEWS.md
+#> ✔ Added 1 entry to /tmp/RtmpNHSj61/NEWS.md
 #> → Version: 0.0.0.9000, Category: BUG FIXES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # RtmpRWJ9bG 0.0.0.9000 (2026-10-16)
+#> # RtmpNHSj61 0.0.0.9000 (2026-10-23)
 #> 
 #> ## BUG FIXES
 #> 
@@ -95,29 +95,7 @@ news_md_show(path = tmpdir)
 As you can see, different categories belong to the same version are
 grouped together.
 
-Validate the resulting file against the package’s NEWS formatting rules:
-
-``` r
-
-news_md_check(path = tmpdir)
-#> ℹ Checking NEWS.md with 15 lines
-#> ✔ NEWS.md passed all required checks
-#> ℹ 1 suggestion(s) for improvement
-#> $valid
-#> [1] TRUE
-#> 
-#> $errors
-#> character(0)
-#> 
-#> $warnings
-#> character(0)
-#> 
-#> $suggestions
-#> [1] "File should end with a blank line"
-```
-
-`"File should end with a blank line"` just follows the same rule as
-`DESCRIPTION`. But generally, there are very few items that need to be
-checked for NEWS.md compared with other files in an R package, and these
-requirements are not mandatory; however, they can indeed standardize
-NEWS writing.
+For validating the formatting rules of `NEWS.md`, use
+[`news_md_check()`](https://wanglabcsu.github.io/rpkgkit/reference/news_md.md);
+it is deprecated and now warns on every call, so it is only kept for
+backward compatibility.

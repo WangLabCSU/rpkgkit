@@ -26,6 +26,8 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/browse_standalone.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/check_air_installed.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/check_pkgdown_reference.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/check_standalone.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/check_sysdeps.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_func_syntax.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_knitr_chunk_header.html</loc></url>
@@ -54,6 +56,7 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-vendor_extract_imports.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/encode_nonascii.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/flir_fix.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/get_positron_version.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/index.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/inquire_standalone.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/load_language_dict.html</loc></url>

@@ -1,6 +1,6 @@
 # Package Setup & Maintenace
 
-    #> Package: Rtmp5tW8K0
+    #> Package: RtmpUlamDe
     #> Title: What the Package Does (One Line, Title Case)
     #> Version: 0.0.0.9000
     #> Authors@R (parsed):
@@ -25,8 +25,8 @@ while also providing a useful starting template.
 ``` r
 
 use_zzz(path = dir, open = FALSE)
-#> ✔ Setting active project to "/tmp/Rtmp5tW8K0".
-#> ✔ Created /tmp/Rtmp5tW8K0/R/Rtmp5tW8K0-package.R from template.
+#> ✔ Setting active project to "/tmp/RtmpUlamDe".
+#> ✔ Created /tmp/RtmpUlamDe/R/RtmpUlamDe-package.R from template.
 #> ✔ Adding cli to Imports field in DESCRIPTION.
 #> 
 #> ☐ Refer to functions with `cli::fun()`.
@@ -58,7 +58,7 @@ use_clangd(path = dir, overwrite = TRUE)
 #> include path.
 #> Warning: Package RcppArmadillo is not installed; skipping its
 #> include path.
-#> ✔ Created /tmp/Rtmp5tW8K0/.clangd.
+#> ✔ Created /tmp/RtmpUlamDe/.clangd.
 ```
 
 When `path` is a package root, the file also disables background
@@ -88,11 +88,11 @@ try(use_vendor(
 ))
 #> ℹ Fetching repository information for WangLabCSU/rpkgkit...
 #> ✔ Vendor package uses MIT license.
-#> ✔ Created directory /tmp/Rtmp5tW8K0/inst/vendor/rpkgkit.
+#> ✔ Created directory /tmp/RtmpUlamDe/inst/vendor/rpkgkit.
 #> ✔ Copied LICENSE.
 #> ✔ Copied LICENSE.md.
 #> ✔ Created inst/vendor/rpkgkit/README.md.
-#> ✔ Created /tmp/Rtmp5tW8K0/R/vendor-rpkgkit.R.
+#> ✔ Created /tmp/RtmpUlamDe/R/vendor-rpkgkit.R.
 #> ✔ Added rpkgkit authors to Authors@R.
 #> ✔ Updated DESCRIPTION.
 #> ☐ Consider pasting the following statement into README.md
@@ -181,3 +181,64 @@ add_global_rbuildignore(path = dir)
 
 add_global_gitgnore(pkg = dir)
 ```
+
+## Check system dependencies
+
+Some packages need system development libraries (graphics and font
+libraries, for example) to compile.
+[`check_sysdeps()`](https://wanglabcsu.github.io/rpkgkit/reference/check_sysdeps.md)
+detects the package manager in use (`dpkg`, `rpm`, `pacman`, `apk` or
+`brew`), checks each dependency with it, and reports every hit and miss
+together with a ready-to-paste install command for the missing ones.
+
+``` r
+
+check_sysdeps()
+```
+
+With `deps = NULL` (the default), a built-in list of graphics and font
+libraries (`freetype`, `libjpeg`, `libpng`, `libtiff`, `libwebp`,
+`harfbuzz`, `fribidi`, `fontconfig`) is checked using the names that the
+detected package manager expects. Pass your own names in `deps`, and
+optionally set `manager` to check against a manager other than the
+detected one:
+
+``` r
+
+check_sysdeps(c("freetype-devel", "libwebp-devel"), manager = "rpm")
+```
+
+The result is returned invisibly as a named logical vector, so it can be
+reused in scripts. Set `verbose = FALSE` to keep the run silent:
+
+``` r
+
+ok <- check_sysdeps(verbose = FALSE)
+ok[!ok]
+```
+
+## Detect the Positron version
+
+[`get_positron_version()`](https://wanglabcsu.github.io/rpkgkit/reference/get_positron_version.md)
+reports the version of the Positron IDE that hosts the current R
+session. It is useful for diagnostics, bug reports, or for enabling
+IDE-specific behaviour only on recent builds.
+
+``` r
+
+get_positron_version() # e.g. "2025.01.0"
+get_positron_version(long = TRUE) # e.g. "2025.01.0-123"
+```
+
+The version is looked up in three steps, in this order:
+
+1.  the `POSITRON_VERSION` environment variable set by Positron for its
+    R sessions (`POSITRON_LONG_VERSION`, which also carries the build
+    number, when `long = TRUE`);
+2.  the `.ps.positron_version()` helper that the IDE injects into the
+    session;
+3.  the `positron --version` command-line tool.
+
+If the session does not run inside Positron and no `positron` executable
+is on `PATH`, the function returns `NA_character_` instead of throwing
+an error, so it is safe to call in any session, including CI.

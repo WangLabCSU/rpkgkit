@@ -39,6 +39,31 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.21" id="rpkgkit-0121-2026-10-19">rpkgkit 0.1.21 (2026-10-19)<a class="anchor" aria-label="anchor" href="#rpkgkit-0121-2026-10-19"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-1-21">NEW FEATURES<a class="anchor" aria-label="anchor" href="#new-features-0-1-21"></a></h3>
+<ul><li>Added <code><a href="../reference/get_positron_version.html">get_positron_version()</a></code> to report the version of the Positron IDE. It first reads the <code>POSITRON_VERSION</code> environment variable that Positron sets for its R sessions (<code>POSITRON_LONG_VERSION</code>, which includes the build number, when <code>long = TRUE</code>), then falls back to the <code>.ps.positron_version()</code> helper injected by the IDE, and finally to the <code>positron --version</code> command-line tool. When none of them is available it returns <code>NA_character_</code>, so the function is safe to call outside Positron.</li>
+<li>Added <code><a href="../reference/check_sysdeps.html">check_sysdeps()</a></code> to verify that the system development dependencies a package needs at build time are installed. It detects the package manager in use (<code>dpkg</code>, <code>rpm</code>, <code>pacman</code>, <code>apk</code> or <code>brew</code>), or takes it from <code>manager</code>, queries each dependency with that manager, and reports every hit and miss with cli, ending with a ready-to-paste install command for the missing ones. With <code>deps = NULL</code> it checks the built-in list of graphics and font libraries (<code>freetype</code>, <code>libjpeg</code>, <code>libpng</code>, <code>libtiff</code>, <code>libwebp</code>, <code>harfbuzz</code>, <code>fribidi</code>, <code>fontconfig</code>) under the names used by that package manager. The result is returned invisibly as a named logical vector, and <code>verbose = FALSE</code> makes the check silent.</li>
+<li>Added <code><a href="../reference/check_standalone.html">check_standalone()</a></code> to verify that a custom standalone file follows the layout consumed by <code><a href="https://usethis.r-lib.org/reference/use_standalone.html" class="external-link">usethis::use_standalone()</a></code>. It checks three points: the <code># ---</code> header (the required <code>repo</code>, <code>file</code>, <code>last-updated</code> and <code>license</code> slots, plus the optional <code>imports</code> slot, and the format of each value), that every documented function carries <code>@noRd</code>, and that a <code># nocov start</code> marker precedes all functions. Findings are printed in the style of <code><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">devtools::check()</a></code> and the counts are returned invisibly as <code>list(error = , warning = , note = )</code>; an error in a check point skips the remaining ones, while warnings and notes never stop the run.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-improvements-0-1-21">MINOR IMPROVEMENTS<a class="anchor" aria-label="anchor" href="#minor-improvements-0-1-21"></a></h3>
+<ul><li>The version-bumper action now keeps a Rust crate version in sync: when the package ships <code>src/rust/Cargo.toml</code>, the <code>version</code> key of its <code>[package]</code> table is rewritten together with the R package version, under the same <code>NEWS.md</code> guard, while the rest of the manifest is left untouched. Only <code>[package]</code> is inspected, so dependency <code>version</code> keys are never changed, and manifests without a literal version (e.g. <code>version.workspace = true</code>) are skipped. The commit step now stages only the files that exist.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="deprecated-0-1-21">DEPRECATED<a class="anchor" aria-label="anchor" href="#deprecated-0-1-21"></a></h3>
+<ul><li>
+<code><a href="../reference/news_md.html">news_md_check()</a></code> is deprecated and now warns on every call.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-0-1-21">DOCUMENTATION<a class="anchor" aria-label="anchor" href="#documentation-0-1-21"></a></h3>
+<ul><li>The <code>pkg_maintain</code> vignette gained a “Check system dependencies” section covering <code><a href="../reference/check_sysdeps.html">check_sysdeps()</a></code> and a “Detect the Positron version” section covering <code><a href="../reference/get_positron_version.html">get_positron_version()</a></code>.</li>
+<li>The <code>standalone_tools</code> vignette gained a “Validate the standalone file layout” section covering <code><a href="../reference/check_standalone.html">check_standalone()</a></code>.</li>
+<li>Vignette subtitles now report version 0.1.21.</li>
+<li>The README now notes that active-file detection in Positron requires Positron 2026.10.1 or later.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.20" id="rpkgkit-0120-2026-10-15">rpkgkit 0.1.20 (2026-10-15)<a class="anchor" aria-label="anchor" href="#rpkgkit-0120-2026-10-15"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-1-20">NEW FEATURES<a class="anchor" aria-label="anchor" href="#new-features-0-1-20"></a></h3>

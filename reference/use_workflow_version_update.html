@@ -120,6 +120,17 @@ greater than that maximum, so that no release is shipped without a matching
 <code>NEWS.md</code> entry. When <code>NEWS.md</code> is missing or holds no version heading, the
 check is bypassed with a warning.</p>
     </div>
+    <div class="section level2">
+    <h2 id="rust-crate-version">Rust crate version<a class="anchor" aria-label="anchor" href="#rust-crate-version"></a></h2>
+
+
+<p>When the package ships Rust code, the action also reads the <code>version</code> key of
+the <code>[package]</code> table in <code>src/rust/Cargo.toml</code> and rewrites it to the new
+version. The rest of the manifest is left untouched and the same <code>NEWS.md</code>
+guard applies, so the crate version never exceeds the highest version
+documented in <code>NEWS.md</code>. The file is skipped when it is absent or declares no
+literal version (for example <code>version.workspace = true</code>).</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

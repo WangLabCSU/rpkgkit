@@ -1,5 +1,75 @@
 # Changelog
 
+## rpkgkit 0.1.21 (2026-10-19)
+
+### NEW FEATURES
+
+- Added
+  [`get_positron_version()`](https://wanglabcsu.github.io/rpkgkit/reference/get_positron_version.md)
+  to report the version of the Positron IDE. It first reads the
+  `POSITRON_VERSION` environment variable that Positron sets for its R
+  sessions (`POSITRON_LONG_VERSION`, which includes the build number,
+  when `long = TRUE`), then falls back to the `.ps.positron_version()`
+  helper injected by the IDE, and finally to the `positron --version`
+  command-line tool. When none of them is available it returns
+  `NA_character_`, so the function is safe to call outside Positron.
+- Added
+  [`check_sysdeps()`](https://wanglabcsu.github.io/rpkgkit/reference/check_sysdeps.md)
+  to verify that the system development dependencies a package needs at
+  build time are installed. It detects the package manager in use
+  (`dpkg`, `rpm`, `pacman`, `apk` or `brew`), or takes it from
+  `manager`, queries each dependency with that manager, and reports
+  every hit and miss with cli, ending with a ready-to-paste install
+  command for the missing ones. With `deps = NULL` it checks the
+  built-in list of graphics and font libraries (`freetype`, `libjpeg`,
+  `libpng`, `libtiff`, `libwebp`, `harfbuzz`, `fribidi`, `fontconfig`)
+  under the names used by that package manager. The result is returned
+  invisibly as a named logical vector, and `verbose = FALSE` makes the
+  check silent.
+- Added
+  [`check_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/check_standalone.md)
+  to verify that a custom standalone file follows the layout consumed by
+  [`usethis::use_standalone()`](https://usethis.r-lib.org/reference/use_standalone.html).
+  It checks three points: the `# ---` header (the required `repo`,
+  `file`, `last-updated` and `license` slots, plus the optional
+  `imports` slot, and the format of each value), that every documented
+  function carries `@noRd`, and that a `# nocov start` marker precedes
+  all functions. Findings are printed in the style of
+  [`devtools::check()`](https://devtools.r-lib.org/reference/check.html)
+  and the counts are returned invisibly as
+  `list(error = , warning = , note = )`; an error in a check point skips
+  the remaining ones, while warnings and notes never stop the run.
+
+### MINOR IMPROVEMENTS
+
+- The version-bumper action now keeps a Rust crate version in sync: when
+  the package ships `src/rust/Cargo.toml`, the `version` key of its
+  `[package]` table is rewritten together with the R package version,
+  under the same `NEWS.md` guard, while the rest of the manifest is left
+  untouched. Only `[package]` is inspected, so dependency `version` keys
+  are never changed, and manifests without a literal version
+  (e.g. `version.workspace = true`) are skipped. The commit step now
+  stages only the files that exist.
+
+### DEPRECATED
+
+- [`news_md_check()`](https://wanglabcsu.github.io/rpkgkit/reference/news_md.md)
+  is deprecated and now warns on every call.
+
+### DOCUMENTATION
+
+- The `pkg_maintain` vignette gained a “Check system dependencies”
+  section covering
+  [`check_sysdeps()`](https://wanglabcsu.github.io/rpkgkit/reference/check_sysdeps.md)
+  and a “Detect the Positron version” section covering
+  [`get_positron_version()`](https://wanglabcsu.github.io/rpkgkit/reference/get_positron_version.md).
+- The `standalone_tools` vignette gained a “Validate the standalone file
+  layout” section covering
+  [`check_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/check_standalone.md).
+- Vignette subtitles now report version 0.1.21.
+- The README now notes that active-file detection in Positron requires
+  Positron 2026.10.1 or later.
+
 ## rpkgkit 0.1.20 (2026-10-15)
 
 ### NEW FEATURES

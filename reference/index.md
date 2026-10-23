@@ -76,7 +76,7 @@ The following functions help you to create and maintain an R package.
 - [`news_md_check()`](https://wanglabcsu.github.io/rpkgkit/reference/news_md.md)
   [`news_md_show()`](https://wanglabcsu.github.io/rpkgkit/reference/news_md.md)
   [`news_md_add_entry()`](https://wanglabcsu.github.io/rpkgkit/reference/news_md.md)
-  : Manage NEWS.md file for R packages
+  **\[deprecated\]** : Manage NEWS.md file for R packages
 
 - [`rename_func()`](https://wanglabcsu.github.io/rpkgkit/reference/rename_func.md)
   : Rename Function Definitions in an R File
@@ -163,3 +163,12 @@ The following functions help you to create and maintain an R package.
 - [`package_optimize_rmd_yaml()`](https://wanglabcsu.github.io/rpkgkit/reference/package_optimize_rmd_yaml.md)
   : Enrich the YAML headers of README.Rmd and vignettes/\*.Rmd of a
   package
+
+- [`get_positron_version()`](https://wanglabcsu.github.io/rpkgkit/reference/get_positron_version.md)
+  : Get the version of the Positron IDE
+
+- [`check_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/check_standalone.md)
+  : Check the format of a custom standalone file
+
+- [`check_sysdeps()`](https://wanglabcsu.github.io/rpkgkit/reference/check_sysdeps.md)
+  : Check whether system development dependencies are installed

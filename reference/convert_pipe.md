@@ -101,7 +101,7 @@ Rewriting is a literal match, so only a complete operator is converted:
 temp <- tempfile(fileext = ".R")
 writeLines("mtcars |> dplyr::filter(cyl > 4)", temp)
 convert_pipe(temp, direction = "to_magrittr")
-#> ✔ Converted pipes in /tmp/RtmppV69ZI/file1a107fc4ce73.R ("to_magrittr")
+#> ✔ Converted pipes in /tmp/RtmpE8U8XL/file1aa4e0afb4e.R ("to_magrittr")
 readLines(temp)
 #> [1] "mtcars %>% dplyr::filter(cyl > 4)"
 # "mtcars %>% dplyr::filter(cyl > 4)"
@@ -109,8 +109,8 @@ readLines(temp)
 # --- Entire package ---
 tmp_pkg <- tempdir()
 usethis::create_package(tmp_pkg, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmppV69ZI".
-#> Package: RtmppV69ZI
+#> ✔ Setting active project to "/tmp/RtmpE8U8XL".
+#> Package: RtmpE8U8XL
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):

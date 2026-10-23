@@ -169,24 +169,10 @@ try(inquire_standalone("r-lib/rlang")) |> head()
 
 try(browse_standalone()) |> head()
 #> ℹ Searching GitHub for standalone-*.R files
-#> Waiting 18s for retry backoff ■■■                             
-#> Waiting 18s for retry backoff ■■■                             
-#> Waiting 18s for retry backoff ■■■■■■■■                        
-#> Waiting 18s for retry backoff ■■■■■■■■■■■■■                   
-#> Waiting 18s for retry backoff ■■■■■■■■■■■■■■■■■■              
-#> Waiting 18s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■        
-#> Waiting 18s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■   
-#> Waiting 18s for retry backoff ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 
 #> Error in gh::gh("/search/code", q = "filename:standalone- language:R -filename:import-",  : 
-#>   GitHub API error (403): API rate limit exceeded for installation. If you
-#> reach out to GitHub Support for help, please include the request ID
-#> A400:3B962A:6C6739:162E4CF:6AD22C10 and timestamp 2026-10-16 13:52:16 UTC. For
-#> more on scraping GitHub and how it may affect your rights, please review our
-#> Terms of Service
-#> (https://docs.github.com/en/site-policy/github-terms/github-terms-of-service)
-#> ℹ Read more at
-#>   <https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api#rate-limiting>
-#> [1] "Error in gh::gh(\"/search/code\", q = \"filename:standalone- language:R -filename:import-\",  : \n  \033[1m\033[22mGitHub API error (403): API rate limit exceeded for installation. If you\nreach out to GitHub Support for help, please include the request ID\nA400:3B962A:6C6739:162E4CF:6AD22C10 and timestamp 2026-10-16 13:52:16 UTC. For\nmore on scraping GitHub and how it may affect your rights, please review our\nTerms of Service\n(https://docs.github.com/en/site-policy/github-terms/github-terms-of-service)\n\033[36mℹ\033[39m Read more at\n  \033[3m\033[34m<https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api#rate-limiting>\033[39m\033[23m\n"
+#>   GitHub API error (429): try again in 35.264438599s
+#> ℹ Read more at <https://docs.github.com/rest/search/search#search-code>
+#> [1] "Error in gh::gh(\"/search/code\", q = \"filename:standalone- language:R -filename:import-\",  : \n  \033[1m\033[22mGitHub API error (429): try again in 35.264438599s\n\033[36mℹ\033[39m Read more at \033[3m\033[34m<https://docs.github.com/rest/search/search#search-code>\033[39m\033[23m\n"
 ```
 
 Create a local standalone file with a standard metadata header:
@@ -195,6 +181,27 @@ Create a local standalone file with a standard metadata header:
 
 create_standalone("foo", open = FALSE)
 ```
+
+### Validate the standalone file layout
+
+[`check_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/check_standalone.md)
+verifies that a custom standalone file follows the layout consumed by
+[`usethis::use_standalone()`](https://usethis.r-lib.org/reference/use_standalone.html).
+It checks the `# ---` header (the required `repo`, `file`,
+`last-updated` and `license` slots, the optional `imports` slot, and the
+format of each value), that every documented function carries `@noRd`,
+and that a `# nocov start` marker precedes all functions.
+
+``` r
+
+check_standalone("R/standalone-foo.R")
+```
+
+Findings are printed in the style of
+[`devtools::check()`](https://devtools.r-lib.org/reference/check.html),
+and the counts are returned invisibly as
+`list(error = , warning = , note = )`. An error in a check point skips
+the remaining ones, while warnings and notes never stop the run.
 
 After editing standalone files, refresh their `last-updated` field:
 
