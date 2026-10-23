@@ -98,9 +98,9 @@ pmap <- function(.l, .f, ...) {
     do.call(what = "mapply", args = c(FUN = list(quote(.f)), args, MoreArgs = quote(list(...)), SIMPLIFY = FALSE, USE.NAMES = FALSE))
 }
 .rlang_purrr_args_recycle <- function(args) {
-    lengths <- map_int(.x = args, .f = length)
+    lengths <- lengths(x = args)
     n <- max(lengths)
-    stopifnot(all(lengths == 1L | lengths == n))
+    stopifnot(lengths == 1L | lengths == n)
     to_recycle <- lengths == 1L
     args[to_recycle] <- map(.x = args[to_recycle], .f = function(x) rep.int(x = x, times = n))
     args

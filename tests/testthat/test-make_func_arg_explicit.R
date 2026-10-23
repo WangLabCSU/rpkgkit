@@ -625,8 +625,12 @@ test_that("returns invisibly", {
 # ---------------------------------------------------------------------------
 
 test_that("package_func_arg_explicit aborts when path is not a package", {
+  # A dedicated directory rather than `tempdir()` itself: the session temp dir
+  # may already hold a DESCRIPTION left behind by another test or a package
+  # example, which would make `tempdir()` look like a package.
+  non_pkg <- withr::local_tempdir()
   expect_error(
-    package_func_arg_explicit(tempdir()),
+    package_func_arg_explicit(non_pkg),
     "is not an R package"
   )
 })

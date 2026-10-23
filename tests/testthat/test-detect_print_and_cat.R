@@ -312,8 +312,12 @@ test_that("find_print_cat_calls ignores sprintf and print.myclass", {
 # ---------------------------------------------------------------------------
 
 test_that("package_print_and_cat aborts when path is not a package", {
+  # A dedicated directory rather than `tempdir()` itself: the session temp dir
+  # may already hold a DESCRIPTION left behind by another test or a package
+  # example, which would make `tempdir()` look like a package.
+  non_pkg <- withr::local_tempdir()
   expect_error(
-    package_print_and_cat(tempdir()),
+    package_print_and_cat(non_pkg),
     "is not an R package"
   )
 })

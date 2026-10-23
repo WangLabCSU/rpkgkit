@@ -3,8 +3,12 @@
 # ---------------------------------------------------------------------------
 
 test_that("package_lost_glue_brace aborts when path is not a package", {
+  # A dedicated directory rather than `tempdir()` itself: the session temp dir
+  # may already hold a DESCRIPTION left behind by another test or a package
+  # example, which would make `tempdir()` look like a package.
+  non_pkg <- withr::local_tempdir()
   expect_error(
-    package_lost_glue_brace(tempdir()),
+    package_lost_glue_brace(non_pkg),
     "is not an R package"
   )
 })

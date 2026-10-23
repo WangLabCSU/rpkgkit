@@ -1,6 +1,6 @@
 ---
 title: "rpkgkit standalone scripts"
-subtitle: "rpkgkit 0.1.19"
+subtitle: "rpkgkit 0.1.21"
 author: "Yuxi Yang"
 date: "`r Sys.Date()`"
 lang: en-US
@@ -203,6 +203,24 @@ Create a local standalone file with a standard metadata header:
 #| eval = FALSE
 create_standalone("foo", open = FALSE)
 ```
+
+## Validate the standalone file layout
+
+`check_standalone()` verifies that a custom standalone file follows the layout
+consumed by `usethis::use_standalone()`. It checks the `# ---` header (the
+required `repo`, `file`, `last-updated` and `license` slots, the optional
+`imports` slot, and the format of each value), that every documented function
+carries `@noRd`, and that a `# nocov start` marker precedes all functions.
+
+```{r}
+#| label = "check_standalone",
+#| eval = FALSE
+check_standalone("R/standalone-foo.R")
+```
+
+Findings are printed in the style of `devtools::check()`, and the counts are
+returned invisibly as `list(error = , warning = , note = )`. An error in a check
+point skips the remaining ones, while warnings and notes never stop the run.
 
 After editing standalone files, refresh their `last-updated` field:
 

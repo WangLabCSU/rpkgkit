@@ -8,7 +8,6 @@ template:
     pkgdown-nav-height: 100px
     bg: white
     fg: black
-    primary: "#2c5f9b"
 
 title: rpkgkit
 description: >-
@@ -109,3 +108,6 @@ reference:
       - PERMISSIVE_LICENSE
       - optimize_rmd_yaml
       - package_optimize_rmd_yaml
+      - get_positron_version
+      - check_standalone
+      - check_sysdeps

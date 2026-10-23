@@ -1,7 +1,10 @@
+# ? This function was no longer maintained.
+# nocov start
+
 #' Check NEWS.md format for CRAN compliance
 #'
 #' @description
-#' Validates the NEWS.md file against CRAN guidelines and common best practices.
+#' `r lifecycle::badge('deprecated')` Validates the NEWS.md file against CRAN guidelines and common best practices.
 #' Reports issues found and provides suggestions for fixes.
 #'
 #' @param path Path to the package root. If \code{NULL} (the default), uses
@@ -30,6 +33,11 @@
 #' }
 #' }
 news_md_check <- function(path = NULL, strict = FALSE, verbose = TRUE) {
+  lifecycle::deprecate_stop(
+    "0.1.21",
+    "news_md_check()"
+  )
+
   path <- path %||% "."
   news_path <- file.path(path, "NEWS.md")
 

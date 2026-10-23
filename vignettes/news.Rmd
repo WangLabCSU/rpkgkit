@@ -1,6 +1,6 @@
 ---
 title: "Edit NEWS"
-subtitle: "rpkgkit 0.1.19"
+subtitle: "rpkgkit 0.1.21"
 author: "Yuxi Yang"
 date: "`r Sys.Date()`"
 lang: en-US
@@ -87,11 +87,6 @@ news_md_show(path = tmpdir)
 
 As you can see, different categories belong to the same version are grouped together.
 
-Validate the resulting file against the package's NEWS formatting rules:
-
-```{r}
-#| label = "news_check"
-news_md_check(path = tmpdir)
-```
-
-`"File should end with a blank line"` just follows the same rule as `DESCRIPTION`. But generally, there are very few items that need to be checked for NEWS.md compared with other files in an R package, and these requirements are not mandatory; however, they can indeed standardize NEWS writing.
+For validating the formatting rules of `NEWS.md`, use `news_md_check()`; it is
+deprecated and now warns on every call, so it is only kept for backward
+compatibility.

@@ -96,6 +96,15 @@ test_that("optimize_rmd_yaml() reports a helpful error without a DESCRIPTION", {
   rmd <- file.path(dir, "intro.Rmd")
   writeLines(ory_vignette_lines(), rmd)
 
+  # `desc::desc()` searches the parent directories, so a stray DESCRIPTION
+  # above the session temp dir (left behind by another test or a package
+  # example) would make the lookup succeed. The error can only be exercised
+  # when the whole ancestor chain is free of DESCRIPTION files.
+  skip_if(
+    !inherits(try(desc::desc(dir), silent = TRUE), "try-error"),
+    "an ancestor directory provides a DESCRIPTION"
+  )
+
   expect_error(optimize_rmd_yaml(rmd, type = "vignette"), "package")
 })
 

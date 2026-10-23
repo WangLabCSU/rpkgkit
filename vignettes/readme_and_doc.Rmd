@@ -1,6 +1,6 @@
 ---
 title: "Tools for README & Documentation"
-subtitle: "rpkgkit 0.1.19"
+subtitle: "rpkgkit 0.1.21"
 author: "Yuxi Yang"
 date: "`r Sys.Date()`"
 lang: en-US

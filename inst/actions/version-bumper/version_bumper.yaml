@@ -57,7 +57,9 @@ jobs:
       - name: Commit and tag
         if: steps.version_bump.outputs.bumped == 'true'
         run: |
-          git add DESCRIPTION README.md README.Rmd 2>/dev/null || true
+          for f in DESCRIPTION README.md README.Rmd src/rust/Cargo.toml; do
+            if [ -f "$f" ]; then git add "$f"; fi
+          done
 
           if git diff --staged --quiet; then
             echo "No changes to commit"

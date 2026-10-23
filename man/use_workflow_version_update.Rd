@@ -51,6 +51,16 @@ greater than that maximum, so that no release is shipped without a matching
 check is bypassed with a warning.
 }
 
+\section{Rust crate version}{
+
+When the package ships Rust code, the action also reads the \code{version} key of
+the \verb{[package]} table in \code{src/rust/Cargo.toml} and rewrites it to the new
+version. The rest of the manifest is left untouched and the same \code{NEWS.md}
+guard applies, so the crate version never exceeds the highest version
+documented in \code{NEWS.md}. The file is skipped when it is absent or declares no
+literal version (for example \code{version.workspace = true}).
+}
+
 \examples{
 \dontrun{
 temp <- tempdir()

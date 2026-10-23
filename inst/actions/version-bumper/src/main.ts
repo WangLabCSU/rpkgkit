@@ -5,6 +5,9 @@ import * as fs from 'fs';
 /** Path of the NEWS file used as the release gate */
 const NEWS_FILE = 'NEWS.md';
 
+/** Path of the Rust crate manifest kept in sync with the R package version */
+const CARGO_FILE = 'src/rust/Cargo.toml';
+
 /**
  * Parse version string into components
  */
@@ -109,6 +112,62 @@ function getMaxNewsVersion(): string | null {
     );
 }
 
+/** Matches a literal `version = "x.y.z"` line, capturing indent, quotes and trailing text */
+const CARGO_VERSION_LINE = /^(\s*version\s*=\s*)(["'])([^"']+)\2(.*)$/;
+
+/** Matches a TOML table header such as `[package]` */
+const TOML_SECTION_LINE = /^\s*\[([^\]]+)\]\s*(?:#.*)?$/;
+
+/**
+ * Locate the `version` key of the `[package]` table
+ *
+ * Only the `[package]` table is inspected, so `version` keys of dependencies
+ * (e.g. `[dependencies.serde] version = "1"`) are never touched.
+ * Returns `null` when the table holds no literal version (for instance when it
+ * inherits `version.workspace = true`).
+ */
+function findCargoPackageVersion(
+    lines: string[]
+): { version: string; lineIndex: number } | null {
+    let inPackage = false;
+
+    for (let i = 0; i < lines.length; i++) {
+        const section = lines[i].match(TOML_SECTION_LINE);
+        if (section) {
+            inPackage = section[1].trim() === 'package';
+            continue;
+        }
+
+        if (!inPackage) {
+            continue;
+        }
+
+        const match = lines[i].match(CARGO_VERSION_LINE);
+        if (match) {
+            return { version: match[3], lineIndex: i };
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Get the crate version declared in the `[package]` table of
+ * `src/rust/Cargo.toml`
+ *
+ * Returns `null` when the manifest is missing or declares no literal version.
+ */
+function getCargoVersion(): string | null {
+    if (!fs.existsSync(CARGO_FILE)) {
+        return null;
+    }
+
+    const lines = fs.readFileSync(CARGO_FILE, 'utf8').split(/\r?\n/);
+    const found = findCargoPackageVersion(lines);
+
+    return found === null ? null : found.version;
+}
+
 /**
  * Get current version from DESCRIPTION using R
  */
@@ -170,6 +229,66 @@ async function setVersion(newVersion: string): Promise<void> {
     }
 
     core.info(`✅ Updated DESCRIPTION to v${newVersion}`);
+}
+
+/**
+ * Sync the Rust crate version in `src/rust/Cargo.toml`
+ *
+ * Only the `version` key of the `[package]` table is rewritten; the rest of the
+ * manifest (formatting, comments, dependencies) is preserved byte for byte.
+ * The same NEWS.md release gate as DESCRIPTION applies: a version higher than
+ * the highest one documented in NEWS.md is never written.
+ */
+function updateCargoVersion(
+    newVersion: string,
+    maxNewsVersion: string | null
+): void {
+    if (!fs.existsSync(CARGO_FILE)) {
+        core.info(`⏭️  ${CARGO_FILE} not found, skipping Rust crate version`);
+        return;
+    }
+
+    if (
+        maxNewsVersion !== null &&
+        compareVersions(newVersion, maxNewsVersion) > 0
+    ) {
+        core.warning(
+            `⏭️  Skipping ${CARGO_FILE}: v${newVersion} is higher than the ` +
+            `highest version in ${NEWS_FILE} (v${maxNewsVersion}).`
+        );
+        return;
+    }
+
+    const content = fs.readFileSync(CARGO_FILE, 'utf8');
+    const lines = content.split(/\r?\n/);
+    const found = findCargoPackageVersion(lines);
+
+    if (found === null) {
+        core.warning(
+            `⏭️  No literal version in the [package] table of ${CARGO_FILE}`
+        );
+        return;
+    }
+
+    if (found.version === newVersion) {
+        core.info(`✅ ${CARGO_FILE} already at v${newVersion}`);
+        return;
+    }
+
+    const match = lines[found.lineIndex].match(CARGO_VERSION_LINE);
+    if (match === null) {
+        core.warning(`⏭️  Could not rewrite the version line of ${CARGO_FILE}`);
+        return;
+    }
+
+    lines[found.lineIndex] =
+        `${match[1]}${match[2]}${newVersion}${match[2]}${match[4]}`;
+
+    fs.writeFileSync(CARGO_FILE, lines.join(content.includes('\r\n') ? '\r\n' : '\n'));
+
+    core.info(
+        `✅ Updated ${CARGO_FILE} to v${newVersion} (was v${found.version})`
+    );
 }
 
 /**
@@ -263,7 +382,13 @@ async function run(): Promise<void> {
         core.setOutput('old_version', currentVersion);
         core.info(`📌 Current: v${currentVersion}`);
 
-        // 4. Check if bump needed
+        // 4. Get current Rust crate version (optional)
+        const cargoVersion = getCargoVersion();
+        if (cargoVersion !== null) {
+            core.info(`📌 Current Rust crate (${CARGO_FILE}): v${cargoVersion}`);
+        }
+
+        // 5. Check if bump needed
         if (bumpType === 'none' && !customVersion) {
             core.info('⏭️  No bump needed');
             core.setOutput('bumped', 'false');
@@ -271,16 +396,16 @@ async function run(): Promise<void> {
             return;
         }
 
-        // 5. Calculate new version
+        // 6. Calculate new version
         const newVersion = bumpVersion(currentVersion, bumpType, customVersion);
         core.info(`🆕 New: v${newVersion}`);
 
-        // 6. Validate
+        // 7. Validate
         if (!/^\d+\.\d+\.\d+$/.test(newVersion)) {
             throw new Error(`Invalid version: ${newVersion}`);
         }
 
-        // 7. Release gate: never go beyond what NEWS.md documents
+        // 8. Release gate: never go beyond what NEWS.md documents
         const maxNewsVersion = getMaxNewsVersion();
         if (maxNewsVersion === null) {
             core.warning(
@@ -299,13 +424,16 @@ async function run(): Promise<void> {
             core.info(`✅ ${NEWS_FILE} highest version: v${maxNewsVersion}`);
         }
 
-        // 8. Update DESCRIPTION
+        // 9. Update DESCRIPTION
         await setVersion(newVersion);
 
-        // 9. Update badges before the version commit triggers CI
+        // 10. Sync the Rust crate version (same NEWS.md gate)
+        updateCargoVersion(newVersion, maxNewsVersion);
+
+        // 11. Update badges before the version commit triggers CI
         await updateReadmeBadges(newVersion);
 
-        // 10. Set outputs
+        // 12. Set outputs
         core.setOutput('new_version', newVersion);
         core.setOutput('bumped', 'true');
 

@@ -65,7 +65,7 @@ Invisibly returns the path to the NEWS.md file.
 Functions to help manage the NEWS.md file in R packages according to CRAN
 guidelines. Includes functions to add new entries and check the format.
 
-Validates the NEWS.md file against CRAN guidelines and common best practices.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Validates the NEWS.md file against CRAN guidelines and common best practices.
 Reports issues found and provides suggestions for fixes.
 
 Reads and displays the NEWS.md file content with optional filtering.

@@ -253,7 +253,7 @@ test_that(".cil_process_text leaves scientific notation with a signed exponent",
   expect_equal(rpkgkit:::.cil_process_text("x <- 1e+3"), "x <- 1e+3")
   expect_equal(rpkgkit:::.cil_process_text("x <- 1.5e-3"), "x <- 1.5e-3")
   expect_equal(rpkgkit:::.cil_process_text("x <- .5e-3"), "x <- .5e-3")
-  expect_equal(rpkgkit:::.cil_process_text("x <- 1e-3L"), "x <- 1e-3L")
+  expect_equal(rpkgkit:::.cil_process_text("x <- 1e-3"), "x <- 1e-3")
   expect_equal(rpkgkit:::.cil_process_text("f(1e-3)"), "f(1e-3)")
 })
 

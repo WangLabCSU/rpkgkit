@@ -43,7 +43,7 @@ use_hexsticker <- function(
   ...
 ) {
   path <- path %||% "."
-  lifecycle::deprecate_warn(
+  lifecycle::deprecate_stop(
     "0.1.3",
     "use_hexsticker()",
     with = "usethis::use_logo()"

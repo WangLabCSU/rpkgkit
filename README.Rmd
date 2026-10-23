@@ -46,8 +46,7 @@ functions support common development tasks such as managing standalone scripts,
 maintaining `NEWS.md`, modernizing R source, configuring package infrastructure,
 and maintaining README files.
 
-Most functions detect the active file context in RStudio and Positron, so a
-file path can often be omitted.
+Most functions detect the active file context in RStudio and Positron (2026.10.1 or later), so a file path can often be omitted.
 
 ## Installation
 
