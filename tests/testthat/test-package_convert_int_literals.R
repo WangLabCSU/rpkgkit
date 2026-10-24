@@ -93,6 +93,65 @@ test_that("package_convert_int_literals skips generated RcppExports files", {
   expect_equal(changed, norm(regular_file))
 })
 
+test_that("package_convert_int_literals skips extendr wrapper files", {
+  root <- make_test_pkg()
+  wrapper <- file.path(root, "R", "extendr-wrappers.R")
+  writeLines("f <- function() 1", wrapper)
+
+  expect_message(
+    result <- package_convert_int_literals(root),
+    "No R files found"
+  )
+  expect_identical(result, character())
+  expect_equal(readLines(wrapper, warn = FALSE), "f <- function() 1")
+})
+
+test_that("package_convert_int_literals matches `exclude` case-insensitively", {
+  root <- make_test_pkg()
+  wrapper <- file.path(root, "R", "rcppexports.r")
+  writeLines("f <- function() 1", wrapper)
+
+  expect_message(
+    result <- package_convert_int_literals(root),
+    "No R files found"
+  )
+  expect_identical(result, character())
+})
+
+test_that("package_convert_int_literals processes everything when `exclude` is NULL", {
+  root <- make_test_pkg()
+  rcpp_exports <- file.path(root, "R", "RcppExports.R")
+  writeLines("f <- function() 1", rcpp_exports)
+
+  changed <- package_convert_int_literals(root, exclude = NULL)
+
+  expect_equal(readLines(rcpp_exports, warn = FALSE), "f <- function() 1L")
+  expect_equal(changed, norm(rcpp_exports))
+})
+
+test_that("package_convert_int_literals respects a custom `exclude`", {
+  root <- make_test_pkg()
+  keep <- file.path(root, "R", "RcppExports.R")
+  skip <- file.path(root, "R", "skip_me.R")
+  writeLines("f <- function() 1", keep)
+  writeLines("g <- function() 2", skip)
+
+  changed <- package_convert_int_literals(root, exclude = "skip_me.R")
+
+  expect_equal(readLines(keep, warn = FALSE), "f <- function() 1L")
+  expect_equal(readLines(skip, warn = FALSE), "g <- function() 2")
+  expect_equal(changed, norm(keep))
+})
+
+test_that("package_convert_int_literals validates `exclude`", {
+  root <- make_test_pkg()
+
+  expect_error(
+    package_convert_int_literals(root, exclude = 1),
+    "must be a character vector"
+  )
+})
+
 test_that("package_convert_int_literals returns changed paths invisibly", {
   root <- make_test_pkg()
   writeLines("f <- function() 1", file.path(root, "R", "a.R"))

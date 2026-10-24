@@ -8,28 +8,71 @@ check_sysdeps(deps = NULL, manager = NULL, verbose = TRUE)
 }
 \arguments{
 \item{deps}{A character vector of system package names to check. Names must
-match the naming convention of the package manager in use. If \code{NULL}, a
-built-in list of graphics and font related dependencies is used.}
+match the naming convention of the package manager in use. Alternative
+names can be given as \code{"a|b"}: the dependency counts as installed if any
+alternative is installed, and the first one is used in the install hint.
+If \code{NULL}, a built-in list of graphics and font related dependencies is
+used. There is no built-in list for \code{"winget"}, \code{"choco"} and \code{"scoop"},
+so \code{deps} must be supplied for them.}
 
 \item{manager}{The package manager: one of \code{"dpkg"}, \code{"rpm"}, \code{"pacman"},
-\code{"apk"}, or \code{"brew"}. If \code{NULL}, it is detected automatically.}
+\code{"apk"}, \code{"brew"}, \code{"winget"}, \code{"choco"}, or \code{"scoop"}. If \code{NULL}, it is
+detected automatically (on Linux via \verb{/etc/os-release}, falling back to
+whichever manager is on the \code{PATH}).}
 
 \item{verbose}{Logical. If \code{TRUE} (the default), print the check results.
 If \code{FALSE}, no messages are printed.}
 }
 \value{
 A named logical vector (package name -> installed or not),
-returned invisibly.
+returned invisibly. It carries the attribute \code{"manager"} (the manager
+used) and, if anything is missing, \code{"install_cmd"} (a suggested install
+command).
 }
 \description{
 Detects the system package manager, checks each system dependency, and
 reports the result with \pkg{cli}. Argument validation uses \pkg{rlang}.
+On Windows, \code{winget}, \code{choco} and \code{scoop} are supported (\code{scoop} is queried
+through PowerShell).
 }
 \examples{
 \donttest{
-check_sysdeps()
-check_sysdeps(c("freetype-devel", "libwebp-devel"), manager = "rpm")
-ok <- check_sysdeps(verbose = FALSE)
-ok[!ok]
+# `deps` must follow the naming convention of the manager in use, and the
+# managers themselves are OS specific, so every example runs only where the
+# matching executable is available.
+
+# Fedora / RHEL / openSUSE
+if (nzchar(Sys.which("rpm"))) {
+  check_sysdeps(c("freetype-devel", "libwebp-devel"), manager = "rpm")
+}
+
+# Debian / Ubuntu, with an alternative name for freetype
+if (nzchar(Sys.which("dpkg"))) {
+  check_sysdeps(
+    c("libfreetype-dev|libfreetype6-dev", "libpng-dev"),
+    manager = "dpkg"
+  )
+}
+
+# macOS
+if (nzchar(Sys.which("brew"))) {
+  check_sysdeps(manager = "brew")
+}
+
+# Windows: `winget`, `choco` and `scoop` have no built-in dependency list,
+# so `deps` is always required.
+if (nzchar(Sys.which("winget"))) {
+  check_sysdeps(c("Git.Git", "Kitware.CMake"), manager = "winget")
+}
+
+# The result is a named logical vector that carries the manager used, so the
+# missing dependencies can be extracted and reused in a script.
+default_managers <- c("dpkg", "rpm", "pacman", "apk", "brew")
+available <- default_managers[nzchar(Sys.which(default_managers))]
+if (length(available) > 0L) {
+  ok <- check_sysdeps(manager = available[[1L]], verbose = FALSE)
+  attr(ok, "manager")
+  ok[!ok]
+}
 }
 }

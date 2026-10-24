@@ -10,9 +10,13 @@ use_vendor(pkg, ..., branch = "main", path = NULL)
 \item{pkg}{GitHub repository specification in \code{"owner/repo"} form or a full
 GitHub URL (e.g. \code{"https://github.com/owner/repo"}).}
 
-\item{...}{File paths within the vendor package to copy into your package
-and append to the vendor R file. If empty (default), only the
-infrastructure is set up.}
+\item{...}{File paths within the vendor package to copy into your package.
+Files are routed by extension: \code{.R} files are appended to
+\code{R/vendor-pkg.R}, \code{.c} files to \code{src/vendor-pkg.c}, \code{.cpp} files to
+\code{src/vendor-pkg.cpp}, and \code{.rs} files to \code{src/rust/src/vendor-pkg.rs}.
+Paths without a directory component are looked up in the conventional
+directory of their language. If empty (default), only the infrastructure
+is set up.}
 
 \item{branch}{Github repository branch name.  Defaults to \code{"main"}}
 
@@ -28,6 +32,8 @@ your own R package. This function:
 \itemize{
 \item Creates \verb{inst/vendor/pkg/} with LICENSE files and a README
 \item Creates \code{R/vendor-pkg.R} with attribution header and optional vendored code
+\item Creates \code{src/vendor-pkg.c}, \code{src/vendor-pkg.cpp} or
+\code{src/rust/src/vendor-pkg.rs} for vendored C, C++ or Rust sources
 \item Updates \code{DESCRIPTION} (\code{Authors@R} and \code{Copyright} fields)
 \item Prints an acknowledgement snippet for your README
 }
@@ -35,5 +41,7 @@ your own R package. This function:
 \examples{
 \dontrun{
 use_vendor("hadley/emo", "R/zzz.R")
+# C++ and Rust sources are routed to src/ and src/rust/src/
+use_vendor("wurli/pedant", "R/utils.R", "src/foo.cpp", "src/lib.rs")
 }
 }

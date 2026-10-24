@@ -110,7 +110,7 @@ convert_nonascii_code_path <- function(
   # overwrite is NULL, prompt user interactively
   if (rlang::is_interactive()) {
     msg <- cli::cli_fmt(cli::cli_text(
-      "{cli::col_red(cli::symbol$checkbox_off)} \
+      "{cli::col_red(cli_symbol$checkbox_off)} \
       Overwrite file {.path {path}} with converted content?"
     ))
     ans <- utils::askYesNo(msg, default = FALSE)

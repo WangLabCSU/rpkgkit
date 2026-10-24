@@ -149,7 +149,7 @@ use_multilanguage_readme <- function(
   )
   cli_inform_colored <- add_colors_to_cli(cli::cli_inform)
   cli_inform_colored(
-    "{.red {(cli::symbol$checkbox_off)}} \
+    "{.red {(cli_symbol$checkbox_off)}} \
     {.cyan Consider pasting the following badges into your main {.file README.md}:}"
   )
 
@@ -205,7 +205,7 @@ badge_translated_by_ai <- function(lang = "en", color = "yellow") {
 
   cli_inform_colored <- add_colors_to_cli(cli::cli_inform)
   cli_inform_colored(
-    "{.red {(cli::symbol$checkbox_off)}} \
+    "{.red {(cli_symbol$checkbox_off)}} \
     {.cyan Consider copying the following statement to the AI-translated file(s):}"
   )
   message("")

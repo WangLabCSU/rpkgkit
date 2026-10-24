@@ -16,11 +16,10 @@ add_global_rbuildignore(
 the selected patterns. Each must already be in \code{.Rbuildignore} regex
 format (e.g. \code{"^\\\\.myfile$"}).}
 
-\item{pattern}{Character vector of \code{.Rbuildignore} patterns. By default,
-uses \link{GLOBAL_RBUILDIGNORE_PATTERN}.}
+\item{pattern}{Character vector of \code{.Rbuildignore} patterns.}
 
 \item{replace_default}{Logical. If \code{FALSE} (the default), \code{pattern} is
-appended to \link{GLOBAL_RBUILDIGNORE_PATTERN}. If \code{TRUE}, \code{pattern} is used instead
+appended to default setting. If \code{TRUE}, \code{pattern} is used instead
 of the defaults.}
 
 \item{path}{Character. Path to the package root directory. If \code{NULL}

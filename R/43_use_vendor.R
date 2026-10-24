@@ -4,14 +4,20 @@
 #' your own R package. This function:
 #' - Creates `inst/vendor/pkg/` with LICENSE files and a README
 #' - Creates `R/vendor-pkg.R` with attribution header and optional vendored code
+#' - Creates `src/vendor-pkg.c`, `src/vendor-pkg.cpp` or
+#'   `src/rust/src/vendor-pkg.rs` for vendored C, C++ or Rust sources
 #' - Updates `DESCRIPTION` (`Authors@R` and `Copyright` fields)
 #' - Prints an acknowledgement snippet for your README
 #'
 #' @param pkg GitHub repository specification in `"owner/repo"` form or a full
 #'   GitHub URL (e.g. `"https://github.com/owner/repo"`).
-#' @param ... File paths within the vendor package to copy into your package
-#'   and append to the vendor R file. If empty (default), only the
-#'   infrastructure is set up.
+#' @param ... File paths within the vendor package to copy into your package.
+#'   Files are routed by extension: `.R` files are appended to
+#'   `R/vendor-pkg.R`, `.c` files to `src/vendor-pkg.c`, `.cpp` files to
+#'   `src/vendor-pkg.cpp`, and `.rs` files to `src/rust/src/vendor-pkg.rs`.
+#'   Paths without a directory component are looked up in the conventional
+#'   directory of their language. If empty (default), only the infrastructure
+#'   is set up.
 #' @param branch Github repository branch name.  Defaults to `"main"`
 #' @param path Path to the target package directory. If \code{NULL}
 #'   (the default), uses the current working directory.
@@ -22,6 +28,8 @@
 #' @examples
 #' \dontrun{
 #' use_vendor("hadley/emo", "R/zzz.R")
+#' # C++ and Rust sources are routed to src/ and src/rust/src/
+#' use_vendor("wurli/pedant", "R/utils.R", "src/foo.cpp", "src/lib.rs")
 #' }
 use_vendor <- function(
   pkg,
@@ -64,6 +72,31 @@ use_vendor <- function(
     repo_url = spec$repo_url
   )
 
+  # -- Route `...` by language before writing the R file --
+  # R -> R/vendor-pkg.R, C/C++ -> src/vendor-pkg.c|cpp,
+  # Rust -> src/rust/src/vendor-pkg.rs
+  dots <- rlang::list2(...)
+  vendor_files <- vendor_split_files(dots)
+
+  for (kind in c("c", "cpp", "rs")) {
+    if (length(vendor_files[[kind]]) == 0L) {
+      next
+    }
+    vendor_create_source_file(
+      path = path,
+      kind = kind,
+      repo = spec$repo,
+      repo_url = spec$repo_url,
+      author_str = author_info$author_str,
+      license = license_spdx,
+      owner = spec$owner,
+      branch = branch,
+      dots = vendor_files[[kind]],
+      desc_vendor = desc_vendor,
+      all_files = unlist(dots, use.names = FALSE)
+    )
+  }
+
   # -- Create R/vendor-pkg.R --
   vendor_create_r_file(
     path = path,
@@ -73,8 +106,9 @@ use_vendor <- function(
     license = license_spdx,
     owner = spec$owner,
     branch = branch,
-    dots = rlang::list2(...),
-    desc_vendor = desc_vendor
+    dots = vendor_files$R,
+    desc_vendor = desc_vendor,
+    all_files = unlist(dots, use.names = FALSE)
   )
 
   # -- Update DESCRIPTION --
@@ -85,10 +119,10 @@ use_vendor <- function(
     repo_url = spec$repo_url
   )
 
-  # -- Step 6: Print acknowledgement snippet --
+  # -- Print acknowledgement snippet --
   cli_inform_colored <- add_colors_to_cli(cli::cli_inform)
   cli_inform_colored(
-    "{.red {(cli::symbol$checkbox_off)}} \
+    "{.red {cli_symbol$checkbox_off}} \
     {.cyan Consider pasting the following statement into README.md}"
   )
   message("")
@@ -97,7 +131,7 @@ use_vendor <- function(
       "## Acknowledgements\n\n",
       "We would like to thank the following people and projects:\n\n",
       "- The authors of the [%s](%s) package &mdash; **%s** &mdash; ",
-      "whose code is included (under %s license) in `R/vendor-%s.R`.\n"
+      "whose code is included (under %s license) in files named `vendor-%s.*`.\n"
     ),
     spec$repo,
     spec$repo_url,
@@ -142,7 +176,6 @@ repo_spec_parse <- function(pkg, branch = "main") {
 
 #' Project License Allowing Copying
 #'
-#' @export
 PERMISSIVE_LICENSE <- c(
   "MIT",
   "Apache-2.0",
@@ -275,6 +308,152 @@ vendor_declare_source_license <- function(
 }
 
 
+# Where vendored non-R sources land in the target package: `dir` is relative to
+# the package root, `ext` is the extension of the single generated file.
+VENDOR_SOURCE_LAYOUT <- list(
+  c = list(dir = "src", ext = ".c"),
+  cpp = list(dir = "src", ext = ".cpp"),
+  rs = list(dir = file.path("src", "rust", "src"), ext = ".rs")
+)
+
+# File extension -> vendored language kind. Unknown extensions are treated as R.
+VENDOR_KIND_BY_EXT <- c(r = "R", c = "c", cpp = "cpp", rs = "rs")
+
+
+#' Helper: classify a vendored file by language
+#' @keywords internal
+vendor_file_kind <- function(file) {
+  kind <- unname(VENDOR_KIND_BY_EXT[tolower(tools::file_ext(file))])
+  if (length(kind) == 0L || is.na(kind)) "R" else kind
+}
+
+
+#' Helper: split the files passed to `use_vendor(...)` by language
+#' @keywords internal
+vendor_split_files <- function(files) {
+  files <- as.character(files %||% character(0L))
+  kinds <- vapply(
+    X = files,
+    FUN = vendor_file_kind,
+    FUN.VALUE = character(1L),
+    USE.NAMES = FALSE
+  )
+
+  out <- list(
+    R = character(0L),
+    c = character(0L),
+    cpp = character(0L),
+    rs = character(0L)
+  )
+  for (kind in names(out)) {
+    out[[kind]] <- unname(files[kinds == kind])
+  }
+  out
+}
+
+
+#' Helper: resolve the path of a vendored file inside the source repository
+#'
+#' Files given without a directory component are looked up in the conventional
+#' directory of their language (`R/` for R, `src/` for C and C++,
+#' `src/rust/src/` for Rust).
+#' @keywords internal
+vendor_source_path <- function(file, dir = "R") {
+  if (identical(dir, "R") && !nzchar(tools::file_ext(file))) {
+    file <- paste0(file, ".R")
+  }
+  if (identical(dirname(file), ".")) {
+    file.path(dir, file)
+  } else {
+    file
+  }
+}
+
+
+#' Helper: build the attribution header of a vendored file
+#' @keywords internal
+vendor_header_lines <- function(
+  repo,
+  repo_url,
+  author_str,
+  license,
+  owner,
+  files = character(0L),
+  desc_vendor = NULL,
+  comment = "#",
+  imports = NULL,
+  nocov = FALSE
+) {
+  vendor_version <- if (!is.null(desc_vendor)) {
+    tryCatch(
+      desc_vendor$get_field("Version"),
+      error = function(e) "unknown"
+    )
+  } else {
+    "unknown"
+  }
+
+  generated_call <- if (length(files) > 0L) {
+    toString(paste0(", \"", files, "\""))
+  } else {
+    ""
+  }
+
+  body <- c(
+    sprintf("The following code is adapted from the '%s' package.", repo),
+    sprintf("Source: %s", repo_url),
+    sprintf("Authors: %s", author_str),
+    sprintf(
+      "License: %s + file LICENSE (See inst/vendor/%s/LICENSE)",
+      license,
+      repo
+    ),
+    sprintf(
+      "Generated by: rpkgkit::use_vendor(\"%s/%s\"%s)",
+      owner,
+      repo,
+      generated_call
+    ),
+    sprintf("Last-updated: %s", Sys.Date()),
+    sprintf("Vendor version: %s", vendor_version)
+  )
+
+  if (!is.null(imports)) {
+    imports_str <- if (length(imports) > 0L) toString(imports) else "none"
+    body <- c(body, sprintf("Imports: [%s]", imports_str))
+  }
+
+  lines <- c(
+    paste0(comment, " ---"),
+    paste(comment, body),
+    paste0(comment, " ---")
+  )
+
+  if (nocov) {
+    lines <- c(lines, comment, paste0(comment, " nocov start"))
+  }
+
+  lines
+}
+
+
+#' Helper: build the per-file section separator of a vendored file
+#' @keywords internal
+vendor_section_lines <- function(file, comment = "#") {
+  separator <- paste0(
+    comment,
+    " ------------------------------------------------------------------------------"
+  )
+  c(
+    "",
+    separator,
+    paste(comment, sprintf("File: %s", file)),
+    separator,
+    ""
+  )
+}
+
+
 # Helper: create R/vendor-pkg.R
 #' @keywords internal
 vendor_create_r_file <- function(
@@ -286,19 +465,13 @@ vendor_create_r_file <- function(
   owner = character(1L),
   branch = character(1L),
   dots = list(),
-  desc_vendor = NULL
+  desc_vendor = NULL,
+  all_files = NULL
 ) {
   path <- path %||% "."
   r_path <- file.path(path, "R", sprintf("vendor-%s.R", repo))
 
-  files_to_copy <- lapply(X = dots, FUN = function(file) {
-    ext <- if (!endsWith(file, ".R")) {
-      paste0(file, ".R")
-    } else {
-      file
-    }
-  }) |>
-    unlist()
+  files_to_copy <- unlist(dots, use.names = FALSE) %||% character(0L)
 
   # -- Download all files first (needed for Imports analysis) --
   downloaded_contents <- list()
@@ -313,7 +486,7 @@ vendor_create_r_file <- function(
         owner = owner,
         repo = repo,
         branch = branch,
-        path = file.path("R", f)
+        path = vendor_source_path(f, dir = "R")
       )
       downloaded_contents[[f]] <- content
       cli::cli_progress_update()
@@ -321,62 +494,27 @@ vendor_create_r_file <- function(
     cli::cli_progress_done()
   }
 
-  # -- Extract metadata --
-  vendor_version <- if (!is.null(desc_vendor)) {
-    tryCatch(
-      desc_vendor$get_field("Version"),
-      error = function(e) "unknown"
-    )
-  } else {
-    "unknown"
-  }
-
   all_content <- unlist(downloaded_contents, use.names = FALSE)
-  imports <- .vendor_extract_imports(all_content)
-  imports_str <- if (length(imports) > 0L) {
-    toString(imports)
-  } else {
-    "none"
-  }
 
   # -- Build header --
-  r_lines <- c(
-    "# ---",
-    sprintf("# The following code is adapted from the '%s' package.", repo),
-    sprintf("# Source: %s", repo_url),
-    sprintf("# Authors: %s", author_str),
-    sprintf(
-      "# License: %s + file LICENSE (See inst/vendor/%s/LICENSE)",
-      license,
-      repo
-    ),
-    sprintf(
-      "# Generated by: rpkgkit::use_vendor(\"%s/%s\"%s)",
-      owner,
-      repo,
-      if (!is.null(files_to_copy)) {
-        toString(paste0(", \"", files_to_copy, "\""))
-      } else {
-        ""
-      }
-    ),
-    sprintf("# Last-updated: %s", Sys.Date()),
-    sprintf("# Vendor version: %s", vendor_version),
-    sprintf("# Imports: [%s]", imports_str),
-    "# ---",
-    "#",
-    "# nocov start"
+  r_lines <- vendor_header_lines(
+    repo = repo,
+    repo_url = repo_url,
+    author_str = author_str,
+    license = license,
+    owner = owner,
+    files = all_files %||% files_to_copy,
+    desc_vendor = desc_vendor,
+    comment = "#",
+    imports = .vendor_extract_imports(all_content),
+    nocov = TRUE
   )
 
   # -- Append file contents --
   for (f in names(downloaded_contents)) {
     r_lines <- c(
       r_lines,
-      "",
-      "# ------------------------------------------------------------------------------",
-      sprintf("# File: %s", f),
-      "# ------------------------------------------------------------------------------",
-      "",
+      vendor_section_lines(f, comment = "#"),
       downloaded_contents[[f]]
     )
   }
@@ -384,6 +522,88 @@ vendor_create_r_file <- function(
   r_lines <- c(r_lines, "", "# nocov end")
   writeLines(r_lines, r_path)
   cli::cli_alert_success("Created {.file {r_path}}.")
+  invisible(TRUE)
+}
+
+
+# Helper: create src/vendor-pkg.c, src/vendor-pkg.cpp or
+# src/rust/src/vendor-pkg.rs from vendored C, C++ or Rust sources
+#' @keywords internal
+vendor_create_source_file <- function(
+  path = NULL,
+  kind = "cpp",
+  repo = character(1L),
+  repo_url = character(1L),
+  author_str = character(1L),
+  license = character(1L),
+  owner = character(1L),
+  branch = character(1L),
+  dots = list(),
+  desc_vendor = NULL,
+  all_files = NULL
+) {
+  path <- path %||% "."
+  layout <- VENDOR_SOURCE_LAYOUT[[kind]]
+  if (is.null(layout)) {
+    cli::cli_abort(c(
+      "x" = "Unknown vendored source kind {.val {kind}}.",
+      "i" = "Supported kinds are {.val {names(VENDOR_SOURCE_LAYOUT)}}."
+    ))
+  }
+
+  files_to_copy <- unlist(dots, use.names = FALSE) %||% character(0L)
+  if (length(files_to_copy) == 0L) {
+    return(invisible(FALSE))
+  }
+
+  target_dir <- file.path(path, layout$dir)
+  dir.create(target_dir, recursive = TRUE, showWarnings = FALSE)
+  target_path <- file.path(
+    target_dir,
+    sprintf("vendor-%s%s", repo, layout$ext)
+  )
+
+  # -- Download all files first --
+  downloaded_contents <- list()
+  cli::cli_progress_bar(
+    "Downloading src",
+    type = "download",
+    total = length(files_to_copy)
+  )
+  for (f in files_to_copy) {
+    downloaded_contents[[f]] <- vendor_download_file(
+      owner = owner,
+      repo = repo,
+      branch = branch,
+      path = vendor_source_path(f, dir = layout$dir)
+    )
+    cli::cli_progress_update()
+  }
+  cli::cli_progress_done()
+
+  # -- Build header --
+  src_lines <- vendor_header_lines(
+    repo = repo,
+    repo_url = repo_url,
+    author_str = author_str,
+    license = license,
+    owner = owner,
+    files = all_files %||% files_to_copy,
+    desc_vendor = desc_vendor,
+    comment = "//"
+  )
+
+  # -- Append file contents --
+  for (f in names(downloaded_contents)) {
+    src_lines <- c(
+      src_lines,
+      vendor_section_lines(f, comment = "//"),
+      downloaded_contents[[f]]
+    )
+  }
+
+  writeLines(src_lines, target_path)
+  cli::cli_alert_success("Created {.file {target_path}}.")
   invisible(TRUE)
 }
 

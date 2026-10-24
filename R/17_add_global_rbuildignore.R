@@ -1,8 +1,3 @@
-#' Global `.Rbuildignore` patterns
-#'
-#' Default regular-expression patterns used by [add_global_rbuildignore()].
-#'
-#' @export
 GLOBAL_RBUILDIGNORE_PATTERN <- c(
   "",
   "# ---- Global rbuildignore patterns ----",
@@ -76,10 +71,9 @@ GLOBAL_RBUILDIGNORE_PATTERN <- c(
 #' @param ... Additional regex patterns (character strings) to add beyond
 #'   the selected patterns. Each must already be in `.Rbuildignore` regex
 #'   format (e.g. `"^\\.myfile$"`).
-#' @param pattern Character vector of `.Rbuildignore` patterns. By default,
-#'   uses [rpkgkit::GLOBAL_RBUILDIGNORE_PATTERN].
+#' @param pattern Character vector of `.Rbuildignore` patterns.
 #' @param replace_default Logical. If `FALSE` (the default), `pattern` is
-#'   appended to [rpkgkit::GLOBAL_RBUILDIGNORE_PATTERN]. If `TRUE`, `pattern` is used instead
+#'   appended to default setting. If `TRUE`, `pattern` is used instead
 #'   of the defaults.
 #' @param path Character. Path to the package root directory. If \code{NULL}
 #'   (the default), uses the current working directory.

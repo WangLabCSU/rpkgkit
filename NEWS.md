@@ -11,14 +11,21 @@
   function is safe to call outside Positron.
 * Added `check_sysdeps()` to verify that the system development dependencies a
   package needs at build time are installed. It detects the package manager in
-  use (`dpkg`, `rpm`, `pacman`, `apk` or `brew`), or takes it from `manager`,
-  queries each dependency with that manager, and reports every hit and miss with
-  cli, ending with a ready-to-paste install command for the missing ones. With
-  `deps = NULL` it checks the built-in list of graphics and font libraries
-  (`freetype`, `libjpeg`, `libpng`, `libtiff`, `libwebp`, `harfbuzz`, `fribidi`,
-  `fontconfig`) under the names used by that package manager. The result is
-  returned invisibly as a named logical vector, and `verbose = FALSE` makes the
-  check silent.
+  use (`dpkg`, `rpm`, `pacman`, `apk` or `brew`, plus `winget`, `choco` and
+  `scoop` on Windows), or takes it from `manager`, queries each dependency with
+  that manager, and reports every hit and miss with cli, ending with a
+  ready-to-paste install command for the missing ones. A dependency may list
+  alternatives as `"a|b"`: it counts as installed when any alternative is, and
+  the first one is used in the install hint. On Linux the manager is read from
+  `/etc/os-release` before falling back to whichever manager is on the `PATH`,
+  `dpkg` is queried through `dpkg-query`, and the suggested command drops `sudo`
+  when R runs as root. With `deps = NULL` it checks the built-in list of graphics
+  and font libraries (`freetype`, `libjpeg`, `libpng`, `libtiff`, `libwebp`,
+  `harfbuzz`, `fribidi`, `fontconfig`) under the names used by that package
+  manager; there is no built-in list for the Windows managers, so `deps` must be
+  supplied for them. The result is returned invisibly as a named logical vector
+  carrying the `"manager"` and, when something is missing, `"install_cmd"`
+  attributes, and `verbose = FALSE` makes the check silent.
 * Added `check_standalone()` to verify that a custom standalone file follows the
   layout consumed by `usethis::use_standalone()`. It checks three points: the
   `# ---` header (the required `repo`, `file`, `last-updated` and `license`
@@ -31,6 +38,24 @@
 
 ## MINOR IMPROVEMENTS
 
+* `use_vendor()` now routes the files it is given by language instead of
+  assuming R: `.R` files still go to `R/vendor-<pkg>.R`, `.c` files to
+  `src/vendor-<pkg>.c`, `.cpp` files to `src/vendor-<pkg>.cpp`, and `.rs` files
+  to `src/rust/src/vendor-<pkg>.rs`. A file given without a directory component
+  is looked up in the conventional directory of its language (`R/`, `src/` or
+  `src/rust/src/`), and all generated files share the same attribution header
+  and per-file separators, with `//` as the comment prefix for the compiled
+  sources.
+* `package_convert_int_literals()` gained an `exclude` argument listing the file
+  names to skip, matched case-insensitively against the base name. It defaults
+  to `c("RcppExports.R", "extendr-wrappers.R")`, so the wrappers written by
+  `Rcpp::compileAttributes()` and `rextendr::document()` are left alone, and
+  `NULL` (or `character()`) restores the previous behaviour of processing every
+  file.
+* `GLOBAL_RBUILDIGNORE_PATTERN` and `PERMISSIVE_LICENSE` are now internal
+  constants instead of exported objects, so packages extending rpkgkit can no
+  longer pick them up with `::`. Both are gone from the pkgdown reference index,
+  and `GLOBAL_RBUILDIGNORE_PATTERN` no longer has a help page of its own.
 * The version-bumper action now keeps a Rust crate version in sync: when the
   package ships `src/rust/Cargo.toml`, the `version` key of its `[package]` table
   is rewritten together with the R package version, under the same `NEWS.md`

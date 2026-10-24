@@ -140,7 +140,7 @@ create_standalone <- function(
 
   if (isTRUE(open) && rlang::is_installed("rstudioapi")) {
     cli::cli_text(
-      "{cli::col_red(cli::symbol$checkbox_off)} File opened in editor."
+      "{cli::col_red(cli_symbol$checkbox_off)} File opened in editor."
     )
     rstudioapi::navigateToFile(target_path)
   }

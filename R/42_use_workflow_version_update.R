@@ -109,7 +109,7 @@ use_workflow_version_update <- function(
   ))
   cli_inform_colored <- add_colors_to_cli(cli::cli_inform)
   cli_inform_colored(
-    "{.red {(cli::symbol$checkbox_off)}} \
+    "{.red {(cli_symbol$checkbox_off)}} \
     {.cyan It is recommended to add a devel version badge to your {.file README.md} via} {.code badger::badge_devel(color = \"blue\")}"
   )
 

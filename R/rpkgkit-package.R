@@ -97,4 +97,6 @@ NULL
   x
 }
 
+cli_symbol <- cli::symbol
+
 # nocov end

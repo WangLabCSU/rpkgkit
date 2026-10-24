@@ -541,6 +541,224 @@ test_that("vendor_create_r_file falls back to 'unknown' when no desc_vendor give
   expect_match(lines[8L], "Vendor version: unknown", fixed = TRUE)
 })
 
+test_that("vendor_create_r_file lists all vendored files in the header", {
+  tmp <- withr::local_tempdir()
+  dir.create(file.path(tmp, "R"))
+
+  rpkgkit:::vendor_create_r_file(
+    path = tmp,
+    repo = "pedant",
+    repo_url = "https://github.com/wurli/pedant",
+    author_str = "Jacob Scott",
+    license = "MIT",
+    owner = "wurli",
+    branch = "main",
+    dots = list(),
+    all_files = c("R/utils.R", "src/foo.cpp")
+  )
+
+  lines <- readLines(file.path(tmp, "R", "vendor-pedant.R"), warn = FALSE)
+  expect_match(lines[6L], "src/foo.cpp", fixed = TRUE)
+})
+
+# ---------------------------------------------------------------------------
+# vendor_file_kind(), vendor_split_files(), vendor_source_path()
+# ---------------------------------------------------------------------------
+
+test_that("vendor_file_kind classifies by extension", {
+  expect_identical(rpkgkit:::vendor_file_kind("foo.R"), "R")
+  expect_identical(rpkgkit:::vendor_file_kind("foo.r"), "R")
+  expect_identical(rpkgkit:::vendor_file_kind("foo.c"), "c")
+  expect_identical(rpkgkit:::vendor_file_kind("foo.cpp"), "cpp")
+  expect_identical(rpkgkit:::vendor_file_kind("foo.CPP"), "cpp")
+  expect_identical(rpkgkit:::vendor_file_kind("foo.rs"), "rs")
+})
+
+test_that("vendor_file_kind defaults unknown extensions to R", {
+  expect_identical(rpkgkit:::vendor_file_kind("foo.txt"), "R")
+  expect_identical(rpkgkit:::vendor_file_kind("noext"), "R")
+})
+
+test_that("vendor_split_files groups files by language", {
+  files <- list("R/utils.R", "src/a.c", "src/b.cpp", "src/lib.rs")
+  result <- rpkgkit:::vendor_split_files(files)
+
+  expect_named(result, c("R", "c", "cpp", "rs"))
+  expect_identical(result$R, "R/utils.R")
+  expect_identical(result$c, "src/a.c")
+  expect_identical(result$cpp, "src/b.cpp")
+  expect_identical(result$rs, "src/lib.rs")
+})
+
+test_that("vendor_split_files returns empty groups for empty input", {
+  result <- rpkgkit:::vendor_split_files(list())
+
+  expect_length(result, 4L)
+  expect_true(all(vapply(result, length, integer(1L)) == 0L))
+})
+
+test_that("vendor_source_path resolves conventional directories", {
+  expect_identical(rpkgkit:::vendor_source_path("utils.R"), "R/utils.R")
+  expect_identical(rpkgkit:::vendor_source_path("zzz"), "R/zzz.R")
+  expect_identical(rpkgkit:::vendor_source_path("R/utils.R"), "R/utils.R")
+  expect_identical(
+    rpkgkit:::vendor_source_path("foo.cpp", "src"),
+    "src/foo.cpp"
+  )
+  expect_identical(
+    rpkgkit:::vendor_source_path("src/foo.cpp", "src"),
+    "src/foo.cpp"
+  )
+  expect_identical(
+    rpkgkit:::vendor_source_path("lib.rs", file.path("src", "rust", "src")),
+    file.path("src", "rust", "src", "lib.rs")
+  )
+})
+
+# ---------------------------------------------------------------------------
+# vendor_create_source_file()
+# ---------------------------------------------------------------------------
+
+test_that("vendor_create_source_file writes C++ sources to src/", {
+  tmp <- withr::local_tempdir()
+
+  local_mocked_bindings(
+    vendor_download_file = function(...) c("int foo() {", "  return 1;", "}")
+  )
+
+  rpkgkit:::vendor_create_source_file(
+    path = tmp,
+    kind = "cpp",
+    repo = "pedant",
+    repo_url = "https://github.com/wurli/pedant",
+    author_str = "Jacob Scott",
+    license = "MIT",
+    owner = "wurli",
+    branch = "main",
+    dots = list("src/foo.cpp")
+  )
+
+  target <- file.path(tmp, "src", "vendor-pedant.cpp")
+  expect_true(file.exists(target))
+
+  lines <- readLines(target, warn = FALSE)
+  expect_match(lines[1L], "^// ---", all = FALSE)
+  expect_match(lines[2L], "pedant", fixed = TRUE)
+  expect_false(any(grepl("Imports:", lines)))
+  expect_true(any(grepl("File: src/foo.cpp", lines, fixed = TRUE)))
+  expect_true(any(grepl("int foo() {", lines, fixed = TRUE)))
+})
+
+test_that("vendor_create_source_file writes C sources to src/", {
+  tmp <- withr::local_tempdir()
+
+  local_mocked_bindings(
+    vendor_download_file = function(...) "int bar(void) { return 0; }"
+  )
+
+  rpkgkit:::vendor_create_source_file(
+    path = tmp,
+    kind = "c",
+    repo = "pedant",
+    repo_url = "https://github.com/wurli/pedant",
+    author_str = "Jacob Scott",
+    license = "MIT",
+    owner = "wurli",
+    branch = "main",
+    dots = list("bar.c")
+  )
+
+  target <- file.path(tmp, "src", "vendor-pedant.c")
+  expect_true(file.exists(target))
+})
+
+test_that("vendor_create_source_file writes Rust sources to src/rust/src/", {
+  tmp <- withr::local_tempdir()
+
+  local_mocked_bindings(
+    vendor_download_file = function(...) "pub fn foo() -> i32 { 1 }"
+  )
+
+  rpkgkit:::vendor_create_source_file(
+    path = tmp,
+    kind = "rs",
+    repo = "pedant",
+    repo_url = "https://github.com/wurli/pedant",
+    author_str = "Jacob Scott",
+    license = "MIT",
+    owner = "wurli",
+    branch = "main",
+    dots = list("lib.rs")
+  )
+
+  target <- file.path(tmp, "src", "rust", "src", "vendor-pedant.rs")
+  expect_true(file.exists(target))
+})
+
+test_that("vendor_create_source_file concatenates multiple files of one kind", {
+  tmp <- withr::local_tempdir()
+
+  local_mocked_bindings(
+    vendor_download_file = function(owner, repo, branch, path) {
+      sprintf("// body of %s", path)
+    }
+  )
+
+  rpkgkit:::vendor_create_source_file(
+    path = tmp,
+    kind = "cpp",
+    repo = "pedant",
+    repo_url = "https://github.com/wurli/pedant",
+    author_str = "Jacob Scott",
+    license = "MIT",
+    owner = "wurli",
+    branch = "main",
+    dots = list("src/a.cpp", "src/b.cpp")
+  )
+
+  lines <- readLines(file.path(tmp, "src", "vendor-pedant.cpp"), warn = FALSE)
+  expect_true(any(grepl("// body of src/a.cpp", lines, fixed = TRUE)))
+  expect_true(any(grepl("// body of src/b.cpp", lines, fixed = TRUE)))
+})
+
+test_that("vendor_create_source_file does nothing without files", {
+  tmp <- withr::local_tempdir()
+
+  result <- rpkgkit:::vendor_create_source_file(
+    path = tmp,
+    kind = "cpp",
+    repo = "pedant",
+    repo_url = "https://github.com/wurli/pedant",
+    author_str = "Jacob Scott",
+    license = "MIT",
+    owner = "wurli",
+    branch = "main",
+    dots = list()
+  )
+
+  expect_false(result)
+  expect_false(dir.exists(file.path(tmp, "src")))
+})
+
+test_that("vendor_create_source_file aborts on an unknown kind", {
+  tmp <- withr::local_tempdir()
+
+  expect_error(
+    rpkgkit:::vendor_create_source_file(
+      path = tmp,
+      kind = "fortran",
+      repo = "pedant",
+      repo_url = "https://github.com/wurli/pedant",
+      author_str = "Jacob Scott",
+      license = "MIT",
+      owner = "wurli",
+      branch = "main",
+      dots = list("a.f90")
+    ),
+    "Unknown vendored source kind"
+  )
+})
+
 # ---------------------------------------------------------------------------
 # vendor_update_desc()
 # ---------------------------------------------------------------------------
@@ -740,4 +958,81 @@ test_that("use_vendor aborts when path is not an R package", {
     use_vendor("wurli/pedant", path = tmp),
     "not an R package"
   )
+})
+
+test_that("use_vendor routes R, C++ and Rust files to their directories", {
+  tmp <- withr::local_tempdir()
+  dir.create(file.path(tmp, "R"))
+  writeLines(
+    c(
+      "Package: mypkg",
+      "Title: My Package",
+      "Version: 1.0.0",
+      "Authors@R: c(person(given = \"Original\", family = \"Author\", role = c(\"aut\", \"cre\")))"
+    ),
+    file.path(tmp, "DESCRIPTION")
+  )
+
+  local_mocked_bindings(
+    request = function(url) list(url = url),
+    req_error = function(req, ...) req,
+    req_perform = function(req) req,
+    resp_status = function(resp) 200L,
+    resp_body_string = function(resp) {
+      if (grepl("DESCRIPTION$", resp$url)) {
+        paste0(
+          "Package: vendorpkg\n",
+          "Version: 0.1.0\n",
+          "License: MIT\n",
+          "Authors@R: c(person(given = \"Jane\", family = \"Doe\", ",
+          "role = c(\"aut\", \"cre\")))\n"
+        )
+      } else {
+        "MIT license text"
+      }
+    },
+    .package = "httr2"
+  )
+  local_mocked_bindings(
+    vendor_download_file = function(owner, repo, branch, path) {
+      sprintf("body of %s", path)
+    }
+  )
+
+  suppressMessages(
+    use_vendor(
+      "owner/vendorpkg",
+      "R/utils.R",
+      "src/foo.cpp",
+      "src/bar.c",
+      "src/lib.rs",
+      path = tmp
+    )
+  )
+
+  r_target <- file.path(tmp, "R", "vendor-vendorpkg.R")
+  expect_true(file.exists(r_target))
+  r_lines <- readLines(r_target, warn = FALSE)
+  # only R files are appended to the R file
+  expect_true(any(grepl("body of R/utils.R", r_lines, fixed = TRUE)))
+  expect_false(any(grepl("body of src/foo.cpp", r_lines, fixed = TRUE)))
+
+  cpp_target <- file.path(tmp, "src", "vendor-vendorpkg.cpp")
+  expect_true(file.exists(cpp_target))
+  cpp_lines <- readLines(cpp_target, warn = FALSE)
+  expect_true(any(grepl("body of src/foo.cpp", cpp_lines, fixed = TRUE)))
+
+  c_target <- file.path(tmp, "src", "vendor-vendorpkg.c")
+  expect_true(file.exists(c_target))
+  expect_true(any(grepl(
+    "body of src/bar.c",
+    readLines(c_target, warn = FALSE)
+  )))
+
+  rs_target <- file.path(tmp, "src", "rust", "src", "vendor-vendorpkg.rs")
+  expect_true(file.exists(rs_target))
+  expect_true(any(grepl(
+    "body of src/lib.rs",
+    readLines(rs_target, warn = FALSE)
+  )))
 })

@@ -360,8 +360,8 @@ check_standalone <- function(path = NULL, ...) {
   cli::cat_line()
 
   final_line_paint <- function(value = integer(), name = character()) {
-    t <- cli::symbol$tick
-    x <- cli::symbol$cross
+    t <- cli_symbol$tick
+    x <- cli_symbol$cross
 
     if (value == 0) {
       return(cli::col_green(paste(value, name, t)))
@@ -385,7 +385,7 @@ check_standalone <- function(path = NULL, ...) {
 inform_warn <- function(message, ...) {
   cli::cli_text(
     cli::col_magenta(paste(
-      cli::symbol$pointer,
+      cli_symbol$pointer,
       " ",
       message,
       "... WARNING"
@@ -398,7 +398,7 @@ inform_warn <- function(message, ...) {
 inform_error <- function(message, ...) {
   cli::cli_text(
     cli::col_red(paste(
-      cli::symbol$pointer,
+      cli_symbol$pointer,
       " ",
       message,
       "... ERROR"
@@ -411,7 +411,7 @@ inform_error <- function(message, ...) {
 inform_note <- function(message, ...) {
   cli::cli_text(
     cli::col_blue(paste(
-      cli::symbol$pointer,
+      cli_symbol$pointer,
       " ",
       message,
       "... NOTE"

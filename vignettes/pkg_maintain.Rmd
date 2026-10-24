@@ -105,10 +105,6 @@ Only packages with a supported permissive license can be vendored. Review the
 acknowledgement text printed by the function and add it to your README when
 appropriate.
 
-```{r}
-rpkgkit::PERMISSIVE_LICENSE
-```
-
 # `usethis` extensions
 
 Use the following helpers from the package root:
