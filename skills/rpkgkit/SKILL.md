@@ -1,6 +1,6 @@
 ---
 name: rpkgkit
-description: Use rpkgkit functions to create and maintain R packages when the task involves qualifying package calls with pkg::, detecting CRAN-unsafe print()/cat() or lost glue braces, modernizing R syntax (base/magrittr pipes, integer L suffix, non-ASCII literals, \\( lambdas, knitr chunk headers), editing or displaying NEWS.md, creating r-lib standalone files, configuring DESCRIPTION fields, .Rbuildignore/.clangd/zzz.R, vendoring upstream code, or generating multilingual README translations and badges.
+description: Use rpkgkit functions to create and maintain R packages when the task involves qualifying package calls with pkg::, detecting CRAN-unsafe print()/cat(), lost glue braces or unmatched # nocov start / # nocov end markers, modernizing R syntax (base/magrittr pipes, integer L suffix, non-ASCII literals, \\( lambdas, knitr chunk headers), editing or displaying NEWS.md, creating r-lib standalone files, configuring DESCRIPTION fields, .Rbuildignore/.clangd/zzz.R, vendoring upstream code, or generating multilingual README translations and badges.
 ---
 
 # rpkgkit
@@ -21,6 +21,7 @@ Use this skill when the request touches R package housekeeping:
 
 - Making function calls explicit (`pkg::fun()`) or arguments explicit (`arg = value`)
 - Detecting or fixing CRAN-unsafe `print()`/`cat()`, or lost `{}` in `glue`/`cli`
+- Checking the `# nocov start` / `# nocov end` markers of a file or package
 - Converting pipes, `function()` ↔ `\(`, integer literals, non-ASCII literals, Rmd chunk headers
 - Adding, showing, or formatting `NEWS.md` entries
 - Creating or validating r-lib style `standalone-*.R` files
@@ -61,6 +62,7 @@ rpkgkit::package_func_call_explicit()   # add pkg:: to unqualified calls
 rpkgkit::package_func_arg_explicit()    # add arg = for non-leading formals
 rpkgkit::package_lost_glue_brace()      # report lost {} in glue/cli
 rpkgkit::package_print_and_cat(fix = TRUE)  # print()/cat() -> message()
+rpkgkit::package_unmatched_nocov_marker()   # report unmatched nocov markers
 rpkgkit::package_convert_pipe(direction = "to_base")
 rpkgkit::package_convert_int_literals()
 rpkgkit::air_format()                   # format last

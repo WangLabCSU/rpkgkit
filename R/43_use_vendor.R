@@ -174,8 +174,7 @@ repo_spec_parse <- function(pkg, branch = "main") {
   )
 }
 
-#' Project License Allowing Copying
-#'
+# Project licenses that allow copying the source into a vendor file.
 PERMISSIVE_LICENSE <- c(
   "MIT",
   "Apache-2.0",
@@ -430,7 +429,7 @@ vendor_header_lines <- function(
   )
 
   if (nocov) {
-    lines <- c(lines, comment, paste0(comment, " nocov start"))
+    lines <- c(lines, comment, paste0(comment, " nocov", " start")) # won't be detected
   }
 
   lines
@@ -519,7 +518,7 @@ vendor_create_r_file <- function(
     )
   }
 
-  r_lines <- c(r_lines, "", "# nocov end")
+  r_lines <- c(r_lines, "", paste0("# nocov", " end")) # won't be detected
   writeLines(r_lines, r_path)
   cli::cli_alert_success("Created {.file {r_path}}.")
   invisible(TRUE)

@@ -272,3 +272,5 @@ news_md_check <- function(path = NULL, strict = FALSE, verbose = TRUE) {
 
   result
 }
+
+# nocov end

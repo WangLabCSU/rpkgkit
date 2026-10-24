@@ -120,6 +120,49 @@ detect_print_and_cat(file, fix = TRUE)
 readLines(file) |> cli::cli_code()
 ```
 
+# Detect unmatched nocov markers
+
+`detect_unmatched_nocov_marker()` checks the `# nocov start` and `# nocov end`
+markers of one file, and `package_unmatched_nocov_marker()` checks a whole
+package. A file may hold at most one marker of each kind, so every further start
+or end is reported with its line and column, together with an end that has no
+start and an end placed before the start. A start without an end is accepted:
+coverage is then excluded until the end of the file.
+
+Detection is purely textual, so a marker inside a string literal or a roxygen
+comment is reported as well (as covr does); such a marker has no effect on coverage, so it is
+usually a leftover to remove. Nothing is rewritten — the offending comment is
+pointed at and the fix is left to you.
+
+```{r}
+#| label = "detect_unmatched_nocov_marker"
+file <- tempfile(fileext = ".R")
+writeLines(
+  c(
+    "# nocov start",
+    "f <- function(x) x + 1",
+    "# nocov start",
+    "# nocov end"
+  ),
+  file
+)
+
+detect_unmatched_nocov_marker(file)
+```
+
+```{r}
+#| label = "package_unmatched_nocov_marker"
+pkg <- file.path(tempdir(), "demo")
+dir.create(file.path(pkg, "R"), recursive = TRUE, showWarnings = FALSE)
+writeLines(
+  c("Package: demo", "Version: 0.0.1"),
+  file.path(pkg, "DESCRIPTION")
+)
+writeLines(c("g <- function(y) y", "# nocov end"), file.path(pkg, "R", "g.R"))
+
+package_unmatched_nocov_marker(pkg)
+```
+
 # Convert function syntax
 
 Convert between `function()` and the short `\()` syntax.

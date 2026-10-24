@@ -189,5 +189,3 @@ restore_unicode_escapes <- function(x) {
   })
   x
 }
-
-# nocov end

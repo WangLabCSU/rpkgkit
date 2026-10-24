@@ -50,7 +50,7 @@ check_standalone <- function(path = NULL, ...) {
   checks <- list(
     "header format" = function() .cs_header(lines, path),
     "@noRd in docs" = function() .cs_noRd(lines),
-    "nocov start marker" = function() .cs_nocov(lines)
+    "nocoverage start marker" = function() .cs_nocov(lines)
   )
 
   results <- imap(checks, function(val, name) {
@@ -95,7 +95,7 @@ check_standalone <- function(path = NULL, ...) {
     inform_error("Line 1 must be the header opening marker `# ---`.")
     return(res)
   }
-  ends <- which(grepl(marker, lines))
+  ends <- grep(marker, lines)
   ends <- ends[ends > 1L]
   if (!length(ends)) {
     res$error <- res$error + 1L
@@ -261,8 +261,8 @@ check_standalone <- function(path = NULL, ...) {
   res
 }
 
-# Check 3: `# nocov start` must exist and precede all functions
-# (`# nocov end` is optional and not checked)
+# Check 3: `# nocov, start` must exist and precede all functions
+# (`# nocov, end` is optional and not checked)
 .cs_nocov <- function(lines) {
   res <- .cs_new_result()
   fns <- .cs_find_functions(lines)
@@ -275,10 +275,10 @@ check_standalone <- function(path = NULL, ...) {
     return(res)
   }
 
-  starts <- which(grepl("^\\s*#\\s*nocov\\s+start\\b", lines))
+  starts <- grep("^\\s*#\\s*nocov\\s+start\\b", lines)
   if (!length(starts)) {
     res$error <- res$error + 1L
-    inform_error("Can't find a `# nocov start` marker.")
+    inform_error(paste0("Can't find a `# nocov", " start` marker."))
     return(res)
   }
   first <- starts[1L]
@@ -286,7 +286,7 @@ check_standalone <- function(path = NULL, ...) {
   if (length(early)) {
     res$error <- res$error + 1L
     inform_error(sprintf(
-      "Functions found before `# nocov start` (line %d): %s.",
+      paste0("Functions found before `# nocov", " start` (line %d): %s."),
       first,
       paste0(
         "`",
