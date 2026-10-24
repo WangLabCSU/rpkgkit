@@ -1,4 +1,17 @@
 {
+  "rust-analyzer.linkedProjects": [
+    "${workspaceFolder}/src/rust/Cargo.toml"
+  ],
+  "files.associations": {
+    "Makevars": "makefile",
+    "Makevars.in": "makefile",
+    "Makevars.win": "makefile",
+    "Makevars.win.in": "makefile",
+    "configure": "shellscript",
+    "configure.win": "shellscript",
+    "cleanup": "shellscript",
+    "cleanup.win": "shellscript"
+  },
   "[quarto]": {
     "editor.defaultFormatter": "quarto.quarto",
     "editor.formatOnSave": true

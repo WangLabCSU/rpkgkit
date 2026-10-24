@@ -53,3 +53,6 @@ inst/doc
 .posit/assistant/skills/r-lib
 tests/testthat/_problems/
 tests/testthat/testthat-problems.rds
+src/rust/vendor
+src/Makevars
+src/Makevars.win
