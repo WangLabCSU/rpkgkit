@@ -7,13 +7,15 @@
   markers of a package. Detection is purely textual, so a marker hidden inside a
   string literal or a roxygen comment is reported too, which is intentional.
   Every marker is located by line and column, and a file may hold at most one
-  start and one end: the second and later marker of each kind is reported, an
-  end without a start is reported, and an end placed before the start is
-  reported (an end later on the same line is accepted). A `# nocov start`
-  without an end is accepted, since coverage is then excluded until the end of
-  the file, and is echoed as information. Every problem is printed with its line
-  and column, the source line and a caret marker under the offending comment, so
-  the fix is left to the user; the verdict is returned invisibly.
+  start and one end, so the two counts must match: the second and later marker
+  of each kind is reported, a start or an end without a counterpart is reported,
+  and an end placed before the start is reported (an end later on the same line
+  is accepted). An unclosed `# nocov start` is an error rather than a note,
+  because `covr::package_coverage()` aborts on such a range with a "range start
+  but only range ends" message. `package_unmatched_nocov_marker()` scans `R/` by
+  default and takes `dirs` for anything else. Every problem is printed with its
+  line and column, the source line and a caret marker under the offending
+  comment, so the fix is left to the user; the verdict is returned invisibly.
 * Added `get_positron_version()` to report the version of the Positron IDE. It
   first reads the `POSITRON_VERSION` environment variable that Positron sets for
   its R sessions (`POSITRON_LONG_VERSION`, which includes the build number, when

@@ -81,6 +81,7 @@ reference:
       - use_bugreports
       - use_clangd
       - use_hexsticker
+      - use_jarl
       - use_multilanguage_readme
       - use_r_v4.1.0
       - use_url

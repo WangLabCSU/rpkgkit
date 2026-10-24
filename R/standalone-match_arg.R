@@ -69,10 +69,11 @@ match_arg <- function(
   ...
 ) {
   if (missing(choices)) {
-    formal.args <- formals(sys.function(sysP <- sys.parent()))
+    sys_p <- sys.parent()
+    formal.args <- formals(sys.function(sys_p))
     choices <- eval(
       formal.args[[as.character(substitute(arg))]],
-      envir = sys.frame(sysP)
+      envir = sys.frame(sys_p)
     )
   }
   if (is.null(arg)) {

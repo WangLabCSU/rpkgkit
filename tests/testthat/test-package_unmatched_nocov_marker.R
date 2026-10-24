@@ -38,10 +38,23 @@ test_that("package_unmatched_nocov_marker returns TRUE when all markers are cons
     withr::local_tempdir(),
     list(
       "R/foo.R" = c(marker_start, "a <- 1", marker_end),
-      "R/bar.R" = c("b <- 2", marker_start, "c <- 3")
+      "R/bar.R" = c("b <- 2", marker_start, "c <- 3", marker_end)
     )
   )
   expect_true(package_unmatched_nocov_marker(pkg))
+})
+
+test_that("package_unmatched_nocov_marker detects a lone nocov start", {
+  pkg <- write_test_pkg(
+    withr::local_tempdir(),
+    list("R/foo.R" = c(marker_start, "a <- 1"))
+  )
+  expect_false(package_unmatched_nocov_marker(pkg))
+  expect_message(
+    package_unmatched_nocov_marker(pkg),
+    "`nocov start` at line 1, column 1 has no matching `nocov end`",
+    fixed = TRUE
+  )
 })
 
 test_that("package_unmatched_nocov_marker detects problems in R/ files", {
@@ -74,7 +87,7 @@ test_that("package_unmatched_nocov_marker reports file name and line", {
   )
 })
 
-test_that("package_unmatched_nocov_marker scans tests/testthat by default", {
+test_that("package_unmatched_nocov_marker scans only R/ by default", {
   pkg <- write_test_pkg(
     withr::local_tempdir(),
     list(
@@ -82,8 +95,10 @@ test_that("package_unmatched_nocov_marker scans tests/testthat by default", {
       "tests/testthat/test-a.R" = c("test_that", marker_end)
     )
   )
-  expect_false(package_unmatched_nocov_marker(pkg))
-  expect_true(package_unmatched_nocov_marker(pkg, dirs = "R"))
+  expect_true(package_unmatched_nocov_marker(pkg))
+  expect_false(
+    package_unmatched_nocov_marker(pkg, dirs = c("R", "tests/testthat"))
+  )
 })
 
 test_that("package_unmatched_nocov_marker counts problems across files", {

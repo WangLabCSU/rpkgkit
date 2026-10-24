@@ -125,9 +125,11 @@ readLines(file) |> cli::cli_code()
 `detect_unmatched_nocov_marker()` checks the `# nocov start` and `# nocov end`
 markers of one file, and `package_unmatched_nocov_marker()` checks a whole
 package. A file may hold at most one marker of each kind, so every further start
-or end is reported with its line and column, together with an end that has no
-start and an end placed before the start. A start without an end is accepted:
-coverage is then excluded until the end of the file.
+or end is reported with its line and column, together with a start or an end
+that has no counterpart and an end placed before the start. Both counts must
+therefore match: an unclosed start is reported as well, because
+`covr::package_coverage()` aborts on such a range with a "range start but only
+range ends" error.
 
 Detection is purely textual, so a marker inside a string literal or a roxygen
 comment is reported as well (as covr does); such a marker has no effect on coverage, so it is
@@ -147,6 +149,14 @@ writeLines(
   file
 )
 
+detect_unmatched_nocov_marker(file)
+```
+
+A `# nocov start` that is never closed is reported as well:
+
+```{r}
+#| label = "detect_unmatched_nocov_marker_unclosed"
+writeLines(c("# nocov start", "g <- function(y) y"), file)
 detect_unmatched_nocov_marker(file)
 ```
 

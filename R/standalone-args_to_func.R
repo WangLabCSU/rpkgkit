@@ -57,7 +57,7 @@
 #' \donttest{
 #' # Example function with specific parameters
 #' example_function <- function(a, b, c = 10, d = 20) {
-#'   return(a + b + c + d)
+#'   a + b + c + d
 #' }
 #'
 #' # Create a list with both relevant and irrelevant arguments

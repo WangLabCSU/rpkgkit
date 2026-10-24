@@ -111,7 +111,7 @@ check_standalone <- function(path = NULL, ...) {
   slots <- list()
   for (i in seq_along(body)) {
     txt <- body[i]
-    if (grepl("^#\\s*$", txt)) {
+    if (grepl("^#\\s*$", txt) || !nzchar(trimws(txt))) {
       next
     }
     m <- regmatches(
@@ -178,13 +178,13 @@ check_standalone <- function(path = NULL, ...) {
     if (key %in% names(slots) && nzchar(slots[[key]])) slots[[key]] else NULL
   }
 
-  if (
-    !is.null(v <- val("repo")) && !grepl("^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$", v)
-  ) {
+  v <- val("repo")
+  if (!is.null(v) && !grepl("^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$", v)) {
     res$warning <- res$warning + 1L
     inform_warn(sprintf("`repo` should look like `owner/repo`, got: %s", v))
   }
-  if (!is.null(v <- val("file"))) {
+  v <- val("file")
+  if (!is.null(v)) {
     if (!grepl("\\.[Rr]$", v)) {
       res$warning <- res$warning + 1L
       inform_warn(sprintf("`file` should end in `.R`, got: %s", v))
@@ -199,7 +199,8 @@ check_standalone <- function(path = NULL, ...) {
       ))
     }
   }
-  if (!is.null(v <- val("last-updated"))) {
+  v <- val("last-updated")
+  if (!is.null(v)) {
     d <- if (grepl("^\\d{4}-\\d{2}-\\d{2}$", v)) {
       as.Date(v, format = "%Y-%m-%d")
     } else {
@@ -216,7 +217,8 @@ check_standalone <- function(path = NULL, ...) {
       inform_warn(sprintf("`last-updated` is in the future: %s", v))
     }
   }
-  if (!is.null(v <- val("license")) && !grepl("^https?://", v)) {
+  v <- val("license")
+  if (!is.null(v) && !grepl("^https?://", v)) {
     res$note <- res$note + 1L
     inform_note(sprintf(
       "`license` is best given as a URL (e.g. https://unlicense.org), got: %s",

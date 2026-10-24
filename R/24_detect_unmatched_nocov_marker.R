@@ -15,21 +15,22 @@
 #'
 #' @section Marker rules:
 #' A file may contain at most one \code{nocov start} and at most one
-#' \code{nocov end} marker.
+#' \code{nocov end} marker, so the two counts must be equal: either both are
+#' present or neither is.
 #' \describe{
 #'   \item{Second and later \code{nocov start}}{Reported as a problem: only the
 #'   first start is meaningful, so every further start is echoed with its line
 #'   and column.}
 #'   \item{Second and later \code{nocov end}}{Reported as a problem for the same
 #'   reason.}
+#'   \item{\code{nocov start} without \code{nocov end}}{Reported as a problem:
+#'   \code{covr::package_coverage()} aborts with a "range start but only range
+#'   ends" error when a start is never closed, so a lone start must be fixed.}
 #'   \item{\code{nocov end} without \code{nocov start}}{Reported as a problem:
 #'   the block it closes does not exist.}
 #'   \item{\code{nocov end} before \code{nocov start}}{Reported as a problem:
 #'   the end must come after the start. Markers are compared by line first and
 #'   then by column, so an end placed later on the same line is accepted.}
-#'   \item{\code{nocov start} without \code{nocov end}}{Accepted: coverage
-#'   exclusion simply runs to the end of the file, so a file may contain only a
-#'   \code{nocov start} marker. It is echoed as information, not as a problem.}
 #' }
 #'
 #' @section Single file vs package scope:
@@ -38,9 +39,8 @@
 #'   \code{path} is \code{NULL} and RStudio is available, the currently active
 #'   document path is used.}
 #'   \item{\code{package_unmatched_nocov_marker()}}{Scans the \code{.R} files
-#'   under the configured package-relative directories, by default \code{R/}
-#'   and \code{tests/testthat/}, and reports every problem together with its
-#'   file name and line number.}
+#'   under the configured package-relative directories, by default \code{R/},
+#'   and reports every problem together with its file name and line number.}
 #' }
 #'
 #' @param path For \code{detect_unmatched_nocov_marker()}: path to an \R file.
@@ -49,16 +49,14 @@
 #'   For \code{package_unmatched_nocov_marker()}: path to the root directory of
 #'   an \R package. Defaults to the current directory.
 #' @param dirs Character vector of package-relative directories scanned by
-#'   \code{package_unmatched_nocov_marker()}. Defaults to \code{"R"} and
-#'   \code{"tests/testthat"}.
+#'   \code{package_unmatched_nocov_marker()}. Defaults to \code{"R"}.
 #' @param verbose Whether to emit detection results to the console.
 #' @param ... Unused.
 #'
 #' @return Invisibly returns \code{TRUE} when the markers of the file follow the
-#'   rules above (a \code{nocov start} without \code{nocov end} is fine), and
-#'   \code{FALSE} otherwise. Each problem is printed with its line and column,
-#'   the source line and a caret marker pointing at the offending comment, so
-#'   that the fix is left to the user.
+#'   rules above, and \code{FALSE} otherwise. Each problem is printed with its
+#'   line and column, the source line and a caret marker pointing at the
+#'   offending comment, so that the fix is left to the user.
 #'
 #' @examples
 #' \donttest{
@@ -105,7 +103,6 @@ detect_unmatched_nocov_marker <- function(path = NULL, verbose = TRUE, ...) {
   }
 
   if (verbose) {
-    report_nocov_open_starts(scan = scan)
     cli::cli_alert_success("All {.code nocov} markers are consistent.")
   }
 
@@ -169,17 +166,15 @@ find_nocov_markers <- function(lines) {
 # and column); the rules are then applied to those two sets:
 #   - at most one `nocov start`  -> every start after the first is a problem
 #   - at most one `nocov end`    -> every end after the first is a problem
+#   - the two counts must match  -> a start with no end is a problem, because
+#                                   covr aborts on an unclosed range
 #   - an end needs a start, and must come after it (line first, then column)
 #
-# Returns:
-#   $problems    - list of list(index, reason, reference), ordered by source
-#                  position; `index` is the position in `markers` of the
-#                  offending marker, `reason` is one of "duplicate_start",
-#                  "duplicate_end", "unmatched_end" or "end_before_start", and
-#                  `reference` is the marker the problem refers to (NA when
-#                  there is none)
-#   $open_starts - index of the `nocov start` left open at the end of the file
-#                  (allowed: the exclusion runs to the end of the file)
+# Returns $problems: a list of list(index, reason, reference), ordered by source
+# position; `index` is the position in `markers` of the offending marker,
+# `reason` is one of "duplicate_start", "duplicate_end", "unmatched_start",
+# "unmatched_end" or "end_before_start", and `reference` is the marker the
+# problem refers to (NA when there is none).
 # ---------------------------------------------------------------------------
 check_nocov_markers <- function(markers) {
   types <- vapply(markers, function(marker) marker$type, character(1L))
@@ -227,11 +222,13 @@ check_nocov_markers <- function(markers) {
     }
   }
 
-  # A start without any end is allowed: coverage is excluded to the file end
-  open_starts <- if (length(start_index) > 0L && length(end_index) == 0L) {
-    start_index[[1L]]
-  } else {
-    integer()
+  # A start must be closed by an end: covr aborts on an unclosed range
+  if (length(start_index) > 0L && length(end_index) == 0L) {
+    problems <- append_nocov_problem(
+      problems,
+      start_index[[1L]],
+      "unmatched_start"
+    )
   }
 
   if (length(problems) > 1L) {
@@ -239,7 +236,7 @@ check_nocov_markers <- function(markers) {
     problems <- problems[ord]
   }
 
-  list(problems = problems, open_starts = open_starts)
+  list(problems = problems)
 }
 
 # ---------------------------------------------------------------------------
@@ -269,24 +266,23 @@ marker_comes_before <- function(a, b) {
 }
 
 # ---------------------------------------------------------------------------
-# Read a file and collect its markers together with the pairing result.
+# Read a file and collect its markers together with the check result.
 #
-# Returns a list with $lines, $markers, $problems and $open_starts.
+# Returns a list with $lines, $markers and $problems.
 # ---------------------------------------------------------------------------
 scan_nocov_file <- function(path) {
   lines <- readLines(con = path, warn = FALSE)
   markers <- find_nocov_markers(lines = lines)
-  pairs <- if (length(markers) > 0L) {
+  check <- if (length(markers) > 0L) {
     check_nocov_markers(markers = markers)
   } else {
-    list(problems = list(), open_starts = integer())
+    list(problems = list())
   }
 
   list(
     lines = lines,
     markers = markers,
-    problems = pairs$problems,
-    open_starts = pairs$open_starts
+    problems = check$problems
   )
 }
 
@@ -307,6 +303,10 @@ nocov_problem_text <- function(markers, problem) {
 
   if (identical(problem$reason, "unmatched_end")) {
     return(paste0(at, " has no matching `nocov start`."))
+  }
+
+  if (identical(problem$reason, "unmatched_start")) {
+    return(paste0(at, " has no matching `nocov end`."))
   }
 
   reference <- markers[[problem$reference]]
@@ -363,25 +363,5 @@ report_nocov_problems <- function(scan, label = NULL) {
     cli::cli_alert_danger(nocov_problem_text(scan$markers, problem))
     message(format_nocov_marker_error(scan$lines[[marker$line1]], marker))
   }
-  invisible(NULL)
-}
-
-# ---------------------------------------------------------------------------
-# Inform about `nocov start` markers left open at the end of the file. This is
-# not a problem: the exclusion simply runs to the end of the file.
-# ---------------------------------------------------------------------------
-report_nocov_open_starts <- function(scan) {
-  if (length(scan$open_starts) == 0L) {
-    return(invisible(NULL))
-  }
-  open_lines <- vapply(
-    scan$open_starts,
-    function(index) scan$markers[[index]]$line1,
-    integer(1L)
-  )
-  cli::cli_alert_info(
-    "Found {length(open_lines)} unclosed {.code nocov start} marker{?s} at line{?s} {.val {open_lines}}; \
-    coverage is excluded until the end of the file."
-  )
   invisible(NULL)
 }

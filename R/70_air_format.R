@@ -1,4 +1,7 @@
-#' Format R code using air
+# ? This function was no longer maintained.
+# nocov start
+
+#' `r lifecycle::badge('deprecated')` Format R code using air
 #'
 #' @param path Path to the R file to format. If NULL, attempts to use the active
 #'   document in RStudio (requires `rstudioapi` package).
@@ -20,6 +23,7 @@
 #' }
 #' @export
 air_format <- function(path = NULL, ...) {
+  lifecycle::deprecate_stop("0.1.21", "air_format()")
   check_air_installed()
   if (is.null(path)) {
     if (rlang::is_installed("rstudioapi")) {
@@ -62,7 +66,7 @@ air_format <- function(path = NULL, ...) {
 #' **macOS:**
 #' `curl --proto '=https' --tlsv1.2 -LsSf https://github.com/posit-dev/air/releases/latest/download/air-installer.sh | sh`
 #'
-#' @keywords internal
+#' @export
 check_air_installed <- function() {
   if (nzchar(Sys.which("air"))) {
     return(invisible(TRUE))
@@ -128,3 +132,5 @@ check_air_installed <- function() {
 
   cli::cli_abort(install_instructions)
 }
+
+# nocov end

@@ -40,9 +40,10 @@ CRAN submission mechanics beyond the functions listed here.
    the working directory is used. Pass `path` explicitly in scripts, tests, or CI.
 2. **Single-file vs whole-package pairs.** `detect_*`, `make_*`, `convert_int_literals`,
    `convert_pipe`, `optimize_rmd_yaml` act on one file. The matching `package_*`
-   function walks the package (`dirs = c("R", "tests/testthat")` by default for the
-   detectors, `dirs = "R"` for the converters). Choose the package-level function
-   whenever more than one file is involved.
+   function walks the package. `dirs` defaults to `c("R", "tests/testthat")` for
+   `package_lost_glue_brace()` and `package_print_and_cat()`, and to `"R"` for
+   `package_unmatched_nocov_marker()` and the converters; pass `dirs` to widen it.
+   Choose the package-level function whenever more than one file is involved.
 3. **Results are reported with `cli` and returned invisibly.** Wrap calls in
    `invisible()`-tolerant code; do not assert on a visible return value. Use
    `verbose = TRUE` (default on most functions) to keep the report.

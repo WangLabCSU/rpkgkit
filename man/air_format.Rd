@@ -2,7 +2,7 @@
 % Please edit documentation in R/70_air_format.R
 \name{air_format}
 \alias{air_format}
-\title{Format R code using air}
+\title{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Format R code using air}
 \usage{
 air_format(path = NULL, ...)
 }
@@ -16,7 +16,7 @@ document in RStudio (requires \code{rstudioapi} package).}
 The exit status of the \verb{air format} command (invisibly).
 }
 \description{
-Format R code using air
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Format R code using air
 }
 \details{
 Install \href{https://github.com/posit-dev/air}{air}:

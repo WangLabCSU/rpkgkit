@@ -2,7 +2,7 @@
 #' @export
 package_unmatched_nocov_marker <- function(
   path = NULL,
-  dirs = c("R", file.path("tests", "testthat")),
+  dirs = "R",
   verbose = TRUE
 ) {
   path <- path %||% "."
@@ -98,7 +98,6 @@ package_scan_nocov_file <- function(path, package_path, verbose) {
   label <- substring(path, nchar(package_path) + 2L)
   if (verbose) {
     report_nocov_problems(scan = scan, label = label)
-    report_nocov_open_starts(scan = scan)
   }
 
   length(scan$problems)

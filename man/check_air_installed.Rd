@@ -27,4 +27,3 @@ Installation methods per OS:
 \strong{macOS:}
 \verb{curl --proto '=https' --tlsv1.2 -LsSf https://github.com/posit-dev/air/releases/latest/download/air-installer.sh | sh}
 }
-\keyword{internal}

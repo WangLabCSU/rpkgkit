@@ -84,6 +84,35 @@ the `R/` directory (which holds no C++ code) and adds `.clangd` to
 use_clangd(path = dir, include = c("Rcpp", "BH"), overwrite = TRUE)
 ```
 
+## Configure the jarl linter
+
+`use_jarl()` writes a `jarl.toml` file for [jarl](https://jarl.etiennebacher.com/),
+the linter written in Rust. The file pins down the linting behaviour of every
+`jarl` invocation, so the command line, your editor and CI all agree. It enables
+the opt-in `TESTTHAT` group of rules, skips vendored files, and lints the code
+inside `@examples` and `@examplesIf` tags.
+
+```{r}
+#| label = "use_jarl"
+use_jarl(path = dir, overwrite = TRUE)
+```
+
+`jarl` reads a single configuration file: the closest `jarl.toml` in the current
+directory or any of its parents, and finally the one in your user configuration
+directory. When `path` is a package root, `jarl.toml` is also added to
+`.Rbuildignore` so it stays out of the built tarball.
+
+```{r}
+#| label = "use_jarl_content"
+readLines(file.path(dir, "jarl.toml"))
+```
+
+Read the
+[configuration reference](https://jarl.etiennebacher.com/reference/config-file)
+for options such as `select`, `ignore` and `per-file-ignores`, and the
+[continuous integration guide](https://jarl.etiennebacher.com/howto/ci) to run
+`jarl check` on every push with the `etiennebacher/setup-jarl` action.
+
 # Vendor permissively licensed code
 
 `use_vendor()` records attribution and licensing information when incorporating

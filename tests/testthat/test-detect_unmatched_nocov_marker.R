@@ -53,13 +53,29 @@ test_that("paired markers return TRUE", {
   )
 })
 
-test_that("a file with only a nocov start marker is accepted", {
+test_that("a nocov start without nocov end returns FALSE", {
   file <- withr::local_tempfile(fileext = ".R")
   writeLines(c("a <- 1", marker_start, "b <- 2"), file)
-  expect_true(detect_unmatched_nocov_marker(file))
+  expect_false(detect_unmatched_nocov_marker(file))
   expect_message(
     detect_unmatched_nocov_marker(file),
-    "unclosed `nocov start` marker at line 2",
+    "`nocov start` at line 2, column 1 has no matching `nocov end`",
+    fixed = TRUE
+  )
+  # source line plus a caret line underlining the whole marker
+  expect_message(
+    detect_unmatched_nocov_marker(file),
+    paste0(marker_start, "\n", strrep("^", nchar(marker_start))),
+    fixed = TRUE
+  )
+})
+
+test_that("a lone nocov start is the only reported problem", {
+  file <- withr::local_tempfile(fileext = ".R")
+  writeLines(c(marker_start, "a <- 1"), file)
+  expect_message(
+    detect_unmatched_nocov_marker(file),
+    "Found 1 mismatched `nocov` marker on line 1",
     fixed = TRUE
   )
 })
@@ -90,7 +106,8 @@ test_that("every nocov start after the first is reported", {
       marker_start,
       "b <- 2",
       marker_start,
-      "c <- 3"
+      "c <- 3",
+      marker_end
     ),
     file
   )
@@ -192,7 +209,10 @@ test_that("marker variants are recognised", {
   writeLines(c("# NOCOV START", "a <- 1", "# NOCOV END"), variant)
   expect_true(detect_unmatched_nocov_marker(variant, verbose = FALSE))
 
-  writeLines(c("  # nocov start  # reason", "a <- 1"), variant)
+  writeLines(
+    c("  # nocov start  # reason", "a <- 1", "  # nocov end  # reason"),
+    variant
+  )
   expect_true(detect_unmatched_nocov_marker(variant, verbose = FALSE))
 })
 

@@ -6,11 +6,7 @@
 \alias{detect_unmatched_nocov_marker}
 \title{Detect Unmatched \code{nocov} Markers}
 \usage{
-package_unmatched_nocov_marker(
-  path = NULL,
-  dirs = c("R", file.path("tests", "testthat")),
-  verbose = TRUE
-)
+package_unmatched_nocov_marker(path = NULL, dirs = "R", verbose = TRUE)
 
 detect_unmatched_nocov_marker(path = NULL, verbose = TRUE, ...)
 }
@@ -22,8 +18,7 @@ For \code{package_unmatched_nocov_marker()}: path to the root directory of
 an \R package. Defaults to the current directory.}
 
 \item{dirs}{Character vector of package-relative directories scanned by
-\code{package_unmatched_nocov_marker()}. Defaults to \code{"R"} and
-\code{"tests/testthat"}.}
+\code{package_unmatched_nocov_marker()}. Defaults to \code{"R"}.}
 
 \item{verbose}{Whether to emit detection results to the console.}
 
@@ -31,10 +26,9 @@ an \R package. Defaults to the current directory.}
 }
 \value{
 Invisibly returns \code{TRUE} when the markers of the file follow the
-rules above (a \code{nocov start} without \code{nocov end} is fine), and
-\code{FALSE} otherwise. Each problem is printed with its line and column,
-the source line and a caret marker pointing at the offending comment, so
-that the fix is left to the user.
+rules above, and \code{FALSE} otherwise. Each problem is printed with its
+line and column, the source line and a caret marker pointing at the
+offending comment, so that the fix is left to the user.
 }
 \description{
 Check whether the \verb{nocov start} and \verb{nocov end} comment markers in \R source
@@ -52,21 +46,22 @@ should be removed by hand.
 \section{Marker rules}{
 
 A file may contain at most one \code{nocov start} and at most one
-\code{nocov end} marker.
+\code{nocov end} marker, so the two counts must be equal: either both are
+present or neither is.
 \describe{
 \item{Second and later \code{nocov start}}{Reported as a problem: only the
 first start is meaningful, so every further start is echoed with its line
 and column.}
 \item{Second and later \code{nocov end}}{Reported as a problem for the same
 reason.}
+\item{\code{nocov start} without \code{nocov end}}{Reported as a problem:
+\code{covr::package_coverage()} aborts with a "range start but only range
+ends" error when a start is never closed, so a lone start must be fixed.}
 \item{\code{nocov end} without \code{nocov start}}{Reported as a problem:
 the block it closes does not exist.}
 \item{\code{nocov end} before \code{nocov start}}{Reported as a problem:
 the end must come after the start. Markers are compared by line first and
 then by column, so an end placed later on the same line is accepted.}
-\item{\code{nocov start} without \code{nocov end}}{Accepted: coverage
-exclusion simply runs to the end of the file, so a file may contain only a
-\code{nocov start} marker. It is echoed as information, not as a problem.}
 }
 }
 
@@ -77,9 +72,8 @@ exclusion simply runs to the end of the file, so a file may contain only a
 \code{path} is \code{NULL} and RStudio is available, the currently active
 document path is used.}
 \item{\code{package_unmatched_nocov_marker()}}{Scans the \code{.R} files
-under the configured package-relative directories, by default \code{R/}
-and \code{tests/testthat/}, and reports every problem together with its
-file name and line number.}
+under the configured package-relative directories, by default \code{R/},
+and reports every problem together with its file name and line number.}
 }
 }
 
