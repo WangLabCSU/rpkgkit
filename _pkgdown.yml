@@ -61,6 +61,7 @@ reference:
       - add_global_gitgnore
       - add_global_rbuildignore
       - air_format
+      - check_air_installed
       - badge_translated_by_ai
       - browse_standalone
       - check_pkgdown_reference
