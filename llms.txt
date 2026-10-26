@@ -59,6 +59,34 @@ website:
   Documentation](https://wanglabcsu.github.io/rpkgkit/articles/readme_and_doc.html):
   create README translations and insert or generate badges.
 
+It’s recommended to use following packages together with `rpkgkit`:
+
+- [`pkgdown`](https://pkgdown.r-lib.org/) /
+  [`pkgdown.offline`](https://nanx.me/pkgdown.offline/): generate
+  package website.
+- [`pkgload`](https://pkgload.r-lib.org/): load package source code.
+- [`flir`](https://flir.etiennebacher.com/) /
+  [`jarl`](https://jarl.etiennebacher.com/) /
+  [`lintr`](https://lintr.r-lib.org/): lint and fix source code.
+- [`air`](https://posit-dev.github.io/air/): format source code.
+- [`usethis`](https://usethis.r-lib.org/): manage package metadata.
+- [`devtools`](https://devtools.r-lib.org/): build and check package.
+
+## AI skills
+
+`rpkgkit` ships an agent skill that tells coding agents when to reach
+for `rpkgkit` and how to call it. It follows the [Agent
+Skills](https://skills.sh) layout, so it works with Claude Code, Codex,
+Cursor, Positron, and other compatible agents:
+
+``` bash
+npx skills add WangLabCSU/rpkgkit --skill rpkgkit
+```
+
+Add `-g` to install it for every project, and `-a <agent>` to skip the
+agent prompt. The skill source lives in
+[`skills/rpkgkit/`](https://github.com/WangLabCSU/rpkgkit/tree/main/skills/rpkgkit).
+
 ## Acknowledgements
 
 We would like to thank the following people and projects:
@@ -93,7 +121,12 @@ The following functions help you to create and maintain an R package.
   : Add global .Rbuildignore patterns
 
 - [`air_format()`](https://wanglabcsu.github.io/rpkgkit/reference/air_format.md)
-  : Format R code using air
+  **\[deprecated\]** :
+
+  **\[deprecated\]** Format R code using air
+
+- [`check_air_installed()`](https://wanglabcsu.github.io/rpkgkit/reference/check_air_installed.md)
+  : Check that the air formatter is installed
 
 - [`badge_translated_by_ai()`](https://wanglabcsu.github.io/rpkgkit/reference/badge_translated_by_ai.md)
   : Generate AI Translation Disclaimer Badge
@@ -132,6 +165,12 @@ The following functions help you to create and maintain an R package.
 
   Detect [`print()`](https://rdrr.io/r/base/print.html) and
   [`cat()`](https://rdrr.io/r/base/cat.html) Calls (CRAN-Unsafe)
+
+- [`package_unmatched_nocov_marker()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_unmatched_nocov_marker.md)
+  [`detect_unmatched_nocov_marker()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_unmatched_nocov_marker.md)
+  :
+
+  Detect Unmatched `nocov` Markers
 
 - [`flir_fix()`](https://wanglabcsu.github.io/rpkgkit/reference/flir_fix.md)
   : Fix R code or package using flir
@@ -173,6 +212,11 @@ The following functions help you to create and maintain an R package.
 
 - [`use_hexsticker()`](https://wanglabcsu.github.io/rpkgkit/reference/use_hexsticker.md)
   **\[deprecated\]** : Use Hex Sticker in README
+
+- [`use_jarl()`](https://wanglabcsu.github.io/rpkgkit/reference/use_jarl.md)
+  :
+
+  Create a `jarl.toml` configuration file
 
 - [`use_multilanguage_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/use_multilanguage_readme.md)
   : Create Multilingual README Files
@@ -222,14 +266,6 @@ The following functions help you to create and maintain an R package.
 
 - [`badge_to_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/badge_to_readme.md)
   : Insert a badge into README badges block
-
-- [`GLOBAL_RBUILDIGNORE_PATTERN`](https://wanglabcsu.github.io/rpkgkit/reference/GLOBAL_RBUILDIGNORE_PATTERN.md)
-  :
-
-  Global `.Rbuildignore` patterns
-
-- [`PERMISSIVE_LICENSE`](https://wanglabcsu.github.io/rpkgkit/reference/PERMISSIVE_LICENSE.md)
-  : Project License Allowing Copying
 
 - [`optimize_rmd_yaml()`](https://wanglabcsu.github.io/rpkgkit/reference/optimize_rmd_yaml.md)
   : Enrich the YAML header of ONE Rmd file using the package DESCRIPTION

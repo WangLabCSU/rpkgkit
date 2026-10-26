@@ -61,7 +61,7 @@ Invisibly returns the path to the created file.
 ``` r
 # \donttest{
 create_standalone("my_utils", path = tempdir())
-#> Warning: running command ''git' -C /tmp/RtmpE8U8XL remote get-url origin' had status 128
-#> ✔ Created standalone file: /tmp/RtmpE8U8XL/R/standalone-my_utils.R
+#> Warning: running command ''git' -C /tmp/RtmpQzcj50 remote get-url origin' had status 128
+#> ✔ Created standalone file: /tmp/RtmpQzcj50/R/standalone-my_utils.R
 # }
 ```

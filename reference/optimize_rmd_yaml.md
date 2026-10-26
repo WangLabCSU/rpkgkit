@@ -38,7 +38,7 @@ optimize_rmd_yaml(
 
 - date:
 
-  "auto" -\> 2026-10-23; "desc" -\> DESCRIPTION Date field; "none" -\>
+  "auto" -\> 2026-10-25; "desc" -\> DESCRIPTION Date field; "none" -\>
   do not add a date.
 
 - extra:

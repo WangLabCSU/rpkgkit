@@ -31,14 +31,12 @@ add_global_rbuildignore(
 
 - pattern:
 
-  Character vector of `.Rbuildignore` patterns. By default, uses
-  [GLOBAL_RBUILDIGNORE_PATTERN](https://wanglabcsu.github.io/rpkgkit/reference/GLOBAL_RBUILDIGNORE_PATTERN.md).
+  Character vector of `.Rbuildignore` patterns.
 
 - replace_default:
 
-  Logical. If `FALSE` (the default), `pattern` is appended to
-  [GLOBAL_RBUILDIGNORE_PATTERN](https://wanglabcsu.github.io/rpkgkit/reference/GLOBAL_RBUILDIGNORE_PATTERN.md).
-  If `TRUE`, `pattern` is used instead of the defaults.
+  Logical. If `FALSE` (the default), `pattern` is appended to default
+  setting. If `TRUE`, `pattern` is used instead of the defaults.
 
 - path:
 

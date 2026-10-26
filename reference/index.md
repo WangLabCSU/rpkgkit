@@ -19,7 +19,12 @@ The following functions help you to create and maintain an R package.
   : Add global .Rbuildignore patterns
 
 - [`air_format()`](https://wanglabcsu.github.io/rpkgkit/reference/air_format.md)
-  : Format R code using air
+  **\[deprecated\]** :
+
+  **\[deprecated\]** Format R code using air
+
+- [`check_air_installed()`](https://wanglabcsu.github.io/rpkgkit/reference/check_air_installed.md)
+  : Check that the air formatter is installed
 
 - [`badge_translated_by_ai()`](https://wanglabcsu.github.io/rpkgkit/reference/badge_translated_by_ai.md)
   : Generate AI Translation Disclaimer Badge
@@ -58,6 +63,12 @@ The following functions help you to create and maintain an R package.
 
   Detect [`print()`](https://rdrr.io/r/base/print.html) and
   [`cat()`](https://rdrr.io/r/base/cat.html) Calls (CRAN-Unsafe)
+
+- [`package_unmatched_nocov_marker()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_unmatched_nocov_marker.md)
+  [`detect_unmatched_nocov_marker()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_unmatched_nocov_marker.md)
+  :
+
+  Detect Unmatched `nocov` Markers
 
 - [`flir_fix()`](https://wanglabcsu.github.io/rpkgkit/reference/flir_fix.md)
   : Fix R code or package using flir
@@ -99,6 +110,11 @@ The following functions help you to create and maintain an R package.
 
 - [`use_hexsticker()`](https://wanglabcsu.github.io/rpkgkit/reference/use_hexsticker.md)
   **\[deprecated\]** : Use Hex Sticker in README
+
+- [`use_jarl()`](https://wanglabcsu.github.io/rpkgkit/reference/use_jarl.md)
+  :
+
+  Create a `jarl.toml` configuration file
 
 - [`use_multilanguage_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/use_multilanguage_readme.md)
   : Create Multilingual README Files
@@ -148,14 +164,6 @@ The following functions help you to create and maintain an R package.
 
 - [`badge_to_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/badge_to_readme.md)
   : Insert a badge into README badges block
-
-- [`GLOBAL_RBUILDIGNORE_PATTERN`](https://wanglabcsu.github.io/rpkgkit/reference/GLOBAL_RBUILDIGNORE_PATTERN.md)
-  :
-
-  Global `.Rbuildignore` patterns
-
-- [`PERMISSIVE_LICENSE`](https://wanglabcsu.github.io/rpkgkit/reference/PERMISSIVE_LICENSE.md)
-  : Project License Allowing Copying
 
 - [`optimize_rmd_yaml()`](https://wanglabcsu.github.io/rpkgkit/reference/optimize_rmd_yaml.md)
   : Enrich the YAML header of ONE Rmd file using the package DESCRIPTION

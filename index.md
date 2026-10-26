@@ -59,6 +59,34 @@ website:
   Documentation](https://wanglabcsu.github.io/rpkgkit/articles/readme_and_doc.html):
   create README translations and insert or generate badges.
 
+It’s recommended to use following packages together with `rpkgkit`:
+
+- [`pkgdown`](https://pkgdown.r-lib.org/) /
+  [`pkgdown.offline`](https://nanx.me/pkgdown.offline/): generate
+  package website.
+- [`pkgload`](https://pkgload.r-lib.org/): load package source code.
+- [`flir`](https://flir.etiennebacher.com/) /
+  [`jarl`](https://jarl.etiennebacher.com/) /
+  [`lintr`](https://lintr.r-lib.org/): lint and fix source code.
+- [`air`](https://posit-dev.github.io/air/): format source code.
+- [`usethis`](https://usethis.r-lib.org/): manage package metadata.
+- [`devtools`](https://devtools.r-lib.org/): build and check package.
+
+## AI skills
+
+`rpkgkit` ships an agent skill that tells coding agents when to reach
+for `rpkgkit` and how to call it. It follows the [Agent
+Skills](https://skills.sh) layout, so it works with Claude Code, Codex,
+Cursor, Positron, and other compatible agents:
+
+``` bash
+npx skills add WangLabCSU/rpkgkit --skill rpkgkit
+```
+
+Add `-g` to install it for every project, and `-a <agent>` to skip the
+agent prompt. The skill source lives in
+[`skills/rpkgkit/`](https://github.com/WangLabCSU/rpkgkit/tree/main/skills/rpkgkit).
+
 ## Acknowledgements
 
 We would like to thank the following people and projects:

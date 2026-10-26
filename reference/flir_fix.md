@@ -43,7 +43,7 @@ The function determines the fix strategy based on the path type:
 tmp <- tempfile(fileext = ".R")
 writeLines("a<-1+1", tmp)
 flir_fix(tmp)
-#> ℹ Fixing R code in /tmp/RtmpE8U8XL/file1aa425e233c0.R
+#> ℹ Fixing R code in /tmp/RtmpQzcj50/file1b856d7ec4fa.R
 #> ℹ Going to check 1 file.
 #> ✔ No fixes needed.
 cat(readLines(tmp, warn = FALSE), sep = "\n")

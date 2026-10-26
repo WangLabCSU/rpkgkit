@@ -1,6 +1,6 @@
-# Format R code using air
+# **\[deprecated\]** Format R code using air
 
-Format R code using air
+**\[deprecated\]** Format R code using air
 
 ## Usage
 

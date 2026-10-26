@@ -5,6 +5,26 @@
 ### NEW FEATURES
 
 - Added
+  [`detect_unmatched_nocov_marker()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_unmatched_nocov_marker.md)
+  and
+  [`package_unmatched_nocov_marker()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_unmatched_nocov_marker.md)
+  to check the `# nocov start` / `# nocov end` markers of a package.
+  Detection is purely textual, so a marker hidden inside a string
+  literal or a roxygen comment is reported too, which is intentional.
+  Every marker is located by line and column, and a file may hold at
+  most one start and one end, so the two counts must match: the second
+  and later marker of each kind is reported, a start or an end without a
+  counterpart is reported, and an end placed before the start is
+  reported (an end later on the same line is accepted). An unclosed
+  `# nocov start` is an error rather than a note, because
+  `covr::package_coverage()` aborts on such a range with a “range start
+  but only range ends” message.
+  [`package_unmatched_nocov_marker()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_unmatched_nocov_marker.md)
+  scans `R/` by default and takes `dirs` for anything else. Every
+  problem is printed with its line and column, the source line and a
+  caret marker under the offending comment, so the fix is left to the
+  user; the verdict is returned invisibly.
+- Added
   [`get_positron_version()`](https://wanglabcsu.github.io/rpkgkit/reference/get_positron_version.md)
   to report the version of the Positron IDE. It first reads the
   `POSITRON_VERSION` environment variable that Positron sets for its R
@@ -17,15 +37,23 @@
   [`check_sysdeps()`](https://wanglabcsu.github.io/rpkgkit/reference/check_sysdeps.md)
   to verify that the system development dependencies a package needs at
   build time are installed. It detects the package manager in use
-  (`dpkg`, `rpm`, `pacman`, `apk` or `brew`), or takes it from
-  `manager`, queries each dependency with that manager, and reports
-  every hit and miss with cli, ending with a ready-to-paste install
-  command for the missing ones. With `deps = NULL` it checks the
-  built-in list of graphics and font libraries (`freetype`, `libjpeg`,
-  `libpng`, `libtiff`, `libwebp`, `harfbuzz`, `fribidi`, `fontconfig`)
-  under the names used by that package manager. The result is returned
-  invisibly as a named logical vector, and `verbose = FALSE` makes the
-  check silent.
+  (`dpkg`, `rpm`, `pacman`, `apk` or `brew`, plus `winget`, `choco` and
+  `scoop` on Windows), or takes it from `manager`, queries each
+  dependency with that manager, and reports every hit and miss with cli,
+  ending with a ready-to-paste install command for the missing ones. A
+  dependency may list alternatives as `"a|b"`: it counts as installed
+  when any alternative is, and the first one is used in the install
+  hint. On Linux the manager is read from `/etc/os-release` before
+  falling back to whichever manager is on the `PATH`, `dpkg` is queried
+  through `dpkg-query`, and the suggested command drops `sudo` when R
+  runs as root. With `deps = NULL` it checks the built-in list of
+  graphics and font libraries (`freetype`, `libjpeg`, `libpng`,
+  `libtiff`, `libwebp`, `harfbuzz`, `fribidi`, `fontconfig`) under the
+  names used by that package manager; there is no built-in list for the
+  Windows managers, so `deps` must be supplied for them. The result is
+  returned invisibly as a named logical vector carrying the `"manager"`
+  and, when something is missing, `"install_cmd"` attributes, and
+  `verbose = FALSE` makes the check silent.
 - Added
   [`check_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/check_standalone.md)
   to verify that a custom standalone file follows the layout consumed by
@@ -42,6 +70,28 @@
 
 ### MINOR IMPROVEMENTS
 
+- [`use_vendor()`](https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.md)
+  now routes the files it is given by language instead of assuming R:
+  `.R` files still go to `R/vendor-<pkg>.R`, `.c` files to
+  `src/vendor-<pkg>.c`, `.cpp` files to `src/vendor-<pkg>.cpp`, and
+  `.rs` files to `src/rust/src/vendor-<pkg>.rs`. A file given without a
+  directory component is looked up in the conventional directory of its
+  language (`R/`, `src/` or `src/rust/src/`), and all generated files
+  share the same attribution header and per-file separators, with `//`
+  as the comment prefix for the compiled sources.
+- [`package_convert_int_literals()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_int_literals.md)
+  gained an `exclude` argument listing the file names to skip, matched
+  case-insensitively against the base name. It defaults to
+  `c("RcppExports.R", "extendr-wrappers.R")`, so the wrappers written by
+  [`Rcpp::compileAttributes()`](https://rdrr.io/pkg/Rcpp/man/compileAttributes.html)
+  and `rextendr::document()` are left alone, and `NULL` (or
+  [`character()`](https://rdrr.io/r/base/character.html)) restores the
+  previous behaviour of processing every file.
+- `GLOBAL_RBUILDIGNORE_PATTERN` and `PERMISSIVE_LICENSE` are now
+  internal constants instead of exported objects, so packages extending
+  rpkgkit can no longer pick them up with `::`. Both are gone from the
+  pkgdown reference index, and `GLOBAL_RBUILDIGNORE_PATTERN` no longer
+  has a help page of its own.
 - The version-bumper action now keeps a Rust crate version in sync: when
   the package ships `src/rust/Cargo.toml`, the `version` key of its
   `[package]` table is rewritten together with the R package version,

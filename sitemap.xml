@@ -14,8 +14,6 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/authors.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/index.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/news/index.html</loc></url>
-<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/GLOBAL_RBUILDIGNORE_PATTERN.html</loc></url>
-<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/PERMISSIVE_LICENSE.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/add_changelog_in_standalone.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/add_double_colons.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/add_global_gitgnore.html</loc></url>
@@ -37,6 +35,7 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/current_packages.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/detect_print_and_cat.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/detect_unmatched_nocov_marker.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-cfs_find_matching_paren.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-cfs_process_text_once.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-cfs_transform_text.html</loc></url>
@@ -75,6 +74,7 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_bugreports.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_clangd.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_hexsticker.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_jarl.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_multilanguage_readme.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_r_v4.1.0.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_url.html</loc></url>
@@ -85,6 +85,11 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/vendor_declare_source_license.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/vendor_desc_authors.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/vendor_desc_license.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/vendor_file_kind.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/vendor_header_lines.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/vendor_section_lines.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/vendor_source_path.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/vendor_split_files.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/vendor_update_desc.html</loc></url>
 </urlset>
 
