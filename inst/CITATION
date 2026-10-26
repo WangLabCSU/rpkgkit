@@ -1,0 +1,16 @@
+citHeader("To cite rpkgkit in publications use:")
+
+bibentry(
+  bibtype = "Manual",
+  title = "rpkgkit: Create and Maintain R Packages",
+  author = c(
+    person("Yuxi", "Yang", email = "15364051195@163.com")
+  ),
+  year = "2026",
+  note = paste0("R package version ", meta$Version),
+  url = "https://wanglabcsu.github.io/rpkgkit/"
+)
+
+citFooter(
+  "Corresponding repository: https://github.com/WangLabCSU/rpkgkit"
+)

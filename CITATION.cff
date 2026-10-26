@@ -1,0 +1,29 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: rpkgkit
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Yuxi
+    family-names: Yang
+    email: 15364051195@163.com
+    affiliation: >-
+      Department of Biomedical Informatics, School of Life
+      Sciences, Central South University, Changsha, China
+    orcid: 'https://orcid.org/0009-0006-1329-1224'
+repository-code: 'https://github.com/WangLabCSU/rpkgkit'
+url: 'https://wanglabcsu.github.io/rpkgkit/'
+abstract: >-
+  rpkgkit provides utilities for creating and maintaining R
+  packages. The functions support common development tasks
+  such as managing standalone scripts, maintaining NEWS.md,
+  modernizing R source, configuring package infrastructure,
+  and maintaining README files.
+keywords:
+  - r package development
+  - r programming
+  - r package automation
