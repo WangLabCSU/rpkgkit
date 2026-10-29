@@ -34,7 +34,7 @@ URL (a trailing \code{.git} suffix is removed).
 }
 }
 \examples{
-\donttest{
+\dontrun{
 tmpdir <- tempdir()
 usethis::create_package(path = tmpdir)
 use_url(

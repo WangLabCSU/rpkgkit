@@ -26,7 +26,7 @@ This sets a minimum R version requirement for your package. Then you can use
 }
 }
 \examples{
-\donttest{
+\dontrun{
 tmpdir <- tempdir()
 usethis::create_package(path = tmpdir)
 use_r_v4.1.0(path = tmpdir)

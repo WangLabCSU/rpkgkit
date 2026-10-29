@@ -1,3 +1,25 @@
+# rpkgkit 0.1.22 (2026-10-28)
+
+## NEW FEATURES
+
+* Added `use_workflow_rust_compatible_check()` to install a
+  `.github/workflows/R-CMD-check.yaml` that can build packages shipping Rust
+  code. It copies the bundled `R-CMD-Check.yaml` template to the target
+  package, creating `.github/workflows/` when needed. Unlike the workflow from
+  `usethis::use_github_action("check-standard")`, which only sets up R and
+  leaves the runner's default toolchain in place, the template installs Rust
+  through `dtolnay/rust-toolchain` and, on Windows, additionally the
+  `x86_64-pc-windows-gnu` target: the Windows runner defaults to an MSVC
+  toolchain while R and Rtools are GNU based, so the static library produced by
+  `cargo` cannot be linked and the build noise makes `R CMD check` report a
+  WARNING. The job matrix covers Windows, macOS, Ubuntu release and Ubuntu
+  devel with `fail-fast: false`, and sets `R_REMOTES_NO_ERRORS_FROM_WARNINGS` so
+  that download noise from `remotes`/`pak` does not surface as a check failure.
+  The function aborts when the path is not a package root, when the template is
+  missing, or when the workflow file already exists and `overwrite = FALSE`, and
+  it returns the created path invisibly. The template follows the official
+  `extendr` CI.
+
 # rpkgkit 0.1.21 (2026-10-19)
 
 ## NEW FEATURES

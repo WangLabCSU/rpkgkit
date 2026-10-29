@@ -78,6 +78,7 @@ These share an Rd page with their single-file counterpart (`@rdname`/`@describeI
 | `use_vendor(pkg, ..., branch = "main", path = NULL)` | `43_use_vendor.R` | Vendors upstream source into `inst/vendor/`, writes provenance and license, records vendor version and imports. |
 | `use_workflow_version_update(path = NULL, overwrite = FALSE, color = "blue", ...)` | `42_use_workflow_version_update.R` | Generates the version bump GitHub Actions workflow. |
 | `use_workflow_test_branch(path = NULL, overwrite = FALSE)` | `42B_use_workflow_test_branch.R` | Generates the `main` → `test` sync workflow. |
+| `use_workflow_rust_compatible_check(path = NULL, overwrite = FALSE)` | `42C_use_workflow_rust_compatible_check.R` | Copies `inst/actions/rust_compatible_check/R-CMD-Check.yaml` to `.github/workflows/R-CMD-check.yaml`; installs Rust via `dtolnay/rust-toolchain` plus the `x86_64-pc-windows-gnu` target on Windows, because the MSVC default cannot link with Rtools and makes the check report a WARNING. Use instead of `usethis::use_github_action("check-standard")` for `extendr` packages. |
 | `check_pkgdown_reference(pkg = ".")` | `40_check_pkgdown_reference.R` | Verifies every export appears in `_pkgdown.yml`. Argument is `pkg`. |
 | `check_sysdeps(deps = NULL, manager = NULL, verbose = TRUE)` | `92_check_sysdeps.R` | Reports system dependencies and install commands (apt/dnf/brew). |
 | `get_positron_version(long = FALSE)` | `91_get_positron_version.R` | Returns the Positron version, `NA_character_` outside Positron. |

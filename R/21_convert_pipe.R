@@ -49,7 +49,7 @@
 #'   unchanged.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # --- Single file ---
 #' temp <- tempfile(fileext = ".R")
 #' writeLines("mtcars |> dplyr::filter(cyl > 4)", temp)

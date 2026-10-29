@@ -1,6 +1,6 @@
 ---
 name: rpkgkit
-description: Use rpkgkit functions to create and maintain R packages when the task involves qualifying package calls with pkg::, detecting CRAN-unsafe print()/cat(), lost glue braces or unmatched # nocov start / # nocov end markers, modernizing R syntax (base/magrittr pipes, integer L suffix, non-ASCII literals, \\( lambdas, knitr chunk headers), editing or displaying NEWS.md, creating r-lib standalone files, configuring DESCRIPTION fields, .Rbuildignore/.clangd/zzz.R, vendoring upstream code, or generating multilingual README translations and badges.
+description: Use rpkgkit functions to create and maintain R packages when the task involves qualifying package calls with pkg::, detecting CRAN-unsafe print()/cat(), lost glue braces or unmatched # nocov start / # nocov end markers, modernizing R syntax (base/magrittr pipes, integer L suffix, non-ASCII literals, \\( lambdas, knitr chunk headers), editing or displaying NEWS.md, creating r-lib standalone files, configuring DESCRIPTION fields, .Rbuildignore/.clangd/zzz.R, vendoring upstream code, generating GitHub Actions workflows (R-CMD-check including Rust/extendr builds, version bump, branch sync), or generating multilingual README translations and badges.
 ---
 
 # rpkgkit
@@ -109,8 +109,20 @@ rpkgkit::use_clangd()              # .clangd for Rcpp projects
 rpkgkit::add_global_rbuildignore() # curated .Rbuildignore patterns
 rpkgkit::add_global_gitgnore()
 rpkgkit::use_vendor("pkg")         # vendor upstream source into inst/vendor/
+rpkgkit::use_workflow_version_update()        # version bump workflow + local action
+rpkgkit::use_workflow_rust_compatible_check() # R-CMD-check that builds Rust code
+rpkgkit::use_workflow_test_branch()           # sync main -> test after check passes
 rpkgkit::check_pkgdown_reference() # every export present in _pkgdown.yml
 ```
+
+The three `use_workflow_*()` functions copy bundled templates from `inst/actions/`
+into `.github/`, create the directories they need, abort instead of overwriting
+unless `overwrite = TRUE`, and return the written path invisibly. Use
+`use_workflow_rust_compatible_check()` rather than
+`usethis::use_github_action("check-standard")` for `extendr`/`rextendr`
+packages: it installs a Rust toolchain and the `x86_64-pc-windows-gnu` target,
+without which the MSVC default cannot link against Rtools and the check ends in a
+WARNING.
 
 ## Workflow: README, badges, Rmd
 

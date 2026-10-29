@@ -193,6 +193,65 @@ add_global_rbuildignore(path = dir)
 add_global_gitgnore(pkg = dir)
 ```
 
+# GitHub Actions workflows
+
+Each `use_workflow_*()` function copies a workflow template bundled in
+`inst/actions/` into the `.github/` directory of the target package. All of them
+create the directories they need, abort instead of overwriting unless
+`overwrite = TRUE`, and return the written path invisibly.
+
+## Bump the version from commit messages
+
+`use_workflow_version_update()` installs `version_update.yml` together with the
+`version-bumper` composite action. The version is bumped from the commit message
+(`major`/`breaking`, `feat`/`minor`, `patch`/`fix`), or explicitly through
+`workflow_dispatch`. A bump is skipped when the new version would exceed the
+highest version documented in `NEWS.md`, and the `version` field of
+`src/rust/Cargo.toml` is kept in sync when the package ships Rust code.
+
+```{r}
+#| label = "use_workflow_version_update"
+use_workflow_version_update(path = dir)
+```
+
+## Run `R CMD check` on packages with Rust code
+
+`use_workflow_rust_compatible_check()` installs a `R-CMD-check.yaml` that can
+download, compile and link Rust crates, which is what packages built on
+`extendr`/`rextendr` need. It replaces
+`usethis::use_github_action("check-standard")` for such packages.
+
+```{r}
+#| label = "use_workflow_rust_compatible_check"
+use_workflow_rust_compatible_check(path = dir)
+```
+
+The difference lies in the toolchain. The `usethis` workflow only sets up R and
+leaves the runner default in place; on Windows that default is an MSVC
+toolchain, while R and Rtools are GNU based, so the static library produced by
+`cargo` cannot be linked and the resulting build noise makes `R CMD check`
+report a WARNING. The template used here follows the official `extendr` CI:
+
+* `dtolnay/rust-toolchain` installs the requested toolchain and, on Windows,
+  additionally the `x86_64-pc-windows-gnu` target that Rtools can link.
+* The matrix covers Windows, macOS, Ubuntu release and Ubuntu devel with
+  `fail-fast: false`, so one broken platform does not hide the others.
+* `R_REMOTES_NO_ERRORS_FROM_WARNINGS` keeps download noise from `remotes` and
+  `pak` from surfacing as a check failure.
+
+## Sync `main` to a `test` branch
+
+`use_workflow_test_branch()` adds a workflow that runs after `R-CMD-check.yaml`
+succeeds on `main`/`master` and force-pushes the checked commit to `test`. The
+sync is skipped when `test` holds commits that are not reachable from `main`, so
+unmerged work is never overwritten. Push experimental changes to `test` and each
+push to `main` resets it again.
+
+```{r}
+#| label = "use_workflow_test_branch"
+use_workflow_test_branch(path = dir)
+```
+
 # Check system dependencies
 
 Some packages need system development libraries (graphics and font libraries,
