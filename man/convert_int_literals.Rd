@@ -76,7 +76,7 @@ and it is \strong{not}:
 }
 }
 \examples{
-\donttest{
+\dontrun{
 # --- Single file ---
 temp <- tempfile(fileext = ".R")
 writeLines("tmp <- seq_len(10)", temp)

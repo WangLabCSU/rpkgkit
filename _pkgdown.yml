@@ -87,6 +87,7 @@ reference:
       - use_r_v4.1.0
       - use_url
       - use_vendor
+      - use_workflow_rust_compatible_check
       - use_workflow_test_branch
       - use_workflow_version_update
       - use_zzz

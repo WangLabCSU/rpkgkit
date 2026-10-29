@@ -23,7 +23,7 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' tmpdir <- tempdir()
 #' usethis::create_package(path = tmpdir)
 #' use_url(

@@ -30,7 +30,7 @@ the GitHub issues page URL is derived from the configured \code{git} remote
 }
 }
 \examples{
-\donttest{
+\dontrun{
 tmpdir <- tempdir()
 usethis::create_package(path = tmpdir)
 use_bugreports(

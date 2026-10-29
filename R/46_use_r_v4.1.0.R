@@ -17,7 +17,7 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' tmpdir <- tempdir()
 #' usethis::create_package(path = tmpdir)
 #' use_r_v4.1.0(path = tmpdir)
