@@ -197,7 +197,9 @@ Create a local standalone file with a standard metadata header:
 
 ```{r}
 #| label = "create"
+library(rpkgkit)
 dir <- file.path(tempdir(), "R")
+dir.create(dir, recursive = TRUE)
 create_standalone("foo", path = dir, open = FALSE)
 ```
 
@@ -228,8 +230,7 @@ update_time_in_standalone(path = file.path(dir, "standalone-foo.R"))
 Add a dated changelog entry to one or more standalone files:
 
 ```{r}
-#| label = "add changelog",
-#| eval = FALSE
+#| label = "add changelog"
 add_changelog_in_standalone(
   path = file.path(dir, "standalone-foo.R"),
   "Added foo function"
