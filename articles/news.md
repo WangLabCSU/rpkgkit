@@ -7,13 +7,13 @@ Here we create a template for editing NEWS.md
 ``` r
 
 library(rpkgkit)
-#> ✔ rpkgkit v0.1.21 loaded [1 ms]
+#> ✔ rpkgkit v0.1.22 loaded [1 ms]
 tmpdir <- tempdir()
 usethis::create_package(tmpdir, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmpgLJlWF".
+#> ✔ Setting active project to "/tmp/Rtmpl1Q0mL".
 #> ✔ Creating R/.
 #> ✔ Writing DESCRIPTION.
-#> Package: RtmpgLJlWF
+#> Package: Rtmpl1Q0mL
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):
@@ -49,14 +49,14 @@ news_md_add_entry(
   category = "NEW FEATURES",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/RtmpgLJlWF/NEWS.md
+#> ✔ Added 1 entry to /tmp/Rtmpl1Q0mL/NEWS.md
 #> → Version: 0.0.0.9000, Category: NEW FEATURES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # RtmpgLJlWF 0.0.0.9000 (2026-10-31)
+#> # Rtmpl1Q0mL 0.0.0.9000 (2026-10-31)
 #> 
 #> ## NEW FEATURES
 #> 
@@ -78,14 +78,14 @@ news_md_add_entry(
   contributor = "Jack",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/RtmpgLJlWF/NEWS.md
+#> ✔ Added 1 entry to /tmp/Rtmpl1Q0mL/NEWS.md
 #> → Version: 0.0.0.9000, Category: BUG FIXES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # RtmpgLJlWF 0.0.0.9000 (2026-10-31)
+#> # Rtmpl1Q0mL 0.0.0.9000 (2026-10-31)
 #> 
 #> ## BUG FIXES
 #> 

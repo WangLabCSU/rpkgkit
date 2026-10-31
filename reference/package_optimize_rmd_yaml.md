@@ -43,8 +43,8 @@ package_optimize_rmd_yaml(
 
 - date:
 
-  "auto" -\> 2026-10-30; "desc" -\> DESCRIPTION Date field; "none" -\>
-  do not add a date.
+  "auto" -\> [`Sys.Date()`](https://rdrr.io/r/base/Sys.time.html);
+  "desc" -\> DESCRIPTION Date field; "none" -\> do not add a date.
 
 - extra:
 

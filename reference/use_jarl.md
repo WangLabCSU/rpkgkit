@@ -60,7 +60,7 @@ Invisibly returns the path to the created `jarl.toml` file.
 ``` r
 tmp <- tempdir()
 use_jarl(path = tmp, overwrite = TRUE)
-#> ✔ Created /tmp/RtmplPre7l/jarl.toml.
+#> ✔ Created /tmp/Rtmp0sdzOO/jarl.toml.
 #> • Read jarl's editor support
 #>   (<https://jarl.etiennebacher.com/reference/config-file>) to learn how to
 #>   invoke jarl in your preferred editor.

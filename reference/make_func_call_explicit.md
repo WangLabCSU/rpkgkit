@@ -79,7 +79,7 @@ make_func_call_explicit(
   ignore_functions = c("library", "require")
 )
 #> ℹ Retrieving function calls from dplyr
-#> ✔ Successfully made function call explicit in /tmp/RtmplPre7l/file1ad21ae8025a.R
+#> ✔ Successfully made function call explicit in /tmp/Rtmp0sdzOO/file19c32df619e2.R
 readLines(file) |> message()
 #> dplyr::starwars |> dplyr::mutate(name, bmi = mass / ((height / 100)^2)) |> dplyr::select(name:mass, bmi)
 # }

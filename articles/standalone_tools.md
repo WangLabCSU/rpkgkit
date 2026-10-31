@@ -3,10 +3,31 @@
 ``` r
 
 library(rpkgkit)
+#> ✔ rpkgkit v0.1.22 loaded [1 ms]
 dir <- file.path(tempdir(), "example")
 usethis::create_package(dir, open = FALSE)
+#> ✔ Creating /tmp/RtmpCTsYN5/example/.
+#> ✔ Setting active project to "/tmp/RtmpCTsYN5/example".
+#> ✔ Creating R/.
+#> ✔ Writing DESCRIPTION.
+#> Package: example
+#> Title: What the Package Does (One Line, Title Case)
+#> Version: 0.0.0.9000
+#> Authors@R (parsed):
+#>     * First Last <first.last@example.com> [aut, cre]
+#> Description: What the package does (one paragraph).
+#> License: `use_mit_license()`, `use_gpl3_license()` or friends to
+#>     pick a license
+#> Config/roxygen2/version: 8.1.1
+#> Encoding: UTF-8
+#> Roxygen: list(markdown = TRUE)
+#> ✔ Writing NAMESPACE.
+#> ✔ Setting active project to "<no active project>".
 usethis::local_project(dir)
+#> ✔ Setting active project to "/tmp/RtmpCTsYN5/example".
 usethis::use_readme_md(open = FALSE)
+#> ✔ Writing README.md.
+#> ☐ Update README.md to include installation instructions.
 ```
 
 ## Import standalone helpers
@@ -135,7 +156,7 @@ list:
 
 ``` r
 
-list2env(validate_add(), envir = environment())
+try(list2env(validate_add(), envir = environment()))
 ```
 
 Only names that already existed in the caller’s frame are returned, so a
@@ -169,17 +190,28 @@ try(inquire_standalone("r-lib/rlang")) |> head()
 
 try(browse_standalone()) |> head()
 #> ℹ Searching GitHub for standalone-*.R files
-#> Error in gh::gh("/search/code", q = "filename:standalone- language:R -filename:import-",  : 
-#>   GitHub API error (429): try again in 1.65151611s
-#> ℹ Read more at <https://docs.github.com/rest/search/search#search-code>
-#> [1] "Error in gh::gh(\"/search/code\", q = \"filename:standalone- language:R -filename:import-\",  : \n  \033[1m\033[22mGitHub API error (429): try again in 1.65151611s\n\033[36mℹ\033[39m Read more at \033[3m\033[34m<https://docs.github.com/rest/search/search#search-code>\033[39m\033[23m\n"
+#> ■■■■■■■■■■■■■■■■                  50% | 100/200 items, page 1/2 | ETA  0s
+#> ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■  100% | 200/200 items, page 2/2 | ETA  0s
+#> # A tibble: 6 × 9
+#>   repo        name  path  sha   url   html_url git_url repo_url repo_description
+#>   <chr>       <chr> <chr> <chr> <chr> <chr>    <chr>   <chr>    <chr>           
+#> 1 tidymodels… stan… R/st… 3f38… http… https:/… https:… https:/… A tidy unified …
+#> 2 r-lib/rlang stan… R/st… 14c6… http… https:/… https:… https:/… Low-level API f…
+#> 3 r-lib/rlang stan… R/st… a789… http… https:/… https:… https:/… Low-level API f…
+#> 4 r-lib/rlang stan… R/st… 4da3… http… https:/… https:… https:/… Low-level API f…
+#> 5 r-lib/rlang stan… R/st… 03ee… http… https:/… https:… https:/… Low-level API f…
+#> 6 r-lib/rlang stan… R/st… 0c1d… http… https:/… https:… https:/… Low-level API f…
 ```
 
 Create a local standalone file with a standard metadata header:
 
 ``` r
 
-create_standalone("foo", open = FALSE)
+create_standalone("foo", path = file.path(dir, "R"), open = FALSE)
+#> Warning in system2("git", c("-C", dirname(path), "remote", "get-url",
+#> "origin"), : running command ''git' -C /tmp/RtmpCTsYN5/example remote get-url
+#> origin' had status 128
+#> ✔ Created standalone file: /tmp/RtmpCTsYN5/example/R/standalone-foo.R
 ```
 
 ### Validate the standalone file layout
@@ -194,7 +226,17 @@ and that a `# nocov start` marker precedes all functions.
 
 ``` r
 
-check_standalone("R/standalone-foo.R")
+check_standalone(path = file.path(dir, "R/standalone-foo.R"))
+#> ── standalone check results ──────────────────────────────── standalone-foo.R ──
+#> ❯ The header is missing the required slot `repo`. ... ERROR
+#> ❯ The header slot `imports` is empty; remove it if there are no dependencies.
+#> ... NOTE
+#> ❯ The header has non-standard slots: `dependency`. ... NOTE
+#> ❯ No top-level function definitions found. ... NOTE
+#> ✔ nocoverage start marker
+#> 
+#> Duration: 0.01s
+#> 1 error ✖ | 0 warning ✔ | 3 notes ✖
 ```
 
 Findings are printed in the style of
@@ -207,12 +249,16 @@ After editing standalone files, refresh their `last-updated` field:
 
 ``` r
 
-update_time_in_standalone(path = "./R/standalone-foo.R")
+update_time_in_standalone(path = file.path(dir, "R/standalone-foo.R"))
+#> ✔ Updated last-updated to "2026-10-31" in 1 file.
 ```
 
 Add a dated changelog entry to one or more standalone files:
 
 ``` r
 
-add_changelog_in_standalone("R/standalone-foo.R", "Added foo function")
+add_changelog_in_standalone(
+  path = file.path(dir, "R/standalone-foo.R"),
+  "Added foo function"
+)
 ```

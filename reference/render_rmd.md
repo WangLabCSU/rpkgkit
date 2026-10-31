@@ -37,11 +37,11 @@ writeLines(c("---", "title: Test", "---", "", "Hello, world!"), tmp)
 render_rmd(path = tmp)
 #> 
 #> 
-#> processing file: file1ad286465ed.Rmd
+#> processing file: file19c3ace8481.Rmd
 #> 1/1
-#> output file: file1ad286465ed.knit.md
-#> /opt/hostedtoolcache/pandoc/3.8.3/x64/pandoc +RTS -K512m -RTS file1ad286465ed.knit.md --to markdown_strict-yaml_metadata_block --from markdown+autolink_bare_uris+tex_math_single_backslash --output file1ad286465ed.md 
+#> output file: file19c3ace8481.knit.md
+#> /opt/hostedtoolcache/pandoc/3.8.3/x64/pandoc +RTS -K512m -RTS file19c3ace8481.knit.md --to markdown_strict-yaml_metadata_block --from markdown+autolink_bare_uris+tex_math_single_backslash --output file19c3ace8481.md 
 #> 
-#> Output created: file1ad286465ed.md
+#> Output created: file19c3ace8481.md
 # }
 ```

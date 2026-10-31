@@ -81,7 +81,7 @@ tmp <- tempdir()
 use_clangd(path = tmp)
 #> Warning: Package RcppEigen is not installed; skipping its include path.
 #> Warning: Package RcppArmadillo is not installed; skipping its include path.
-#> ✔ Created /tmp/RtmplPre7l/.clangd.
+#> ✔ Created /tmp/Rtmp0sdzOO/.clangd.
 
 # Custom include library names
 use_clangd(
@@ -89,8 +89,8 @@ use_clangd(
   include = c("Rcpp", "BH"),
   overwrite = TRUE
 )
-#> ! Overwriting /tmp/RtmplPre7l/.clangd.
+#> ! Overwriting /tmp/Rtmp0sdzOO/.clangd.
 #> Warning: Package BH is not installed; skipping its include path.
-#> ✔ Created /tmp/RtmplPre7l/.clangd.
+#> ✔ Created /tmp/Rtmp0sdzOO/.clangd.
 # }
 ```

@@ -78,17 +78,17 @@ digit run (for example `scale_x_log10()`) is left untouched.
 temp <- tempfile(fileext = ".R")
 writeLines("foo_bar <- function(){message('foo_bar')}", temp)
 rename_func(temp, style = "camelCase")
-#> ✔ Renamed 1 function to "camelCase" style in /tmp/RtmplPre7l/file1ad224fde33b.R
+#> ✔ Renamed 1 function to "camelCase" style in /tmp/Rtmp0sdzOO/file19c35413694d.R
 readLines(temp)
 #> [1] "fooBar <- function(){message('fooBar')}"
 rename_func(temp, style = "snake_case")
-#> ✔ Renamed 1 function to "snake_case" style in /tmp/RtmplPre7l/file1ad224fde33b.R
+#> ✔ Renamed 1 function to "snake_case" style in /tmp/Rtmp0sdzOO/file19c35413694d.R
 readLines(temp)
 #> [1] "foo_bar <- function(){message('foo_bar')}"
 
 writeLines("list2env <- function(x) x", temp)
 rename_func(temp, style = "snake_case")
-#> ✔ Renamed 1 function to "snake_case" style in /tmp/RtmplPre7l/file1ad224fde33b.R
+#> ✔ Renamed 1 function to "snake_case" style in /tmp/Rtmp0sdzOO/file19c35413694d.R
 readLines(temp)
 #> [1] "list_to_env <- function(x) x"
 # "list_to_env <- function(x) x"
