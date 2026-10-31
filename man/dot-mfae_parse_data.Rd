@@ -16,6 +16,7 @@ planning a single large file quadratic.
 }
 \details{
 Rows are reordered into source order first, because that order is what maps
-a call's child tokens onto its arguments.
+a call's child tokens onto its arguments. The reverse lookup (id to row) sits
+in \code{pd$row_of}, an integer vector indexed by node id.
 }
 \keyword{internal}

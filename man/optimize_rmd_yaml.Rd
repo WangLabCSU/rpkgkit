@@ -24,7 +24,7 @@ RStudio editor is used.}
 \item{readme_format}{Format used when a README has the default output:
 "gfm" (md_document + variant: gfm), "github_document" or "html".}
 
-\item{date}{"auto" -> 2026-10-28; "desc" -> DESCRIPTION Date field;
+\item{date}{"auto" -> 2026-10-30; "desc" -> DESCRIPTION Date field;
 "none" -> do not add a date.}
 
 \item{extra}{Named list of extra YAML fields added to the file. It is merged

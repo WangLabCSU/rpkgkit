@@ -52,6 +52,26 @@ Operators (\code{+}, \code{-}, \code{*}, \code{/}, etc.), subset operators
 package's \code{R/} directory, making function arguments explicit.
 
 }}
+\section{Pipes and placeholders}{
+
+The right-hand side of a pipe receives an extra argument from its
+left-hand side, so that argument is counted during positional matching:
+\code{x \%>\% str_remove("a")} becomes
+\code{x \%>\% str_remove(pattern = "a")}, because the piped-in data already
+fills the first formal (\code{string}).
+
+Placeholders are honoured. When a native pipe (\code{|>}) uses the
+\code{_} placeholder, the piped value fills the formal named next to
+\code{_}, so no leading argument is pre-claimed and the remaining
+positional arguments are still matched:
+\code{x |> lm(y ~ z, data = _)} becomes
+\code{x |> lm(formula = y ~ z, data = _)}. When a magrittr pipe
+(\code{\%>\%}, \code{\%<>\%}, \code{\%T>\%}) contains \code{.} anywhere in
+its right-hand side, the piped value is substituted at \code{.} instead of
+being inserted as the first argument, and again no formal is pre-claimed:
+\code{x \%>\% f(., y)} becomes \code{x \%>\% f(a = ., b = y)}.
+}
+
 \section{Single-file operation}{
 
 Operates on one R file. When \code{path} is \code{NULL} and RStudio is
