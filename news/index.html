@@ -39,6 +39,18 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.22" id="rpkgkit-0122-2026-10-28">rpkgkit 0.1.22 (2026-10-28)<a class="anchor" aria-label="anchor" href="#rpkgkit-0122-2026-10-28"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-1-22">NEW FEATURES<a class="anchor" aria-label="anchor" href="#new-features-0-1-22"></a></h3>
+<ul><li>Added <code><a href="../reference/use_workflow_rust_compatible_check.html">use_workflow_rust_compatible_check()</a></code> to install a <code>.github/workflows/R-CMD-check.yaml</code> that can build packages shipping Rust code. It copies the bundled <code>R-CMD-Check.yaml</code> template to the target package, creating <code>.github/workflows/</code> when needed. Unlike the workflow from <code>usethis::use_github_action("check-standard")</code>, which only sets up R and leaves the runner’s default toolchain in place, the template installs Rust through <code>dtolnay/rust-toolchain</code> and, on Windows, additionally the <code>x86_64-pc-windows-gnu</code> target: the Windows runner defaults to an MSVC toolchain while R and Rtools are GNU based, so the static library produced by <code>cargo</code> cannot be linked and the build noise makes <code>R CMD check</code> report a WARNING. The job matrix covers Windows, macOS, Ubuntu release and Ubuntu devel with <code>fail-fast: false</code>, and sets <code>R_REMOTES_NO_ERRORS_FROM_WARNINGS</code> so that download noise from <code>remotes</code>/<code>pak</code> does not surface as a check failure. The function aborts when the path is not a package root, when the template is missing, or when the workflow file already exists and <code>overwrite = FALSE</code>, and it returns the created path invisibly. The template follows the official <code>extendr</code> CI.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-1-22">BUG FIXES<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-22"></a></h3>
+<ul><li>
+<code><a href="../reference/make_func_arg_explicit.html">make_func_arg_explicit()</a></code> now accounts for the argument a pipe passes into its right-hand side call. The piped-in value already fills the function’s first formal, so the arguments written in the call are matched one formal later: <code>x %&gt;% stringr::str_remove("Merc")</code> becomes <code>x %&gt;% stringr::str_remove(pattern = "Merc")</code>, where it previously claimed <code>string</code> and pushed <code>Merc</code> onto <code>pattern</code>. Placeholders are honoured too: a <code>.</code> anywhere in a magrittr right-hand side (<code>%&gt;%</code>, <code>%&lt;&gt;%</code>, <code>%T&gt;%</code>) cancels the leading injection, because the piped value is substituted at <code>.</code> instead of being inserted first, and a <code>_</code> in a native pipe (<code>|&gt;</code>) makes the value fill the formal it is attached to, so <code>x |&gt; lm(y ~ z, data = _)</code> becomes <code>x |&gt; lm(formula = y ~ z, data = _)</code>. Symbols that merely start with a dot, such as the <code>.data</code> pronoun and <code>..1</code>, are not mistaken for the placeholder. A comment between a pipe and its right-hand side no longer hides the call from the transformation.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.21" id="rpkgkit-0121-2026-10-19">rpkgkit 0.1.21 (2026-10-19)<a class="anchor" aria-label="anchor" href="#rpkgkit-0121-2026-10-19"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-1-21">NEW FEATURES<a class="anchor" aria-label="anchor" href="#new-features-0-1-21"></a></h3>

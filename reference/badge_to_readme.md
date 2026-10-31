@@ -36,11 +36,9 @@ Invisibly returns the path to the modified README file.
 
 ``` r
 if (FALSE) { # \dontrun{
-try({
-  tmpdir <- tempdir()
-  usethis::create_package(path = tmpdir, open = FALSE)
-  usethis::proj_set(path = tmpdir)
-  badger::badge_last_commit(alt = "last-commit") |> badge_to_readme(path = tmpdir)
-})
+tmpdir <- tempdir()
+usethis::create_package(path = tmpdir, open = FALSE)
+usethis::proj_set(path = tmpdir)
+badger::badge_last_commit(alt = "last-commit") |> badge_to_readme(path = tmpdir)
 } # }
 ```

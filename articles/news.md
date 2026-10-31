@@ -4,23 +4,33 @@
 
 Here we create a template for editing NEWS.md
 
-    #> ✔ rpkgkit v0.1.21 loaded [1 ms]
-    #> ✔ Setting active project to "/tmp/RtmpJWwjjo".
-    #> ✔ Creating R/.
-    #> ✔ Writing DESCRIPTION.
-    #> Package: RtmpJWwjjo
-    #> Title: What the Package Does (One Line, Title Case)
-    #> Version: 0.0.0.9000
-    #> Authors@R (parsed):
-    #>     * First Last <first.last@example.com> [aut, cre]
-    #> Description: What the package does (one paragraph).
-    #> License: `use_mit_license()`, `use_gpl3_license()` or friends to
-    #>     pick a license
-    #> Config/roxygen2/version: 8.1.1
-    #> Encoding: UTF-8
-    #> Roxygen: list(markdown = TRUE)
-    #> ✔ Writing NAMESPACE.
-    #> ✔ Setting active project to "<no active project>".
+``` r
+
+library(rpkgkit)
+#> ✔ rpkgkit v0.1.21 loaded [1 ms]
+tmpdir <- tempdir()
+usethis::create_package(tmpdir, open = FALSE)
+#> ✔ Setting active project to "/tmp/RtmpgLJlWF".
+#> ✔ Creating R/.
+#> ✔ Writing DESCRIPTION.
+#> Package: RtmpgLJlWF
+#> Title: What the Package Does (One Line, Title Case)
+#> Version: 0.0.0.9000
+#> Authors@R (parsed):
+#>     * First Last <first.last@example.com> [aut, cre]
+#> Description: What the package does (one paragraph).
+#> License: `use_mit_license()`, `use_gpl3_license()` or friends to
+#>     pick a license
+#> Config/roxygen2/version: 8.1.1
+#> Encoding: UTF-8
+#> Roxygen: list(markdown = TRUE)
+#> ✔ Writing NAMESPACE.
+#> ✔ Setting active project to "<no active project>".
+writeLines(
+  c("# pkgname v0.0.0.9000", "", "* This is a template for editing NEWS.md"),
+  file.path(tmpdir, "NEWS.md")
+)
+```
 
 ``` r
 
@@ -39,14 +49,14 @@ news_md_add_entry(
   category = "NEW FEATURES",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/RtmpJWwjjo/NEWS.md
+#> ✔ Added 1 entry to /tmp/RtmpgLJlWF/NEWS.md
 #> → Version: 0.0.0.9000, Category: NEW FEATURES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # RtmpJWwjjo 0.0.0.9000 (2026-10-26)
+#> # RtmpgLJlWF 0.0.0.9000 (2026-10-31)
 #> 
 #> ## NEW FEATURES
 #> 
@@ -68,14 +78,14 @@ news_md_add_entry(
   contributor = "Jack",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/RtmpJWwjjo/NEWS.md
+#> ✔ Added 1 entry to /tmp/RtmpgLJlWF/NEWS.md
 #> → Version: 0.0.0.9000, Category: BUG FIXES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # RtmpJWwjjo 0.0.0.9000 (2026-10-26)
+#> # RtmpgLJlWF 0.0.0.9000 (2026-10-31)
 #> 
 #> ## BUG FIXES
 #> 

@@ -96,36 +96,19 @@ Rewriting is a literal match, so only a complete operator is converted:
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # \dontrun{
 # --- Single file ---
 temp <- tempfile(fileext = ".R")
 writeLines("mtcars |> dplyr::filter(cyl > 4)", temp)
 convert_pipe(temp, direction = "to_magrittr")
-#> ✔ Converted pipes in /tmp/RtmpQzcj50/file1b856e793103.R ("to_magrittr")
 readLines(temp)
-#> [1] "mtcars %>% dplyr::filter(cyl > 4)"
 # "mtcars %>% dplyr::filter(cyl > 4)"
 
 # --- Entire package ---
 tmp_pkg <- tempdir()
 usethis::create_package(tmp_pkg, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmpQzcj50".
-#> Package: RtmpQzcj50
-#> Title: What the Package Does (One Line, Title Case)
-#> Version: 0.0.0.9000
-#> Authors@R (parsed):
-#>     * First Last <first.last@example.com> [aut, cre]
-#> Description: What the package does (one paragraph).
-#> License: `use_mit_license()`, `use_gpl3_license()` or friends to
-#>     pick a license
-#> Config/roxygen2/version: 8.1.1
-#> Encoding: UTF-8
-#> Roxygen: list(markdown = TRUE)
-#> ✔ Setting active project to "<no active project>".
 writeLines("mtcars %>% dplyr::filter(cyl > 4)", file.path(tmp_pkg, "R/foo.R"))
 package_convert_pipe(tmp_pkg, direction = "to_base")
-#> ✔ Processed 1 file, updated 1
 readLines(file.path(tmp_pkg, "R/foo.R"))
-#> [1] "mtcars |> dplyr::filter(cyl > 4)"
-# }
+} # }
 ```

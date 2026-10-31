@@ -67,7 +67,7 @@
             <h3 data-toc-skip class="subtitle">rpkgkit 0.1.21</h3>
                         <h4 data-toc-skip class="author">Yuxi Yang</h4>
             
-            <h4 data-toc-skip class="date">2026-10-26</h4>
+            <h4 data-toc-skip class="date">2026-10-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/WangLabCSU/rpkgkit/blob/main/vignettes/standalone_tools.Rmd" class="external-link"><code>vignettes/standalone_tools.Rmd</code></a></small>
       <div class="d-none name"><code>standalone_tools.Rmd</code></div>
@@ -76,7 +76,7 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/WangLabCSU/rpkgkit" class="external-link">rpkgkit</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">rpkgkit</span><span class="op">)</span></span>
 <span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"example"</span><span class="op">)</span></span>
 <span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/create_package.html" class="external-link">create_package</a></span><span class="op">(</span><span class="va">dir</span>, open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/proj_utils.html" class="external-link">local_project</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span>
@@ -218,9 +218,9 @@ supported repositories.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/browse_standalone.html">browse_standalone</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Searching GitHub for standalone-*.R files</span></span>
 <span><span class="co">#&gt; Error in gh::gh("/search/code", q = "filename:standalone- language:R -filename:import-",  : </span></span>
-<span><span class="co">#&gt;   GitHub API error (429): try again in 10.944232514s</span></span>
+<span><span class="co">#&gt;   GitHub API error (429): try again in 1.65151611s</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Read more at <span style="color: #0000BB; font-style: italic;">&lt;https://docs.github.com/rest/search/search#search-code&gt;</span></span></span>
-<span><span class="co">#&gt; [1] "Error in gh::gh(\"/search/code\", q = \"filename:standalone- language:R -filename:import-\",  : \n  \033[1m\033[22mGitHub API error (429): try again in 10.944232514s\n\033[36mℹ\033[39m Read more at \033[3m\033[34m&lt;https://docs.github.com/rest/search/search#search-code&gt;\033[39m\033[23m\n"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "Error in gh::gh(\"/search/code\", q = \"filename:standalone- language:R -filename:import-\",  : \n  \033[1m\033[22mGitHub API error (429): try again in 1.65151611s\n\033[36mℹ\033[39m Read more at \033[3m\033[34m&lt;https://docs.github.com/rest/search/search#search-code&gt;\033[39m\033[23m\n"</span></span></code></pre></div>
 <p>Create a local standalone file with a standard metadata header:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/create_standalone.html">create_standalone</a></span><span class="op">(</span><span class="st">"foo"</span>, open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>

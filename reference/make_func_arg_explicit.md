@@ -54,6 +54,23 @@ code back to the file.
 - `package_func_arg_explicit()`: Processes all `.R` files in a package's
   `R/` directory, making function arguments explicit.
 
+## Pipes and placeholders
+
+The right-hand side of a pipe receives an extra argument from its
+left-hand side, so that argument is counted during positional matching:
+`x %>% str_remove("a")` becomes `x %>% str_remove(pattern = "a")`,
+because the piped-in data already fills the first formal (`string`).
+
+Placeholders are honoured. When a native pipe (`|>`) uses the `_`
+placeholder, the piped value fills the formal named next to `_`, so no
+leading argument is pre-claimed and the remaining positional arguments
+are still matched: `x |> lm(y ~ z, data = _)` becomes
+`x |> lm(formula = y ~ z, data = _)`. When a magrittr pipe (`%>%`,
+`%<>%`, `%T>%`) contains `.` anywhere in its right-hand side, the piped
+value is substituted at `.` instead of being inserted as the first
+argument, and again no formal is pre-claimed: `x %>% f(., y)` becomes
+`x %>% f(a = ., b = y)`.
+
 ## Single-file operation
 
 Operates on one R file. When `path` is `NULL` and RStudio is available,
@@ -66,7 +83,7 @@ the currently active document is used automatically.
 tf <- tempfile(fileext = ".R")
 writeLines("vapply(1:9, function(x) x*2, numeric(1))", tf)
 make_func_arg_explicit(tf)
-#> ✔ Made function arguments explicit in /tmp/RtmpQzcj50/file1b856c398b19.R
+#> ✔ Made function arguments explicit in /tmp/RtmplPre7l/file1ad236eb9324.R
 cat(readLines(tf), sep = "\n")
 #> vapply(X = 1:9, FUN = function(x) x*2, FUN.VALUE = numeric(length = 1))
 # vapply(X = 1:9, FUN = function(x) x*2, FUN.VALUE = numeric(length = 1))

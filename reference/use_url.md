@@ -44,29 +44,13 @@ Invisibly returns the URLs that were written.
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # \dontrun{
 tmpdir <- tempdir()
 usethis::create_package(path = tmpdir)
-#> ✔ Setting active project to "/tmp/RtmpQzcj50".
-#> ℹ Leaving DESCRIPTION unchanged.
-#> Package: RtmpQzcj50
-#> Title: What the Package Does (One Line, Title Case)
-#> Version: 0.0.0.9000
-#> Authors@R (parsed):
-#>     * First Last <first.last@example.com> [aut, cre]
-#> Description: What the package does (one paragraph).
-#> License: `use_mit_license()`, `use_gpl3_license()` or friends to
-#>     pick a license
-#> Config/roxygen2/version: 8.1.1
-#> Encoding: UTF-8
-#> Roxygen: list(markdown = TRUE)
-#> ✔ Setting active project to "/tmp/RtmpQzcj50".
 use_url(
   url = "https://github.com/WangLabCSU/rpkgkit",
   pkgdown_url = "https://wanglabcsu.github.io/rpkgkit/",
   path = tmpdir
 )
-#> ✔ Setting URL field to <https://github.com/WangLabCSU/rpkgkit> and
-#>   <https://wanglabcsu.github.io/rpkgkit/>.
-# }
+} # }
 ```

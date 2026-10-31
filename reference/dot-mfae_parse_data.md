@@ -16,4 +16,5 @@ scans linearly, which turns planning a single large file quadratic.
 ## Details
 
 Rows are reordered into source order first, because that order is what
-maps a call's child tokens onto its arguments.
+maps a call's child tokens onto its arguments. The reverse lookup (id to
+row) sits in `pd$row_of`, an integer vector indexed by node id.

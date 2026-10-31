@@ -234,6 +234,9 @@ The following functions help you to create and maintain an R package.
 - [`use_vendor()`](https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.md)
   : Use a Vendor Package
 
+- [`use_workflow_rust_compatible_check()`](https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_rust_compatible_check.md)
+  : Create a Rust-compatible R-CMD-check Workflow
+
 - [`use_workflow_test_branch()`](https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_test_branch.md)
   : Create a GitHub Actions Workflow to Sync Main to Test Branch
 

@@ -47,11 +47,17 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_callee.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_char_index.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_children.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_has_placeholder.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_is_dots.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_match_args.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_operators.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_parse_data.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_pipe_placeholder.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_pipe_rhs.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_pipe_shift.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_pipes.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_plan_edits.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-mfae_row_of.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/dot-vendor_extract_imports.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/encode_nonascii.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/flir_fix.html</loc></url>
@@ -79,6 +85,7 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_r_v4.1.0.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_url.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_rust_compatible_check.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_test_branch.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_version_update.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.html</loc></url>

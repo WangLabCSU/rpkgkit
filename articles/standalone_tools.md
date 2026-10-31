@@ -170,9 +170,9 @@ try(inquire_standalone("r-lib/rlang")) |> head()
 try(browse_standalone()) |> head()
 #> ℹ Searching GitHub for standalone-*.R files
 #> Error in gh::gh("/search/code", q = "filename:standalone- language:R -filename:import-",  : 
-#>   GitHub API error (429): try again in 10.944232514s
+#>   GitHub API error (429): try again in 1.65151611s
 #> ℹ Read more at <https://docs.github.com/rest/search/search#search-code>
-#> [1] "Error in gh::gh(\"/search/code\", q = \"filename:standalone- language:R -filename:import-\",  : \n  \033[1m\033[22mGitHub API error (429): try again in 10.944232514s\n\033[36mℹ\033[39m Read more at \033[3m\033[34m<https://docs.github.com/rest/search/search#search-code>\033[39m\033[23m\n"
+#> [1] "Error in gh::gh(\"/search/code\", q = \"filename:standalone- language:R -filename:import-\",  : \n  \033[1m\033[22mGitHub API error (429): try again in 1.65151611s\n\033[36mℹ\033[39m Read more at \033[3m\033[34m<https://docs.github.com/rest/search/search#search-code>\033[39m\033[23m\n"
 ```
 
 Create a local standalone file with a standard metadata header:

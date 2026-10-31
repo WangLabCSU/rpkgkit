@@ -95,39 +95,19 @@ and it is **not**:
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # \dontrun{
 # --- Single file ---
 temp <- tempfile(fileext = ".R")
 writeLines("tmp <- seq_len(10)", temp)
 convert_int_literals(temp)
-#> ✔ Added explicit integer suffixes in /tmp/RtmpQzcj50/file1b85506c6a97.R
 readLines(temp)
-#> [1] "tmp <- seq_len(10L)"
 # "tmp <- seq_len(10L)"
 
 # --- Entire package ---
 tmp_pkg <- tempdir()
 usethis::create_package(tmp_pkg, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmpQzcj50".
-#> ✔ Creating R/.
-#> ✔ Writing DESCRIPTION.
-#> Package: RtmpQzcj50
-#> Title: What the Package Does (One Line, Title Case)
-#> Version: 0.0.0.9000
-#> Authors@R (parsed):
-#>     * First Last <first.last@example.com> [aut, cre]
-#> Description: What the package does (one paragraph).
-#> License: `use_mit_license()`, `use_gpl3_license()` or friends to
-#>     pick a license
-#> Config/roxygen2/version: 8.1.1
-#> Encoding: UTF-8
-#> Roxygen: list(markdown = TRUE)
-#> ✔ Writing NAMESPACE.
-#> ✔ Setting active project to "<no active project>".
 writeLines("foo <- seq_len(42)", file.path(tmp_pkg, "R/foo.R"))
 package_convert_int_literals(tmp_pkg)
-#> ✔ Processed 1 file, updated 1
 readLines(file.path(tmp_pkg, "R/foo.R"))
-#> [1] "foo <- seq_len(42L)"
-# }
+} # }
 ```

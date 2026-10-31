@@ -123,6 +123,26 @@ transformed code back to the file.</p>
 package's <code>R/</code> directory, making function arguments explicit.</p></li>
 </ul></div>
     <div class="section level2">
+    <h2 id="pipes-and-placeholders">Pipes and placeholders<a class="anchor" aria-label="anchor" href="#pipes-and-placeholders"></a></h2>
+
+
+<p>The right-hand side of a pipe receives an extra argument from its
+left-hand side, so that argument is counted during positional matching:
+<code>x %&gt;% str_remove("a")</code> becomes
+<code>x %&gt;% str_remove(pattern = "a")</code>, because the piped-in data already
+fills the first formal (<code>string</code>).</p>
+<p>Placeholders are honoured. When a native pipe (<code>|&gt;</code>) uses the
+<code>_</code> placeholder, the piped value fills the formal named next to
+<code>_</code>, so no leading argument is pre-claimed and the remaining
+positional arguments are still matched:
+<code>x |&gt; lm(y ~ z, data = _)</code> becomes
+<code>x |&gt; lm(formula = y ~ z, data = _)</code>. When a magrittr pipe
+(<code>%&gt;%</code>, <code>%&lt;&gt;%</code>, <code>%T&gt;%</code>) contains <code>.</code> anywhere in
+its right-hand side, the piped value is substituted at <code>.</code> instead of
+being inserted as the first argument, and again no formal is pre-claimed:
+<code>x %&gt;% f(., y)</code> becomes <code>x %&gt;% f(a = ., b = y)</code>.</p>
+    </div>
+    <div class="section level2">
     <h2 id="single-file-operation">Single-file operation<a class="anchor" aria-label="anchor" href="#single-file-operation"></a></h2>
 
 
@@ -136,7 +156,7 @@ available, the currently active document is used automatically.</p>
 <span class="r-in"><span><span class="va">tf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".R"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="st">"vapply(1:9, function(x) x*2, numeric(1))"</span>, <span class="va">tf</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">make_func_arg_explicit</span><span class="op">(</span><span class="va">tf</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Made function arguments explicit in <span style="color: #0000BB;">/tmp/RtmpQzcj50/file1b856c398b19.R</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Made function arguments explicit in <span style="color: #0000BB;">/tmp/RtmplPre7l/file1ad236eb9324.R</span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">tf</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> vapply(X = 1:9, FUN = function(x) x*2, FUN.VALUE = numeric(length = 1))</span>
 <span class="r-in"><span><span class="co"># vapply(X = 1:9, FUN = function(x) x*2, FUN.VALUE = numeric(length = 1))</span></span></span>

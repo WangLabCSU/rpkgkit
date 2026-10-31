@@ -1,5 +1,49 @@
 # Changelog
 
+## rpkgkit 0.1.22 (2026-10-28)
+
+### NEW FEATURES
+
+- Added
+  [`use_workflow_rust_compatible_check()`](https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_rust_compatible_check.md)
+  to install a `.github/workflows/R-CMD-check.yaml` that can build
+  packages shipping Rust code. It copies the bundled `R-CMD-Check.yaml`
+  template to the target package, creating `.github/workflows/` when
+  needed. Unlike the workflow from
+  `usethis::use_github_action("check-standard")`, which only sets up R
+  and leaves the runner’s default toolchain in place, the template
+  installs Rust through `dtolnay/rust-toolchain` and, on Windows,
+  additionally the `x86_64-pc-windows-gnu` target: the Windows runner
+  defaults to an MSVC toolchain while R and Rtools are GNU based, so the
+  static library produced by `cargo` cannot be linked and the build
+  noise makes `R CMD check` report a WARNING. The job matrix covers
+  Windows, macOS, Ubuntu release and Ubuntu devel with
+  `fail-fast: false`, and sets `R_REMOTES_NO_ERRORS_FROM_WARNINGS` so
+  that download noise from `remotes`/`pak` does not surface as a check
+  failure. The function aborts when the path is not a package root, when
+  the template is missing, or when the workflow file already exists and
+  `overwrite = FALSE`, and it returns the created path invisibly. The
+  template follows the official `extendr` CI.
+
+### BUG FIXES
+
+- [`make_func_arg_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_arg_explicit.md)
+  now accounts for the argument a pipe passes into its right-hand side
+  call. The piped-in value already fills the function’s first formal, so
+  the arguments written in the call are matched one formal later:
+  `x %>% stringr::str_remove("Merc")` becomes
+  `x %>% stringr::str_remove(pattern = "Merc")`, where it previously
+  claimed `string` and pushed `Merc` onto `pattern`. Placeholders are
+  honoured too: a `.` anywhere in a magrittr right-hand side (`%>%`,
+  `%<>%`, `%T>%`) cancels the leading injection, because the piped value
+  is substituted at `.` instead of being inserted first, and a `_` in a
+  native pipe (`|>`) makes the value fill the formal it is attached to,
+  so `x |> lm(y ~ z, data = _)` becomes
+  `x |> lm(formula = y ~ z, data = _)`. Symbols that merely start with a
+  dot, such as the `.data` pronoun and `..1`, are not mistaken for the
+  placeholder. A comment between a pipe and its right-hand side no
+  longer hides the call from the transformation.
+
 ## rpkgkit 0.1.21 (2026-10-19)
 
 ### NEW FEATURES
