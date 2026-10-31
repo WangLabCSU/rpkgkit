@@ -133,7 +133,7 @@ create_standalone <- function(
     "\n# TODO\n",
     paste0("# nocov", " end")
   )
-
+  file.create(target_path)
   writeLines(head_lines, con = target_path)
 
   cli::cli_alert_success("Created standalone file: {.path {target_path}}")

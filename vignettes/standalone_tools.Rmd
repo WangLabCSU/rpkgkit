@@ -30,10 +30,12 @@ knitr::opts_chunk$set(
 ```
 
 ```{r}
-#| label = "setup"
+#| label = "setup",
+#| eval = FALSE
 library(rpkgkit)
-dir <- file.path(tempdir(), "example")
-usethis::create_package(dir, open = FALSE)
+dir <- tempdir()
+dir.create(dir)
+usethis::create_package(dir)
 usethis::local_project(dir)
 usethis::use_readme_md(open = FALSE)
 ```
@@ -195,7 +197,8 @@ Create a local standalone file with a standard metadata header:
 
 ```{r}
 #| label = "create"
-create_standalone("foo", path = file.path(dir, "R"), open = FALSE)
+dir <- file.path(tempdir(), "R")
+create_standalone("foo", path = dir, open = FALSE)
 ```
 
 ## Validate the standalone file layout
@@ -208,7 +211,7 @@ carries `@noRd`, and that a `# nocov start` marker precedes all functions.
 
 ```{r}
 #| label = "check_standalone"
-check_standalone(path = file.path(dir, "R/standalone-foo.R"))
+check_standalone(path = file.path(dir, "standalone-foo.R"))
 ```
 
 Findings are printed in the style of `devtools::check()`, and the counts are
@@ -219,7 +222,7 @@ After editing standalone files, refresh their `last-updated` field:
 
 ```{r}
 #| label = "update timestamp"
-update_time_in_standalone(path = file.path(dir, "R/standalone-foo.R"))
+update_time_in_standalone(path = file.path(dir, "standalone-foo.R"))
 ```
 
 Add a dated changelog entry to one or more standalone files:
@@ -228,7 +231,7 @@ Add a dated changelog entry to one or more standalone files:
 #| label = "add changelog",
 #| eval = FALSE
 add_changelog_in_standalone(
-  path = file.path(dir, "R/standalone-foo.R"),
+  path = file.path(dir, "standalone-foo.R"),
   "Added foo function"
 )
 ```
