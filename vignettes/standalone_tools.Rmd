@@ -30,21 +30,12 @@ knitr::opts_chunk$set(
 ```
 
 ```{r}
-#| label = "setup",
-#| eval = FALSE
+#| label = "setup"
 library(rpkgkit)
 dir <- file.path(tempdir(), "example")
 usethis::create_package(dir, open = FALSE)
 usethis::local_project(dir)
 usethis::use_readme_md(open = FALSE)
-```
-
-```{r}
-#| label = "setup_bg",
-#| include = FALSE,
-#| echo = FALSE,
-#| message = FALSE
-library(rpkgkit)
 ```
 
 # Import standalone helpers
@@ -120,7 +111,9 @@ color_cli2$cli_alert_success(
 
 The `ts_cli.R` standalone script creates timestamped `cli` functions.
 
-```r
+```{r}
+#| label = "ts_cli",
+#| eval = FALSE
 ts_cli <- create_ts_cli_env()
 ts_cli$cli_alert_info("Hello, world!")
 ```
@@ -172,8 +165,10 @@ add("sum", 3)
 Errors raised inside the block reach the caller unchanged, and an assignment
 to an existing argument is written back through the returned list:
 
-```r
-list2env(validate_add(), envir = environment())
+```{r}
+#| label = "validate_add",
+#| eval = FALSE
+try(list2env(validate_add(), envir = environment()))
 ```
 
 Only names that already existed in the caller's frame are returned, so a
@@ -199,9 +194,8 @@ try(browse_standalone()) |> head()
 Create a local standalone file with a standard metadata header:
 
 ```{r}
-#| label = "create",
-#| eval = FALSE
-create_standalone("foo", open = FALSE)
+#| label = "create"
+create_standalone("foo", path = file.path(dir, "R"), open = FALSE)
 ```
 
 ## Validate the standalone file layout
@@ -213,9 +207,8 @@ required `repo`, `file`, `last-updated` and `license` slots, the optional
 carries `@noRd`, and that a `# nocov start` marker precedes all functions.
 
 ```{r}
-#| label = "check_standalone",
-#| eval = FALSE
-check_standalone("R/standalone-foo.R")
+#| label = "check_standalone"
+check_standalone(path = file.path(dir, "R/standalone-foo.R"))
 ```
 
 Findings are printed in the style of `devtools::check()`, and the counts are
@@ -225,9 +218,8 @@ point skips the remaining ones, while warnings and notes never stop the run.
 After editing standalone files, refresh their `last-updated` field:
 
 ```{r}
-#| label = "update timestamp",
-#| eval = FALSE
-update_time_in_standalone(path = "./R/standalone-foo.R")
+#| label = "update timestamp"
+update_time_in_standalone(path = file.path(dir, "R/standalone-foo.R"))
 ```
 
 Add a dated changelog entry to one or more standalone files:
@@ -235,5 +227,8 @@ Add a dated changelog entry to one or more standalone files:
 ```{r}
 #| label = "add changelog",
 #| eval = FALSE
-add_changelog_in_standalone("R/standalone-foo.R", "Added foo function")
+add_changelog_in_standalone(
+  path = file.path(dir, "R/standalone-foo.R"),
+  "Added foo function"
+)
 ```

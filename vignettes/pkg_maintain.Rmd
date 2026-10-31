@@ -259,7 +259,8 @@ reports every hit and miss together with a ready-to-paste install command for
 the missing ones.
 
 ```{r}
-#| label = "check_sysdeps"
+#| label = "check_sysdeps",
+#| eval = FALSE
 check_sysdeps()
 ```
 
@@ -270,7 +271,8 @@ expects. Pass your own names in `deps`, and optionally set `manager` to check
 against a manager other than the detected one:
 
 ```{r}
-#| label = "check_sysdeps_deps"
+#| label = "check_sysdeps_deps",
+#| eval = FALSE
 try(check_sysdeps(c("freetype-devel", "libwebp-devel"), manager = "rpm"))
 ```
 
@@ -278,7 +280,8 @@ The result is returned invisibly as a named logical vector, so it can be reused
 in scripts. Set `verbose = FALSE` to keep the run silent:
 
 ```{r}
-#| label = "check_sysdeps_result"
+#| label = "check_sysdeps_result",
+#| eval = FALSE
 ok <- check_sysdeps(verbose = FALSE)
 ok[!ok]
 ```
