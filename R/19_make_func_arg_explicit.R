@@ -19,6 +19,24 @@
 #' \code{<<-}), and special syntax (\code{if}, \code{for}, \code{while},
 #' \code{repeat}, \code{\{}, \code{(}, \code{function}) are not transformed.
 #'
+#' @section Pipes and placeholders:
+#' The right-hand side of a pipe receives an extra argument from its
+#' left-hand side, so that argument is counted during positional matching:
+#' \code{x \%>\% str_remove("a")} becomes
+#' \code{x \%>\% str_remove(pattern = "a")}, because the piped-in data already
+#' fills the first formal (\code{string}).
+#'
+#' Placeholders are honoured. When a native pipe (\code{|>}) uses the
+#' \code{_} placeholder, the piped value fills the formal named next to
+#' \code{_}, so no leading argument is pre-claimed and the remaining
+#' positional arguments are still matched:
+#' \code{x |> lm(y ~ z, data = _)} becomes
+#' \code{x |> lm(formula = y ~ z, data = _)}. When a magrittr pipe
+#' (\code{\%>\%}, \code{\%<>\%}, \code{\%T>\%}) contains \code{.} anywhere in
+#' its right-hand side, the piped value is substituted at \code{.} instead of
+#' being inserted as the first argument, and again no formal is pre-claimed:
+#' \code{x \%>\% f(., y)} becomes \code{x \%>\% f(a = ., b = y)}.
+#'
 #' @section Single-file operation:
 #' Operates on one R file. When \code{path} is \code{NULL} and RStudio is
 #' available, the currently active document is used automatically.
@@ -138,8 +156,19 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
       next
     }
 
+    # A call on the right-hand side of a pipe silently receives the piped-in
+    # value as an extra leading argument. Unless a placeholder is present, it
+    # claims the function's first formal, so positional matching has to start
+    # one formal later than the written arguments suggest.
+    shift <- .mfae_pipe_shift(pd, id)
     arg_names <- vapply(slots, function(s) s$name, character(1L))
-    wanted <- .mfae_assign_arg_names(arg_names, names(fmls))
+    wanted <- .mfae_assign_arg_names(
+      arg_nms = c(rep("", shift), arg_names),
+      fml_nms = names(fmls)
+    )
+    if (shift > 0L) {
+      wanted <- wanted[-seq_len(shift)]
+    }
 
     for (i in seq_along(slots)) {
       if (nzchar(arg_names[[i]]) || !nzchar(wanted[[i]])) {
@@ -169,7 +198,8 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
 #' planning a single large file quadratic.
 #'
 #' Rows are reordered into source order first, because that order is what maps
-#' a call's child tokens onto its arguments.
+#' a call's child tokens onto its arguments. The reverse lookup (id to row) sits
+#' in \code{pd$row_of}, an integer vector indexed by node id.
 #' @keywords internal
 .mfae_parse_data <- function(parse_data) {
   parse_data <- parse_data[
@@ -195,6 +225,13 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
     hash = TRUE,
     parent = emptyenv()
   )
+  # Node ids are assigned sequentially, so an integer lookup vector maps an id
+  # to its row without hashing a name.
+  pd$row_of <- integer(max(pd$id))
+  pd$row_of[pd$id] <- seq_along(pd$id)
+  pipe <- .mfae_pipe_rhs(pd)
+  pd$pipe_rhs <- pipe$rhs
+  pd$pipe_op <- pipe$op
   pd
 }
 
@@ -207,6 +244,20 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
 #' @keywords internal
 .mfae_children <- function(pd, id) {
   get0(as.character(id), envir = pd$children, ifnotfound = integer(0L))
+}
+
+
+#' Row of a node id
+#'
+#' Reverse of \code{pd$id}; \code{NA} when the id is not in \code{pd} (the root
+#' node has parent \code{0}, which is never present).
+#' @keywords internal
+.mfae_row_of <- function(pd, id) {
+  if (length(id) != 1L || is.na(id) || id < 1L || id > length(pd$row_of)) {
+    return(NA_integer_)
+  }
+  row <- pd$row_of[[id]]
+  if (row == 0L) NA_integer_ else row
 }
 
 
@@ -323,6 +374,94 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
 .mfae_is_dots <- function(pd, row) {
   kids <- .mfae_children(pd, pd$id[[row]])
   length(kids) == 1L && pd$token[kids] == "SYMBOL" && pd$text[kids] == "..."
+}
+
+
+#' Pipe operators that pass their left-hand side into the right-hand side call
+#' @keywords internal
+.mfae_pipes <- c("%>%", "%<>%", "%T>%", "|>")
+
+#' Placeholder each pipe flavour understands
+#'
+#' The native pipe uses \code{_}, magrittr uses \code{.}.
+#' @keywords internal
+.mfae_pipe_placeholder <- function(op) {
+  if (identical(op, "|>")) "_" else "."
+}
+
+
+#' How many formals a pipe claims before the written arguments
+#'
+#' Returns \code{1L} when the call is the right-hand side of a pipe that
+#' injects its left-hand side as the first argument, and \code{0L} otherwise.
+#' A placeholder anywhere in the call cancels the leading injection: the piped
+#' value is substituted at the placeholder instead, so the written arguments
+#' keep their natural positions.
+#' @keywords internal
+.mfae_pipe_shift <- function(pd, id) {
+  row <- .mfae_row_of(pd, id)
+  if (is.na(row) || !pd$pipe_rhs[[row]]) {
+    return(0L)
+  }
+  op <- pd$pipe_op[[row]]
+  if (.mfae_has_placeholder(pd, id, .mfae_pipe_placeholder(op))) {
+    return(0L)
+  }
+  1L
+}
+
+
+#' Locate the right-hand side of every pipe expression
+#'
+#' Returns a logical vector \code{rhs} that is \code{TRUE} at the row of every
+#' expression a pipe feeds, plus \code{op}, the pipe operator used there. The
+#' parse tree of \code{a \%>\% b()} nests that expression as the last child of
+#' the pipe expression, so it is the last \code{expr} child after the pipe
+#' token. Comments are children of the pipe expression too, but they are not
+#' \code{expr} nodes and are skipped by the same filter.
+#' @keywords internal
+.mfae_pipe_rhs <- function(pd) {
+  rhs <- logical(length(pd$token))
+  op <- character(length(pd$token))
+  op_rows <- which(
+    pd$token %in% c("SPECIAL", "PIPE") & pd$text %in% .mfae_pipes
+  )
+  for (op_row in op_rows) {
+    kids <- .mfae_children(pd, pd$parent[[op_row]])
+    fed <- kids[pd$token[kids] == "expr" & kids > op_row]
+    if (length(fed) == 0L) {
+      next
+    }
+    rhs[[fed[[length(fed)]]]] <- TRUE
+    op[[fed[[length(fed)]]]] <- pd$text[[op_row]]
+  }
+  list(rhs = rhs, op = op)
+}
+
+
+#' Does a placeholder occur anywhere inside this expression?
+#'
+#' Magrittr substitutes its left-hand side at every \code{.} in the whole
+#' right-hand side call, including nested ones, so the search is recursive.
+#' \code{.data} and \code{..1} are different symbols and do not match.
+#' @keywords internal
+.mfae_has_placeholder <- function(pd, id, placeholder) {
+  kids <- .mfae_children(pd, id)
+  if (length(kids) == 0L) {
+    return(FALSE)
+  }
+  tokens <- pd$token[kids]
+  if (
+    any(tokens %in% c("SYMBOL", "PLACEHOLDER") & pd$text[kids] == placeholder)
+  ) {
+    return(TRUE)
+  }
+  for (kid in pd$id[kids[tokens == "expr"]]) {
+    if (.mfae_has_placeholder(pd, kid, placeholder)) {
+      return(TRUE)
+    }
+  }
+  FALSE
 }
 
 

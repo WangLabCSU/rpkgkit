@@ -23,7 +23,7 @@
 #'   "readme" or "vignette".
 #' @param readme_format Format used when a README has the default output:
 #'   "gfm" (md_document + variant: gfm), "github_document" or "html".
-#' @param date "auto" -> `r Sys.Date()`; "desc" -> DESCRIPTION Date field;
+#' @param date "auto" -> `Sys.Date()`; "desc" -> DESCRIPTION Date field;
 #'   "none" -> do not add a date.
 #' @param extra Named list of extra YAML fields added to the file. It is merged
 #'   onto the built-in defaults with [utils::modifyList()] (nested lists are

@@ -20,6 +20,23 @@
   it returns the created path invisibly. The template follows the official
   `extendr` CI.
 
+## BUG FIXES
+
+* `make_func_arg_explicit()` now accounts for the argument a pipe passes into
+  its right-hand side call. The piped-in value already fills the function's
+  first formal, so the arguments written in the call are matched one formal
+  later: `x %>% stringr::str_remove("Merc")` becomes
+  `x %>% stringr::str_remove(pattern = "Merc")`, where it previously claimed
+  `string` and pushed `Merc` onto `pattern`. Placeholders are honoured too: a
+  `.` anywhere in a magrittr right-hand side (`%>%`, `%<>%`, `%T>%`) cancels
+  the leading injection, because the piped value is substituted at `.` instead
+  of being inserted first, and a `_` in a native pipe (`|>`) makes the value
+  fill the formal it is attached to, so `x |> lm(y ~ z, data = _)` becomes
+  `x |> lm(formula = y ~ z, data = _)`. Symbols that merely start with a dot,
+  such as the `.data` pronoun and `..1`, are not mistaken for the placeholder.
+  A comment between a pipe and its right-hand side no longer hides the call
+  from the transformation.
+
 # rpkgkit 0.1.21 (2026-10-19)
 
 ## NEW FEATURES

@@ -79,6 +79,87 @@ test_that("mfae_operators contains core operators (not control flow)", {
 })
 
 # ---------------------------------------------------------------------------
+# .mfae_pipe_shift / .mfae_has_placeholder -- unit tests
+# ---------------------------------------------------------------------------
+
+# Build the internal parse-data structure and locate the call node of a
+# function by name, so the pipe helpers can be exercised directly.
+mfae_pd <- function(code) {
+  exprs <- parse(text = code, keep.source = TRUE)
+  .mfae_parse_data(utils::getParseData(exprs))
+}
+
+mfae_call_id <- function(pd, fn) {
+  row <- which(pd$token == "SYMBOL_FUNCTION_CALL" & pd$text == fn)[[1L]]
+  head_row <- which(pd$id == pd$parent[[row]])[[1L]]
+  pd$parent[[head_row]]
+}
+
+test_that("pipe_placeholder reports the placeholder of each pipe flavour", {
+  expect_equal(.mfae_pipe_placeholder("%>%"), ".")
+  expect_equal(.mfae_pipe_placeholder("%<>%"), ".")
+  expect_equal(.mfae_pipe_placeholder("%T>%"), ".")
+  expect_equal(.mfae_pipe_placeholder("|>"), "_")
+})
+
+test_that("pipe_shift is 1 for the right-hand side of a pipe", {
+  pd <- mfae_pd("x %>% round(2)")
+  expect_equal(.mfae_pipe_shift(pd, mfae_call_id(pd, "round")), 1L)
+})
+
+test_that("pipe_shift is 1 for the native pipe too", {
+  pd <- mfae_pd("x |> round(2)")
+  expect_equal(.mfae_pipe_shift(pd, mfae_call_id(pd, "round")), 1L)
+})
+
+test_that("pipe_shift is 0 when magrittr sees a dot placeholder", {
+  pd <- mfae_pd("x %>% rep(., 2)")
+  expect_equal(.mfae_pipe_shift(pd, mfae_call_id(pd, "rep")), 0L)
+})
+
+test_that("pipe_shift is 0 when the dot placeholder is nested", {
+  pd <- mfae_pd("x %>% rep(length(.), 2)")
+  expect_equal(.mfae_pipe_shift(pd, mfae_call_id(pd, "rep")), 0L)
+})
+
+test_that("pipe_shift ignores dot-prefixed symbols such as .data", {
+  pd <- mfae_pd("x %>% rep(.data$y, 2)")
+  expect_equal(.mfae_pipe_shift(pd, mfae_call_id(pd, "rep")), 1L)
+})
+
+test_that("pipe_shift is 0 when the native pipe uses _", {
+  skip_if(getRversion() < "4.3.0", "the _ placeholder needs R >= 4.3")
+  pd <- mfae_pd("x |> lm(y ~ z, data = _)")
+  expect_equal(.mfae_pipe_shift(pd, mfae_call_id(pd, "lm")), 0L)
+})
+
+test_that("pipe_shift is 0 outside a pipe", {
+  pd <- mfae_pd("round(2)")
+  expect_equal(.mfae_pipe_shift(pd, mfae_call_id(pd, "round")), 0L)
+})
+
+test_that("pipe_shift is 0 for the left-hand side of a pipe", {
+  pd <- mfae_pd("round(2) %>% sqrt()")
+  expect_equal(.mfae_pipe_shift(pd, mfae_call_id(pd, "round")), 0L)
+})
+
+test_that("pipe_shift is 0 for the pipe expression itself", {
+  pd <- mfae_pd("x %>% round(2)")
+  pipe_expr <- pd$parent[[which(pd$token == "SPECIAL")[[1L]]]]
+  expect_equal(.mfae_pipe_shift(pd, pipe_expr), 0L)
+})
+
+test_that("has_placeholder matches the exact symbol only", {
+  # `.data` and `..1` start with a dot but are different symbols.
+  pd <- mfae_pd("x %>% rep(.data$y, 2, ..1)")
+  expect_false(.mfae_has_placeholder(pd, mfae_call_id(pd, "rep"), "."))
+  expect_false(.mfae_has_placeholder(pd, mfae_call_id(pd, "rep"), "_"))
+
+  pd <- mfae_pd("x %>% rep(., .data$y)")
+  expect_true(.mfae_has_placeholder(pd, mfae_call_id(pd, "rep"), "."))
+})
+
+# ---------------------------------------------------------------------------
 # .mfae_resolve_function -- unit tests
 # ---------------------------------------------------------------------------
 
@@ -428,10 +509,10 @@ test_that("infix operators like %>% are not transformed", {
   writeLines(input, tf)
   make_func_arg_explicit(tf)
   result <- readLines(tf, warn = FALSE)
-  # %>% is not transformed, but filter(y > 1) IS transformed because
-  # stats::filter is available (x -> filter(x = y > 1))
+  # %>% itself is not transformed. The piped-in `x` already fills the first
+  # formal of stats::filter(x, filter, ...), so `y > 1` lands on `filter`.
   expect_true(grepl("x %>%", result, fixed = TRUE))
-  expect_true(grepl("filter\\(x = y > 1\\)", result))
+  expect_true(grepl("filter\\(filter = y > 1\\)", result))
 })
 
 test_that("if/for/while constructs are not transformed", {
@@ -618,6 +699,167 @@ test_that("returns invisibly", {
   tf <- withr::local_tempfile(fileext = ".R")
   writeLines("mean(1:10)", tf)
   expect_invisible(make_func_arg_explicit(tf))
+})
+
+# ---------------------------------------------------------------------------
+# Pipes and placeholders
+# ---------------------------------------------------------------------------
+
+test_that("a piped-in value claims the first formal", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  writeLines("x %>% substr(2, 3)", tf)
+  make_func_arg_explicit(tf)
+  expect_equal(readLines(tf, warn = FALSE), "x %>% substr(start = 2, stop = 3)")
+})
+
+test_that("the native pipe also claims the first formal", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  writeLines("x |> substr(2, 3)", tf)
+  make_func_arg_explicit(tf)
+  expect_equal(readLines(tf, warn = FALSE), "x |> substr(start = 2, stop = 3)")
+})
+
+test_that("a pipe chain is transformed link by link", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  writeLines(
+    c(
+      "a1 %>% substr(1, 1) %>% trimws(\"left\")",
+      "b2 |> substr(1, 1) |> trimws(\"left\")"
+    ),
+    tf
+  )
+  make_func_arg_explicit(tf)
+  expect_equal(
+    readLines(tf, warn = FALSE),
+    c(
+      "a1 %>% substr(start = 1, stop = 1) %>% trimws(which = \"left\")",
+      "b2 |> substr(start = 1, stop = 1) |> trimws(which = \"left\")"
+    )
+  )
+})
+
+test_that("only the direct right-hand side call consumes the piped value", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  # `trimws()` is nested, so it keeps its own first formal `x`; only the outer
+  # `substr()` starts one formal later.
+  writeLines("x %>% substr(trimws(\"left\"), 2)", tf)
+  make_func_arg_explicit(tf)
+  expect_equal(
+    readLines(tf, warn = FALSE),
+    "x %>% substr(start = trimws(x = \"left\"), stop = 2)"
+  )
+})
+
+test_that("the magrittr dot placeholder cancels the leading injection", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  writeLines("x %>% substr(., 2)", tf)
+  make_func_arg_explicit(tf)
+  expect_equal(
+    readLines(tf, warn = FALSE),
+    "x %>% substr(x = ., start = 2)"
+  )
+})
+
+test_that("a nested dot placeholder cancels the leading injection too", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  writeLines("x %>% substr(nchar(.), 2)", tf)
+  make_func_arg_explicit(tf)
+  expect_equal(
+    readLines(tf, warn = FALSE),
+    "x %>% substr(x = nchar(x = .), start = 2)"
+  )
+})
+
+test_that("a dot-prefixed symbol is not a placeholder", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  writeLines("x %>% substr(.data$y, 2)", tf)
+  make_func_arg_explicit(tf)
+  expect_equal(
+    readLines(tf, warn = FALSE),
+    "x %>% substr(start = .data$y, stop = 2)"
+  )
+})
+
+test_that("the native pipe placeholder claims the formal it is attached to", {
+  skip_if(getRversion() < "4.3.0", "the _ placeholder needs R >= 4.3")
+  tf <- withr::local_tempfile(fileext = ".R")
+  writeLines("d |> lm(mpg ~ wt, data = _)", tf)
+  make_func_arg_explicit(tf)
+  expect_equal(
+    readLines(tf, warn = FALSE),
+    "d |> lm(formula = mpg ~ wt, data = _)"
+  )
+})
+
+test_that("a named argument after _ is matched normally", {
+  skip_if(getRversion() < "4.3.0", "the _ placeholder needs R >= 4.3")
+  tf <- withr::local_tempfile(fileext = ".R")
+  writeLines("d |> sub(\"a\", \"b\", x = _)", tf)
+  make_func_arg_explicit(tf)
+  expect_equal(
+    readLines(tf, warn = FALSE),
+    "d |> sub(pattern = \"a\", replacement = \"b\", x = _)"
+  )
+})
+
+test_that("piping into a dots-only function inserts nothing", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  input_lines <- c("x %>% list(1, 2)", "x |> print()")
+  writeLines(input_lines, tf)
+  make_func_arg_explicit(tf)
+  expect_equal(readLines(tf, warn = FALSE), input_lines)
+})
+
+test_that("other magrittr pipes are treated like %>%", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  writeLines("x %T>% substr(2, 3)", tf)
+  make_func_arg_explicit(tf)
+  expect_equal(
+    readLines(tf, warn = FALSE),
+    "x %T>% substr(start = 2, stop = 3)"
+  )
+})
+
+test_that("a comment between a pipe and its right-hand side is preserved", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  writeLines(
+    c(
+      "res <- \"a1\" |>",
+      "  # trim it",
+      "  substr(2, 3)"
+    ),
+    tf
+  )
+  make_func_arg_explicit(tf)
+  expect_equal(
+    readLines(tf, warn = FALSE),
+    c(
+      "res <- \"a1\" |>",
+      "  # trim it",
+      "  substr(start = 2, stop = 3)"
+    )
+  )
+})
+
+test_that("the reported pipeline bug stays fixed", {
+  tf <- withr::local_tempfile(fileext = ".R")
+  writeLines(
+    c(
+      "res <- rownames(mtcars) %>%",
+      "  substr(1, 2) |>",
+      "  trimws(\"left\")"
+    ),
+    tf
+  )
+  make_func_arg_explicit(tf)
+  expect_equal(
+    readLines(tf, warn = FALSE),
+    c(
+      "res <- rownames(x = mtcars) %>%",
+      "  substr(start = 1, stop = 2) |>",
+      "  trimws(which = \"left\")"
+    )
+  )
 })
 
 # ---------------------------------------------------------------------------

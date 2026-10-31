@@ -31,11 +31,10 @@ knitr::opts_chunk$set(
 
 ```{r}
 #| label = "setup",
-#| echo = FALSE,
-#| message = FALSE
 library(rpkgkit)
 dir <- tempdir()
 usethis::create_package(path = dir, open = FALSE)
+usethis::use_pkgdown()
 ```
 
 # Create package infrastructure
@@ -79,8 +78,7 @@ the `R/` directory (which holds no C++ code) and adds `.clangd` to
 `.Rbuildignore`.
 
 ```{r}
-#| label = "use_clangd_include",
-#| eval = FALSE
+#| label = "use_clangd_include"
 use_clangd(path = dir, include = c("Rcpp", "BH"), overwrite = TRUE)
 ```
 
@@ -104,7 +102,7 @@ directory. When `path` is a package root, `jarl.toml` is also added to
 
 ```{r}
 #| label = "use_jarl_content"
-readLines(file.path(dir, "jarl.toml"))
+readLines(file.path(dir, "jarl.toml")) |> cli::cli_code()
 ```
 
 Read the
@@ -261,8 +259,7 @@ reports every hit and miss together with a ready-to-paste install command for
 the missing ones.
 
 ```{r}
-#| label = "check_sysdeps",
-#| eval = FALSE
+#| label = "check_sysdeps"
 check_sysdeps()
 ```
 
@@ -273,17 +270,15 @@ expects. Pass your own names in `deps`, and optionally set `manager` to check
 against a manager other than the detected one:
 
 ```{r}
-#| label = "check_sysdeps_deps",
-#| eval = FALSE
-check_sysdeps(c("freetype-devel", "libwebp-devel"), manager = "rpm")
+#| label = "check_sysdeps_deps"
+try(check_sysdeps(c("freetype-devel", "libwebp-devel"), manager = "rpm"))
 ```
 
 The result is returned invisibly as a named logical vector, so it can be reused
 in scripts. Set `verbose = FALSE` to keep the run silent:
 
 ```{r}
-#| label = "check_sysdeps_result",
-#| eval = FALSE
+#| label = "check_sysdeps_result"
 ok <- check_sysdeps(verbose = FALSE)
 ok[!ok]
 ```
