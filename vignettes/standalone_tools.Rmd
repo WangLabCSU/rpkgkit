@@ -1,6 +1,6 @@
 ---
 title: "rpkgkit standalone scripts"
-subtitle: "rpkgkit 0.1.21"
+subtitle: "rpkgkit 0.1.23"
 author: "Yuxi Yang"
 date: "`r Sys.Date()`"
 lang: en-US
@@ -107,6 +107,20 @@ color_cli2 <- create_colorful_cli_env(cli_theme = generate_color_theme())
 color_cli2$cli_alert_success(
   "{.violetred3 R}{.orange a}{.yellow i}{.green n}{.cyan b}{.blue o}{.purple w}"
 )
+```
+
+The wrapped functions also take `.envir`, defaulting to `parent.frame()` and
+forwarded to the cli function, so `{}` interpolation is resolved in the caller's
+environment instead of inside the wrapper:
+
+```{r}
+#| label = "colorful_cli_envir",
+#| eval = FALSE
+name <- "world"
+color_cli$cli_alert_info("Hello, {name}")
+
+msg_env <- list2env(list(who = "Positron"), parent = emptyenv())
+color_cli$cli_alert_info("Hello, {who}", .envir = msg_env)
 ```
 
 ## Add timestamps to cli output

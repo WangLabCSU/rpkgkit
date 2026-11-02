@@ -71,6 +71,18 @@ detect_lost_glue_brace <- function(path = NULL, verbose = TRUE, ...) {
 
   error_lines <- integer()
 
+  # highlight the whole file: a single source line is usually not parseable, and
+  # `cli::code_highlight()` silently returns unparseable input unchanged. It must
+  # also get one element per line, otherwise only the first line is highlighted.
+  hl_lines <- tryCatch(
+    cli::code_highlight(lines),
+    error = function(e) lines,
+    cli_parse_failure = function(cnd) lines
+  )
+  if (length(hl_lines) != length(lines)) {
+    hl_lines <- lines
+  }
+
   for (info in strings_info) {
     result <- check_brace_balance(info$content)
 
@@ -80,7 +92,7 @@ detect_lost_glue_brace <- function(path = NULL, verbose = TRUE, ...) {
       if (verbose) {
         message(
           format_brace_error(
-            line_content = lines[info$line1],
+            line_content = hl_lines[info$line1],
             str_content = info$content,
             line_num = info$line1,
             col_offset = info$col1,
@@ -278,8 +290,8 @@ find_nearest_open_before <- function(s, pos) {
 #   "Hello, {name!"
 #           ^^^^^^
 #
-# The top line is the original source line, the second line has `^` markers
-# aligned under the problematic region.
+# The top line is the original source line (already highlighted by the caller),
+# the second line has `^` markers aligned under the problematic region.
 # ---------------------------------------------------------------------------
 format_brace_error <- function(
   line_content,

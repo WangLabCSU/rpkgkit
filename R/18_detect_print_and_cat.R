@@ -161,6 +161,17 @@ detect_print_and_cat <- function(
   }
 
   report_lines <- if (fix) original_lines else lines
+  # highlight the whole file: a single source line is usually not parseable, and
+  # `cli::code_highlight()` silently returns unparseable input unchanged. It must
+  # also get one element per line, otherwise only the first line is highlighted.
+  hl_lines <- tryCatch(
+    cli::code_highlight(report_lines),
+    error = function(e) report_lines,
+    cli_parse_failure = function(cnd) report_lines
+  )
+  if (length(hl_lines) != length(report_lines)) {
+    hl_lines <- report_lines
+  }
   for (info in calls_info) {
     caret_width <- nchar(x = info$text) + if (info$type == "call") 1L else 0L
     caret <- paste0(
@@ -168,7 +179,12 @@ detect_print_and_cat <- function(
       strrep(x = "^", times = caret_width)
     )
     tag <- if (!is.null(info$kind)) paste0(" [", info$kind, "]") else ""
-    message(paste0(report_lines[[info$line1]], tag, "\n", caret))
+    message(
+      hl_lines[[info$line1]],
+      tag,
+      "\n",
+      caret
+    )
   }
 
   reported_lines <- unique(vapply(calls_info, `[[`, integer(1L), "line1"))

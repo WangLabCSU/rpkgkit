@@ -20,7 +20,7 @@ MIT + file LICENSE
 \seealso{
 Useful links:
 \itemize{
-  \item /tmp/RtmpoUp5qA
+  \item \url{https://github.com/Exceret/rpkgkit}
   \item Report bugs at \url{https://github.com/WangLabCSU/rpkgkit/issues}
 }
 

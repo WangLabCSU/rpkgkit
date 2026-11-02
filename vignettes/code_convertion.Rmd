@@ -1,6 +1,6 @@
 ---
 title: "Code Convertion"
-subtitle: "rpkgkit 0.1.21"
+subtitle: "rpkgkit 0.1.23"
 author: "Yuxi Yang"
 date: "`r Sys.Date()`"
 lang: en-US
@@ -59,7 +59,8 @@ readLines(file) |> cli::cli_code()
 # Find unmatched glue braces
 
 `detect_lost_glue_brace()` checks one file; `package_lost_glue_brace()` checks
-an entire package. Both support `glue` and `cli` expressions.
+an entire package. Both support `glue` and `cli` expressions, and print the
+offending source line with `cli` syntax highlighting.
 
 ```{r}
 #| label = "detect_lost_glue_brace"
@@ -105,7 +106,8 @@ readLines(file) |> cli::cli_code()
 
 `detect_print_and_cat()` reports `print()` and `cat()` calls in one file.
 `package_print_and_cat()` checks an entire package. Set `fix = TRUE` to replace
-those calls in the selected file with `message()`.
+those calls in the selected file with `message()`. As for the glue brace
+detection, the reported source line is syntax highlighted.
 
 ```{r}
 #| label = "detect_print_and_cat"
@@ -171,6 +173,49 @@ writeLines(
 writeLines(c("g <- function(y) y", "# nocov end"), file.path(pkg, "R", "g.R"))
 
 package_unmatched_nocov_marker(pkg)
+```
+
+# Detect default paths in exported arguments
+
+CRAN does not allow a path-like argument of an exported function to default to a
+concrete location such as `"."` or `"~/data.csv"`. `detect_fn_arg_path()` checks
+one file and `package_fn_arg_path()` checks every `.R` file of a package, using
+the exports declared in `NAMESPACE`.
+
+```{r}
+#| label = "detect_fn_arg_path"
+file <- tempfile(fileext = ".R")
+writeLines(
+  c(
+    'read_csv <- function(path = "~/data.csv", n = 1L) NULL',
+    'read_all <- function(file = "data.txt") NULL',
+    'read_tsv <- function(path = NULL, n = 1L) NULL'
+  ),
+  file
+)
+
+detect_fn_arg_path(file)
+```
+
+An argument is reported when its name matches `arg_pattern` and its default is
+not listed in `allow`, so `read_tsv()` above is clean: its default is `NULL`. An
+argument without a default is always fine. Narrow the pattern when a loose match
+is not wanted:
+
+```{r}
+#| label = "detect_fn_arg_path_pattern"
+detect_fn_arg_path(file, arg_pattern = "^path$")
+```
+
+`detect_fn_arg_path()` uses the active document when `path` is `NULL`, and checks
+every top-level function of that file unless `exports` or `export_patterns` say
+which ones count as exported. Use the package-wide function to see all the
+occurrences at once:
+
+```{r}
+#| label = "package_fn_arg_path",
+#| eval = FALSE
+package_fn_arg_path()
 ```
 
 # Convert function syntax

@@ -1,6 +1,6 @@
 ---
 title: "Package Setup & Maintenace"
-subtitle: "rpkgkit 0.1.21"
+subtitle: "rpkgkit 0.1.23"
 author: "Yuxi Yang"
 date: "`r Sys.Date()`"
 lang: en-US
@@ -110,6 +110,55 @@ Read the
 for options such as `select`, `ignore` and `per-file-ignores`, and the
 [continuous integration guide](https://jarl.etiennebacher.com/howto/ci) to run
 `jarl check` on every push with the `etiennebacher/setup-jarl` action.
+
+# RStudio addins
+
+An addin is an exported function registered in `inst/rstudio/addins.dcf`; RStudio
+then lists it in the `Addins` menu and runs it in the current session.
+`use_tidy_addin()` writes that entry for you:
+
+```{r}
+#| label = "use_tidy_addin",
+#| eval = FALSE
+use_tidy_addin(
+  fn_name = "check_my_pkg",
+  desc = "Check my package",
+  path = dir
+)
+```
+
+The entry is appended above the existing ones, so the newest addin comes first,
+and a `Binding` that is already registered is never added twice:
+
+```
+Name: check_my_pkg
+Description: Check my package
+Binding: check_my_pkg
+Interactive: false
+```
+
+Before writing, the function checks that `path` is a package and that `fn_name`
+is exported in `NAMESPACE`, reads the body of the function (from the installed
+package, or from `R/` when the package has not been documented yet), and warns
+when that body calls no `rstudioapi` function, or, for an `Interactive = TRUE`
+addin, no `shiny`/`miniUI` function. In an interactive session the warning asks
+whether to continue; a non-interactive session only reports it and writes the
+entry.
+
+`rpkgkit` registers its own addins in `inst/rstudio/addins.dcf`, so every
+detector can be run from the menu without typing the call:
+
+| Addin | What it checks |
+|---|---|
+| `detect_lost_glue_brace` / `package_lost_glue_brace` | unmatched `{}` in `glue()`/`cli` strings |
+| `detect_print_and_cat` / `package_print_and_cat` | CRAN-unsafe `print()`/`cat()` calls |
+| `detect_fn_arg_path` / `package_fn_arg_path` | path-like arguments of exported functions that default to a concrete location |
+| `package_unmatched_nocov_marker` | unmatched `# nocov start` / `# nocov end` markers |
+| `check_pkgdown_reference` | exported functions missing from the `_pkgdown.yml` reference |
+
+The `detect_*` addins work on the active editor, the package-wide ones on the
+current package directory. They only report; none of them rewrites a file. In
+Positron, addins need a third-party extension such as Positron R Wizard.
 
 # Vendor permissively licensed code
 

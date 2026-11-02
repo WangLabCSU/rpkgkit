@@ -35,7 +35,7 @@
 #' }
 use_zzz <- function(
   path = NULL,
-  file_name = paste0(get_package_name(path = path), "-package.R"),
+  file_name = NULL,
   overwrite = FALSE,
   open = rlang::is_interactive(),
   ...
@@ -51,6 +51,9 @@ use_zzz <- function(
   }
 
   usethis::proj_set(path = path)
+
+  file_name <- file_name %||%
+    paste0(get_package_name(path = path), "-package.R")
 
   desc <- read.dcf(file = file.path(path, "DESCRIPTION"))
   pkg <- desc[, "Package"]

@@ -1,7 +1,7 @@
 # ---
 # repo: WangLabCSU/rpkgkit
 # file: standalone-colorful_cli.R
-# last-updated: 2026-10-12
+# last-updated: 2026-11-01
 # license: https://unlicense.org
 # imports: [cli]
 # ---
@@ -9,6 +9,10 @@
 #
 # ## Changelog:
 #
+# 2026-11-01:
+# * `add_colors_to_cli()`: the wrapper now takes `.envir = parent.frame()` and
+#   forwards it to the wrapped cli function, so `{}` interpolation resolves in
+#   the caller's environment instead of the wrapper's frame
 #
 # 2026-10-12:
 # * Added variable checking
@@ -133,6 +137,14 @@ create_colorful_cli_env <- function(
 #' at creation time. The color theme is applied via \code{\link[cli]{cli_div}} with
 #' automatic cleanup via \code{\link[base]{on.exit}} to call \code{\link[cli]{cli_end}}.
 #'
+#' The returned function takes a `.envir` argument (defaulting to
+#' \code{\link[base]{parent.frame}}, i.e. the caller) and passes it on to the
+#' wrapped CLI function, so glue-style interpolation such as
+#' \code{"Hello, {name}"} is resolved in the environment that called the wrapper
+#' and not in the wrapper's own frame. Pass `.envir` explicitly to interpolate in
+#' another environment (for example the frame of the function that created the
+#' wrapper).
+#'
 #' @examples
 #' \donttest{
 #' # Create a color-enabled version of cli_alert_info
@@ -165,8 +177,8 @@ add_colors_to_cli <- function(
   if (!is.function(cli_func)) {
     cli::cli_abort(message = "`cli_func` must be a {.cls function}")
   }
-  function(...) {
-    messages <- list(...)
+  function(..., .envir = parent.frame()) {
+    messages <- list(..., .envir = .envir)
     cli::cli_div(theme = cli_theme)
     on.exit(cli::cli_end())
     do.call(what = cli_func, args = messages)

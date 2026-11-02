@@ -1,11 +1,9 @@
 # rpkgkit <a href="https://wanglabcsu.github.io/rpkgkit/"><img src="../../man/figures/logo.png" align="right" height="139" alt="sitio web de rpkgkit" /></a>
 
 <!-- badges: start -->
-[![Lifecycle:stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN-status](https://www.r-pkg.org/badges/version/rpkgkit)](https://CRAN.R-project.org/package=rpkgkit)
+[![R-universe-version](https://wanglabcsu.r-universe.dev/rpkgkit/badges/version)](https://wanglabcsu.r-universe.dev/rpkgkit)
 [![R-CMD-check](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WangLabCSU/rpkgkit/actions/workflows/R-CMD-check.yaml)
-[![Devel-version](https://img.shields.io/badge/devel%20version-0.1.16-blue.svg)](https://github.com/WangLabCSU/rpkgkit)
 [![Codesize](https://img.shields.io/github/languages/code-size/WangLabCSU/rpkgkit.svg)](https://github.com/WangLabCSU/rpkgkit)
 [![Codecov-testcoverage](https://codecov.io/gh/WangLabCSU/rpkgkit/graph/badge.svg)](https://app.codecov.io/gh/WangLabCSU/rpkgkit)
 [![Ask-DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/WangLabCSU/rpkgkit)
@@ -13,14 +11,13 @@
 [![English](https://img.shields.io/badge/README-English-blue)](../../README.md)
 [![Español](https://img.shields.io/badge/README-Espa%C3%B1ol-blue)]()
 [![简体中文](https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue)](README.zh-cn.md)
-[![Last-commit](https://img.shields.io/github/last-commit/WangLabCSU/rpkgkit.svg)](https://github.com/WangLabCSU/rpkgkit/commits/main)
 <!-- badges: end -->
 
 ## Resumen
 
 `rpkgkit` ofrece utilidades para crear y mantener paquetes de R. Sus funciones cubren tareas habituales, como gestionar scripts independientes, mantener `NEWS.md`, modernizar código R, configurar la infraestructura de un paquete y mantener archivos README.
 
-Muchas funciones detectan el contexto del archivo activo en RStudio y Positron, por lo que a menudo se puede omitir la ruta del archivo.
+Muchas funciones detectan el contexto del archivo activo en RStudio y Positron (2026.10.1 o posterior), por lo que a menudo se puede omitir la ruta del archivo.
 
 ## Instalación
 
@@ -39,7 +36,7 @@ install.packages(
 )
 ```
 
-O instálala desde GitHub:
+O instálala desde GitHub (recomendado):
 
 ```r
 pak::pak("WangLabCSU/rpkgkit")
@@ -54,6 +51,31 @@ El sitio web del paquete organiza ejemplos detallados y listos para usar por tar
 - [Editar NEWS](https://wanglabcsu.github.io/rpkgkit/articles/news.html): crea, actualiza, muestra y valida entradas de `NEWS.md`.
 - [Configuración y mantenimiento de paquetes](https://wanglabcsu.github.io/rpkgkit/articles/pkg_maintain.html): configura la infraestructura del paquete, incorpora código con licencias permisivas y gestiona archivos de exclusión.
 - [Herramientas para README y documentación](https://wanglabcsu.github.io/rpkgkit/articles/readme_and_doc.html): crea traducciones de README e inserta o genera insignias.
+
+Se recomienda usar los siguientes paquetes junto con `rpkgkit`:
+
+- [`pkgdown`](https://pkgdown.r-lib.org/) / [`pkgdown.offline`](https://nanx.me/pkgdown.offline/): genera el sitio web del paquete.
+- [`pkgload`](https://pkgload.r-lib.org/): carga el código fuente del paquete.
+- [`flir`](https://flir.etiennebacher.com/) / [`jarl`](https://jarl.etiennebacher.com/) / [`lintr`](https://lintr.r-lib.org/): analiza y corrige el código fuente.
+- [`air`](https://posit-dev.github.io/air/): formatea el código fuente.
+- [`usethis`](https://usethis.r-lib.org/): gestiona los metadatos del paquete.
+- [`devtools`](https://devtools.r-lib.org/): construye y comprueba el paquete.
+
+## Addin
+
+A partir de la v0.1.23, `rpkgkit` incluye un addin que se puede usar en RStudio. Está disponible en el menú `Addins` y también se puede abrir con `Ctrl+Shift+P` (Windows/Linux) o `Cmd+Shift+P` (macOS).
+
+Si quieres usar addins en Positron, puedes usar la extensión [Positron R Wizard](https://github.com/ntluong95/positron-r-wizard.git).
+
+## Habilidades de IA
+
+`rpkgkit` incluye una skill para agentes que indica a los agentes de programación cuándo deben usar `rpkgkit` y cómo llamarlo. Sigue el formato [Agent Skills](https://skills.sh), por lo que funciona con Claude Code, Codex, Cursor, Positron y otros agentes compatibles:
+
+```bash
+npx skills add WangLabCSU/rpkgkit --skill rpkgkit
+```
+
+Añade `-g` para instalarla en todos los proyectos y `-a <agente>` para omitir la pregunta del agente. El código fuente de la skill está en [`skills/rpkgkit/`](https://github.com/WangLabCSU/rpkgkit/tree/main/skills/rpkgkit).
 
 ## Agradecimientos
 

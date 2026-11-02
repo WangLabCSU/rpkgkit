@@ -17,7 +17,9 @@ test_that("add_caller_to_cli prepends caller name to character message", {
 
 test_that("add_caller_to_cli does not modify message when no arguments", {
   captured <- NULL
-  mock_cli <- function(...) {
+  # `add_caller_to_cli()` always forwards `.envir`, so the mock mirrors the
+  # signature of the cli functions it wraps and keeps `.envir` out of `...`
+  mock_cli <- function(..., .envir = parent.frame()) {
     captured <<- list(...)
   }
 

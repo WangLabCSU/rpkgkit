@@ -1,7 +1,7 @@
 # ---
 # repo: WangLabCSU/rpkgkit
 # file: standalone-ts_cli.R
-# last-updated: 2026-10-12
+# last-updated: 2026-11-01
 # license: https://unlicense.org
 # imports: [cli]
 # ---
@@ -10,6 +10,13 @@
 #
 # ## Changelog:
 #
+# 2026-11-01:
+# * `add_timestamp_to_cli()`: the timestamp is now evaluated by the wrapper
+#   (`time_stamp()` is called directly) instead of being injected as
+#   `"{time_stamp()}"` glue syntax. cli interpolates `{}` in the caller's
+#   frame, so composing this wrapper with another one that forwards `.envir`
+#   (e.g. `add_colors_to_cli()`) failed with "could not find function
+#   time_stamp"
 #
 # 2026-10-12:
 # * Added variable checking
@@ -36,9 +43,12 @@
 #'
 #' @details
 #' This function uses \code{\link{force}} to ensure the CLI function is evaluated
-#' at creation time. The timestamp is generated using a \code{time_stamp()} function
-#' which should be available in the execution environment and is inserted using
-#' cli's glue-like syntax \code{"{ }"}.
+#' at creation time. The timestamp is produced by calling \code{time_stamp()}
+#' inside the wrapper and is prepended to the message before the wrapped CLI
+#' function is called. It therefore does not depend on \code{time_stamp()} being
+#' visible in the environment cli interpolates \code{"{ }"} expressions in, and
+#' the wrapper can be safely composed with other wrappers that forward
+#' \code{.envir} (such as \code{\link{add_colors_to_cli}}).
 #'
 #' @examples
 #' \donttest{
@@ -65,7 +75,10 @@ add_timestamp_to_cli <- function(
   function(...) {
     messages <- list(...)
     if (length(messages) > 0L && is.character(messages[[1L]])) {
-      messages[[1L]] <- paste0("{time_stamp()}", messages[[1L]])
+      # Evaluated here and not through cli's `{}` interpolation: cli resolves
+      # `{}` in `.envir`, which is the caller's frame (possibly several
+      # wrappers further out), where `time_stamp()` need not exist.
+      messages[[1L]] <- paste0(time_stamp(), messages[[1L]])
     }
     do.call(what = cli_func, args = messages)
   }
