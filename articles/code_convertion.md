@@ -27,7 +27,7 @@ writeLines(
 
 make_func_call_explicit(file, use_packages = "dplyr")
 #> ℹ Retrieving function calls from dplyr
-#> ✔ Successfully made function call explicit in /tmp/Rtmp6Ce9jI/file1f175e573058.R
+#> ✔ Successfully made function call explicit in /tmp/RtmpomZCc0/file1f094cb9d78a.R
 readLines(file) |> cli::cli_code()
 #> dplyr::starwars |>
 #>   dplyr::mutate(name, bmi = mass / ((height / 100)^2)) |>
@@ -74,7 +74,7 @@ applies this transformation across a package.
 file <- tempfile(fileext = ".R")
 writeLines("vapply(1:9, function(x) x * 2, numeric(1))", file)
 make_func_arg_explicit(file)
-#> ✔ Made function arguments explicit in /tmp/Rtmp6Ce9jI/file1f176d5be338.R
+#> ✔ Made function arguments explicit in /tmp/RtmpomZCc0/file1f09459cc557.R
 readLines(file) |> cli::cli_code()
 #> vapply(X = 1:9, FUN = function(x) x * 2, FUN.VALUE = numeric(length = 1))
 ```
@@ -90,7 +90,7 @@ to apply a naming style to function definitions in a file.
 file <- tempfile(fileext = ".R")
 writeLines("this_is_a_function <- function() message('Hello, world')", file)
 rename_func(file, style = "camelCase")
-#> ✔ Renamed 1 function to "camelCase" style in /tmp/Rtmp6Ce9jI/file1f176b30c087.R
+#> ✔ Renamed 1 function to "camelCase" style in /tmp/RtmpomZCc0/file1f0935a1248d.R
 readLines(file) |> cli::cli_code()
 #> thisIsAFunction <- function() message('Hello, world')
 ```
@@ -119,7 +119,7 @@ detect_print_and_cat(file)
 ``` r
 
 detect_print_and_cat(file, fix = TRUE)
-#> ✔ Fixed 1 line in file1f1737f6e764.R.
+#> ✔ Fixed 1 line in file1f091a644ee5.R.
 #> print('Hello, world') [message]
 #> ^^^^^^
 #> ✖ Found 1 unsupported call on line 1.
@@ -218,15 +218,15 @@ writeLines(
 )
 
 detect_fn_arg_path(file)
-#> /tmp/Rtmp6Ce9jI/file1f174667ab75.R:1:22 read_csv(): `path` defaults to
+#> /tmp/RtmpomZCc0/file1f092effcb84.R:1:22 read_csv(): `path` defaults to
 #> "~/data.csv"
 #> read_csv <- function(path = "~/data.csv", n = 1L) NULL
 #>                      ^^^^^^^^^^^^^^^^^^^
-#> /tmp/Rtmp6Ce9jI/file1f174667ab75.R:2:22 read_all(): `file` defaults to
+#> /tmp/RtmpomZCc0/file1f092effcb84.R:2:22 read_all(): `file` defaults to
 #> "data.txt"
 #> read_all <- function(file = "data.txt") NULL
 #>                      ^^^^^^^^^^^^^^^^^
-#> ✖ Found 2 arguments with a default path in /tmp/Rtmp6Ce9jI/file1f174667ab75.R
+#> ✖ Found 2 arguments with a default path in /tmp/RtmpomZCc0/file1f092effcb84.R
 ```
 
 An argument is reported when its name matches `arg_pattern` and its
@@ -237,11 +237,11 @@ the pattern when a loose match is not wanted:
 ``` r
 
 detect_fn_arg_path(file, arg_pattern = "^path$")
-#> /tmp/Rtmp6Ce9jI/file1f174667ab75.R:1:22 read_csv(): `path` defaults to
+#> /tmp/RtmpomZCc0/file1f092effcb84.R:1:22 read_csv(): `path` defaults to
 #> "~/data.csv"
 #> read_csv <- function(path = "~/data.csv", n = 1L) NULL
 #>                      ^^^^^^^^^^^^^^^^^^^
-#> ✖ Found 1 argument with a default path in /tmp/Rtmp6Ce9jI/file1f174667ab75.R
+#> ✖ Found 1 argument with a default path in /tmp/RtmpomZCc0/file1f092effcb84.R
 ```
 
 [`detect_fn_arg_path()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_fn_arg_path.md)
@@ -264,7 +264,7 @@ Convert between `function()` and the short `\()` syntax.
 file <- tempfile(fileext = ".R")
 writeLines("f <- function(x) x^2", file)
 convert_func_syntax(file, "to_lambda")
-#> ✔ Converted function definitions in /tmp/Rtmp6Ce9jI/file1f177af9f002.R to "to_lambda"
+#> ✔ Converted function definitions in /tmp/RtmpomZCc0/file1f0923b7bc06.R to "to_lambda"
 readLines(file) |> cli::cli_code()
 #> f <- \(x) x^2
 ```
@@ -272,7 +272,7 @@ readLines(file) |> cli::cli_code()
 ``` r
 
 convert_func_syntax(file, "to_explicit")
-#> ✔ Converted function definitions in /tmp/Rtmp6Ce9jI/file1f177af9f002.R to "to_explicit"
+#> ✔ Converted function definitions in /tmp/RtmpomZCc0/file1f0923b7bc06.R to "to_explicit"
 readLines(file) |> cli::cli_code()
 #> f <- function(x) x^2
 ```
@@ -290,7 +290,7 @@ writeLines(c("```{r, echo=TRUE, fig.width=10}", "x <- 1", "```"), file)
 convert_knitr_chunk_header(file)
 ```
 
-    #> ℹ Converting knitr chunk headers in /tmp/Rtmp6Ce9jI/file1f17479803c5.Rmd
+    #> ℹ Converting knitr chunk headers in /tmp/RtmpomZCc0/file1f092d984adb.Rmd
     readLines(file) |> cli::cli_code()
 
     #> ```{r}
@@ -310,7 +310,7 @@ and the other magrittr operators (`%<>%`, `%$%`) are left unchanged.
 file <- tempfile(fileext = ".R")
 writeLines("mtcars %>% dplyr::filter(cyl > 4)", file)
 convert_pipe(file, direction = "to_base")
-#> ✔ Converted pipes in /tmp/Rtmp6Ce9jI/file1f17505e1dea.R ("to_base")
+#> ✔ Converted pipes in /tmp/RtmpomZCc0/file1f09788a10bc.R ("to_base")
 readLines(file) |> cli::cli_code()
 #> mtcars |> dplyr::filter(cyl > 4)
 ```
@@ -335,7 +335,7 @@ floating-point values, and existing suffixes unchanged.
 file <- tempfile(fileext = ".R")
 writeLines("x <- seq_len(10) # length 10", file)
 convert_int_literals(file)
-#> ✔ Added explicit integer suffixes in /tmp/Rtmp6Ce9jI/file1f176eebf884.R
+#> ✔ Added explicit integer suffixes in /tmp/RtmpomZCc0/file1f091282f11d.R
 readLines(file) |> cli::cli_code()
 #> x <- seq_len(10L) # length 10
 ```
@@ -362,7 +362,7 @@ expression.
 file <- tempfile()
 writeLines("foo <- \\() message('滚滚长江东逝水')", file)
 convert_nonascii_code(file, overwrite = TRUE)
-#> ℹ Converted content written to /tmp/Rtmp6Ce9jI/file1f174f94a265
+#> ℹ Converted content written to /tmp/RtmpomZCc0/file1f0977ac2c0d
 readLines(file) |> cli::cli_code()
 #> foo <- \() message('\u6eda\u6eda\u957f\u6c5f\u4e1c\u901d\u6c34')
 ```

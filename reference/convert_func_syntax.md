@@ -55,12 +55,12 @@ reached.
 temp <- tempfile(fileext = ".R")
 writeLines("add_one <- function(x) x + 1", temp)
 convert_func_syntax(temp, direction = "to_lambda")
-#> ✔ Converted function definitions in /tmp/Rtmpz0H4u0/file19dd62d2bb27.R to "to_lambda"
+#> ✔ Converted function definitions in /tmp/RtmpyESqYS/file19d063d1b9c7.R to "to_lambda"
 readLines(temp)
 #> [1] "add_one <- \\(x) x + 1"
 # "add_one <- \(x) x + 1"
 convert_func_syntax(temp, direction = "to_explicit")
-#> ✔ Converted function definitions in /tmp/Rtmpz0H4u0/file19dd62d2bb27.R to "to_explicit"
+#> ✔ Converted function definitions in /tmp/RtmpyESqYS/file19d063d1b9c7.R to "to_explicit"
 readLines(temp)
 #> [1] "add_one <- function(x) x + 1"
 # "add_one <- function(x) x + 1"

@@ -192,7 +192,7 @@ library(rpkgkit)
 dir <- file.path(tempdir(), "R")
 dir.create(dir, recursive = TRUE)
 create_standalone("foo", path = dir, open = FALSE)
-#> ✔ Created standalone file: /tmp/RtmpDQvchb/R/standalone-foo.R
+#> ✔ Created standalone file: /tmp/Rtmp07qleA/R/standalone-foo.R
 ```
 
 ### Validate the standalone file layout
@@ -242,5 +242,5 @@ add_changelog_in_standalone(
   path = file.path(dir, "standalone-foo.R"),
   "Added foo function"
 )
-#> ✔ Added changelog entry (2026-11-02) for /tmp/RtmpDQvchb/R/standalone-foo.R.
+#> ✔ Added changelog entry (2026-11-02) for /tmp/Rtmp07qleA/R/standalone-foo.R.
 ```
