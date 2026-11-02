@@ -6,10 +6,10 @@ library(rpkgkit)
 #> ✔ rpkgkit v0.1.22 loaded [2 ms]
 dir <- tempdir()
 usethis::create_package(path = dir, open = FALSE)
-#> ✔ Setting active project to "/tmp/Rtmp9muKjy".
+#> ✔ Setting active project to "/tmp/RtmpN9hZaK".
 #> ✔ Creating R/.
 #> ✔ Writing DESCRIPTION.
-#> Package: Rtmp9muKjy
+#> Package: RtmpN9hZaK
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):
@@ -41,8 +41,8 @@ while also providing a useful starting template.
 ``` r
 
 use_zzz(path = dir, open = FALSE)
-#> ✔ Setting active project to "/tmp/Rtmp9muKjy".
-#> ✔ Created /tmp/Rtmp9muKjy/R/Rtmp9muKjy-package.R from template.
+#> ✔ Setting active project to "/tmp/RtmpN9hZaK".
+#> ✔ Created /tmp/RtmpN9hZaK/R/RtmpN9hZaK-package.R from template.
 #> ✔ Adding cli to Imports field in DESCRIPTION.
 #> 
 #> ☐ Refer to functions with `cli::fun()`.
@@ -74,7 +74,7 @@ use_clangd(path = dir, overwrite = TRUE)
 #> include path.
 #> Warning: Package RcppArmadillo is not installed; skipping its
 #> include path.
-#> ✔ Created /tmp/Rtmp9muKjy/.clangd.
+#> ✔ Created /tmp/RtmpN9hZaK/.clangd.
 ```
 
 When `path` is a package root, the file also disables background
@@ -84,9 +84,9 @@ indexing for the `R/` directory (which holds no C++ code) and adds
 ``` r
 
 use_clangd(path = dir, include = c("Rcpp", "BH"), overwrite = TRUE)
-#> ! Overwriting /tmp/Rtmp9muKjy/.clangd.
+#> ! Overwriting /tmp/RtmpN9hZaK/.clangd.
 #> Warning: Package BH is not installed; skipping its include path.
-#> ✔ Created /tmp/Rtmp9muKjy/.clangd.
+#> ✔ Created /tmp/RtmpN9hZaK/.clangd.
 ```
 
 ### Configure the jarl linter
@@ -101,7 +101,7 @@ files, and lints the code inside `@examples` and `@examplesIf` tags.
 ``` r
 
 use_jarl(path = dir, overwrite = TRUE)
-#> ✔ Created /tmp/Rtmp9muKjy/jarl.toml.
+#> ✔ Created /tmp/RtmpN9hZaK/jarl.toml.
 #> • Read jarl's editor support
 #>   (<https://jarl.etiennebacher.com/reference/config-file>) to learn how to
 #>   invoke jarl in your preferred editor.
@@ -143,6 +143,56 @@ options such as `select`, `ignore` and `per-file-ignores`, and the
 to run `jarl check` on every push with the `etiennebacher/setup-jarl`
 action.
 
+## RStudio addins
+
+An addin is an exported function registered in
+`inst/rstudio/addins.dcf`; RStudio then lists it in the `Addins` menu
+and runs it in the current session.
+[`use_tidy_addin()`](https://wanglabcsu.github.io/rpkgkit/reference/use_tidy_addin.md)
+writes that entry for you:
+
+``` r
+
+use_tidy_addin(
+  fn_name = "check_my_pkg",
+  desc = "Check my package",
+  path = dir
+)
+```
+
+The entry is appended above the existing ones, so the newest addin comes
+first, and a `Binding` that is already registered is never added twice:
+
+    Name: check_my_pkg
+    Description: Check my package
+    Binding: check_my_pkg
+    Interactive: false
+
+Before writing, the function checks that `path` is a package and that
+`fn_name` is exported in `NAMESPACE`, reads the body of the function
+(from the installed package, or from `R/` when the package has not been
+documented yet), and warns when that body calls no `rstudioapi`
+function, or, for an `Interactive = TRUE` addin, no `shiny`/`miniUI`
+function. In an interactive session the warning asks whether to
+continue; a non-interactive session only reports it and writes the
+entry.
+
+`rpkgkit` registers its own addins in `inst/rstudio/addins.dcf`, so
+every detector can be run from the menu without typing the call:
+
+| Addin | What it checks |
+|----|----|
+| `detect_lost_glue_brace` / `package_lost_glue_brace` | unmatched [`{}`](https://rdrr.io/r/base/Paren.html) in `glue()`/`cli` strings |
+| `detect_print_and_cat` / `package_print_and_cat` | CRAN-unsafe [`print()`](https://rdrr.io/r/base/print.html)/[`cat()`](https://rdrr.io/r/base/cat.html) calls |
+| `detect_fn_arg_path` / `package_fn_arg_path` | path-like arguments of exported functions that default to a concrete location |
+| `package_unmatched_nocov_marker` | unmatched `# nocov start` / `# nocov end` markers |
+| `check_pkgdown_reference` | exported functions missing from the `_pkgdown.yml` reference |
+
+The `detect_*` addins work on the active editor, the package-wide ones
+on the current package directory. They only report; none of them
+rewrites a file. In Positron, addins need a third-party extension such
+as Positron R Wizard.
+
 ## Vendor permissively licensed code
 
 [`use_vendor()`](https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.md)
@@ -161,11 +211,11 @@ try(use_vendor(
 ))
 #> ℹ Fetching repository information for WangLabCSU/rpkgkit...
 #> ✔ Vendor package uses MIT license.
-#> ✔ Created directory /tmp/Rtmp9muKjy/inst/vendor/rpkgkit.
+#> ✔ Created directory /tmp/RtmpN9hZaK/inst/vendor/rpkgkit.
 #> ✔ Copied LICENSE.
 #> ✔ Copied LICENSE.md.
 #> ✔ Created inst/vendor/rpkgkit/README.md.
-#> ✔ Created /tmp/Rtmp9muKjy/R/vendor-rpkgkit.R.
+#> ✔ Created /tmp/RtmpN9hZaK/R/vendor-rpkgkit.R.
 #> ✔ Added rpkgkit authors to Authors@R.
 #> ✔ Updated DESCRIPTION.
 #> ☐ Consider pasting the following statement into README.md
@@ -269,7 +319,7 @@ package ships Rust code.
 ``` r
 
 use_workflow_version_update(path = dir)
-#> ✔ Created workflow: /tmp/Rtmp9muKjy/.github/workflows/version_update.yml
+#> ✔ Created workflow: /tmp/RtmpN9hZaK/.github/workflows/version_update.yml
 #> → It triggers on push to "main/master" and via workflow_dispatch. Version bump
 #>   is inferred from commit messages or manual input.
 #> ☐ It is recommended to add a devel version badge to your README.md via
@@ -287,7 +337,7 @@ packages.
 ``` r
 
 use_workflow_rust_compatible_check(path = dir)
-#> ✔ Created workflow: /tmp/Rtmp9muKjy/.github/workflows/R-CMD-check.yaml
+#> ✔ Created workflow: /tmp/RtmpN9hZaK/.github/workflows/R-CMD-check.yaml
 #> → It triggers on push to "main" and on pull requests targeting "main".
 #> → Rust crates are compiled with a pinned toolchain and the
 #>   "x86_64-pc-windows-gnu" target on Windows, so they link against Rtools.
@@ -320,7 +370,7 @@ so unmerged work is never overwritten. Push experimental changes to
 ``` r
 
 use_workflow_test_branch(path = dir)
-#> ✔ Created workflow: /tmp/Rtmp9muKjy/.github/workflows/sync_test_branch.yml
+#> ✔ Created workflow: /tmp/RtmpN9hZaK/.github/workflows/sync_test_branch.yml
 #> → It runs after "R-CMD-check.yaml" succeeds for "main/master", then syncs the
 #>   checked commit to "test".
 #> → If "test" has unmerged work, the sync is skipped automatically.

@@ -77,6 +77,21 @@ color_cli2$cli_alert_success(
 )
 ```
 
+The wrapped functions also take `.envir`, defaulting to
+[`parent.frame()`](https://rdrr.io/r/base/sys.parent.html) and forwarded
+to the cli function, so [`{}`](https://rdrr.io/r/base/Paren.html)
+interpolation is resolved in the caller’s environment instead of inside
+the wrapper:
+
+``` r
+
+name <- "world"
+color_cli$cli_alert_info("Hello, {name}")
+
+msg_env <- list2env(list(who = "Positron"), parent = emptyenv())
+color_cli$cli_alert_info("Hello, {who}", .envir = msg_env)
+```
+
 ### Add timestamps to cli output
 
 The `ts_cli.R` standalone script creates timestamped `cli` functions.
@@ -173,11 +188,11 @@ Create a local standalone file with a standard metadata header:
 ``` r
 
 library(rpkgkit)
-#> ✔ rpkgkit v0.1.22 loaded [1 ms]
+#> ✔ rpkgkit v0.1.22 loaded [2 ms]
 dir <- file.path(tempdir(), "R")
 dir.create(dir, recursive = TRUE)
 create_standalone("foo", path = dir, open = FALSE)
-#> ✔ Created standalone file: /tmp/RtmppDgdga/R/standalone-foo.R
+#> ✔ Created standalone file: /tmp/RtmpDQvchb/R/standalone-foo.R
 ```
 
 ### Validate the standalone file layout
@@ -216,7 +231,7 @@ After editing standalone files, refresh their `last-updated` field:
 ``` r
 
 update_time_in_standalone(path = file.path(dir, "standalone-foo.R"))
-#> ✔ Updated last-updated to "2026-10-31" in 1 file.
+#> ✔ Updated last-updated to "2026-11-02" in 1 file.
 ```
 
 Add a dated changelog entry to one or more standalone files:
@@ -227,5 +242,5 @@ add_changelog_in_standalone(
   path = file.path(dir, "standalone-foo.R"),
   "Added foo function"
 )
-#> ✔ Added changelog entry (2026-10-31) for /tmp/RtmppDgdga/R/standalone-foo.R.
+#> ✔ Added changelog entry (2026-11-02) for /tmp/RtmpDQvchb/R/standalone-foo.R.
 ```

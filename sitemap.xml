@@ -33,6 +33,7 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/convert_pipe.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/create_standalone.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/current_packages.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/detect_fn_arg_path.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/detect_print_and_cat.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/detect_unmatched_nocov_marker.html</loc></url>
@@ -83,6 +84,7 @@
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_jarl.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_multilanguage_readme.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_r_v4.1.0.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_tidy_addin.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_url.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_rust_compatible_check.html</loc></url>

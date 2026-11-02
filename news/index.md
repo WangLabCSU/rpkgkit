@@ -1,5 +1,107 @@
 # Changelog
 
+## rpkgkit 0.1.23 (2026-11-01)
+
+### NEW FEATURES
+
+- Added
+  [`detect_fn_arg_path()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_fn_arg_path.md)
+  and
+  [`package_fn_arg_path()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_fn_arg_path.md)
+  to report exported functions whose path-like argument defaults to a
+  concrete location, which CRAN does not allow. The check is syntactic:
+  the file is parsed, the top-level `name <- function(...)` definitions
+  that count as exported are kept, and every formal whose name matches
+  `arg_pattern` (default `"path|file|filename"`) is reported when its
+  default is not listed in `allow` (default `"NULL"`); an argument
+  without a default is always fine. Each hit is printed as
+  `file:line:col` with the function and argument name, the source lines
+  and a caret marker under `arg = default`.
+  [`detect_fn_arg_path()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_fn_arg_path.md)
+  checks one file and falls back to the active document; pass `exports`
+  or `export_patterns` when the exports of that file are known,
+  otherwise every top-level function is checked.
+  [`package_fn_arg_path()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_fn_arg_path.md)
+  reads the exports from `NAMESPACE` and scans the `.R` files under
+  `dirs` (default `"R"`). Both return `TRUE` invisibly when nothing
+  needs fixing.
+- Added
+  [`use_tidy_addin()`](https://wanglabcsu.github.io/rpkgkit/reference/use_tidy_addin.md)
+  to register an exported function in `inst/rstudio/addins.dcf`, which
+  makes it available from the RStudio Addins menu. The new entry is
+  written above the existing ones, a `Binding` that is already
+  registered is never added twice, and the file is written as UTF-8.
+  Before writing, the function checks that the path is a package and
+  that the function is exported in `NAMESPACE`, reads the function body
+  (from the installed package, or from `R/` when the package has not
+  been documented yet), and warns when the body calls no `rstudioapi`
+  function or, with `Interactive = TRUE`, no `shiny`/`miniUI` function;
+  a non-interactive session cannot confirm, so it only reports the
+  warning and continues. It returns the path of the dcf file invisibly,
+  or `NULL` when the operation is cancelled.
+- `rpkgkit` now registers its own addins in `inst/rstudio/addins.dcf`:
+  [`package_lost_glue_brace()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.md)
+  and
+  [`detect_lost_glue_brace()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.md),
+  [`package_print_and_cat()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_print_and_cat.md)
+  and
+  [`detect_print_and_cat()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_print_and_cat.md),
+  [`package_fn_arg_path()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_fn_arg_path.md)
+  and
+  [`detect_fn_arg_path()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_fn_arg_path.md),
+  [`package_unmatched_nocov_marker()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_unmatched_nocov_marker.md)
+  and
+  [`check_pkgdown_reference()`](https://wanglabcsu.github.io/rpkgkit/reference/check_pkgdown_reference.md).
+  The `detect_*()` addins run on the active editor, the package-wide
+  ones on the current package directory. All of them only report, so
+  none rewrites a file.
+
+### MINOR IMPROVEMENTS
+
+- [`detect_lost_glue_brace()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.md)
+  and
+  [`detect_print_and_cat()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_print_and_cat.md)
+  now print the offending source line with cli syntax highlighting. The
+  file is highlighted once and then indexed line by line, because a
+  single source line is usually not parseable (a continuation such as
+  `x = fn(a, b),` ends with a comma) and
+  [`cli::code_highlight()`](https://cli.r-lib.org/reference/code_highlight.html)
+  silently returns unparseable input unchanged; when the highlighting
+  fails, or when it returns a different number of lines, the plain
+  source is printed instead.
+- `add_colors_to_cli()` (standalone `colorful_cli.R`) gained `.envir`,
+  defaulting to
+  [`parent.frame()`](https://rdrr.io/r/base/sys.parent.html) and
+  forwarded to the wrapped cli function, so glue-style interpolation
+  such as `"Hello, {name}"` is resolved in the caller’s environment
+  instead of the wrapper’s frame.
+- [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
+  now resolves `file_name` inside the function body (`file_name = NULL`
+  means `<pkg>-package.R`) instead of in the default argument, following
+  the `path = NULL` convention of the other `use_*()` helpers.
+
+### DOCUMENTATION
+
+- The `code_convertion` vignette gained a “Detect default paths in
+  exported arguments” section covering
+  [`detect_fn_arg_path()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_fn_arg_path.md)
+  and
+  [`package_fn_arg_path()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_fn_arg_path.md),
+  and the `pkg_maintain` vignette an “RStudio addins” section covering
+  [`use_tidy_addin()`](https://wanglabcsu.github.io/rpkgkit/reference/use_tidy_addin.md)
+  and the bundled addins.
+- The `standalone_tools` vignette documents the `.envir` argument of the
+  `colorful_cli.R` wrapper.
+- The README gained an “Addin” section, and `README.md` was regenerated
+  from `README.Rmd`. Both translations under `inst/translations/` were
+  brought back in sync with the English README: they now share its badge
+  block (the stale development-version badge is gone), and carry the
+  “recommended packages” and “AI skills” sections and the “Addin”
+  section they were missing.
+- The package skill (`skills/rpkgkit/`) covers the new functions and the
+  addin workflow.
+- Vignette subtitles now report version 0.1.23.
+
 ## rpkgkit 0.1.22 (2026-10-28)
 
 ### NEW FEATURES

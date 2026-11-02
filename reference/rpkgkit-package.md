@@ -14,7 +14,7 @@ MIT + file LICENSE
 
 Useful links:
 
-- /tmp/RtmpoUp5qA
+- <https://github.com/Exceret/rpkgkit>
 
 - Report bugs at <https://github.com/WangLabCSU/rpkgkit/issues>
 

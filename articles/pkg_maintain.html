@@ -64,10 +64,10 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Package Setup &amp; Maintenace</h1>
-            <h3 data-toc-skip class="subtitle">rpkgkit 0.1.21</h3>
+            <h3 data-toc-skip class="subtitle">rpkgkit 0.1.23</h3>
                         <h4 data-toc-skip class="author">Yuxi Yang</h4>
             
-            <h4 data-toc-skip class="date">2026-10-31</h4>
+            <h4 data-toc-skip class="date">2026-11-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/WangLabCSU/rpkgkit/blob/main/vignettes/pkg_maintain.Rmd" class="external-link"><code>vignettes/pkg_maintain.Rmd</code></a></small>
       <div class="d-none name"><code>pkg_maintain.Rmd</code></div>
@@ -76,14 +76,14 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">rpkgkit</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Exceret/rpkgkit" class="external-link">rpkgkit</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">rpkgkit</span> v0.1.22 loaded <span style="color: #555555;">[2 ms]</span></span></span>
 <span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/create_package.html" class="external-link">create_package</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span>, open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/tmp/Rtmp9muKjy"</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/tmp/RtmpN9hZaK"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Creating <span style="color: #0000BB;">R/</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Writing <span style="color: #0000BB;">DESCRIPTION</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Package</span>: Rtmp9muKjy</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">Package</span>: RtmpN9hZaK</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">Title</span>: What the Package Does (One Line, Title Case)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">Version</span>: 0.0.0.9000</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">Authors@R</span> (parsed):</span></span>
@@ -112,8 +112,8 @@ is similar to <code><a href="https://usethis.r-lib.org/reference/use_package_doc
 providing a useful starting template.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/use_zzz.html">use_zzz</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span>, open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/tmp/Rtmp9muKjy"</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/Rtmp9muKjy/R/Rtmp9muKjy-package.R</span> from template.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/tmp/RtmpN9hZaK"</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/RtmpN9hZaK/R/RtmpN9hZaK-package.R</span> from template.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Adding <span style="color: #0000BB;">cli</span> to <span style="color: #00BB00;">Imports</span> field in DESCRIPTION.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">☐</span> Refer to functions with `cli::fun()`.</span></span></code></pre></div>
@@ -142,16 +142,16 @@ are skipped with a warning.</p>
 <span><span class="co">#&gt; include path.</span></span>
 <span><span class="co">#&gt; Warning: Package <span style="color: #0000BB;">RcppArmadillo</span> is not installed; skipping its</span></span>
 <span><span class="co">#&gt; include path.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/Rtmp9muKjy/.clangd</span>.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/RtmpN9hZaK/.clangd</span>.</span></span></code></pre></div>
 <p>When <code>path</code> is a package root, the file also disables
 background indexing for the <code>R/</code> directory (which holds no
 C++ code) and adds <code>.clangd</code> to
 <code>.Rbuildignore</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/use_clangd.html">use_clangd</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span>, include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Rcpp"</span>, <span class="st">"BH"</span><span class="op">)</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Overwriting <span style="color: #0000BB;">/tmp/Rtmp9muKjy/.clangd</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Overwriting <span style="color: #0000BB;">/tmp/RtmpN9hZaK/.clangd</span>.</span></span>
 <span><span class="co">#&gt; Warning: Package <span style="color: #0000BB;">BH</span> is not installed; skipping its include path.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/Rtmp9muKjy/.clangd</span>.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/RtmpN9hZaK/.clangd</span>.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="configure-the-jarl-linter">Configure the jarl linter<a class="anchor" aria-label="anchor" href="#configure-the-jarl-linter"></a>
@@ -164,7 +164,7 @@ skips vendored files, and lints the code inside <code>@examples</code>
 and <code>@examplesIf</code> tags.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/use_jarl.html">use_jarl</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/Rtmp9muKjy/jarl.toml</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/RtmpN9hZaK/jarl.toml</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Read jarl's editor support</span></span>
 <span><span class="co">#&gt;   (<span style="color: #0000BB; font-style: italic;">&lt;https://jarl.etiennebacher.com/reference/config-file&gt;</span>) to learn how to</span></span>
 <span><span class="co">#&gt;   invoke jarl in your preferred editor.</span></span>
@@ -203,6 +203,89 @@ guide</a> to run <code>jarl check</code> on every push with the
 </div>
 </div>
 <div class="section level2">
+<h2 id="rstudio-addins">RStudio addins<a class="anchor" aria-label="anchor" href="#rstudio-addins"></a>
+</h2>
+<p>An addin is an exported function registered in
+<code>inst/rstudio/addins.dcf</code>; RStudio then lists it in the
+<code>Addins</code> menu and runs it in the current session.
+<code><a href="../reference/use_tidy_addin.html">use_tidy_addin()</a></code> writes that entry for you:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_tidy_addin.html">use_tidy_addin</a></span><span class="op">(</span></span>
+<span>  fn_name <span class="op">=</span> <span class="st">"check_my_pkg"</span>,</span>
+<span>  desc <span class="op">=</span> <span class="st">"Check my package"</span>,</span>
+<span>  path <span class="op">=</span> <span class="va">dir</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The entry is appended above the existing ones, so the newest addin
+comes first, and a <code>Binding</code> that is already registered is
+never added twice:</p>
+<pre><code>Name: check_my_pkg
+Description: Check my package
+Binding: check_my_pkg
+Interactive: false</code></pre>
+<p>Before writing, the function checks that <code>path</code> is a
+package and that <code>fn_name</code> is exported in
+<code>NAMESPACE</code>, reads the body of the function (from the
+installed package, or from <code>R/</code> when the package has not been
+documented yet), and warns when that body calls no
+<code>rstudioapi</code> function, or, for an
+<code>Interactive = TRUE</code> addin, no
+<code>shiny</code>/<code>miniUI</code> function. In an interactive
+session the warning asks whether to continue; a non-interactive session
+only reports it and writes the entry.</p>
+<p><code>rpkgkit</code> registers its own addins in
+<code>inst/rstudio/addins.dcf</code>, so every detector can be run from
+the menu without typing the call:</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th>Addin</th>
+<th>What it checks</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>
+<code>detect_lost_glue_brace</code> /
+<code>package_lost_glue_brace</code>
+</td>
+<td>unmatched <code><a href="https://rdrr.io/r/base/Paren.html" class="external-link">{}</a></code> in <code>glue()</code>/<code>cli</code>
+strings</td>
+</tr>
+<tr class="even">
+<td>
+<code>detect_print_and_cat</code> /
+<code>package_print_and_cat</code>
+</td>
+<td>CRAN-unsafe <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>/<code><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat()</a></code> calls</td>
+</tr>
+<tr class="odd">
+<td>
+<code>detect_fn_arg_path</code> /
+<code>package_fn_arg_path</code>
+</td>
+<td>path-like arguments of exported functions that default to a concrete
+location</td>
+</tr>
+<tr class="even">
+<td><code>package_unmatched_nocov_marker</code></td>
+<td>unmatched <code># nocov start</code> / <code># nocov end</code>
+markers</td>
+</tr>
+<tr class="odd">
+<td><code>check_pkgdown_reference</code></td>
+<td>exported functions missing from the <code>_pkgdown.yml</code>
+reference</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>detect_*</code> addins work on the active editor, the
+package-wide ones on the current package directory. They only report;
+none of them rewrites a file. In Positron, addins need a third-party
+extension such as Positron R Wizard.</p>
+</div>
+<div class="section level2">
 <h2 id="vendor-permissively-licensed-code">Vendor permissively licensed code<a class="anchor" aria-label="anchor" href="#vendor-permissively-licensed-code"></a>
 </h2>
 <p><code><a href="../reference/use_vendor.html">use_vendor()</a></code> records attribution and licensing
@@ -210,7 +293,7 @@ information when incorporating selected source files from a permissively
 licensed GitHub R package. It creates an <code>inst/vendor/</code>
 directory, a <code>R/vendor-*.R</code> file, and updates relevant
 <code>DESCRIPTION</code> fields.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/use_vendor.html">use_vendor</a></span><span class="op">(</span></span>
 <span>  pkg <span class="op">=</span> <span class="st">"WangLabCSU/rpkgkit"</span>,</span>
 <span>  <span class="st">"43_use_vendor.R"</span>,</span>
@@ -219,11 +302,11 @@ directory, a <code>R/vendor-*.R</code> file, and updates relevant
 <span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Fetching repository information for <span style="font-style: italic;">WangLabCSU/rpkgkit</span>...</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Vendor package uses MIT license.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created directory <span style="color: #0000BB;">/tmp/Rtmp9muKjy/inst/vendor/rpkgkit</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created directory <span style="color: #0000BB;">/tmp/RtmpN9hZaK/inst/vendor/rpkgkit</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copied <span style="color: #0000BB;">LICENSE</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copied <span style="color: #0000BB;">LICENSE.md</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">inst/vendor/rpkgkit/README.md</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/Rtmp9muKjy/R/vendor-rpkgkit.R</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/RtmpN9hZaK/R/vendor-rpkgkit.R</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Added <span style="color: #0000BB;">rpkgkit</span> authors to <span style="color: #00BB00;">Authors@R</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Updated DESCRIPTION.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">☐</span> <span style="color: #00BBBB;">Consider pasting the following statement into README.md</span></span></span>
@@ -249,20 +332,20 @@ your README when appropriate.</p>
 <p>R 4.1.0 introduced the pipe (<code>|&gt;</code>) and anonymous
 function <code>\()</code>. If these syntaxes need to be used in a
 package, the R package must require at least R version 4.1.0.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/use_r_v4.1.0.html">use_r_v4.1.0</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Adding <span style="color: #0000BB;">R</span> to <span style="color: #00BB00;">Depends</span> field in DESCRIPTION.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="add-url-in-description">Add URL in <code>DESCRIPTION</code><a class="anchor" aria-label="anchor" href="#add-url-in-description"></a>
 </h3>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/use_url.html">use_url</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="add-bug-reports-url-in-description">Add bug reports URL in <code>DESCRIPTION</code><a class="anchor" aria-label="anchor" href="#add-bug-reports-url-in-description"></a>
 </h3>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/use_bugreports.html">use_bugreports</a></span><span class="op">(</span><span class="va">dir</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -274,7 +357,7 @@ machine-readable citation information for software and datasets.</p>
 <p>Code developers can include such files in their source code
 repositories to let others know how to correctly cite their
 software.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/open_cffinit.html">open_cffinit</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><strong>This cannot replace
 <code><a href="https://usethis.r-lib.org/reference/use_citation.html" class="external-link">usethis::use_citation()</a></code></strong>, it just complements
@@ -286,10 +369,10 @@ project.</p>
 <p>Use <code><a href="../reference/add_global_rbuildignore.html">add_global_rbuildignore()</a></code> and
 <code><a href="../reference/add_global_gitgnore.html">add_global_gitgnore()</a></code> to add the corresponding global
 ignore-file templates to a package.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/add_global_rbuildignore.html">add_global_rbuildignore</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Added 38 pattern(s) to <span style="color: #0000BB;">.Rbuildignore</span>.</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/add_global_gitgnore.html">add_global_gitgnore</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -314,9 +397,9 @@ the commit message (<code>major</code>/<code>breaking</code>,
 would exceed the highest version documented in <code>NEWS.md</code>, and
 the <code>version</code> field of <code>src/rust/Cargo.toml</code> is
 kept in sync when the package ships Rust code.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/use_workflow_version_update.html">use_workflow_version_update</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created workflow: <span style="color: #0000BB;">/tmp/Rtmp9muKjy/.github/workflows/version_update.yml</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created workflow: <span style="color: #0000BB;">/tmp/RtmpN9hZaK/.github/workflows/version_update.yml</span></span></span>
 <span><span class="co">#&gt; → It triggers on push to <span style="color: #0000BB;">"main/master"</span> and via <span style="color: #00BB00;">workflow_dispatch</span>. Version bump</span></span>
 <span><span class="co">#&gt;   is inferred from commit messages or manual input.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">☐</span> <span style="color: #00BBBB;">It is recommended to add a devel version badge to your </span><span style="color: #0000BB;">README.md</span><span style="color: #00BBBB;"> via</span></span></span>
@@ -331,9 +414,9 @@ crates, which is what packages built on
 <code>extendr</code>/<code>rextendr</code> need. It replaces
 <code>usethis::use_github_action("check-standard")</code> for such
 packages.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/use_workflow_rust_compatible_check.html">use_workflow_rust_compatible_check</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created workflow: <span style="color: #0000BB;">/tmp/Rtmp9muKjy/.github/workflows/R-CMD-check.yaml</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created workflow: <span style="color: #0000BB;">/tmp/RtmpN9hZaK/.github/workflows/R-CMD-check.yaml</span></span></span>
 <span><span class="co">#&gt; → It triggers on push to <span style="color: #0000BB;">"main"</span> and on pull requests targeting <span style="color: #0000BB;">"main"</span>.</span></span>
 <span><span class="co">#&gt; → Rust crates are compiled with a pinned toolchain and the</span></span>
 <span><span class="co">#&gt;   <span style="color: #0000BB;">"x86_64-pc-windows-gnu"</span> target on Windows, so they link against Rtools.</span></span></code></pre></div>
@@ -369,9 +452,9 @@ holds commits that are not reachable from <code>main</code>, so unmerged
 work is never overwritten. Push experimental changes to
 <code>test</code> and each push to <code>main</code> resets it
 again.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/use_workflow_test_branch.html">use_workflow_test_branch</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created workflow: <span style="color: #0000BB;">/tmp/Rtmp9muKjy/.github/workflows/sync_test_branch.yml</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created workflow: <span style="color: #0000BB;">/tmp/RtmpN9hZaK/.github/workflows/sync_test_branch.yml</span></span></span>
 <span><span class="co">#&gt; → It runs after <span style="color: #0000BB;">"R-CMD-check.yaml"</span> succeeds for <span style="color: #0000BB;">"main/master"</span>, then syncs the</span></span>
 <span><span class="co">#&gt;   checked commit to <span style="color: #0000BB;">"test"</span>.</span></span>
 <span><span class="co">#&gt; → If <span style="color: #0000BB;">"test"</span> has unmerged work, the sync is skipped automatically.</span></span></code></pre></div>
@@ -386,7 +469,7 @@ the package manager in use (<code>dpkg</code>, <code>rpm</code>,
 <code>pacman</code>, <code>apk</code> or <code>brew</code>), checks each
 dependency with it, and reports every hit and miss together with a
 ready-to-paste install command for the missing ones.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_sysdeps.html">check_sysdeps</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>With <code>deps = NULL</code> (the default), a built-in list of
 graphics and font libraries (<code>freetype</code>,
@@ -396,12 +479,12 @@ graphics and font libraries (<code>freetype</code>,
 package manager expects. Pass your own names in <code>deps</code>, and
 optionally set <code>manager</code> to check against a manager other
 than the detected one:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/check_sysdeps.html">check_sysdeps</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"freetype-devel"</span>, <span class="st">"libwebp-devel"</span><span class="op">)</span>, manager <span class="op">=</span> <span class="st">"rpm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The result is returned invisibly as a named logical vector, so it can
 be reused in scripts. Set <code>verbose = FALSE</code> to keep the run
 silent:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ok</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/check_sysdeps.html">check_sysdeps</a></span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">ok</span><span class="op">[</span><span class="op">!</span><span class="va">ok</span><span class="op">]</span></span></code></pre></div>
 </div>
@@ -412,7 +495,7 @@ silent:</p>
 Positron IDE that hosts the current R session. It is useful for
 diagnostics, bug reports, or for enabling IDE-specific behaviour only on
 recent builds.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_positron_version.html">get_positron_version</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># e.g. "2025.01.0"</span></span>
 <span><span class="fu"><a href="../reference/get_positron_version.html">get_positron_version</a></span><span class="op">(</span>long <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># e.g. "2025.01.0-123"</span></span></code></pre></div>
 <p>The version is looked up in three steps, in this order:</p>

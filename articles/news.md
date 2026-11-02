@@ -10,10 +10,10 @@ library(rpkgkit)
 #> ✔ rpkgkit v0.1.22 loaded [2 ms]
 tmpdir <- tempdir()
 usethis::create_package(tmpdir, open = FALSE)
-#> ✔ Setting active project to "/tmp/Rtmpv7HHFv".
+#> ✔ Setting active project to "/tmp/RtmpXRymot".
 #> ✔ Creating R/.
 #> ✔ Writing DESCRIPTION.
-#> Package: Rtmpv7HHFv
+#> Package: RtmpXRymot
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):
@@ -49,14 +49,14 @@ news_md_add_entry(
   category = "NEW FEATURES",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/Rtmpv7HHFv/NEWS.md
+#> ✔ Added 1 entry to /tmp/RtmpXRymot/NEWS.md
 #> → Version: 0.0.0.9000, Category: NEW FEATURES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # Rtmpv7HHFv 0.0.0.9000 (2026-10-31)
+#> # RtmpXRymot 0.0.0.9000 (2026-11-02)
 #> 
 #> ## NEW FEATURES
 #> 
@@ -78,14 +78,14 @@ news_md_add_entry(
   contributor = "Jack",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/Rtmpv7HHFv/NEWS.md
+#> ✔ Added 1 entry to /tmp/RtmpXRymot/NEWS.md
 #> → Version: 0.0.0.9000, Category: BUG FIXES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # Rtmpv7HHFv 0.0.0.9000 (2026-10-31)
+#> # RtmpXRymot 0.0.0.9000 (2026-11-02)
 #> 
 #> ## BUG FIXES
 #> 

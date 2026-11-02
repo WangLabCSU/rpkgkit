@@ -70,6 +70,10 @@ The following functions help you to create and maintain an R package.
 
   Detect Unmatched `nocov` Markers
 
+- [`package_fn_arg_path()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_fn_arg_path.md)
+  [`detect_fn_arg_path()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_fn_arg_path.md)
+  : Detect Default Paths in Exported Function Arguments
+
 - [`flir_fix()`](https://wanglabcsu.github.io/rpkgkit/reference/flir_fix.md)
   : Fix R code or package using flir
 
@@ -143,6 +147,9 @@ The following functions help you to create and maintain an R package.
 
 - [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
   : Create a (pkgname)-package.R file from a template
+
+- [`use_tidy_addin()`](https://wanglabcsu.github.io/rpkgkit/reference/use_tidy_addin.md)
+  : Create an RStudio Addin registration entry for a package function
 
 - [`convert_nonascii_code()`](https://wanglabcsu.github.io/rpkgkit/reference/convert_nonascii_code.md)
   : Convert Non-ASCII Code
