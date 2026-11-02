@@ -30,6 +30,14 @@ local_addin_pkg <- function(
   pkg
 }
 
+# `use_tidy_addin()` returns a path built on `normalizePath(path)`, which
+# resolves symlinks on macOS (`/var` -> `/private/var`) and expands 8.3 short
+# names on Windows (`RUNNER~1` -> `runneradmin`). Normalize both sides before
+# comparing so the tests are portable.
+norm_path <- function(path) {
+  normalizePath(path, winslash = "/", mustWork = FALSE)
+}
+
 test_that("use_tidy_addin writes the addin registration", {
   skip_if_not_installed("desc")
   pkg <- local_addin_pkg()
@@ -60,8 +68,8 @@ test_that("use_tidy_addin returns the dcf path invisibly", {
     suppressMessages(use_tidy_addin("my_addin", "gadget", path = pkg))
   )
   expect_equal(
-    suppressMessages(use_tidy_addin("my_addin", "gadget", path = pkg)),
-    file.path(pkg, "inst", "rstudio", "addins.dcf")
+    norm_path(suppressMessages(use_tidy_addin("my_addin", "gadget", path = pkg))),
+    norm_path(file.path(pkg, "inst", "rstudio", "addins.dcf"))
   )
 })
 
@@ -119,8 +127,8 @@ test_that("use_tidy_addin does not register the same addin twice", {
 
   expect_message(
     expect_equal(
-      use_tidy_addin("my_addin", "again", path = pkg),
-      dcf
+      norm_path(use_tidy_addin("my_addin", "again", path = pkg)),
+      norm_path(dcf)
     ),
     "already registered"
   )
