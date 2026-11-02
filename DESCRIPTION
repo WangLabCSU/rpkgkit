@@ -18,7 +18,7 @@ Description: Utilities for R package development including NEWS.md
     'RStudio'. Includes helper functions for renaming functions and
     detecting common coding errors.
 License: MIT + file LICENSE
-URL: /tmp/RtmpoUp5qA
+URL: https://github.com/Exceret/rpkgkit
 BugReports: https://github.com/WangLabCSU/rpkgkit/issues
 Depends: 
     R (>= 4.1.0)

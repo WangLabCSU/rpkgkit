@@ -1,0 +1,49 @@
+Name: package_func_arg_explicit
+Description: Make all function arguments explicit in R/ folder.
+Binding: package_func_arg_explicit
+Interactive: false
+
+Name: make_func_arg_explicit
+Description: Make all function arguments explicit in the active file.
+Binding: make_func_arg_explicit
+Interactive: false
+
+Name: package_lost_glue_brace
+Description: Detect all possible unmatched glue(cli) braces in R/ folder.
+Binding: package_lost_glue_brace
+Interactive: false
+
+Name: detect_lost_glue_brace
+Description: Detect all possible unmatched glue(cli) braces in the active file.
+Binding: detect_lost_glue_brace
+Interactive: false
+
+Name: package_print_and_cat
+Description: Detect CRAN-unsafe print() and cat() calls in R/ folder.
+Binding: package_print_and_cat
+Interactive: false
+
+Name: detect_print_and_cat
+Description: Detect CRAN-unsafe print() and cat() calls in the active file.
+Binding: detect_print_and_cat
+Interactive: false
+
+Name: package_fn_arg_path
+Description: Detect default paths in arguments of exported functions across the package.
+Binding: package_fn_arg_path
+Interactive: false
+
+Name: detect_fn_arg_path
+Description: Detect default paths in arguments of exported functions in the active file.
+Binding: detect_fn_arg_path
+Interactive: false
+
+Name: package_unmatched_nocov_marker
+Description: Detect unmatched # nocov start / # nocov end markers in R/ folder.
+Binding: package_unmatched_nocov_marker
+Interactive: false
+
+Name: check_pkgdown_reference
+Description: Check that every exported function is listed in the _pkgdown.yml reference.
+Binding: check_pkgdown_reference
+Interactive: false

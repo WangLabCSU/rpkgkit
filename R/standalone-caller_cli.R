@@ -1,7 +1,7 @@
 # ---
 # repo: WangLabCSU/rpkgkit
 # file: standalone-caller_cli.R
-# last-updated: 2026-10-12
+# last-updated: 2026-11-01
 # license: https://unlicense.org
 # imports: [cli, rlang]
 # ---
@@ -9,7 +9,9 @@
 # Retrieve caller name and add caller context to CLI functions.
 #
 # ## Changelog:
-#
+# * `add_caller_to_cli()`: the wrapper now takes `.envir = parent.frame()` and
+#   forwards it to the wrapped cli function, so `{}` interpolation resolves in
+#   the caller's environment instead of the wrapper's frame
 #
 # 2026-10-12:
 # * Added variable checking
@@ -77,12 +79,12 @@ add_caller_to_cli <- function(cli_func, offset = 2L) {
   if (!is.function(cli_func)) {
     cli::cli_abort(message = c("x" = "`cli_func` must be a {.cls function}"))
   }
-  function(...) {
+  function(..., .envir = parent.frame()) {
     # offset = 1 because we are inside this anonymous wrapper function.
     # We look back 1 frame to find who called this wrapper.
     caller_name <- get_caller_name(offset = offset)
 
-    messages <- list(...)
+    messages <- list(..., .envir = .envir)
 
     if (length(messages) > 0L && is.character(messages[[1L]])) {
       # Construct the prefix: [caller]:

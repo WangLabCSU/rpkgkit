@@ -71,6 +71,7 @@ reference:
       - package_lost_glue_brace
       - package_print_and_cat
       - package_unmatched_nocov_marker
+      - package_fn_arg_path
       - flir_fix
       - inquire_standalone
       - package_func_arg_explicit
@@ -91,10 +92,12 @@ reference:
       - use_workflow_test_branch
       - use_workflow_version_update
       - use_zzz
+      - use_tidy_addin
       - current_packages
       - detect_lost_glue_brace
       - detect_print_and_cat
       - detect_unmatched_nocov_marker
+      - detect_fn_arg_path
       - imported_functions
       - make_func_arg_explicit
       - make_func_call_explicit

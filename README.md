@@ -84,6 +84,15 @@ It’s recommended to use following packages together with `rpkgkit`:
 - [`usethis`](https://usethis.r-lib.org/): manage package metadata.
 - [`devtools`](https://devtools.r-lib.org/): build and check package.
 
+## Addin
+
+After v0.1.23, `rpkgkit` ships an addin that can be used in RStudio.
+It’s available in the `Addins` menu, and can be accessed by pressing
+`Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (macOS).
+
+If you want to use addins in Positron, you can use [Positron R
+Wizard](https://github.com/ntluong95/positron-r-wizard.git) extension.
+
 ## AI skills
 
 `rpkgkit` ships an agent skill that tells coding agents when to reach

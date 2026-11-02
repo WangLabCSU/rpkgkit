@@ -150,13 +150,13 @@ package_detect_print_and_cat <- function(
     )
     tag <- if (!is.null(info$kind)) paste0(" [", info$kind, "]") else ""
     cli::cli_text(
-      "{.file {relative_path}}: {.val {info$line1}}:"
+      "{.file {relative_path}}: {info$line1}:"
     )
     message(paste0(
-      report_lines[[info$line1]],
+      cli::code_highlight(report_lines[[info$line1]]),
       cli::col_grey(tag),
       "\n",
-      caret
+      cli::col_grey(caret)
     ))
   }
 

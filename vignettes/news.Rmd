@@ -1,6 +1,6 @@
 ---
 title: "Edit NEWS"
-subtitle: "rpkgkit 0.1.21"
+subtitle: "rpkgkit 0.1.23"
 author: "Yuxi Yang"
 date: "`r Sys.Date()`"
 lang: en-US

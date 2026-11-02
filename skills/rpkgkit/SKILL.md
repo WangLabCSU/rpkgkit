@@ -1,6 +1,6 @@
 ---
 name: rpkgkit
-description: Use rpkgkit functions to create and maintain R packages when the task involves qualifying package calls with pkg::, detecting CRAN-unsafe print()/cat(), lost glue braces or unmatched # nocov start / # nocov end markers, modernizing R syntax (base/magrittr pipes, integer L suffix, non-ASCII literals, \\( lambdas, knitr chunk headers), editing or displaying NEWS.md, creating r-lib standalone files, configuring DESCRIPTION fields, .Rbuildignore/.clangd/zzz.R, vendoring upstream code, generating GitHub Actions workflows (R-CMD-check including Rust/extendr builds, version bump, branch sync), or generating multilingual README translations and badges.
+description: Use rpkgkit functions to create and maintain R packages when the task involves qualifying package calls with pkg::, detecting CRAN-unsafe print()/cat(), lost glue braces, unmatched # nocov start / # nocov end markers or path-like arguments of exported functions that default to a concrete location, modernizing R syntax (base/magrittr pipes, integer L suffix, non-ASCII literals, \\( lambdas, knitr chunk headers), editing or displaying NEWS.md, creating r-lib standalone files, configuring DESCRIPTION fields, .Rbuildignore/.clangd/zzz.R, registering RStudio addins in inst/rstudio/addins.dcf, vendoring upstream code, generating GitHub Actions workflows (R-CMD-check including Rust/extendr builds, version bump, branch sync), or generating multilingual README translations and badges.
 ---
 
 # rpkgkit
@@ -22,10 +22,13 @@ Use this skill when the request touches R package housekeeping:
 - Making function calls explicit (`pkg::fun()`) or arguments explicit (`arg = value`)
 - Detecting or fixing CRAN-unsafe `print()`/`cat()`, or lost `{}` in `glue`/`cli`
 - Checking the `# nocov start` / `# nocov end` markers of a file or package
+- Finding path-like arguments of exported functions that default to a concrete
+  location, which CRAN rejects
 - Converting pipes, `function()` ↔ `\(`, integer literals, non-ASCII literals, Rmd chunk headers
 - Adding, showing, or formatting `NEWS.md` entries
 - Creating or validating r-lib style `standalone-*.R` files
 - Adding DESCRIPTION fields (`URL`, `BugReports`, `Depends: R (>= ...)`), `.clangd`, `(pkg)-package.R`
+- Registering an exported function as an RStudio addin (`inst/rstudio/addins.dcf`)
 - Vendoring upstream code, or generating `.Rbuildignore` patterns
 - Multilingual README translations, AI-translation badges, README badges, Rmd YAML headers
 - Formatting with air/flir, or checking `_pkgdown.yml` coverage
@@ -42,8 +45,9 @@ CRAN submission mechanics beyond the functions listed here.
    `convert_pipe`, `optimize_rmd_yaml` act on one file. The matching `package_*`
    function walks the package. `dirs` defaults to `c("R", "tests/testthat")` for
    `package_lost_glue_brace()` and `package_print_and_cat()`, and to `"R"` for
-   `package_unmatched_nocov_marker()` and the converters; pass `dirs` to widen it.
-   Choose the package-level function whenever more than one file is involved.
+   `package_unmatched_nocov_marker()`, `package_fn_arg_path()` and the
+   converters; pass `dirs` to widen it. Choose the package-level function
+   whenever more than one file is involved.
 3. **Results are reported with `cli` and returned invisibly.** Wrap calls in
    `invisible()`-tolerant code; do not assert on a visible return value. Use
    `verbose = TRUE` (default on most functions) to keep the report.
@@ -64,6 +68,7 @@ rpkgkit::package_func_arg_explicit()    # add arg = for non-leading formals
 rpkgkit::package_lost_glue_brace()      # report lost {} in glue/cli
 rpkgkit::package_print_and_cat(fix = TRUE)  # print()/cat() -> message()
 rpkgkit::package_unmatched_nocov_marker()   # report unmatched nocov markers
+rpkgkit::package_fn_arg_path()          # report `path = "."` on exported functions
 rpkgkit::package_convert_pipe(direction = "to_base")
 rpkgkit::package_convert_int_literals()
 rpkgkit::air_format()                   # format last
@@ -113,6 +118,7 @@ rpkgkit::use_workflow_version_update()        # version bump workflow + local ac
 rpkgkit::use_workflow_rust_compatible_check() # R-CMD-check that builds Rust code
 rpkgkit::use_workflow_test_branch()           # sync main -> test after check passes
 rpkgkit::check_pkgdown_reference() # every export present in _pkgdown.yml
+rpkgkit::use_tidy_addin("my_addin", "Do something") # inst/rstudio/addins.dcf entry
 ```
 
 The three `use_workflow_*()` functions copy bundled templates from `inst/actions/`
@@ -123,6 +129,31 @@ unless `overwrite = TRUE`, and return the written path invisibly. Use
 packages: it installs a Rust toolchain and the `x86_64-pc-windows-gnu` target,
 without which the MSVC default cannot link against Rtools and the check ends in a
 WARNING.
+
+## Workflow: RStudio addins
+
+```r
+rpkgkit::use_tidy_addin("my_addin", "Do something")             # Interactive: FALSE
+rpkgkit::use_tidy_addin("my_gadget", "Open a gadget", Interactive = TRUE)
+```
+
+`use_tidy_addin()` writes one record (`Name`, `Description`, `Binding`,
+`Interactive`) on top of `inst/rstudio/addins.dcf`, creating `inst/rstudio/` when
+needed, and returns the dcf path invisibly. It aborts when `path` is not a package
+or when the function is not exported in `NAMESPACE`, and it skips a `Binding`
+that is already registered instead of adding it twice. It also warns when the
+function body calls no `rstudioapi` function, or, for `Interactive = TRUE`, no
+`shiny`/`miniUI` function, since such an entry is unlikely to work as an addin; a
+non-interactive session cannot confirm the warning and only continues. Requires
+`desc`.
+
+`rpkgkit` ships its own addins, all read-only, in `inst/rstudio/addins.dcf`:
+`detect_lost_glue_brace`, `package_lost_glue_brace`, `detect_print_and_cat`,
+`package_print_and_cat`, `detect_fn_arg_path`, `package_fn_arg_path`,
+`package_unmatched_nocov_marker` and `check_pkgdown_reference`. The `detect_*`
+entries run on the active editor, the package-wide ones on the working directory.
+Addins are an RStudio feature; Positron needs an extension such as Positron R
+Wizard.
 
 ## Workflow: README, badges, Rmd
 
