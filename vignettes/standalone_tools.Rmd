@@ -153,6 +153,48 @@ cli_table_oneline(x)
 cli_table_oneline(mtcars$cyl, sep = " | ", count_format = NULL)
 ```
 
+## Print data frames as kable-style tables
+
+The `cli_kable.R` standalone script prints a data frame, a matrix or any object
+`as.data.frame()` accepts as the pipe table of `knitr::kable()`, the layout
+`kableExtra::kable()` shows, with `cli` inline classes instead of Markdown. The
+layout is the one of `kable()`: padded cells, `padding` extra spaces per column,
+a minimum column width of 3, rounded and right-aligned numbers, and the
+`:---|---:` alignment rule below the headers.
+
+`header_format` (column headers), `rownames_format` (row names) and
+`value_format` (body values) style the table. Pass a single class to style
+everything, or a named vector or named list to style only the columns or rows it
+names: an unnamed element is the fallback style of everything that is not named,
+which is how a part of the table is highlighted. The printed lines are returned
+invisibly.
+
+```{r}
+#| label = "cli_kable",
+#| eval = FALSE
+cli_kable(head(mtcars, 3))
+
+# style the header of two columns only, with two different classes
+cli_kable(head(mtcars, 3), header_format = c(cyl = ".val", wt = ".field"))
+```
+
+Named formats reach the rows too, and the elements of a `value_format` list can be
+named vectors of row names, so a block of rows and columns can be highlighted:
+
+```{r}
+#| label = "cli_kable_partial",
+#| eval = FALSE
+cli_kable(
+  mtcars[1:6, c("mpg", "cyl", "disp", "wt")],
+  header_format = c(disp = ".strong", wt = ".strong"),
+  rownames_format = c("Hornet 4 Drive" = ".strong", "Valiant" = ".strong"),
+  value_format = list(
+    disp = c("Hornet 4 Drive" = ".field", "Valiant" = ".field"),
+    wt = c("Hornet 4 Drive" = ".field", "Valiant" = ".field")
+  )
+)
+```
+
 ## Validate and transform arguments
 
 The `make_arg_validator.R` standalone script builds reusable validators. Give

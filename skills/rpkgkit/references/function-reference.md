@@ -14,6 +14,24 @@ document, falling back to the working directory. Source files are under `R/`.
 | `browse_standalone(per_page = 100L, limit = 200L, ...)` | `64_browse_standalone.R` | GitHub code search across repositories. Requires `gh`, `dplyr`. |
 | `check_standalone(path = NULL, ...)` | `65_check_standalone.R` | Validates header fields, `@noRd`, `# nocov start/end`; reports in `devtools::check()` style. |
 
+## Bundled standalone helpers
+
+Internal scripts under `R/standalone-*.R` (`@noRd`, not exported). Vendor one into
+another package with
+`usethis::use_standalone("WangLabCSU/rpkgkit", "<script name>")`; they are
+self-contained and `cli`-only unless the table says otherwise.
+
+| Script | Functions | Notes |
+|---|---|---|
+| `args_to_func` | `match_func_to_args()`, `filter_args_for_func()`, `get_func_args()` | Match a list of arguments to compatible functions, and keep only the arguments a function accepts. |
+| `caller_cli` | `get_caller_name()`, `add_caller_to_cli()`, `create_caller_cli_env()` | Decorate a `cli` function so its output names the caller. |
+| `cli_kable` | `cli_kable(x, header_format = ".val", rownames_format = ".val", value_format = NULL, ...)` | Print a data frame or matrix as the pipe table of `knitr::kable()` (`kableExtra::kable()` layout) with `cli` inline classes. Named formats style only the named columns or rows and an unnamed element is the fallback; a `value_format` list element may be a named vector of row names, for per-cell styling. `align`, `digits`, `padding`, `sep` and `rule` control the rest of the layout. Returns the printed lines invisibly. |
+| `cli_table` | `cli_table()`, `cli_table_oneline()` | Print a `cli`-styled frequency table of a vector, on two aligned lines or on one `header: count` line. |
+| `colorful_cli` | `add_colors_to_cli()`, `create_colorful_cli_env()`, `generate_color_code()`, `generate_color_theme()` | Wrap `cli` functions with a custom colour theme. |
+| `make_arg_validator` | `make_arg_validator()` | Turn an unquoted block of checks and coercions into a reusable argument validator. |
+| `match_arg` | `match_arg()` | Exact, partial and default fallback argument matching. |
+| `ts_cli` | `add_timestamp_to_cli()`, `create_ts_cli_env()` | Prefix `cli` output with a timestamp. |
+
 ## Code qualification and detection (single file)
 
 | Function | File | Notes |
@@ -53,6 +71,8 @@ These share an Rd page with their single-file counterpart (`@rdname`/`@describeI
 | Function | File | Notes |
 |---|---|---|
 | `air_format(path = NULL, ...)` | `70_air_format.R` | Formats with `air`. |
+| `check_air_installed()` | `70_air_format.R` | Aborts with the per-OS `air` install command when the binary is not on the `PATH`; called by `use_air_table()`. |
+| `use_air_table(path = NULL, ncol = 3L, min_length = 12L, marker = "# fmt: table", ...)` | `54_use_air_table_.R` | Runs `air format`, inserts `marker` above every unnamed `c()`/`list()` call with more than `min_length` elements, re-flows the elements `ncol` per row, then formats again so the cells are aligned. Skips calls nested inside another call, calls that already carry `marker` (idempotent) and line breaks that would swallow a trailing comment. Requires `air` 0.8.0+. Returns the normalized path invisibly. |
 | `flir_fix(path = NULL, ...)` | `71_flir_fix.R` | Dispatches to `flir::fix()`, `fix_package()`, or `fix_dir()` based on the path. Single entry point for flir. |
 | `render_rmd(path = NULL, output_format = "md_document", ...)` | `72_render_rmd.R` | Renders Rmd/R to Markdown. |
 
@@ -76,7 +96,7 @@ These share an Rd page with their single-file counterpart (`@rdname`/`@describeI
 | `use_url(url = NULL, pkgdown_url = NULL, path = NULL, ...)` | `49_use_url.R` | Writes `URL`; defaults to the git remote. |
 | `use_bugreports(url = NULL, path = NULL, ...)` | `50_use_bugreports.R` | Writes `BugReports`. |
 | `use_clangd(path = NULL, include = c("Rcpp", "RcppEigen", "RcppArmadillo"), overwrite = FALSE, open = rlang::is_interactive(), ...)` | `51_use_clangd.R` | Creates `.clangd`. |
-| `use_zzz(path = NULL, file_name = NULL, overwrite = FALSE, open = rlang::is_interactive(), ...)` | `45_use_zzz.R` | Creates `R/<pkg>-package.R` from `inst/R_template/zzz_template.R`; `file_name = NULL` resolves to `<pkg>-package.R` inside the function. |
+| `use_zzz(path = NULL, file_name = NULL, overwrite = FALSE, open = rlang::is_interactive(), ...)` | `45_use_zzz.R` | Creates `R/<pkg>-package.R` from `inst/R_template/zzz_template.R`; `file_name = NULL` resolves to `<pkg>-package.R` inside the function. The template reports the load time with `cli::cli_progress_step()` in `.onLoad()` and `cli::cli_process_done()` in `.onAttach()`, and the function adds `cli` to `Imports`. |
 | `use_tidy_addin(fn_name, desc, Interactive = FALSE, path = NULL)` | `53_use_tidy_addin.R` | Prepend a record to `inst/rstudio/addins.dcf`; requires the function to be exported in `NAMESPACE`, skips an already registered `Binding`, warns when the body calls no `rstudioapi` (or, with `Interactive = TRUE`, no `shiny`/`miniUI`) function. Requires `desc`. |
 | `use_vendor(pkg, ..., branch = "main", path = NULL)` | `43_use_vendor.R` | Vendors upstream source into `inst/vendor/`, writes provenance and license, records vendor version and imports. |
 | `use_workflow_version_update(path = NULL, overwrite = FALSE, color = "blue", ...)` | `42_use_workflow_version_update.R` | Generates the version bump GitHub Actions workflow. |

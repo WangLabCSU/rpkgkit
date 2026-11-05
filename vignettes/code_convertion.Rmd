@@ -326,7 +326,8 @@ row holds `ncol` of them; a second `air format` run then pads the cells and
 aligns the columns.
 
 ```{r}
-#| label = "use_air_table"
+#| label = "use_air_table",
+#| eval = FALSE
 file <- tempfile(fileext = ".R")
 writeLines(
   'x <- c("alpha", "beta", "gamma", "delta", "epsilon", "zeta")',
