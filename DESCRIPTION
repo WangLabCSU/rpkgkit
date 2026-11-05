@@ -39,6 +39,7 @@ Suggests:
     knitr,
     pkgload,
     rmarkdown,
+    spelling,
     stats,
     testthat (>= 3.0.0),
     usethis,
@@ -53,3 +54,4 @@ Copyright: Jacob Scott, Christopher T. Kenny, and Sebastian Lammers (for
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Config/roxygen2/version: 8.1.0
+Language: en-US

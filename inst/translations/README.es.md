@@ -96,6 +96,7 @@ Todas las funciones exportadas con una llamada mínima. La mayoría acepta `path
 | `check_sysdeps()` | `check_sysdeps(c("libpng-dev"))` | Comprobar si las librerías del sistema están instaladas |
 | `check_air_installed()` | `check_air_installed()` | Comprobar que el formateador `air` está en el `PATH` |
 | `flir_fix()` | `flir_fix("R/foo.R")` | Corregir código R con `flir` |
+| `use_air_table()` | `use_air_table("R/foo.R", ncol = 3)` | Maquetar llamadas largas a `c()` y `list()` como tablas alineadas con `air` |
 | `air_format()` | `air_format("R/foo.R")` | Obsoleta; formatear código R con `air` |
 
 ### Gestionar `NEWS.md`

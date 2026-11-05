@@ -1,3 +1,43 @@
+# rpkgkit 0.1.24 (2026-11-08)
+
+## NEW FEATURES
+
+* Added `use_air_table()` to lay out long `c()` and `list()` calls as
+  column-aligned tables with `air` 0.8.0 or newer. A first `air format` run
+  leaves every element on its own line; the experimental `# fmt: table`
+  directive is then inserted above every call holding more than `min_length`
+  elements and the elements are re-flowed so that each row holds `ncol` of them,
+  by collapsing the line breaks inside a row or, for a definition that air kept
+  on a single line, by splitting it into rows. A second `air format` run pads
+  the cells and aligns the columns. Only calls whose elements are all unnamed
+  are converted, because air expands named elements one per line whatever the
+  directive says; only the outermost call of a statement is converted, because
+  air ignores the directive on nested calls; a line ending in a comment is never
+  joined with the next one, which would swallow the following element; and a
+  call that already carries the directive is left untouched, so the function is
+  idempotent. `path = NULL` falls back to the active RStudio document, `air`
+  must be on the `PATH` (checked with `check_air_installed()`), and the
+  normalized path is returned invisibly.
+
+## MINOR IMPROVEMENTS
+
+* The startup message is now a `cli` progress step: `.onLoad()` starts
+  `cli::cli_progress_step()` and `.onAttach()` closes it with
+  `cli::cli_process_done()`, which also covers the time spent loading the
+  namespace. The hand-written `cli_timestamp_formatter()` helper, which
+  formatted the elapsed time by hand, is gone, and the `use_zzz()` template
+  (`inst/R_template/zzz_template.R`) follows the same pattern.
+
+## DOCUMENTATION
+
+* The `code_convertion` vignette gained a "Lay out long vectors and lists as
+  tables" section covering `use_air_table()` and its requirements.
+* `use_air_table()` is listed in the README, in both translations under
+  `inst/translations/`, and in the `_pkgdown.yml` reference index.
+* The package is now spell-checked: `spelling` was added to `Suggests` together
+  with `Language: en-US`, `inst/WORDLIST` holds the accepted words, and
+  `tests/spelling.R` runs `spelling::spell_check_test()`.
+
 # rpkgkit 0.1.23 (2026-11-01)
 
 ## NEW FEATURES

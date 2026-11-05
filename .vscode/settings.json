@@ -1,21 +1,21 @@
 {
-  "[quarto]": {
-    "editor.defaultFormatter": "quarto.quarto",
-    "editor.formatOnSave": true
-  },
-  "[r]": {
-    "editor.defaultFormatter": "Posit.air-vscode",
-    "editor.formatOnSave": true
-  },
-  "positron.r.customBinaries": [
-    "/opt/R/4.5.1/lib/R/bin/R"
-  ],
-  "positron.r.customRootFolders": [
-    "/data/home/yyx/.uvr/r-versions"
-  ],
-  "positron.r.interpreters.default": "/opt/R/4.5.1/lib/R/bin/R",
-  "positron.r.pipe": "|>",
-  "positron.r.useNativePipe": true,
-  "r.rpath.linux": "/opt/R/4.5.1/lib/R/bin/R",
-  "r.rterm.linux": "/opt/R/4.5.1/lib/R/bin/R"
+    "[quarto]": {
+        "editor.defaultFormatter": "quarto.quarto",
+        "editor.formatOnSave": true
+    },
+    "[r]": {
+        "editor.defaultFormatter": "Posit.air-vscode",
+        "editor.formatOnSave": true
+    },
+    "positron.r.customBinaries": [
+        "/opt/R/4.5.1/lib/R/bin/R"
+    ],
+    "positron.r.customRootFolders": [
+        "/data/home/yyx/.uvr/r-versions"
+    ],
+    "positron.r.interpreters.default": "/opt/R/4.5.1/lib/R/bin/R",
+    "positron.r.pipe": "|>",
+    "positron.r.useNativePipe": true,
+    "r.rpath.linux": "/opt/R/4.5.1/lib/R/bin/R",
+    "r.rterm.linux": "/opt/R/4.5.1/lib/R/bin/R"
 }

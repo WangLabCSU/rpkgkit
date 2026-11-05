@@ -96,6 +96,7 @@ pak::pak("WangLabCSU/rpkgkit")
 | `check_sysdeps()` | `check_sysdeps(c("libpng-dev"))` | 检查系统库是否已安装 |
 | `check_air_installed()` | `check_air_installed()` | 检查 `air` 格式化工具是否在 `PATH` 中 |
 | `flir_fix()` | `flir_fix("R/foo.R")` | 使用 `flir` 修复 R 代码 |
+| `use_air_table()` | `use_air_table("R/foo.R", ncol = 3)` | 使用 `air` 将较长的 `c()` 和 `list()` 调用排版为对齐的表格 |
 | `air_format()` | `air_format("R/foo.R")` | 已弃用；使用 `air` 格式化 R 代码 |
 
 ### 管理 `NEWS.md`
