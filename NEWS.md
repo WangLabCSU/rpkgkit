@@ -18,6 +18,26 @@
   idempotent. `path = NULL` falls back to the active RStudio document, `air`
   must be on the `PATH` (checked with `check_air_installed()`), and the
   normalized path is returned invisibly.
+* Added the standalone `standalone-cli_kable.R` script, which provides
+  `cli_kable()` for printing a data frame, a matrix or any object
+  `as.data.frame()` accepts as the pipe table of `knitr::kable()`, the layout
+  `kableExtra::kable()` shows, with `cli` inline classes instead of Markdown. The
+  layout is the one of `kable()`: cells are padded to the column width, columns
+  are `padding` spaces wider and at least 3 characters wide, numeric columns are
+  rounded to `digits` decimals and right aligned while everything else is left
+  aligned, and the `:---|---:` alignment rule follows the headers.
+  `header_format` (default `".val"`), `rownames_format` (default `".val"`) and
+  `value_format` (default `NULL`) accept a single class, a vector of `ncol(x)`
+  classes, or a named vector or named list: named elements style only the columns
+  or rows they name and an unnamed element is the fallback of everything that is
+  not named, which is how a part of the table is highlighted, while the elements
+  of a `value_format` list can be named vectors of row names to style single
+  cells. Widths are measured with `cli::ansi_nchar()` after the classes are
+  applied, so classes that add visible characters (`{.val}`, `{.code}`) keep the
+  columns aligned, and each distinct class is rendered once instead of once per
+  cell. `align`, `digits`, `padding`, `sep` and `rule` control the rest of the
+  table, an unknown name or an invalid class aborts with `cli::cli_abort()`, and
+  the printed lines are returned invisibly.
 
 ## MINOR IMPROVEMENTS
 
@@ -37,6 +57,10 @@
 * The package is now spell-checked: `spelling` was added to `Suggests` together
   with `Language: en-US`, `inst/WORDLIST` holds the accepted words, and
   `tests/spelling.R` runs `spelling::spell_check_test()`.
+* The `standalone_tools` vignette gained a "Print data frames as kable-style
+  tables" section covering `cli_kable()` and the named formats that highlight a
+  part of the table, and the package skill (`skills/rpkgkit/`) now lists every
+  bundled standalone helper with the functions it provides.
 
 # rpkgkit 0.1.23 (2026-11-01)
 
