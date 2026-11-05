@@ -121,6 +121,50 @@ cli_table_oneline(x)
 cli_table_oneline(mtcars$cyl, sep = " | ", count_format = NULL)
 ```
 
+### Print data frames as kable-style tables
+
+The `cli_kable.R` standalone script prints a data frame, a matrix or any
+object [`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html)
+accepts as the pipe table of
+[`knitr::kable()`](https://rdrr.io/pkg/knitr/man/kable.html), the layout
+`kableExtra::kable()` shows, with `cli` inline classes instead of
+Markdown. The layout is the one of `kable()`: padded cells, `padding`
+extra spaces per column, a minimum column width of 3, rounded and
+right-aligned numbers, and the `:---|---:` alignment rule below the
+headers.
+
+`header_format` (column headers), `rownames_format` (row names) and
+`value_format` (body values) style the table. Pass a single class to
+style everything, or a named vector or named list to style only the
+columns or rows it names: an unnamed element is the fallback style of
+everything that is not named, which is how a part of the table is
+highlighted. The printed lines are returned invisibly.
+
+``` r
+
+cli_kable(head(mtcars, 3))
+
+# style the header of two columns only, with two different classes
+cli_kable(head(mtcars, 3), header_format = c(cyl = ".val", wt = ".field"))
+```
+
+Named formats reach the rows too, and the elements of a `value_format`
+list can be named vectors of row names, so a block of rows and columns
+can be highlighted:
+
+``` r
+
+cli_kable(
+  mtcars[1:6, c("mpg", "cyl", "disp", "wt")],
+  header_format = c(disp = ".strong", wt = ".strong"),
+  rownames_format = c("Hornet 4 Drive" = ".strong", "Valiant" = ".strong"),
+  value_format = list(
+    disp = c("Hornet 4 Drive" = ".field", "Valiant" = ".field"),
+    wt = c("Hornet 4 Drive" = ".field", "Valiant" = ".field")
+  )
+)
+```
+
 ### Validate and transform arguments
 
 The `make_arg_validator.R` standalone script builds reusable validators.
@@ -188,11 +232,13 @@ Create a local standalone file with a standard metadata header:
 ``` r
 
 library(rpkgkit)
-#> ✔ rpkgkit v0.1.22 loaded [2 ms]
+#> ⠙ Loading rpkgkit v0.1.24
+#> ✔ rpkgkit v0.1.24 loaded [5ms]
+#> 
 dir <- file.path(tempdir(), "R")
 dir.create(dir, recursive = TRUE)
 create_standalone("foo", path = dir, open = FALSE)
-#> ✔ Created standalone file: /tmp/Rtmp07qleA/R/standalone-foo.R
+#> ✔ Created standalone file: /tmp/RtmpleOyAi/R/standalone-foo.R
 ```
 
 ### Validate the standalone file layout
@@ -216,7 +262,7 @@ check_standalone(path = file.path(dir, "standalone-foo.R"))
 #> ❯ No top-level function definitions found. ... NOTE
 #> ✔ nocoverage start marker
 #> 
-#> Duration: 0.02s
+#> Duration: 0.01s
 #> 0 error ✔ | 1 warning ✖ | 3 notes ✖
 ```
 
@@ -231,7 +277,7 @@ After editing standalone files, refresh their `last-updated` field:
 ``` r
 
 update_time_in_standalone(path = file.path(dir, "standalone-foo.R"))
-#> ✔ Updated last-updated to "2026-11-02" in 1 file.
+#> ✔ Updated last-updated to "2026-11-05" in 1 file.
 ```
 
 Add a dated changelog entry to one or more standalone files:
@@ -242,5 +288,5 @@ add_changelog_in_standalone(
   path = file.path(dir, "standalone-foo.R"),
   "Added foo function"
 )
-#> ✔ Added changelog entry (2026-11-02) for /tmp/Rtmp07qleA/R/standalone-foo.R.
+#> ✔ Added changelog entry (2026-11-05) for /tmp/RtmpleOyAi/R/standalone-foo.R.
 ```

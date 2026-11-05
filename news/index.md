@@ -1,5 +1,89 @@
 # Changelog
 
+## rpkgkit 0.1.24 (2026-11-08)
+
+### NEW FEATURES
+
+- Added
+  [`use_air_table()`](https://wanglabcsu.github.io/rpkgkit/reference/use_air_table.md)
+  to lay out long [`c()`](https://rdrr.io/r/base/c.html) and
+  [`list()`](https://rdrr.io/r/base/list.html) calls as column-aligned
+  tables with `air` 0.8.0 or newer. A first `air format` run leaves
+  every element on its own line; the experimental `# fmt: table`
+  directive is then inserted above every call holding more than
+  `min_length` elements and the elements are re-flowed so that each row
+  holds `ncol` of them, by collapsing the line breaks inside a row or,
+  for a definition that air kept on a single line, by splitting it into
+  rows. A second `air format` run pads the cells and aligns the columns.
+  Only calls whose elements are all unnamed are converted, because air
+  expands named elements one per line whatever the directive says; only
+  the outermost call of a statement is converted, because air ignores
+  the directive on nested calls; a line ending in a comment is never
+  joined with the next one, which would swallow the following element;
+  and a call that already carries the directive is left untouched, so
+  the function is idempotent. `path = NULL` falls back to the active
+  RStudio document, `air` must be on the `PATH` (checked with
+  [`check_air_installed()`](https://wanglabcsu.github.io/rpkgkit/reference/check_air_installed.md)),
+  and the normalized path is returned invisibly.
+- Added the standalone `standalone-cli_kable.R` script, which provides
+  `cli_kable()` for printing a data frame, a matrix or any object
+  [`as.data.frame()`](https://rdrr.io/r/base/as.data.frame.html) accepts
+  as the pipe table of
+  [`knitr::kable()`](https://rdrr.io/pkg/knitr/man/kable.html), the
+  layout `kableExtra::kable()` shows, with `cli` inline classes instead
+  of Markdown. The layout is the one of `kable()`: cells are padded to
+  the column width, columns are `padding` spaces wider and at least 3
+  characters wide, numeric columns are rounded to `digits` decimals and
+  right aligned while everything else is left aligned, and the
+  `:---|---:` alignment rule follows the headers. `header_format`
+  (default `".val"`), `rownames_format` (default `".val"`) and
+  `value_format` (default `NULL`) accept a single class, a vector of
+  `ncol(x)` classes, or a named vector or named list: named elements
+  style only the columns or rows they name and an unnamed element is the
+  fallback of everything that is not named, which is how a part of the
+  table is highlighted, while the elements of a `value_format` list can
+  be named vectors of row names to style single cells. Widths are
+  measured with
+  [`cli::ansi_nchar()`](https://cli.r-lib.org/reference/ansi_nchar.html)
+  after the classes are applied, so classes that add visible characters
+  (`{.val}`, `{.code}`) keep the columns aligned, and each distinct
+  class is rendered once instead of once per cell. `align`, `digits`,
+  `padding`, `sep` and `rule` control the rest of the table, an unknown
+  name or an invalid class aborts with
+  [`cli::cli_abort()`](https://cli.r-lib.org/reference/cli_abort.html),
+  and the printed lines are returned invisibly.
+
+### MINOR IMPROVEMENTS
+
+- The startup message is now a `cli` progress step: `.onLoad()` starts
+  [`cli::cli_progress_step()`](https://cli.r-lib.org/reference/cli_progress_step.html)
+  and `.onAttach()` closes it with
+  [`cli::cli_process_done()`](https://cli.r-lib.org/reference/cli_process_start.html),
+  which also covers the time spent loading the namespace. The
+  hand-written `cli_timestamp_formatter()` helper, which formatted the
+  elapsed time by hand, is gone, and the
+  [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
+  template (`inst/R_template/zzz_template.R`) follows the same pattern.
+
+### DOCUMENTATION
+
+- The `code_convertion` vignette gained a “Lay out long vectors and
+  lists as tables” section covering
+  [`use_air_table()`](https://wanglabcsu.github.io/rpkgkit/reference/use_air_table.md)
+  and its requirements.
+- [`use_air_table()`](https://wanglabcsu.github.io/rpkgkit/reference/use_air_table.md)
+  is listed in the README, in both translations under
+  `inst/translations/`, and in the `_pkgdown.yml` reference index.
+- The package is now spell-checked: `spelling` was added to `Suggests`
+  together with `Language: en-US`, `inst/WORDLIST` holds the accepted
+  words, and `tests/spelling.R` runs
+  [`spelling::spell_check_test()`](https://docs.ropensci.org/spelling//reference/spell_check_package.html).
+- The `standalone_tools` vignette gained a “Print data frames as
+  kable-style tables” section covering `cli_kable()` and the named
+  formats that highlight a part of the table, and the package skill
+  (`skills/rpkgkit/`) now lists every bundled standalone helper with the
+  functions it provides.
+
 ## rpkgkit 0.1.23 (2026-11-01)
 
 ### NEW FEATURES
@@ -163,8 +247,9 @@
   counterpart is reported, and an end placed before the start is
   reported (an end later on the same line is accepted). An unclosed
   `# nocov start` is an error rather than a note, because
-  `covr::package_coverage()` aborts on such a range with a “range start
-  but only range ends” message.
+  [`covr::package_coverage()`](http://covr.r-lib.org/reference/package_coverage.md)
+  aborts on such a range with a “range start but only range ends”
+  message.
   [`package_unmatched_nocov_marker()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_unmatched_nocov_marker.md)
   scans `R/` by default and takes `dirs` for anything else. Every
   problem is printed with its line and column, the source line and a

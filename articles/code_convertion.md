@@ -3,7 +3,9 @@
 ``` r
 
 library(rpkgkit)
-#> ✔ rpkgkit v0.1.22 loaded [2 ms]
+#> ⠙ Loading rpkgkit v0.1.24
+#> ✔ rpkgkit v0.1.24 loaded [5ms]
+#> 
 ```
 
 ## Qualify package function calls
@@ -27,7 +29,7 @@ writeLines(
 
 make_func_call_explicit(file, use_packages = "dplyr")
 #> ℹ Retrieving function calls from dplyr
-#> ✔ Successfully made function call explicit in /tmp/RtmpomZCc0/file1f094cb9d78a.R
+#> ✔ Successfully made function call explicit in /tmp/Rtmp0TIWwy/file1f9046f74834.R
 readLines(file) |> cli::cli_code()
 #> dplyr::starwars |>
 #>   dplyr::mutate(name, bmi = mass / ((height / 100)^2)) |>
@@ -74,7 +76,7 @@ applies this transformation across a package.
 file <- tempfile(fileext = ".R")
 writeLines("vapply(1:9, function(x) x * 2, numeric(1))", file)
 make_func_arg_explicit(file)
-#> ✔ Made function arguments explicit in /tmp/RtmpomZCc0/file1f09459cc557.R
+#> ✔ Made function arguments explicit in /tmp/Rtmp0TIWwy/file1f9030f734fe.R
 readLines(file) |> cli::cli_code()
 #> vapply(X = 1:9, FUN = function(x) x * 2, FUN.VALUE = numeric(length = 1))
 ```
@@ -90,7 +92,7 @@ to apply a naming style to function definitions in a file.
 file <- tempfile(fileext = ".R")
 writeLines("this_is_a_function <- function() message('Hello, world')", file)
 rename_func(file, style = "camelCase")
-#> ✔ Renamed 1 function to "camelCase" style in /tmp/RtmpomZCc0/file1f0935a1248d.R
+#> ✔ Renamed 1 function to "camelCase" style in /tmp/Rtmp0TIWwy/file1f90546bf2d5.R
 readLines(file) |> cli::cli_code()
 #> thisIsAFunction <- function() message('Hello, world')
 ```
@@ -119,7 +121,7 @@ detect_print_and_cat(file)
 ``` r
 
 detect_print_and_cat(file, fix = TRUE)
-#> ✔ Fixed 1 line in file1f091a644ee5.R.
+#> ✔ Fixed 1 line in file1f902c8311f9.R.
 #> print('Hello, world') [message]
 #> ^^^^^^
 #> ✖ Found 1 unsupported call on line 1.
@@ -136,8 +138,9 @@ checks a whole package. A file may hold at most one marker of each kind,
 so every further start or end is reported with its line and column,
 together with a start or an end that has no counterpart and an end
 placed before the start. Both counts must therefore match: an unclosed
-start is reported as well, because `covr::package_coverage()` aborts on
-such a range with a “range start but only range ends” error.
+start is reported as well, because
+[`covr::package_coverage()`](http://covr.r-lib.org/reference/package_coverage.md)
+aborts on such a range with a “range start but only range ends” error.
 
 Detection is purely textual, so a marker inside a string literal or a
 roxygen comment is reported as well (as covr does); such a marker has no
@@ -218,15 +221,15 @@ writeLines(
 )
 
 detect_fn_arg_path(file)
-#> /tmp/RtmpomZCc0/file1f092effcb84.R:1:22 read_csv(): `path` defaults to
+#> /tmp/Rtmp0TIWwy/file1f9093bb541.R:1:22 read_csv(): `path` defaults to
 #> "~/data.csv"
 #> read_csv <- function(path = "~/data.csv", n = 1L) NULL
 #>                      ^^^^^^^^^^^^^^^^^^^
-#> /tmp/RtmpomZCc0/file1f092effcb84.R:2:22 read_all(): `file` defaults to
+#> /tmp/Rtmp0TIWwy/file1f9093bb541.R:2:22 read_all(): `file` defaults to
 #> "data.txt"
 #> read_all <- function(file = "data.txt") NULL
 #>                      ^^^^^^^^^^^^^^^^^
-#> ✖ Found 2 arguments with a default path in /tmp/RtmpomZCc0/file1f092effcb84.R
+#> ✖ Found 2 arguments with a default path in /tmp/Rtmp0TIWwy/file1f9093bb541.R
 ```
 
 An argument is reported when its name matches `arg_pattern` and its
@@ -237,11 +240,11 @@ the pattern when a loose match is not wanted:
 ``` r
 
 detect_fn_arg_path(file, arg_pattern = "^path$")
-#> /tmp/RtmpomZCc0/file1f092effcb84.R:1:22 read_csv(): `path` defaults to
+#> /tmp/Rtmp0TIWwy/file1f9093bb541.R:1:22 read_csv(): `path` defaults to
 #> "~/data.csv"
 #> read_csv <- function(path = "~/data.csv", n = 1L) NULL
 #>                      ^^^^^^^^^^^^^^^^^^^
-#> ✖ Found 1 argument with a default path in /tmp/RtmpomZCc0/file1f092effcb84.R
+#> ✖ Found 1 argument with a default path in /tmp/Rtmp0TIWwy/file1f9093bb541.R
 ```
 
 [`detect_fn_arg_path()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_fn_arg_path.md)
@@ -264,7 +267,7 @@ Convert between `function()` and the short `\()` syntax.
 file <- tempfile(fileext = ".R")
 writeLines("f <- function(x) x^2", file)
 convert_func_syntax(file, "to_lambda")
-#> ✔ Converted function definitions in /tmp/RtmpomZCc0/file1f0923b7bc06.R to "to_lambda"
+#> ✔ Converted function definitions in /tmp/Rtmp0TIWwy/file1f9069233c96.R to "to_lambda"
 readLines(file) |> cli::cli_code()
 #> f <- \(x) x^2
 ```
@@ -272,7 +275,7 @@ readLines(file) |> cli::cli_code()
 ``` r
 
 convert_func_syntax(file, "to_explicit")
-#> ✔ Converted function definitions in /tmp/RtmpomZCc0/file1f0923b7bc06.R to "to_explicit"
+#> ✔ Converted function definitions in /tmp/Rtmp0TIWwy/file1f9069233c96.R to "to_explicit"
 readLines(file) |> cli::cli_code()
 #> f <- function(x) x^2
 ```
@@ -290,7 +293,7 @@ writeLines(c("```{r, echo=TRUE, fig.width=10}", "x <- 1", "```"), file)
 convert_knitr_chunk_header(file)
 ```
 
-    #> ℹ Converting knitr chunk headers in /tmp/RtmpomZCc0/file1f092d984adb.Rmd
+    #> ℹ Converting knitr chunk headers in /tmp/Rtmp0TIWwy/file1f902137c897.Rmd
     readLines(file) |> cli::cli_code()
 
     #> ```{r}
@@ -310,7 +313,7 @@ and the other magrittr operators (`%<>%`, `%$%`) are left unchanged.
 file <- tempfile(fileext = ".R")
 writeLines("mtcars %>% dplyr::filter(cyl > 4)", file)
 convert_pipe(file, direction = "to_base")
-#> ✔ Converted pipes in /tmp/RtmpomZCc0/file1f09788a10bc.R ("to_base")
+#> ✔ Converted pipes in /tmp/Rtmp0TIWwy/file1f9068f84fe3.R ("to_base")
 readLines(file) |> cli::cli_code()
 #> mtcars |> dplyr::filter(cyl > 4)
 ```
@@ -335,7 +338,7 @@ floating-point values, and existing suffixes unchanged.
 file <- tempfile(fileext = ".R")
 writeLines("x <- seq_len(10) # length 10", file)
 convert_int_literals(file)
-#> ✔ Added explicit integer suffixes in /tmp/RtmpomZCc0/file1f091282f11d.R
+#> ✔ Added explicit integer suffixes in /tmp/Rtmp0TIWwy/file1f907cf06f8a.R
 readLines(file) |> cli::cli_code()
 #> x <- seq_len(10L) # length 10
 ```
@@ -362,7 +365,7 @@ expression.
 file <- tempfile()
 writeLines("foo <- \\() message('滚滚长江东逝水')", file)
 convert_nonascii_code(file, overwrite = TRUE)
-#> ℹ Converted content written to /tmp/RtmpomZCc0/file1f0977ac2c0d
+#> ℹ Converted content written to /tmp/Rtmp0TIWwy/file1f90343543d3
 readLines(file) |> cli::cli_code()
 #> foo <- \() message('\u6eda\u6eda\u957f\u6c5f\u4e1c\u901d\u6c34')
 ```
@@ -379,3 +382,47 @@ convert_nonascii_code({
 #>   cli::cli_alert_warning("\u628a\u9152\u95ee\u9752\u5929")
 #> }
 ```
+
+## Lay out long vectors and lists as tables
+
+Air 0.8.0 and newer can align the elements of a
+[`c()`](https://rdrr.io/r/base/c.html) or
+[`list()`](https://rdrr.io/r/base/list.html) call column by column,
+giving the layout of
+[`tibble::tribble()`](https://tibble.tidyverse.org/reference/tribble.html).
+The feature is switched on by the experimental `# fmt: table` directive
+placed right above the call, but air never re-flows the elements on its
+own: whatever sits on one source line stays there.
+
+[`use_air_table()`](https://wanglabcsu.github.io/rpkgkit/reference/use_air_table.md)
+does the two things air does not do by itself. It runs `air format`,
+inserts the directive above every unnamed
+[`c()`](https://rdrr.io/r/base/c.html)/[`list()`](https://rdrr.io/r/base/list.html)
+call that holds more than `min_length` elements, and re-flows those
+elements so that each row holds `ncol` of them; a second `air format`
+run then pads the cells and aligns the columns.
+
+``` r
+
+file <- tempfile(fileext = ".R")
+writeLines(
+  'x <- c("alpha", "beta", "gamma", "delta", "epsilon", "zeta")',
+  file
+)
+use_air_table(file, ncol = 3L, min_length = 5L)
+readLines(file) |> cli::cli_code()
+```
+
+Keep in mind that:
+
+- `air` must be installed and on the `PATH`;
+  [`check_air_installed()`](https://wanglabcsu.github.io/rpkgkit/reference/check_air_installed.md)
+  reports the installation command for each operating system.
+- Only calls whose elements are all unnamed are rewritten: air expands
+  named elements one per line whatever the directive says, so a named
+  call is skipped instead of being decorated with a directive that has
+  no effect.
+- A call that already carries the directive is left untouched, so the
+  function is idempotent.
+- Only the outermost call of a statement is converted, because air
+  ignores the directive on nested calls.

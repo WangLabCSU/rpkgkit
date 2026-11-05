@@ -102,6 +102,9 @@ The following functions help you to create and maintain an R package.
 - [`update_time_in_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/update_time_in_standalone.md)
   : Update the last-updated field in standalone R files
 
+- [`use_air_table()`](https://wanglabcsu.github.io/rpkgkit/reference/use_air_table.md)
+  : Format Long Vectors and Lists as Aligned Tables with Air
+
 - [`use_bugreports()`](https://wanglabcsu.github.io/rpkgkit/reference/use_bugreports.md)
   :
 
