@@ -39,6 +39,7 @@ Suggests:
     knitr,
     pkgload,
     rmarkdown,
+    spelling,
     stats,
     testthat (>= 3.0.0),
     usethis,

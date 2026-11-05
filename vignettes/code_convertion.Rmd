@@ -310,3 +310,40 @@ convert_nonascii_code({
   cli::cli_alert_warning("把酒问青天")
 })
 ```
+
+# Lay out long vectors and lists as tables
+
+Air 0.8.0 and newer can align the elements of a `c()` or `list()` call column by
+column, giving the layout of `tibble::tribble()`. The feature is switched on by
+the experimental `# fmt: table` directive placed right above the call, but air
+never re-flows the elements on its own: whatever sits on one source line stays
+there.
+
+`use_air_table()` does the two things air does not do by itself. It runs
+`air format`, inserts the directive above every unnamed `c()`/`list()` call that
+holds more than `min_length` elements, and re-flows those elements so that each
+row holds `ncol` of them; a second `air format` run then pads the cells and
+aligns the columns.
+
+```{r}
+#| label = "use_air_table"
+file <- tempfile(fileext = ".R")
+writeLines(
+  'x <- c("alpha", "beta", "gamma", "delta", "epsilon", "zeta")',
+  file
+)
+use_air_table(file, ncol = 3L, min_length = 5L)
+readLines(file) |> cli::cli_code()
+```
+
+Keep in mind that:
+
+- `air` must be installed and on the `PATH`; `check_air_installed()` reports the
+  installation command for each operating system.
+- Only calls whose elements are all unnamed are rewritten: air expands named
+  elements one per line whatever the directive says, so a named call is skipped
+  instead of being decorated with a directive that has no effect.
+- A call that already carries the directive is left untouched, so the function
+  is idempotent.
+- Only the outermost call of a statement is converted, because air ignores the
+  directive on nested calls.

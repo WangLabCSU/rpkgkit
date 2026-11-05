@@ -123,6 +123,7 @@ It's recommended to use following packages together with `rpkgkit`:
 | `check_sysdeps()` | `check_sysdeps(c("libpng-dev"))` | Check whether system libraries are installed |
 | `check_air_installed()` | `check_air_installed()` | Check that the `air` formatter is on the `PATH` |
 | `flir_fix()` | `flir_fix("R/foo.R")` | Fix R code with `flir` |
+| `use_air_table()` | `use_air_table("R/foo.R", ncol = 3)` | Lay out long `c()` and `list()` calls as aligned tables with `air` |
 | `air_format()` | `air_format("R/foo.R")` | Deprecated; format R code with `air` |
 
 ### Manage `NEWS.md`

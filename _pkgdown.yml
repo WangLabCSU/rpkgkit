@@ -80,6 +80,7 @@ reference:
       - rename_func
       - render_rmd
       - update_time_in_standalone
+      - use_air_table
       - use_bugreports
       - use_clangd
       - use_hexsticker
