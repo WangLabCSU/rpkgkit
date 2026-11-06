@@ -3,15 +3,13 @@
 ``` r
 
 library(rpkgkit)
-#> ⠙ Loading rpkgkit v0.1.24
-#> ✔ rpkgkit v0.1.24 loaded [5ms]
-#> 
+#> ✔ rpkgkit v0.1.24 loaded [2 ms]
 dir <- tempdir()
 usethis::create_package(path = dir, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmpZWiTNI".
+#> ✔ Setting active project to "/tmp/RtmpFX7Op9".
 #> ✔ Creating R/.
 #> ✔ Writing DESCRIPTION.
-#> Package: RtmpZWiTNI
+#> Package: RtmpFX7Op9
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):
@@ -43,8 +41,8 @@ while also providing a useful starting template.
 ``` r
 
 use_zzz(path = dir, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmpZWiTNI".
-#> ✔ Created /tmp/RtmpZWiTNI/R/RtmpZWiTNI-package.R from template.
+#> ✔ Setting active project to "/tmp/RtmpFX7Op9".
+#> ✔ Created /tmp/RtmpFX7Op9/R/RtmpFX7Op9-package.R from template.
 #> ✔ Adding cli to Imports field in DESCRIPTION.
 #> 
 #> ☐ Refer to functions with `cli::fun()`.
@@ -76,7 +74,7 @@ use_clangd(path = dir, overwrite = TRUE)
 #> include path.
 #> Warning: Package RcppArmadillo is not installed; skipping its
 #> include path.
-#> ✔ Created /tmp/RtmpZWiTNI/.clangd.
+#> ✔ Created /tmp/RtmpFX7Op9/.clangd.
 ```
 
 When `path` is a package root, the file also disables background
@@ -86,9 +84,9 @@ indexing for the `R/` directory (which holds no C++ code) and adds
 ``` r
 
 use_clangd(path = dir, include = c("Rcpp", "BH"), overwrite = TRUE)
-#> ! Overwriting /tmp/RtmpZWiTNI/.clangd.
+#> ! Overwriting /tmp/RtmpFX7Op9/.clangd.
 #> Warning: Package BH is not installed; skipping its include path.
-#> ✔ Created /tmp/RtmpZWiTNI/.clangd.
+#> ✔ Created /tmp/RtmpFX7Op9/.clangd.
 ```
 
 ### Configure the jarl linter
@@ -103,7 +101,7 @@ files, and lints the code inside `@examples` and `@examplesIf` tags.
 ``` r
 
 use_jarl(path = dir, overwrite = TRUE)
-#> ✔ Created /tmp/RtmpZWiTNI/jarl.toml.
+#> ✔ Created /tmp/RtmpFX7Op9/jarl.toml.
 #> • Read jarl's editor support
 #>   (<https://jarl.etiennebacher.com/reference/config-file>) to learn how to
 #>   invoke jarl in your preferred editor.
@@ -213,11 +211,11 @@ try(use_vendor(
 ))
 #> ℹ Fetching repository information for WangLabCSU/rpkgkit...
 #> ✔ Vendor package uses MIT license.
-#> ✔ Created directory /tmp/RtmpZWiTNI/inst/vendor/rpkgkit.
+#> ✔ Created directory /tmp/RtmpFX7Op9/inst/vendor/rpkgkit.
 #> ✔ Copied LICENSE.
 #> ✔ Copied LICENSE.md.
 #> ✔ Created inst/vendor/rpkgkit/README.md.
-#> ✔ Created /tmp/RtmpZWiTNI/R/vendor-rpkgkit.R.
+#> ✔ Created /tmp/RtmpFX7Op9/R/vendor-rpkgkit.R.
 #> ✔ Added rpkgkit authors to Authors@R.
 #> ✔ Updated DESCRIPTION.
 #> ☐ Consider pasting the following statement into README.md
@@ -321,7 +319,7 @@ package ships Rust code.
 ``` r
 
 use_workflow_version_update(path = dir)
-#> ✔ Created workflow: /tmp/RtmpZWiTNI/.github/workflows/version_update.yml
+#> ✔ Created workflow: /tmp/RtmpFX7Op9/.github/workflows/version_update.yml
 #> → It triggers on push to "main/master" and via workflow_dispatch. Version bump
 #>   is inferred from commit messages or manual input.
 #> ☐ It is recommended to add a devel version badge to your README.md via
@@ -339,7 +337,7 @@ packages.
 ``` r
 
 use_workflow_rust_compatible_check(path = dir)
-#> ✔ Created workflow: /tmp/RtmpZWiTNI/.github/workflows/R-CMD-check.yaml
+#> ✔ Created workflow: /tmp/RtmpFX7Op9/.github/workflows/R-CMD-check.yaml
 #> → It triggers on push to "main" and on pull requests targeting "main".
 #> → Rust crates are compiled with a pinned toolchain and the
 #>   "x86_64-pc-windows-gnu" target on Windows, so they link against Rtools.
@@ -372,7 +370,7 @@ so unmerged work is never overwritten. Push experimental changes to
 ``` r
 
 use_workflow_test_branch(path = dir)
-#> ✔ Created workflow: /tmp/RtmpZWiTNI/.github/workflows/sync_test_branch.yml
+#> ✔ Created workflow: /tmp/RtmpFX7Op9/.github/workflows/sync_test_branch.yml
 #> → It runs after "R-CMD-check.yaml" succeeds for "main/master", then syncs the
 #>   checked commit to "test".
 #> → If "test" has unmerged work, the sync is skipped automatically.

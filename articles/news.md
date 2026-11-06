@@ -7,15 +7,13 @@ Here we create a template for editing NEWS.md
 ``` r
 
 library(rpkgkit)
-#> ⠙ Loading rpkgkit v0.1.24
-#> ✔ rpkgkit v0.1.24 loaded [5ms]
-#> 
+#> ✔ rpkgkit v0.1.24 loaded [2 ms]
 tmpdir <- tempdir()
 usethis::create_package(tmpdir, open = FALSE)
-#> ✔ Setting active project to "/tmp/Rtmpty8Zvg".
+#> ✔ Setting active project to "/tmp/RtmpVXV3rb".
 #> ✔ Creating R/.
 #> ✔ Writing DESCRIPTION.
-#> Package: Rtmpty8Zvg
+#> Package: RtmpVXV3rb
 #> Title: What the Package Does (One Line, Title Case)
 #> Version: 0.0.0.9000
 #> Authors@R (parsed):
@@ -51,14 +49,14 @@ news_md_add_entry(
   category = "NEW FEATURES",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/Rtmpty8Zvg/NEWS.md
+#> ✔ Added 1 entry to /tmp/RtmpVXV3rb/NEWS.md
 #> → Version: 0.0.0.9000, Category: NEW FEATURES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # Rtmpty8Zvg 0.0.0.9000 (2026-11-05)
+#> # RtmpVXV3rb 0.0.0.9000 (2026-11-06)
 #> 
 #> ## NEW FEATURES
 #> 
@@ -80,14 +78,14 @@ news_md_add_entry(
   contributor = "Jack",
   path = tmpdir
 )
-#> ✔ Added 1 entry to /tmp/Rtmpty8Zvg/NEWS.md
+#> ✔ Added 1 entry to /tmp/RtmpVXV3rb/NEWS.md
 #> → Version: 0.0.0.9000, Category: BUG FIXES
 ```
 
 ``` r
 
 news_md_show(path = tmpdir)
-#> # Rtmpty8Zvg 0.0.0.9000 (2026-11-05)
+#> # RtmpVXV3rb 0.0.0.9000 (2026-11-06)
 #> 
 #> ## BUG FIXES
 #> 

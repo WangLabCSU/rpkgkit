@@ -53,18 +53,6 @@
   [`cli::cli_abort()`](https://cli.r-lib.org/reference/cli_abort.html),
   and the printed lines are returned invisibly.
 
-### MINOR IMPROVEMENTS
-
-- The startup message is now a `cli` progress step: `.onLoad()` starts
-  [`cli::cli_progress_step()`](https://cli.r-lib.org/reference/cli_progress_step.html)
-  and `.onAttach()` closes it with
-  [`cli::cli_process_done()`](https://cli.r-lib.org/reference/cli_process_start.html),
-  which also covers the time spent loading the namespace. The
-  hand-written `cli_timestamp_formatter()` helper, which formatted the
-  elapsed time by hand, is gone, and the
-  [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
-  template (`inst/R_template/zzz_template.R`) follows the same pattern.
-
 ### DOCUMENTATION
 
 - The `code_convertion` vignette gained a “Lay out long vectors and
@@ -640,7 +628,6 @@
   [`use_workflow_test_branch()`](https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_test_branch.md),
   which can create a test branch for maintaining R pkg. This branch will
   sync
-
 - Added `convert_noascii_code()` to convert non-ascii code to ascii
   code, complying with CRAN requirements
 
@@ -655,7 +642,6 @@
 
 - Fixed dots checking error in
   [`browse_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/browse_standalone.md)
-
 - Fixed `.gitignore` not found error in `vendor-pkgdev.R`, this bug is
   from source code of `pkgdev`
 
@@ -708,7 +694,6 @@ CRAN release: 2026-07-21
 - Made
   [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
   compatible with `usethis`
-
 - Added cov ignorance in
   [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
 
@@ -724,7 +709,6 @@ CRAN release: 2026-07-21
 - Changed default file name created by
   [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
   to -package.R
-
 - Bug fix in
   [`use_workflow_version_update()`](https://wanglabcsu.github.io/rpkgkit/reference/use_workflow_version_update.md)
 
@@ -747,22 +731,17 @@ CRAN release: 2026-07-21
 - make
   [`check_pkgdown_reference()`](https://wanglabcsu.github.io/rpkgkit/reference/check_pkgdown_reference.md)
   easy to copy
-
 - Fixed lints
 
 ### NEW FEATURES
 
 - Added `package_*`, some package-wise functions
-
 - Added
   [`make_func_arg_explicit()`](https://wanglabcsu.github.io/rpkgkit/reference/make_func_arg_explicit.md)
-
 - Imported `add_global_gitignore` from pkgdev, under license MIT
-
 - Added
   [`add_global_rbuildignore()`](https://wanglabcsu.github.io/rpkgkit/reference/add_global_rbuildignore.md)
   to supplement `.Rbuildignore` with common build-exclusion patterns
-
 - Added
   [`use_vendor()`](https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.md),[`use_multilanguage_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/use_multilanguage_readme.md)
 
@@ -787,7 +766,6 @@ CRAN release: 2026-07-21
 - Added
   [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md)
   for easier zzz.R management
-
 - Bump verion to v0.1
 
 ## rpkgkit 0.0.7 (2026-06-17)
@@ -796,10 +774,8 @@ CRAN release: 2026-07-21
 
 - Added basic color support to
   [`news_md_show()`](https://wanglabcsu.github.io/rpkgkit/reference/news_md.md)
-
 - Added dependency, description and nocov tag in
   [`create_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/create_standalone.md)
-
 - Fixed pattern detection of
   [`detect_lost_glue_brace()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_lost_glue_brace.md)
   when resolving contexts with more than one lines. Added more detailed
@@ -817,14 +793,12 @@ CRAN release: 2026-07-21
 ### MINOR IMPROVEMENTS
 
 - Add more options for changelog type in NEWS.md
-
 - Add more tests
 
 ### NEW FEATURES
 
 - Added browse_standalone() to inquire all available standalone R files
   across github
-
 - Added `rename_func` to change the naming style of functions
 
 ## rpkgkit 0.0.4 (2026-06-02)
@@ -836,9 +810,7 @@ CRAN release: 2026-07-21
 ### MINOR IMPROVEMENTS
 
 - Made `news_md_add_entry` vectorized
-
 - Made `inquire_standalone` more explicit
-
 - Made `use_hexsticker` operate on README.Rmd. Added
   `detect_lost_glue_brace`
 
