@@ -15,28 +15,48 @@
 
 .onAttach <- function(libname, pkgname) {
   if (startup_message_allowed()) {
-    cli::cli_process_done(.envir = .time_record)
+    pkg_version <- utils::packageVersion(pkgname)
+    end <- Sys.time()
+    elapsed <- cli_timestamp_formatter(as.numeric(end - .time_record$start))
+    cli::cli_alert_success(sprintf(
+      "{.pkg {pkgname}} v{pkg_version} loaded {cli::col_grey('[%s]')}",
+      elapsed
+    ))
   }
 }
 
 .onLoad <- function(libname, pkgname) {
   if (startup_message_allowed()) {
-    pkg_version <- utils::packageVersion(pkgname)
-    .time_record$pkgname <- pkgname
-    .time_record$pkg_version <- pkg_version
-    cli::cli_progress_step(
-      msg = "Loading {.pkg {pkgname}} v{pkg_version}",
-      msg_done = "{.pkg {pkgname}} v{pkg_version} loaded",
-      spinner = TRUE,
-      .envir = .time_record
-    )
+    .time_record$start <- Sys.time()
   }
-
   invisible()
 }
 
 .time_record <- new.env()
 
+cli_timestamp_formatter <- function(x) {
+  stopifnot(
+    length(x) == 1L,
+    is.numeric(x),
+    !is.na(x),
+    x >= 0L
+  )
+
+  if (x < 1L) {
+    sprintf("%d ms", as.integer(x * 1000L))
+  } else if (x < 60L) {
+    sprintf("%d s", as.integer(x))
+  } else if (x < 3600L) {
+    sprintf("%d min %d s", floor(x / 60L), as.integer(x %% 60L))
+  } else {
+    sprintf(
+      "%d h %02d min %d s",
+      floor(x / 3600L),
+      floor((x %% 3600L) / 60L),
+      as.integer(x %% 60L)
+    )
+  }
+}
 
 startup_message_allowed <- function() {
   allowed <- FALSE
