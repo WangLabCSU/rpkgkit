@@ -503,15 +503,15 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
 #' @keywords internal
 .mfae_char_index <- function(line, col) {
   chars <- strsplit(line, "", fixed = TRUE)[[1L]]
-  current <- 1
+  current <- 1L
   for (i in seq_along(chars)) {
     if (current >= col) {
       return(i)
     }
     current <- if (chars[[i]] == "\t") {
-      current + 8 - ((current - 1) %% 8)
+      current + 8L - ((current - 1L) %% 8L)
     } else {
-      current + 1
+      current + 1L
     }
   }
   length(chars) + 1L

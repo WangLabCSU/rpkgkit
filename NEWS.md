@@ -1,5 +1,65 @@
 # rpkgkit 0.2.0 (2026-12-01)
 
+## NEW FEATURES
+
+* The source-code tooling is now backed by Rust through `extendr`: the
+  scanning, rewriting and formatting internals of `optimize_rmd_yaml()`,
+  `detect_fn_arg_path()`, `detect_lost_glue_brace()`, `rename_func()`,
+  `convert_func_syntax()`, `detect_print_and_cat()`,
+  `convert_int_literals()`, `convert_pipe()`,
+  `detect_unmatched_nocov_marker()` and `use_air_table()`, together with their
+  `package_*()` counterparts, delegate to compiled `*_rs()` helpers in
+  `src/rust/src/` through the generated `R/extendr-wrappers.R`. The exported R
+  functions keep their signatures, and file discovery, progress reporting and
+  summary output stay in R; no export was added or removed.
+* Source builds now ship the usual `extendr` infrastructure: `configure`,
+  `configure.win`, `cleanup`, `cleanup.win`, `src/Makevars.in`,
+  `src/Makevars.win.in`, `src/entrypoint.c`, `tools/config.R` and
+  `tools/msrv.R` (which checks Cargo/rustc against the declared MSRV). The
+  crate depends on `extendr-api` 0.9.0 and `regex`;
+  `src/rust/vendor.tar.xz` and `src/rust/vendor-config.toml` allow offline
+  builds on CRAN, and `src/rust/deny.toml` configures dependency auditing.
+
+## BREAKING CHANGES
+
+* The package requires R >= 4.2 and `cli` >= 3.0.0. Building from source also
+  requires Cargo (Rust's package manager), `rustc` >= 1.65.0 and `xz`, now
+  declared in `SystemRequirements`; the shared library is registered with
+  `useDynLib(rpkgkit, .registration = TRUE)`.
+
+## DEFUNCT
+
+* `render_rmd()` now aborts with `lifecycle::deprecate_stop()` instead of
+  rendering, and its test file was removed.
+
+## INTERNAL CHANGES
+
+* `detect_lost_glue_brace()` and `detect_print_and_cat()` scan raw source text
+  with the Rust tokenizer, which understands strings, comments and raw
+  strings, instead of walking a `utils::getParseData()` parse table. A parse
+  is still run as a guard that rejects unparseable files.
+* `use_air_table()` moved from `R/54_use_air_table_.R` to
+  `R/54_use_air_table.R`; its internal helpers were renamed from `.at_*` to
+  `.uat_*` and now delegate to Rust, while the two `air format` runs remain in
+  R.
+* The `R-CMD-check` workflow installs a Rust toolchain on Windows, macOS and
+  Ubuntu (release and devel), uses the `x86_64-pc-windows-gnu` target on
+  Windows and no longer runs the `oldrel-1` to `oldrel-4` jobs. Generated
+  `Makevars`, the vendored crate directory and Rust build output are ignored
+  by Git and excluded from the source tarball; the VS Code settings point
+  rust-analyzer at the crate and drop machine-specific R paths.
+* Tests of the migrated helpers now exercise the text-based Rust interface.
+
+## DOCUMENTATION
+
+* The README gained an `extendr` badge and a "Citation" section, and no longer
+  lists `flir_fix()`, `air_format()`, `render_rmd()` or `use_hexsticker()` in
+  its function tables.
+* The `detect_lost_glue_brace()` help page describes the Rust tokenizer, the
+  old `.at_*` helper pages were replaced by `man/*_rs.Rd` pages for the
+  generated wrappers, and `man/use_air_table.Rd` points at the renamed source
+  file.
+
 # rpkgkit 0.1.24 (2026-11-08)
 
 ## NEW FEATURES

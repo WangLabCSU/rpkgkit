@@ -65,8 +65,8 @@ use_air_table <- function(
   ...
 ) {
   rlang::check_dots_empty()
-  rlang::check_number_whole(ncol, min = 1)
-  rlang::check_number_whole(min_length, min = 0)
+  rlang::check_number_whole(ncol, min = 1L)
+  rlang::check_number_whole(min_length, min = 0L)
   rlang::check_string(marker)
   check_air_installed()
 

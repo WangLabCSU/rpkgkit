@@ -36,7 +36,7 @@ get_positron_version <- function(long = FALSE) {
       system2(cli, "--version", stdout = TRUE, stderr = FALSE),
       error = function(e) character()
     )
-    if (length(out) > 0) return(trimws(out[1]))
+    if (length(out) > 0L) return(trimws(out[1L]))
   }
 
   # 5. Version could not be determined

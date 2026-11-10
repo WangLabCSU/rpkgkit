@@ -59,7 +59,7 @@
 rename_func <- function(
   path = NULL,
   style = c("snake_case", "camelCase", "PascalCase", "google"),
-  num_to_word = c("for" = 4, "to" = 2),
+  num_to_word = c("for" = 4L, "to" = 2L),
   ...
 ) {
   rlang::check_dots_empty()
@@ -67,31 +67,33 @@ rename_func <- function(
   path <- path %||%
     if (rstudioapi::isAvailable()) rstudioapi::getActiveDocumentContext()$path
   if (is.null(path) || !nzchar(path)) {
-    cli::cli_abort(c("x" = "{.arg path} is required"))
+    cli::cli_abort(message = c("x" = "{.arg path} is required"))
   }
 
   style <- match_arg(
-    style,
-    c("snake_case", "camelCase", "PascalCase", "google")
+    arg = style,
+    choices = c("snake_case", "camelCase", "PascalCase", "google")
   )
 
-  num_lookup <- num_to_word_lookup(num_to_word)
+  num_lookup <- num_to_word_lookup(num_to_word = num_to_word)
 
-  lines <- readLines(path, warn = FALSE)
+  lines <- readLines(con = path, warn = FALSE)
 
   # Detect function definitions: `?name`? <- function(  or  `?name`? = function(
-  old_names <- detect_func_defs(lines)
+  old_names <- detect_func_defs(lines = lines)
 
   if (length(old_names) == 0L) {
-    cli::cli_alert_info("No function definitions found in {.file {path}}")
+    cli::cli_alert_info(
+      text = "No function definitions found in {.file {path}}"
+    )
     return(invisible(path))
   }
 
   # Convert each function name to the target style
   new_names <- vapply(
-    old_names,
-    to_style,
-    character(1L),
+    X = old_names,
+    FUN = to_style,
+    FUN.VALUE = character(length = 1L),
     style = style,
     num_lookup = num_lookup,
     USE.NAMES = FALSE
@@ -104,24 +106,28 @@ rename_func <- function(
 
   if (length(old_names) == 0L) {
     cli::cli_alert_info(
-      "All function names already in {.val {style}} style."
+      text = "All function names already in {.val {style}} style."
     )
     return(invisible(path))
   }
 
   # Sort by descending name length so shorter names don't clobber longer ones
-  ord <- order(nchar(old_names), decreasing = TRUE)
+  ord <- order(nchar(x = old_names), decreasing = TRUE)
   old_names <- old_names[ord]
   new_names <- new_names[ord]
 
   text <- paste(lines, collapse = "\n")
-  renamed <- rf_rename_text_rs(text, old_names, new_names)
+  renamed <- rf_rename_text_rs(
+    text = text,
+    old_names = old_names,
+    new_names = new_names
+  )
   text <- renamed$text
   n_renamed <- renamed$n_renamed
 
-  writeLines(text, path)
+  writeLines(text = text, con = path)
   cli::cli_alert_success(
-    "Renamed {n_renamed} function{?s} to {.val {style}} style in {.file {path}}"
+    text = "Renamed {n_renamed} function{?s} to {.val {style}} style in {.file {path}}"
   )
 
   invisible(path)
@@ -132,7 +138,7 @@ rename_func <- function(
 # ---------------------------------------------------------------------------
 
 detect_func_defs <- function(lines) {
-  rf_detect_func_defs_rs(lines)
+  rf_detect_func_defs_rs(lines = lines)
 }
 
 # ---------------------------------------------------------------------------
@@ -143,7 +149,7 @@ to_style <- function(name, style, num_lookup = NULL) {
   rf_to_style_rs(
     name = name,
     style = style,
-    num_lookup = if (is.null(num_lookup)) NULL else as.list(num_lookup)
+    num_lookup = if (is.null(num_lookup)) NULL else as.list(x = num_lookup)
   )
 }
 
@@ -154,28 +160,30 @@ to_style <- function(name, style, num_lookup = NULL) {
 # vector whose names are digit abbreviations and whose values are the words
 # they stand for, e.g. `c("2" = "to", "4" = "for")`.
 num_to_word_lookup <- function(num_to_word, call = rlang::caller_env()) {
-  if (is.null(num_to_word) || isFALSE(num_to_word)) {
+  if (is.null(num_to_word) || isFALSE(x = num_to_word)) {
     return(NULL)
   }
 
   nms <- names(num_to_word)
-  digits <- trimws(as.character(num_to_word))
+  digits <- trimws(x = as.character(num_to_word))
 
   if (
     !is.atomic(num_to_word) ||
-      !is.vector(num_to_word) ||
+      !is.vector(x = num_to_word) ||
       length(num_to_word) == 0L ||
       is.null(nms) ||
       anyNA(nms) ||
-      !all(grepl("^[a-zA-Z]+$", nms)) ||
+      !all(grepl(pattern = "^[a-zA-Z]+$", x = nms)) ||
       anyNA(digits) ||
-      !all(grepl("^[0-9]+$", digits)) ||
-      anyDuplicated(digits) > 0L
+      !all(grepl(pattern = "^[0-9]+$", x = digits)) ||
+      anyDuplicated(x = digits) > 0L
   ) {
-    cli::cli_abort(c(
-      "x" = "{.arg num_to_word} must be a named vector, {.val NULL}, or {.val FALSE}.",
-      "i" = "Names give the replacement word and values the digit abbreviation, e.g. {.code c(\"for\" = 4, \"to\" = 2)}."
-    ))
+    cli::cli_abort(
+      message = c(
+        "x" = "{.arg num_to_word} must be a named vector, {.val NULL}, or {.val FALSE}.",
+        "i" = "Names give the replacement word and values the digit abbreviation, e.g. {.code c(\"for\" = 4, \"to\" = 2)}."
+      )
+    )
   }
 
   lookup <- nms
@@ -193,6 +201,6 @@ num_to_word_lookup <- function(num_to_word, call = rlang::caller_env()) {
 split_word_numbers <- function(word, num_lookup) {
   rf_split_word_numbers_rs(
     word = word,
-    num_lookup = if (is.null(num_lookup)) NULL else as.list(num_lookup)
+    num_lookup = if (is.null(num_lookup)) NULL else as.list(x = num_lookup)
   )
 }

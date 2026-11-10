@@ -53,7 +53,11 @@ use_tidy_addin <- function(
   ns <- .uta_parse_namespace(ns_file)
   is_exported <- fn_name %in%
     ns$exports ||
-    any(vapply(ns$export_patterns, function(p) grepl(p, fn_name), logical(1)))
+    any(vapply(
+      X = ns$export_patterns,
+      FUN = function(p) grepl(p, fn_name),
+      FUN.VALUE = logical(1L)
+    ))
   if (!is_exported) {
     cli::cli_abort(c(
       "{.fn {fn_name}} is not exported in NAMESPACE.",
@@ -171,7 +175,7 @@ use_tidy_addin <- function(
     args <- vapply(
       as.list(e)[-1L],
       function(a) as.character(a)[1L],
-      character(1)
+      character(1L)
     )
     switch(
       fn,

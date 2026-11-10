@@ -231,7 +231,7 @@ resolve_pattern_fn_names <- function(
         error = function(e) FALSE
       )
     },
-    logical(1)
+    logical(1L)
   )
 
   if (any(invalid)) {
