@@ -15,7 +15,7 @@ air_file <- function(lines, env = parent.frame()) {
 mock_air <- function(env = parent.frame()) {
   testthat::local_mocked_bindings(
     check_air_installed = function() invisible(TRUE),
-    .at_run_air = function(path) invisible(path),
+    .uat_run_air = function(path) invisible(path),
     .package = "rpkgkit",
     .env = env
   )
@@ -296,23 +296,23 @@ test_that("use_air_table never joins a line that ends in a comment", {
 # Internal helpers
 # ---------------------------------------------------------------------------
 
-test_that(".at_rows() splits element indices into rows", {
-  expect_identical(unname(.at_rows(4L, 2L)), list(c(1L, 2L), c(3L, 4L)))
-  expect_identical(unname(.at_rows(5L, 3L)), list(c(1L, 2L, 3L), c(4L, 5L)))
-  expect_identical(unname(.at_rows(3L, 1L)), list(1L, 2L, 3L))
+test_that(".uat_rows() splits element indices into rows", {
+  expect_identical(unname(.uat_rows(4L, 2L)), list(c(1L, 2L), c(3L, 4L)))
+  expect_identical(unname(.uat_rows(5L, 3L)), list(c(1L, 2L, 3L), c(4L, 5L)))
+  expect_identical(unname(.uat_rows(3L, 1L)), list(1L, 2L, 3L))
 })
 
-test_that(".at_parse() returns expressions and aborts on invalid code", {
-  expect_length(.at_parse("x <- 1", path = "test.R"), 1L)
-  expect_length(.at_parse(character(0), path = "test.R"), 0L)
+test_that(".uat_parse() returns expressions and aborts on invalid code", {
+  expect_length(.uat_parse("x <- 1", path = "test.R"), 1L)
+  expect_length(.uat_parse(character(0), path = "test.R"), 0L)
   expect_error(
-    .at_parse("x <- (", path = "test.R"),
+    .uat_parse("x <- (", path = "test.R"),
     "not valid R code"
   )
 })
 
-test_that(".at_targets() returns an empty data frame when nothing qualifies", {
-  targets <- .at_targets(
+test_that(".uat_targets() returns an empty data frame when nothing qualifies", {
+  targets <- .uat_targets(
     lines = c("x <- 1", "y <- c(1, 2)"),
     path = "test.R",
     min_length = 5L,
@@ -327,8 +327,8 @@ test_that(".at_targets() returns an empty data frame when nothing qualifies", {
   )
 })
 
-test_that(".at_targets() describes qualifying calls", {
-  targets <- .at_targets(
+test_that(".uat_targets() describes qualifying calls", {
+  targets <- .uat_targets(
     lines = air_multiline_vec(),
     path = "test.R",
     min_length = 2L,
@@ -343,8 +343,8 @@ test_that(".at_targets() describes qualifying calls", {
   expect_identical(nrow(targets$elements[[1L]]), 4L)
 })
 
-test_that(".at_targets() ignores calls that already carry the marker", {
-  targets <- .at_targets(
+test_that(".uat_targets() ignores calls that already carry the marker", {
+  targets <- .uat_targets(
     lines = air_table_vec(),
     path = "test.R",
     min_length = 2L,
@@ -354,7 +354,7 @@ test_that(".at_targets() ignores calls that already carry the marker", {
   expect_identical(nrow(targets), 0L)
 })
 
-test_that(".at_split_lines() rewrites a single-line call", {
+test_that(".uat_split_lines() rewrites a single-line call", {
   line <- "x <- c(1, 2, 3, 4)"
   elements <- data.frame(
     line1 = 1L,
@@ -364,7 +364,7 @@ test_that(".at_split_lines() rewrites a single-line call", {
   )
 
   expect_identical(
-    .at_split_lines(
+    .uat_split_lines(
       line = line,
       call_col1 = 6L,
       elements = elements,
@@ -374,7 +374,7 @@ test_that(".at_split_lines() rewrites a single-line call", {
   )
 })
 
-test_that(".at_join_flags() sets a flag only when a row continues", {
+test_that(".uat_join_flags() sets a flag only when a row continues", {
   elements <- data.frame(
     line1 = c(1L, 2L),
     col1 = c(3L, 3L),
@@ -383,7 +383,7 @@ test_that(".at_join_flags() sets a flag only when a row continues", {
   )
 
   expect_identical(
-    .at_join_flags(
+    .uat_join_flags(
       join = c(FALSE, FALSE),
       elements = elements,
       ncol = 2L,
@@ -394,7 +394,7 @@ test_that(".at_join_flags() sets a flag only when a row continues", {
 
   # A trailing comment must keep the line break.
   expect_identical(
-    .at_join_flags(
+    .uat_join_flags(
       join = c(FALSE, FALSE),
       elements = elements,
       ncol = 2L,
@@ -405,7 +405,7 @@ test_that(".at_join_flags() sets a flag only when a row continues", {
 
   # One element per row never joins anything.
   expect_identical(
-    .at_join_flags(
+    .uat_join_flags(
       join = c(FALSE, FALSE),
       elements = elements,
       ncol = 1L,
@@ -415,7 +415,7 @@ test_that(".at_join_flags() sets a flag only when a row continues", {
   )
 })
 
-test_that(".at_join_flags() ignores lines that are not adjacent", {
+test_that(".uat_join_flags() ignores lines that are not adjacent", {
   elements <- data.frame(
     line1 = c(1L, 3L),
     col1 = c(3L, 3L),
@@ -424,7 +424,7 @@ test_that(".at_join_flags() ignores lines that are not adjacent", {
   )
 
   expect_identical(
-    .at_join_flags(
+    .uat_join_flags(
       join = c(FALSE, FALSE, FALSE),
       elements = elements,
       ncol = 2L,
@@ -434,21 +434,21 @@ test_that(".at_join_flags() ignores lines that are not adjacent", {
   )
 })
 
-test_that(".at_run_air() aborts when air fails", {
+test_that(".uat_run_air() aborts when air fails", {
   local_mocked_bindings(
     system2 = function(...) structure("error: bad syntax", status = 1L),
     .package = "base"
   )
 
-  expect_error(.at_run_air("test.R"), "failed to format")
+  expect_error(.uat_run_air("test.R"), "failed to format")
 })
 
-test_that(".at_run_air() returns the path invisibly on success", {
+test_that(".uat_run_air() returns the path invisibly on success", {
   local_mocked_bindings(
     system2 = function(...) character(),
     .package = "base"
   )
 
-  expect_invisible(.at_run_air("test.R"))
-  expect_identical(.at_run_air("test.R"), "test.R")
+  expect_invisible(.uat_run_air("test.R"))
+  expect_identical(.uat_run_air("test.R"), "test.R")
 })

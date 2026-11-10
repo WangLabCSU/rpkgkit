@@ -90,6 +90,9 @@ convert_pipe <- function(
   rlang::check_bool(verbose)
 
   text <- readLines(path, warn = FALSE)
+  if (length(text) == 0L) {
+    return(invisible(FALSE))
+  }
   result <- .cp_process_text(text, direction)
 
   if (identical(result, text)) {
@@ -115,54 +118,26 @@ convert_pipe <- function(
 #' `text` is a character vector of lines. A line whose first non-whitespace
 #' character is `#` is a comment and is returned untouched; within the remaining
 #' lines, pipes inside string literals, raw strings, and trailing comments are
-#' left unchanged.
+#' left unchanged. The scan is performed by `cp_process_text_rs()`.
 #'
 #' @keywords internal
 .cp_process_text <- function(text, direction) {
-  replacement <- if (direction == "to_base") "|>" else "%>%"
-  comment <- grepl("^\\s*#", text)
-  text[!comment] <- .cp_rewrite_line(
-    text[!comment],
-    .cp_pattern(direction),
-    replacement
-  )
-  text
+  cp_process_text_rs(text, direction)
 }
 
-# Rewrite every pipe in free code. The pattern's first alternative (group 1)
-# matches a string, raw string, or trailing comment and is copied back as-is;
-# a zero capture start means the match is a pipe and is replaced.
+# Rewrite every pipe in free code. `pattern` / `replacement` are kept in the
+# signature for backwards compatibility; the Rust scanner only needs the
+# conversion direction.
 .cp_rewrite_line <- function(lines, pattern, replacement) {
   if (!length(lines)) {
     return(lines)
   }
-  matches <- gregexpr(pattern, lines, perl = TRUE)
+  direction <- if (identical(replacement, "|>")) "to_base" else "to_magrittr"
   vapply(
-    seq_along(lines),
-    function(i) {
-      hit <- matches[[i]]
-      if (hit[[1L]] == -1L) {
-        return(lines[[i]])
-      }
-      is_pipe <- attr(hit, "capture.start")[, 1L] == 0L
-      starts <- as.integer(hit)
-      ends <- starts + attr(hit, "match.length") - 1L
-
-      pieces <- character(2L * length(starts) + 1L)
-      cursor <- 1L
-      for (k in seq_along(starts)) {
-        pieces[2L * k - 1L] <- substr(lines[[i]], cursor, starts[k] - 1L)
-        pieces[2L * k] <- if (is_pipe[k]) {
-          replacement
-        } else {
-          substr(lines[[i]], starts[k], ends[k])
-        }
-        cursor <- ends[k] + 1L
-      }
-      pieces[length(pieces)] <- substr(lines[[i]], cursor, nchar(lines[[i]]))
-      paste(pieces, collapse = "")
-    },
-    character(1L)
+    lines,
+    function(line) cp_rewrite_line_rs(line, direction),
+    character(1L),
+    USE.NAMES = FALSE
   )
 }
 

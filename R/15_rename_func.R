@@ -115,24 +115,9 @@ rename_func <- function(
   new_names <- new_names[ord]
 
   text <- paste(lines, collapse = "\n")
-  n_renamed <- 0L
-
-  for (i in seq_along(old_names)) {
-    # Escape regex special characters in the name (dots, etc.)
-    escaped <- gsub(
-      "([.\\\\|()\\[\\{^$*+?])",
-      "\\\\\\1",
-      old_names[i],
-      perl = TRUE
-    )
-    # Use negative look-behind / look-ahead to match whole R identifiers
-    pattern <- paste0("(?<![a-zA-Z0-9._])", escaped, "(?![a-zA-Z0-9._])")
-
-    if (grepl(pattern, text, perl = TRUE)) {
-      text <- gsub(pattern, new_names[i], text, perl = TRUE)
-      n_renamed <- n_renamed + 1L
-    }
-  }
+  renamed <- rf_rename_text_rs(text, old_names, new_names)
+  text <- renamed$text
+  n_renamed <- renamed$n_renamed
 
   writeLines(text, path)
   cli::cli_alert_success(
@@ -147,22 +132,7 @@ rename_func <- function(
 # ---------------------------------------------------------------------------
 
 detect_func_defs <- function(lines) {
-  # Match: name <- function( / name = function(  or  name <- \( / name = \(
-  # Allows optional backtick quoting on the name
-  pattern <- "`?((?:[a-zA-Z._][a-zA-Z0-9._]*)|(?:`[^`]+`))`?\\s*(?:<-|=)\\s*(?:function\\s*\\(|\\\\\\s*\\()"
-  names <- character()
-
-  for (line in lines) {
-    m <- regexec(pattern, line, perl = TRUE)
-    match_data <- regmatches(line, m)[[1L]]
-    if (length(match_data) > 1L) {
-      # Strip surrounding backticks (if any) and trim whitespace
-      nm <- gsub("^`|`$", "", match_data[2L])
-      names <- c(names, nm)
-    }
-  }
-
-  unique(names)
+  rf_detect_func_defs_rs(lines)
 }
 
 # ---------------------------------------------------------------------------
@@ -170,51 +140,10 @@ detect_func_defs <- function(lines) {
 # ---------------------------------------------------------------------------
 
 to_style <- function(name, style, num_lookup = NULL) {
-  # Step 1 -- insert underscore before uppercase-letter transitions
-  # e.g. "myFunctionName" -> "my_Function_Name"
-  name <- gsub("([a-z0-9])([A-Z])", "\\1_\\2", name, perl = TRUE)
-
-  # Step 2 -- split by common separators (underscore, dot) and normalize
-  name <- gsub("[_.]+", " ", name)
-
-  # Step 3 -- lowercase and split into words
-  words <- strsplit(tolower(name), " ")[[1L]]
-  words <- words[nzchar(words)]
-
-  if (length(words) == 0L) {
-    return(name)
-  }
-
-  # Step 4 -- expand digit abbreviations such as `list2env` -> `list to env`
-  if (length(num_lookup) > 0L) {
-    words <- unlist(
-      lapply(words, split_word_numbers, num_lookup = num_lookup),
-      use.names = FALSE
-    )
-  }
-
-  switch(
-    style,
-    snake_case = paste(words, collapse = "_"),
-    camelCase = {
-      head <- words[1L]
-      if (length(words) > 1L) {
-        tail <- paste0(
-          toupper(substr(words[-1L], 1L, 1L)),
-          substr(words[-1L], 2L, nchar(words[-1L])),
-          collapse = ""
-        )
-        paste0(head, tail)
-      } else {
-        head
-      }
-    },
-    PascalCase = paste0(
-      toupper(substr(words, 1L, 1L)),
-      substr(words, 2L, nchar(words)),
-      collapse = ""
-    ),
-    google = paste(words, collapse = ".")
+  rf_to_style_rs(
+    name = name,
+    style = style,
+    num_lookup = if (is.null(num_lookup)) NULL else as.list(num_lookup)
   )
 }
 
@@ -262,21 +191,8 @@ num_to_word_lookup <- function(num_to_word, call = rlang::caller_env()) {
 # one unmapped digit run is returned unchanged as a single element, so that
 # identifiers such as "scale_x_log10" or "x10y" stay intact.
 split_word_numbers <- function(word, num_lookup) {
-  if (length(num_lookup) == 0L || !grepl("[0-9]", word)) {
-    return(word)
-  }
-
-  parts <- regmatches(
-    word,
-    gregexpr("[0-9]+|[^0-9]+", word, perl = TRUE)
-  )[[1L]]
-
-  is_digit <- grepl("^[0-9]+$", parts)
-
-  # All-or-nothing: leave the word alone if any digit run is unmapped
-  if (!all(parts[is_digit] %in% names(num_lookup))) {
-    return(word)
-  }
-
-  ifelse(is_digit, unname(num_lookup[parts]), parts)
+  rf_split_word_numbers_rs(
+    word = word,
+    num_lookup = if (is.null(num_lookup)) NULL else as.list(num_lookup)
+  )
 }

@@ -2,11 +2,12 @@
 % Please edit documentation in R/20_convert_int_literals.R
 \name{.cil_process_text}
 \alias{.cil_process_text}
-\title{Internal: character-level integer-literal rewrite}
+\title{Internal: character-level integer-literal rewrite (implemented in Rust)}
 \usage{
 .cil_process_text(text)
 }
 \description{
-Internal: character-level integer-literal rewrite
+The character state machine (strings, raw strings, comments, hex/decimal
+literals and signed exponents) now lives in \code{cil_process_text_rs()}.
 }
 \keyword{internal}

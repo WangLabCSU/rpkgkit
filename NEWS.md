@@ -1,3 +1,5 @@
+# rpkgkit 0.2.0 (2026-12-01)
+
 # rpkgkit 0.1.24 (2026-11-08)
 
 ## NEW FEATURES

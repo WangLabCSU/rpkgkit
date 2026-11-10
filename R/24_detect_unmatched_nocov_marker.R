@@ -124,39 +124,7 @@ detect_unmatched_nocov_marker <- function(path = NULL, verbose = TRUE, ...) {
 #   $text  - the matched text
 # ---------------------------------------------------------------------------
 find_nocov_markers <- function(lines) {
-  pattern <- "#+[ \t]+nocov[ \t]+(start|end)\\b"
-  markers <- list()
-
-  for (i in seq_along(lines)) {
-    matches <- gregexpr(
-      pattern = pattern,
-      text = lines[[i]],
-      perl = TRUE,
-      ignore.case = TRUE
-    )[[1L]]
-    if (matches[[1L]] == -1L) {
-      next
-    }
-
-    match_lengths <- attr(matches, "match.length")
-    for (j in seq_along(matches)) {
-      end_col <- matches[[j]] + match_lengths[[j]] - 1L
-      text <- substr(lines[[i]], matches[[j]], end_col)
-      markers[[length(markers) + 1L]] <- list(
-        line1 = i,
-        col1 = as.integer(matches[[j]]),
-        col2 = as.integer(end_col),
-        type = if (grepl("end\\b", text, ignore.case = TRUE, perl = TRUE)) {
-          "end"
-        } else {
-          "start"
-        },
-        text = text
-      )
-    }
-  }
-
-  markers
+  dunm_find_markers_rs(lines)
 }
 
 # ---------------------------------------------------------------------------
@@ -177,66 +145,7 @@ find_nocov_markers <- function(lines) {
 # problem refers to (NA when there is none).
 # ---------------------------------------------------------------------------
 check_nocov_markers <- function(markers) {
-  types <- vapply(markers, function(marker) marker$type, character(1L))
-  start_index <- which(types == "start")
-  end_index <- which(types == "end")
-
-  problems <- list()
-
-  # Only the first `nocov start` of a file is meaningful
-  for (k in start_index[-1L]) {
-    problems <- append_nocov_problem(
-      problems,
-      k,
-      "duplicate_start",
-      start_index[[1L]]
-    )
-  }
-
-  # Only the first `nocov end` of a file is meaningful
-  for (k in end_index[-1L]) {
-    problems <- append_nocov_problem(
-      problems,
-      k,
-      "duplicate_end",
-      end_index[[1L]]
-    )
-  }
-
-  if (length(end_index) > 0L) {
-    first_end <- end_index[[1L]]
-    if (length(start_index) == 0L) {
-      problems <- append_nocov_problem(problems, first_end, "unmatched_end")
-    } else if (
-      marker_comes_before(
-        markers[[first_end]],
-        markers[[start_index[[1L]]]]
-      )
-    ) {
-      problems <- append_nocov_problem(
-        problems,
-        first_end,
-        "end_before_start",
-        start_index[[1L]]
-      )
-    }
-  }
-
-  # A start must be closed by an end: covr aborts on an unclosed range
-  if (length(start_index) > 0L && length(end_index) == 0L) {
-    problems <- append_nocov_problem(
-      problems,
-      start_index[[1L]],
-      "unmatched_start"
-    )
-  }
-
-  if (length(problems) > 1L) {
-    ord <- order(vapply(problems, function(problem) problem$index, integer(1L)))
-    problems <- problems[ord]
-  }
-
-  list(problems = problems)
+  list(problems = dunm_check_markers_rs(markers))
 }
 
 # ---------------------------------------------------------------------------
@@ -291,6 +200,10 @@ scan_nocov_file <- function(path) {
 # evaluate `{...}` inside a message built at run time).
 # ---------------------------------------------------------------------------
 nocov_problem_text <- function(markers, problem) {
+  if (!is.null(problem$text)) {
+    return(problem$text)
+  }
+
   marker <- markers[[problem$index]]
   at <- paste0(
     "`",
@@ -343,11 +256,11 @@ nocov_problem_text <- function(markers, problem) {
 # `format_brace_error()`.
 # ---------------------------------------------------------------------------
 format_nocov_marker_error <- function(line_content, marker) {
-  caret <- paste0(
-    strrep(" ", marker$col1 - 1L),
-    strrep("^", marker$col2 - marker$col1 + 1L)
+  dunm_format_marker_error_rs(
+    line_content = line_content,
+    col1 = as.integer(marker$col1),
+    col2 = as.integer(marker$col2)
   )
-  paste0(line_content, "\n", caret)
 }
 
 # ---------------------------------------------------------------------------

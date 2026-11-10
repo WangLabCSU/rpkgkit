@@ -13,6 +13,7 @@
 [![Dependencies](https://tinyverse.netlify.app/badge/rpkgkit)](https://cran.r-project.org/package=rpkgkit)
 [![简体中文](https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue)](inst/translations/README.zh-cn.md)
 [![Español](https://img.shields.io/badge/README-Espa%C3%B1ol-blue)](inst/translations/README.es.md)
+[![extendr](https://img.shields.io/badge/extendr-%5E0.9.0-276DC2)](https://extendr.github.io/extendr/extendr_api/)
 <!-- badges: end -->
 
 ## Overview
@@ -116,9 +117,7 @@ It’s recommended to use following packages together with `rpkgkit`:
 | `check_pkgdown_reference()` | `check_pkgdown_reference()` | Check that every export appears in `_pkgdown.yml` |
 | `check_sysdeps()` | `check_sysdeps(c("libpng-dev"))` | Check whether system libraries are installed |
 | `check_air_installed()` | `check_air_installed()` | Check that the `air` formatter is on the `PATH` |
-| `flir_fix()` | `flir_fix("R/foo.R")` | Fix R code with `flir` |
 | `use_air_table()` | `use_air_table("R/foo.R", ncol = 3)` | Lay out long `c()` and `list()` calls as aligned tables with `air` |
-| `air_format()` | `air_format("R/foo.R")` | Deprecated; format R code with `air` |
 
 ### Manage `NEWS.md`
 
@@ -154,8 +153,6 @@ It’s recommended to use following packages together with `rpkgkit`:
 | `badge_to_readme()` | `badge_to_readme(badge)` | Insert a badge into the README badges block |
 | `badge_translated_by_ai()` | `badge_translated_by_ai(lang = "zh-cn")` | Generate an AI-translation disclaimer badge |
 | `use_multilanguage_readme()` | `use_multilanguage_readme("zh-cn")` | Create translated README files and their badges |
-| `render_rmd()` | `render_rmd("README.Rmd")` | Render an `.Rmd` or `.R` file to Markdown |
-| `use_hexsticker()` | `use_hexsticker("man/figures/logo.png")` | Deprecated; add a hex sticker to the README title |
 
 ### Standalone files
 
@@ -200,6 +197,27 @@ npx skills add WangLabCSU/rpkgkit --skill rpkgkit
 Add `-g` to install it for every project, and `-a <agent>` to skip the
 agent prompt. The skill source lives in
 [`skills/rpkgkit/`](https://github.com/WangLabCSU/rpkgkit/tree/main/skills/rpkgkit).
+
+## Citation
+
+``` r
+citation("rpkgkit")
+#> To cite rpkgkit in publications use:
+#> 
+#>   Yang Y (2026). _rpkgkit: Create and Maintain R Packages_. R package version 0.2.0, <https://wanglabcsu.github.io/rpkgkit/>.
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Manual{,
+#>     title = {rpkgkit: Create and Maintain R Packages},
+#>     author = {Yuxi Yang},
+#>     year = {2026},
+#>     note = {R package version 0.2.0},
+#>     url = {https://wanglabcsu.github.io/rpkgkit/},
+#>   }
+#> 
+#> Corresponding repository: https://github.com/WangLabCSU/rpkgkit
+```
 
 ## Acknowledgements
 

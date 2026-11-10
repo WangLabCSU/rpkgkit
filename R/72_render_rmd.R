@@ -1,4 +1,7 @@
-#' Render an R Markdown or R document to Markdown format
+# ? This function was no longer maintained.
+# nocov start
+
+#' `r lifecycle::badge('deprecated')` Render an R Markdown or R document to Markdown format
 #'
 #' @param path Path to the input file. If NULL and rstudioapi is available,
 #'   uses the currently active document in RStudio.
@@ -16,6 +19,7 @@
 #' }
 #' @export
 render_rmd <- function(path = NULL, output_format = "md_document", ...) {
+  lifecycle::deprecate_stop("0.2.0", "render_rmd()")
   rlang::check_installed("rmarkdown")
   path <- path %||%
     if (rlang::is_installed("rstudioapi")) {
@@ -26,3 +30,5 @@ render_rmd <- function(path = NULL, output_format = "md_document", ...) {
   }
   rmarkdown::render(input = path, output_format = output_format, ...)
 }
+
+# nocov end

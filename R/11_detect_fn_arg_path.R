@@ -112,85 +112,18 @@ scan_fn_arg_path <- function(
     cli::cli_abort("File {.path {file}} does not exist.")
   }
   lines <- readLines(file, warn = FALSE)
-  exprs <- parse_safely(paste(lines, collapse = "\n"), file)
-  pd <- utils::getParseData(exprs)
+  text <- paste(lines, collapse = "\n")
 
-  if (is.null(pd) || nrow(pd) == 0L) {
-    return(list(lines = lines, hits = list()))
-  }
+  # keep the original guard: unparseable files must still be reported
+  parse_safely(text, file)
 
-  check_all <- is.null(exports) && length(export_patterns) == 0L
-  is_exported <- function(nm) {
-    check_all ||
-      nm %in% exports ||
-      any(vapply(export_patterns, grepl, logical(1L), x = nm))
-  }
-
-  formals_tok <- pd[
-    pd$token == "SYMBOL_FORMALS" & grepl(arg_pattern, pd$text),
-    ,
-    drop = FALSE
-  ]
-
-  hits <- list()
-  for (k in seq_len(nrow(formals_tok))) {
-    tok <- formals_tok[k, ]
-
-    # function expr -> its parent must be a top-level assignment expr
-    fn_row <- pd[pd$id == tok$parent, ]
-    assign_row <- pd[pd$id == fn_row$parent, ]
-    if (nrow(assign_row) != 1L || assign_row$parent != 0L) {
-      next
-    }
-
-    sib <- pd[pd$parent == assign_row$id, ]
-    sib <- sib[order(sib$line1, sib$col1), ]
-    if (
-      nrow(sib) < 3L ||
-        !(sib$token[2L] %in% c("LEFT_ASSIGN", "EQ_ASSIGN")) ||
-        sib$id[3L] != fn_row$id
-    ) {
-      next
-    }
-
-    # function name (symbol or string on the left-hand side)
-    lhs <- pd[pd$parent == sib$id[1L], ]
-    lhs <- lhs[lhs$token %in% c("SYMBOL", "STR_CONST"), ]
-    if (nrow(lhs) == 0L) {
-      next
-    }
-    fn_name <- gsub("^[`\"']|[`\"']$", "", lhs$text[1L])
-    if (!is_exported(fn_name)) {
-      next
-    }
-
-    # default value = the node right after `=` following the formal name
-    fsib <- pd[pd$parent == fn_row$id, ]
-    fsib <- fsib[order(fsib$line1, fsib$col1), ]
-    pos <- which(fsib$id == tok$id)
-    if (
-      length(pos) != 1L ||
-        pos + 2L > nrow(fsib) ||
-        fsib$token[pos + 1L] != "EQ_FORMALS"
-    ) {
-      next # no default value: fine
-    }
-    def_row <- fsib[pos + 2L, ]
-    def_text <- utils::getParseText(pd, def_row$id)
-    if (trimws(def_text) %in% allow) {
-      next
-    }
-
-    hits[[length(hits) + 1L]] <- list(
-      fn = fn_name,
-      arg = tok$text,
-      default = gsub("\\s*\n\\s*", " ", def_text),
-      line1 = tok$line1,
-      col1 = tok$col1,
-      line2 = def_row$line2,
-      col2 = def_row$col2
-    )
-  }
+  hits <- dfap_scan_text_rs(
+    text = text,
+    arg_pattern = arg_pattern,
+    exports = exports,
+    export_patterns = export_patterns,
+    allow = allow
+  )
 
   list(lines = lines, hits = hits)
 }
