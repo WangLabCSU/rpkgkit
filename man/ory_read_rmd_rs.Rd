@@ -7,6 +7,8 @@
 ory_read_rmd_rs(lines)
 }
 \description{
-Rust rewrite of \code{rpkgkit:::.ory_read_rmd()}.
+Rust rewrite of \code{rpkgkit:::.ory_read_rmd()}. Character arguments are taken
+as \verb{Vec<String>} (not \code{Strings}): iterating a zero-length \code{Strings} aborts
+the R session, and an empty YAML header is a valid input.
 }
 \keyword{internal}

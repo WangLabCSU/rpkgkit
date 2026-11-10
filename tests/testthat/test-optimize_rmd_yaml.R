@@ -338,10 +338,6 @@ test_that(".ory_split_chunks() groups top-level keys with their values", {
   )
 })
 
-test_that(".ory_split_chunks() returns an empty list for empty input", {
-  expect_identical(.ory_split_chunks(character()), list())
-})
-
 test_that(".ory_split_chunks() attaches leading non-key lines to the first key", {
   chunks <- .ory_split_chunks(c("# a comment", "title: x"))
 

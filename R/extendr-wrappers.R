@@ -127,7 +127,9 @@ dunm_format_marker_error_rs <- function(line_content, col1, col2) .Call(wrap__du
 
 #' Split an Rmd file into YAML header lines and body lines.
 #'
-#' Rust rewrite of `rpkgkit:::.ory_read_rmd()`.
+#' Rust rewrite of `rpkgkit:::.ory_read_rmd()`. Character arguments are taken
+#' as `Vec<String>` (not `Strings`): iterating a zero-length `Strings` aborts
+#' the R session, and an empty YAML header is a valid input.
 #' @keywords internal
 ory_read_rmd_rs <- function(lines) .Call(wrap__ory_read_rmd_rs, lines)
 

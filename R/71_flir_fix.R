@@ -1,3 +1,6 @@
+# ? This function was no longer maintained.
+# nocov start
+
 #' Fix R code or package using flir
 #'
 #' @description
@@ -23,6 +26,8 @@
 #' cat(readLines(tmp, warn = FALSE), sep = "\n")
 #' @export
 flir_fix <- function(path = NULL, ...) {
+  lifecycle::deprecate_stop("0.2.0", "flir_fix()")
+
   rlang::check_installed("flir")
   path <- path %||% rstudioapi::getActiveDocumentContext()$path
 
@@ -36,3 +41,5 @@ flir_fix <- function(path = NULL, ...) {
     flir::fix_dir(path = path, ...)
   }
 }
+
+# nocov end

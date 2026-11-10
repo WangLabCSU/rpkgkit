@@ -51,11 +51,12 @@ const ORY_MANAGED: [&str; 9] = [
 
 /// Split an Rmd file into YAML header lines and body lines.
 ///
-/// Rust rewrite of `rpkgkit:::.ory_read_rmd()`.
+/// Rust rewrite of `rpkgkit:::.ory_read_rmd()`. Character arguments are taken
+/// as `Vec<String>` (not `Strings`): iterating a zero-length `Strings` aborts
+/// the R session, and an empty YAML header is a valid input.
 /// @keywords internal
 #[extendr]
-pub fn ory_read_rmd_rs(lines: Strings) -> List {
-    let lines: Vec<String> = lines.iter().map(|line| line.to_string()).collect();
+pub fn ory_read_rmd_rs(lines: Vec<String>) -> List {
     let (header, body) = ory_read_rmd_impl(&lines);
     List::from_pairs([
         ("header", Robj::from(Strings::from_values(header))),
@@ -70,8 +71,7 @@ pub fn ory_read_rmd_rs(lines: Strings) -> List {
 /// of character vectors, in source order.
 /// @keywords internal
 #[extendr]
-pub fn ory_split_chunks_rs(header: Strings) -> List {
-    let header: Vec<String> = header.iter().map(|line| line.to_string()).collect();
+pub fn ory_split_chunks_rs(header: Vec<String>) -> List {
     let chunks = ory_split_chunks_impl(&header);
     if chunks.is_empty() {
         // `list()` with no names attribute, like `.ory_split_chunks(character())`.
@@ -158,8 +158,7 @@ pub fn ory_default_output_rs(type_: &str, readme_format: &str) -> Strings {
 /// is still the usethis default", otherwise the lines to keep.
 /// @keywords internal
 #[extendr]
-pub fn ory_optimize_output_rs(chunk: Strings, type_: &str) -> Result<Nullable<Strings>> {
-    let chunk: Vec<String> = chunk.iter().map(|line| line.to_string()).collect();
+pub fn ory_optimize_output_rs(chunk: Vec<String>, type_: &str) -> Result<Nullable<Strings>> {
     match ory_optimize_output_impl(&chunk, type_) {
         Some(lines) => Ok(Nullable::NotNull(Strings::from_values(lines))),
         None => Ok(Nullable::Null),
@@ -183,7 +182,7 @@ pub fn ory_default_title_rs(path: &str, type_: &str, meta: List) -> String {
 /// @keywords internal
 #[extendr]
 pub fn ory_build_header_rs(
-    header: Strings,
+    header: Vec<String>,
     path: &str,
     type_: &str,
     meta: List,
@@ -191,7 +190,6 @@ pub fn ory_build_header_rs(
     date: &str,
     extra: List,
 ) -> Result<Strings> {
-    let header: Vec<String> = header.iter().map(|line| line.to_string()).collect();
     let meta = ory_meta_from_list(&meta);
     let extra = ory_named_pairs(&Robj::from(extra));
     Ok(Strings::from_values(ory_build_header_impl(
@@ -524,6 +522,14 @@ fn ory_is_end_fence(line: &str) -> bool {
     false
 }
 
+/// Split an Rmd into its YAML header and body.
+///
+/// An empty YAML block (`---` immediately followed by a closing fence) is a
+/// valid header: `header` is then zero-length. Keep it that way -- the R side
+/// asserts `length(rmd$header) == 0` for such files and feeds the value back
+/// into the `ory_*_rs` wrappers, which take `Vec<String>` (not `Strings`) so
+/// that a zero-length character vector is safe. Never add a placeholder line
+/// here to "repair" an empty header.
 fn ory_read_rmd_impl(lines: &[String]) -> (Vec<String>, Vec<String>) {
     let mut header: Vec<String> = Vec::new();
     let mut body: Vec<String> = lines.to_vec();
@@ -531,16 +537,11 @@ fn ory_read_rmd_impl(lines: &[String]) -> (Vec<String>, Vec<String>) {
     if lines.first().map(|line| ory_is_header_fence(line)) == Some(true) {
         let end = (1..lines.len()).find(|&idx| ory_is_end_fence(&lines[idx]));
         if let Some(end) = end {
-            header = if end > 1 {
-                lines[1..end].to_vec()
-            } else {
-                Vec::new()
-            };
-            body = if end + 1 < lines.len() {
-                lines[end + 1..].to_vec()
-            } else {
-                Vec::new()
-            };
+            // `end == 1` is the empty-header case. `1..1` and `len..len` are
+            // empty slices, so both cases need no special-casing.
+            header = lines[1..end].to_vec();
+            body = lines[(end + 1).min(lines.len())..].to_vec();
+            // Drop the blank line separating the YAML block from the body.
             if body.first().map(|line| trim_ws(line).is_empty()) == Some(true) {
                 body.remove(0);
             }
@@ -1355,6 +1356,38 @@ mod tests {
         let (header, body) = ory_read_rmd_impl(&ls(&["---", "title: x", "---", "", "Body"]));
         assert_eq!(header, ls(&["title: x"]));
         assert_eq!(body, ls(&["Body"]));
+    }
+
+    #[test]
+    fn reads_rmd_with_empty_header() {
+        let lines = ls(&["---", "---", "", "Body"]);
+        let (header, body) = ory_read_rmd_impl(&lines);
+        assert!(header.is_empty());
+        assert_eq!(body, ls(&["Body"]));
+        assert!(ory_split_chunks_impl(&header).is_empty());
+        let meta = Meta {
+            package: "testpkg".to_string(),
+            title: None,
+            version: "1.0.0".to_string(),
+            authors: None,
+            date: None,
+            lang: "en-US".to_string(),
+        };
+        let built =
+            ory_build_header_impl(&header, "intro.Rmd", "vignette", &meta, "gfm", "auto", &[]);
+        assert_eq!(built[0], "title: \"Intro\"");
+    }
+
+    #[test]
+    fn reads_rmd_with_no_lines_and_no_closing_fence() {
+        let (header, body) = ory_read_rmd_impl(&[]);
+        assert!(header.is_empty());
+        assert!(body.is_empty());
+
+        let lines = ls(&["---", "---"]);
+        let (header, body) = ory_read_rmd_impl(&lines);
+        assert!(header.is_empty());
+        assert!(body.is_empty());
     }
 
     #[test]
