@@ -9,9 +9,9 @@
 #'   match the naming convention of the package manager in use. Alternative
 #'   names can be given as `"a|b"`: the dependency counts as installed if any
 #'   alternative is installed, and the first one is used in the install hint.
-#'   If `NULL`, a built-in list of graphics and font related dependencies is
-#'   used. There is no built-in list for `"winget"`, `"choco"` and `"scoop"`,
-#'   so `deps` must be supplied for them.
+#'   If `NULL`, a built-in list of graphics, font and GLPK development
+#'   libraries is used. There is no built-in list for `"winget"`, `"choco"` and
+#'   `"scoop"`, so `deps` must be supplied for them.
 #' @param manager The package manager: one of `"dpkg"`, `"rpm"`, `"pacman"`,
 #'   `"apk"`, `"brew"`, `"winget"`, `"choco"`, or `"scoop"`. If `NULL`, it is
 #'   detected automatically (on Linux via `/etc/os-release`, falling back to
@@ -33,7 +33,10 @@
 #'
 #' # Fedora / RHEL / openSUSE
 #' if (nzchar(Sys.which("rpm"))) {
-#'   check_sysdeps(c("freetype-devel", "libwebp-devel"), manager = "rpm")
+#'   check_sysdeps(
+#'     c("freetype-devel", "libwebp-devel", "glpk-devel"),
+#'     manager = "rpm"
+#'   )
 #' }
 #'
 #' # Debian / Ubuntu, with an alternative name for freetype
@@ -258,6 +261,9 @@ sysdeps_detect_manager <- function() {
 
 # No built-in lists for winget / choco / scoop: on Windows these libraries are
 # normally bundled with CRAN binaries or provided by Rtools (MSYS2).
+# libwebp and GLPK are checked for every manager under its own naming scheme
+# (e.g. "libwebp-devel"/"glpk-devel" on rpm, or "libwebp-dev"/"libglpk-dev"
+# on dpkg).
 sysdeps_defaults <- function() {
   list(
     rpm = c(
@@ -268,7 +274,8 @@ sysdeps_defaults <- function() {
       "libwebp-devel",
       "harfbuzz-devel",
       "fribidi-devel",
-      "fontconfig-devel"
+      "fontconfig-devel",
+      "glpk-devel"
     ),
     dpkg = c(
       "libfreetype-dev|libfreetype6-dev",
@@ -278,7 +285,8 @@ sysdeps_defaults <- function() {
       "libwebp-dev",
       "libharfbuzz-dev",
       "libfribidi-dev",
-      "libfontconfig1-dev"
+      "libfontconfig1-dev",
+      "libglpk-dev"
     ),
     pacman = c(
       "freetype2",
@@ -288,7 +296,8 @@ sysdeps_defaults <- function() {
       "libwebp",
       "harfbuzz",
       "fribidi",
-      "fontconfig"
+      "fontconfig",
+      "glpk"
     ),
     apk = c(
       "freetype-dev",
@@ -298,7 +307,8 @@ sysdeps_defaults <- function() {
       "libwebp-dev",
       "harfbuzz-dev",
       "fribidi-dev",
-      "fontconfig-dev"
+      "fontconfig-dev",
+      "glpk-dev"
     ),
     brew = c(
       "freetype",
@@ -308,7 +318,8 @@ sysdeps_defaults <- function() {
       "webp",
       "harfbuzz",
       "fribidi",
-      "fontconfig"
+      "fontconfig",
+      "glpk"
     )
   )
 }

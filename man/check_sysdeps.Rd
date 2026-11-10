@@ -11,9 +11,9 @@ check_sysdeps(deps = NULL, manager = NULL, verbose = TRUE)
 match the naming convention of the package manager in use. Alternative
 names can be given as \code{"a|b"}: the dependency counts as installed if any
 alternative is installed, and the first one is used in the install hint.
-If \code{NULL}, a built-in list of graphics and font related dependencies is
-used. There is no built-in list for \code{"winget"}, \code{"choco"} and \code{"scoop"},
-so \code{deps} must be supplied for them.}
+If \code{NULL}, a built-in list of graphics, font and GLPK development
+libraries is used. There is no built-in list for \code{"winget"}, \code{"choco"} and
+\code{"scoop"}, so \code{deps} must be supplied for them.}
 
 \item{manager}{The package manager: one of \code{"dpkg"}, \code{"rpm"}, \code{"pacman"},
 \code{"apk"}, \code{"brew"}, \code{"winget"}, \code{"choco"}, or \code{"scoop"}. If \code{NULL}, it is
@@ -43,7 +43,10 @@ through PowerShell).
 
 # Fedora / RHEL / openSUSE
 if (nzchar(Sys.which("rpm"))) {
-  check_sysdeps(c("freetype-devel", "libwebp-devel"), manager = "rpm")
+  check_sysdeps(
+    c("freetype-devel", "libwebp-devel", "glpk-devel"),
+    manager = "rpm"
+  )
 }
 
 # Debian / Ubuntu, with an alternative name for freetype
