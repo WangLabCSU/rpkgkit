@@ -36,7 +36,8 @@ knitr::opts_chunk$set(
 Here we create a template for editing NEWS.md
 
 ```{r}
-#| label = "setup"
+#| label = "setup",
+#| eval = FALSE
 library(rpkgkit)
 tmpdir <- tempdir()
 usethis::create_package(tmpdir, open = FALSE)
@@ -47,14 +48,16 @@ writeLines(
 ```
 
 ```{r}
-#| label = "show_raw"
+#| label = "show_raw",
+#| eval = FALSE
 news_md_show(path = tmpdir)
 ```
 
 Add a new entry using the package version in `DESCRIPTION`:
 
 ```{r}
-#| label = "add-entry"
+#| label = "add-entry",
+#| eval = FALSE
 news_md_add_entry(
   entry = "Add foo function",
   category = "NEW FEATURES",
@@ -63,14 +66,16 @@ news_md_add_entry(
 ```
 
 ```{r}
-#| label = "show_updated"
+#| label = "show_updated",
+#| eval = FALSE
 news_md_show(path = tmpdir)
 ```
 
 Specify a different category when needed:
 
 ```{r}
-#| label = "add-entry-with-version"
+#| label = "add-entry-with-version",
+#| eval = FALSE
 news_md_add_entry(
   entry = "Fixed bugs in `foo()`",
   category = "BUG FIXES",
@@ -80,7 +85,8 @@ news_md_add_entry(
 ```
 
 ```{r}
-#| label = "show_updated2"
+#| label = "show_updated2",
+#| eval = FALSE
 news_md_show(path = tmpdir)
 ```
 

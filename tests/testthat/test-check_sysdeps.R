@@ -21,6 +21,10 @@ test_that("sysdeps_name_regex() accepts the package names of every manager", {
   valid <- c(
     "libpng-dev",
     "freetype-devel",
+    "libwebp-devel",
+    "glpk-devel",
+    "libglpk-dev",
+    "glpk-dev",
     "freetype2",
     "gtk+",
     "libpng12-0",
@@ -95,6 +99,32 @@ test_that("sysdeps_defaults() covers the graphics stack for each manager", {
 
   for (manager in names(defaults)) {
     expect_match(defaults[[manager]], "fontconfig", all = FALSE)
+  }
+})
+
+test_that("sysdeps_defaults() checks libwebp and GLPK for every manager", {
+  defaults <- rpkgkit:::sysdeps_defaults()
+
+  webp <- c(
+    rpm = "libwebp-devel",
+    dpkg = "libwebp-dev",
+    pacman = "libwebp",
+    apk = "libwebp-dev",
+    brew = "webp"
+  )
+  glpk <- c(
+    rpm = "glpk-devel",
+    dpkg = "libglpk-dev",
+    pacman = "glpk",
+    apk = "glpk-dev",
+    brew = "glpk"
+  )
+
+  expect_setequal(names(webp), names(defaults))
+  expect_setequal(names(glpk), names(defaults))
+  for (manager in names(defaults)) {
+    expect_in(webp[[manager]], defaults[[manager]])
+    expect_in(glpk[[manager]], defaults[[manager]])
   }
 })
 
@@ -763,6 +793,48 @@ test_that("check_sysdeps() uses the default set for the given manager", {
 
   expect_equal(checked, c("x", "y", "z"))
   expect_named(ok, c("x", "y", "z"))
+})
+
+test_that("check_sysdeps() checks the built-in libwebp and GLPK packages", {
+  checked <- character()
+  local_mocked_bindings(
+    sysdeps_has_cmd = function(x) TRUE,
+    sysdeps_is_installed = function(pkg, manager) {
+      checked <<- c(checked, pkg)
+      TRUE
+    }
+  )
+
+  ok <- check_sysdeps(manager = "rpm", verbose = FALSE)
+
+  expect_in("libwebp-devel", checked)
+  expect_in("glpk-devel", checked)
+  expect_named(ok, checked)
+  expect_true(all(ok))
+})
+
+test_that("check_sysdeps() reports missing libwebp-devel and glpk-devel", {
+  local_mocked_bindings(
+    Sys.info = function() c(sysname = "Linux", effective_user = "yyx"),
+    .package = "base"
+  )
+  local_mocked_bindings(
+    sysdeps_has_cmd = function(x) TRUE,
+    sysdeps_is_installed = function(pkg, manager) FALSE
+  )
+
+  ok <- check_sysdeps(
+    c("libwebp-devel", "glpk-devel"),
+    manager = "rpm",
+    verbose = FALSE
+  )
+
+  expect_named(ok, c("libwebp-devel", "glpk-devel"))
+  expect_equal(as.vector(ok), c(FALSE, FALSE))
+  expect_equal(
+    attr(ok, "install_cmd"),
+    "sudo dnf install -y libwebp-devel glpk-devel"
+  )
 })
 
 test_that("check_sysdeps() aborts when a manager has no default list", {
