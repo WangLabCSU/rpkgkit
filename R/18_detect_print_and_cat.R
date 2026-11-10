@@ -181,6 +181,13 @@ detect_print_and_cat <- function(
         kind = info$kind %||% ""
       )
     )
+    tag <- if (!is.null(info$kind)) paste0(" [", info$kind, "]") else ""
+    message(
+      hl_lines[[info$line1]],
+      tag,
+      "\n",
+      caret
+    )
   }
 
   reported_lines <- unique(vapply(calls_info, `[[`, integer(1L), "line1"))
