@@ -236,7 +236,7 @@ library(rpkgkit)
 dir <- file.path(tempdir(), "R")
 dir.create(dir, recursive = TRUE)
 create_standalone("foo", path = dir, open = FALSE)
-#> ✔ Created standalone file: /tmp/RtmpK00ZiL/R/standalone-foo.R
+#> ✔ Created standalone file: /tmp/RtmpsXrV2K/R/standalone-foo.R
 ```
 
 ### Validate the standalone file layout
@@ -275,7 +275,7 @@ After editing standalone files, refresh their `last-updated` field:
 ``` r
 
 update_time_in_standalone(path = file.path(dir, "standalone-foo.R"))
-#> ✔ Updated last-updated to "2026-11-06" in 1 file.
+#> ✔ Updated last-updated to "2026-11-10" in 1 file.
 ```
 
 Add a dated changelog entry to one or more standalone files:
@@ -286,5 +286,5 @@ add_changelog_in_standalone(
   path = file.path(dir, "standalone-foo.R"),
   "Added foo function"
 )
-#> ✔ Added changelog entry (2026-11-06) for /tmp/RtmpK00ZiL/R/standalone-foo.R.
+#> ✔ Added changelog entry (2026-11-10) for /tmp/RtmpsXrV2K/R/standalone-foo.R.
 ```

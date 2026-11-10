@@ -66,9 +66,9 @@ through PowerShell).</p>
 match the naming convention of the package manager in use. Alternative
 names can be given as <code>"a|b"</code>: the dependency counts as installed if any
 alternative is installed, and the first one is used in the install hint.
-If <code>NULL</code>, a built-in list of graphics and font related dependencies is
-used. There is no built-in list for <code>"winget"</code>, <code>"choco"</code> and <code>"scoop"</code>,
-so <code>deps</code> must be supplied for them.</p></dd>
+If <code>NULL</code>, a built-in list of graphics, font and GLPK development
+libraries is used. There is no built-in list for <code>"winget"</code>, <code>"choco"</code> and
+<code>"scoop"</code>, so <code>deps</code> must be supplied for them.</p></dd>
 
 
 <dt id="arg-manager">manager<a class="anchor" aria-label="anchor" href="#arg-manager"></a></dt>
@@ -100,13 +100,17 @@ command).</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fedora / RHEL / openSUSE</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nzchar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.which.html" class="external-link">Sys.which</a></span><span class="op">(</span><span class="st">"rpm"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="fu">check_sysdeps</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"freetype-devel"</span>, <span class="st">"libwebp-devel"</span><span class="op">)</span>, manager <span class="op">=</span> <span class="st">"rpm"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">check_sysdeps</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"freetype-devel"</span>, <span class="st">"libwebp-devel"</span>, <span class="st">"glpk-devel"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    manager <span class="op">=</span> <span class="st">"rpm"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Package manager: <span style="color: #00BB00;">rpm</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">freetype-devel</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">libwebp-devel</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Missing 2 dependencies: <span style="color: #0000BB;">freetype-devel</span> and <span style="color: #0000BB;">libwebp-devel</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Try installing with: `sudo dnf install -y freetype-devel libwebp-devel`</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">glpk-devel</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Missing 3 dependencies: <span style="color: #0000BB;">freetype-devel</span>, <span style="color: #0000BB;">libwebp-devel</span>, and <span style="color: #0000BB;">glpk-devel</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Try installing with: `sudo dnf install -y freetype-devel libwebp-devel glpk-devel`</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Debian / Ubuntu, with an alternative name for freetype</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nzchar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.which.html" class="external-link">Sys.which</a></span><span class="op">(</span><span class="st">"dpkg"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
@@ -140,7 +144,8 @@ command).</p>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">ok</span>, <span class="st">"manager"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="va">ok</span><span class="op">[</span><span class="op">!</span><span class="va">ok</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> named logical(0)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> libglpk-dev </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       FALSE </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

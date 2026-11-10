@@ -68,7 +68,7 @@ neither is.
 - `nocov start` without `nocov end`:
 
   Reported as a problem:
-  [`covr::package_coverage()`](http://covr.r-lib.org/reference/package_coverage.md)
+  [`covr::package_coverage()`](https://covr.r-lib.org/reference/package_coverage.html)
   aborts with a "range start but only range ends" error when a start is
   never closed, so a lone start must be fixed.
 

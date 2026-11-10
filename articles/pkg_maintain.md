@@ -3,29 +3,9 @@
 ``` r
 
 library(rpkgkit)
-#> ✔ rpkgkit v0.1.24 loaded [2 ms]
 dir <- tempdir()
 usethis::create_package(path = dir, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmpFX7Op9".
-#> ✔ Creating R/.
-#> ✔ Writing DESCRIPTION.
-#> Package: RtmpFX7Op9
-#> Title: What the Package Does (One Line, Title Case)
-#> Version: 0.0.0.9000
-#> Authors@R (parsed):
-#>     * First Last <first.last@example.com> [aut, cre]
-#> Description: What the package does (one paragraph).
-#> License: `use_mit_license()`, `use_gpl3_license()` or friends to
-#>     pick a license
-#> Config/roxygen2/version: 8.1.1
-#> Encoding: UTF-8
-#> Roxygen: list(markdown = TRUE)
-#> ✔ Writing NAMESPACE.
-#> ✔ Setting active project to "<no active project>".
 usethis::use_pkgdown()
-#> ✔ Setting active project to "/home/runner/work/rpkgkit/rpkgkit".
-#> ℹ Leaving _pkgdown.yml unchanged.
-#> ☐ Edit _pkgdown.yml.
 ```
 
 ## Create package infrastructure
@@ -41,11 +21,6 @@ while also providing a useful starting template.
 ``` r
 
 use_zzz(path = dir, open = FALSE)
-#> ✔ Setting active project to "/tmp/RtmpFX7Op9".
-#> ✔ Created /tmp/RtmpFX7Op9/R/RtmpFX7Op9-package.R from template.
-#> ✔ Adding cli to Imports field in DESCRIPTION.
-#> 
-#> ☐ Refer to functions with `cli::fun()`.
 ```
 
 ### Check missing function in `_pkgdown` reference
@@ -70,11 +45,6 @@ by default). Packages that are not installed are skipped with a warning.
 ``` r
 
 use_clangd(path = dir, overwrite = TRUE)
-#> Warning: Package RcppEigen is not installed; skipping its
-#> include path.
-#> Warning: Package RcppArmadillo is not installed; skipping its
-#> include path.
-#> ✔ Created /tmp/RtmpFX7Op9/.clangd.
 ```
 
 When `path` is a package root, the file also disables background
@@ -84,9 +54,6 @@ indexing for the `R/` directory (which holds no C++ code) and adds
 ``` r
 
 use_clangd(path = dir, include = c("Rcpp", "BH"), overwrite = TRUE)
-#> ! Overwriting /tmp/RtmpFX7Op9/.clangd.
-#> Warning: Package BH is not installed; skipping its include path.
-#> ✔ Created /tmp/RtmpFX7Op9/.clangd.
 ```
 
 ### Configure the jarl linter
@@ -101,14 +68,6 @@ files, and lints the code inside `@examples` and `@examplesIf` tags.
 ``` r
 
 use_jarl(path = dir, overwrite = TRUE)
-#> ✔ Created /tmp/RtmpFX7Op9/jarl.toml.
-#> • Read jarl's editor support
-#>   (<https://jarl.etiennebacher.com/reference/config-file>) to learn how to
-#>   invoke jarl in your preferred editor.
-#> 
-#> • Read jarl's continuous integration
-#>   (<https://jarl.etiennebacher.com/howto/ci>) to learn about GHA workflows that
-#>   continuously run linting checks.
 ```
 
 `jarl` reads a single configuration file: the closest `jarl.toml` in the
@@ -119,21 +78,6 @@ is also added to `.Rbuildignore` so it stays out of the built tarball.
 ``` r
 
 readLines(file.path(dir, "jarl.toml")) |> cli::cli_code()
-#> # jarl configuration file
-#> # Reference: https://jarl.etiennebacher.com/reference/config-file
-#> [lint]
-#> # Rules enabled on top of jarl's default rule set. The `TESTTHAT` group is
-#> # opt-in, so it has to be requested explicitly.
-#> extend-select = ["TESTTHAT"]
-#> # Files or directories that jarl should not lint.
-#> exclude = ["R/vendor-*.R"]
-#> # Also lint the R code inside `@examples` and `@examplesIf` tags
-#> # (the default).
-#> check-roxygen = true
-#> # Rules that `jarl check --fix` is allowed to fix (all rules by default).
-#> # fixable = ["PERF"]
-#> # Rules that `jarl check --fix` must leave untouched.
-#> # unfixable = ["undesirable_function"]
 ```
 
 Read the [configuration
@@ -209,23 +153,6 @@ try(use_vendor(
   branch = "main",
   path = dir
 ))
-#> ℹ Fetching repository information for WangLabCSU/rpkgkit...
-#> ✔ Vendor package uses MIT license.
-#> ✔ Created directory /tmp/RtmpFX7Op9/inst/vendor/rpkgkit.
-#> ✔ Copied LICENSE.
-#> ✔ Copied LICENSE.md.
-#> ✔ Created inst/vendor/rpkgkit/README.md.
-#> ✔ Created /tmp/RtmpFX7Op9/R/vendor-rpkgkit.R.
-#> ✔ Added rpkgkit authors to Authors@R.
-#> ✔ Updated DESCRIPTION.
-#> ☐ Consider pasting the following statement into README.md
-#> 
-#> 
-#> ## Acknowledgements
-#> 
-#> We would like to thank the following people and projects:
-#> 
-#> - The authors of the [rpkgkit](https://github.com/WangLabCSU/rpkgkit) package &mdash; **Yuxi Yang** &mdash; whose code is included (under MIT license) in files named `vendor-rpkgkit.*`.
 ```
 
 Only packages with a supported permissive license can be vendored.
@@ -245,7 +172,6 @@ at least R version 4.1.0.
 ``` r
 
 use_r_v4.1.0(path = dir)
-#> ✔ Adding R to Depends field in DESCRIPTION.
 ```
 
 ### Add URL in `DESCRIPTION`
@@ -290,7 +216,6 @@ to add the corresponding global ignore-file templates to a package.
 ``` r
 
 add_global_rbuildignore(path = dir)
-#> ✔ Added 38 pattern(s) to .Rbuildignore.
 ```
 
 ``` r
@@ -319,11 +244,6 @@ package ships Rust code.
 ``` r
 
 use_workflow_version_update(path = dir)
-#> ✔ Created workflow: /tmp/RtmpFX7Op9/.github/workflows/version_update.yml
-#> → It triggers on push to "main/master" and via workflow_dispatch. Version bump
-#>   is inferred from commit messages or manual input.
-#> ☐ It is recommended to add a devel version badge to your README.md via
-#> `badger::badge_devel(color = "blue")`
 ```
 
 ### Run `R CMD check` on packages with Rust code
@@ -337,10 +257,6 @@ packages.
 ``` r
 
 use_workflow_rust_compatible_check(path = dir)
-#> ✔ Created workflow: /tmp/RtmpFX7Op9/.github/workflows/R-CMD-check.yaml
-#> → It triggers on push to "main" and on pull requests targeting "main".
-#> → Rust crates are compiled with a pinned toolchain and the
-#>   "x86_64-pc-windows-gnu" target on Windows, so they link against Rtools.
 ```
 
 The difference lies in the toolchain. The `usethis` workflow only sets
@@ -370,10 +286,6 @@ so unmerged work is never overwritten. Push experimental changes to
 ``` r
 
 use_workflow_test_branch(path = dir)
-#> ✔ Created workflow: /tmp/RtmpFX7Op9/.github/workflows/sync_test_branch.yml
-#> → It runs after "R-CMD-check.yaml" succeeds for "main/master", then syncs the
-#>   checked commit to "test".
-#> → If "test" has unmerged work, the sync is skipped automatically.
 ```
 
 ## Check system dependencies
@@ -390,12 +302,13 @@ together with a ready-to-paste install command for the missing ones.
 check_sysdeps()
 ```
 
-With `deps = NULL` (the default), a built-in list of graphics and font
-libraries (`freetype`, `libjpeg`, `libpng`, `libtiff`, `libwebp`,
-`harfbuzz`, `fribidi`, `fontconfig`) is checked using the names that the
-detected package manager expects. Pass your own names in `deps`, and
-optionally set `manager` to check against a manager other than the
-detected one:
+With `deps = NULL` (the default), a built-in list of graphics, font and
+solver libraries (`freetype`, `libjpeg`, `libpng`, `libtiff`, `libwebp`,
+`harfbuzz`, `fribidi`, `fontconfig`, `glpk`) is checked using the names
+that the detected package manager expects (for example `libwebp-devel`
+and `glpk-devel` on rpm, `libwebp-dev` and `libglpk-dev` on dpkg). Pass
+your own names in `deps`, and optionally set `manager` to check against
+a manager other than the detected one:
 
 ``` r
 

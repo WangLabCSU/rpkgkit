@@ -67,7 +67,7 @@
             <h3 data-toc-skip class="subtitle">rpkgkit 0.1.23</h3>
                         <h4 data-toc-skip class="author">Yuxi Yang</h4>
             
-            <h4 data-toc-skip class="date">2026-11-06</h4>
+            <h4 data-toc-skip class="date">2026-11-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/WangLabCSU/rpkgkit/blob/main/vignettes/pkg_maintain.Rmd" class="external-link"><code>vignettes/pkg_maintain.Rmd</code></a></small>
       <div class="d-none name"><code>pkg_maintain.Rmd</code></div>
@@ -77,29 +77,9 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Exceret/rpkgkit" class="external-link">rpkgkit</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">rpkgkit</span> v0.1.24 loaded <span style="color: #555555;">[2 ms]</span></span></span>
 <span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/create_package.html" class="external-link">create_package</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span>, open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/tmp/RtmpFX7Op9"</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Creating <span style="color: #0000BB;">R/</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Writing <span style="color: #0000BB;">DESCRIPTION</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Package</span>: RtmpFX7Op9</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Title</span>: What the Package Does (One Line, Title Case)</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Version</span>: 0.0.0.9000</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Authors@R</span> (parsed):</span></span>
-<span><span class="co">#&gt;     * First Last &lt;first.last@example.com&gt; [aut, cre]</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Description</span>: What the package does (one paragraph).</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">License</span>: `use_mit_license()`, `use_gpl3_license()` or friends to</span></span>
-<span><span class="co">#&gt;     pick a license</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Config/roxygen2/version</span>: 8.1.1</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Encoding</span>: UTF-8</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">Roxygen</span>: list(markdown = TRUE)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Writing <span style="color: #0000BB;">NAMESPACE</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"&lt;no active project&gt;"</span>.</span></span>
-<span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_pkgdown.html" class="external-link">use_pkgdown</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/home/runner/work/rpkgkit/rpkgkit"</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">ℹ</span> Leaving <span style="color: #0000BB;">_pkgdown.yml</span> unchanged.</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">☐</span> Edit <span style="color: #0000BB;">_pkgdown.yml</span>.</span></span></code></pre></div>
+<span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_pkgdown.html" class="external-link">use_pkgdown</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="create-package-infrastructure">Create package infrastructure<a class="anchor" aria-label="anchor" href="#create-package-infrastructure"></a>
 </h2>
@@ -111,12 +91,7 @@
 is similar to <code><a href="https://usethis.r-lib.org/reference/use_package_doc.html" class="external-link">usethis::use_package_doc()</a></code> while also
 providing a useful starting template.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_zzz.html">use_zzz</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span>, open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Setting active project to <span style="color: #0000BB;">"/tmp/RtmpFX7Op9"</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/RtmpFX7Op9/R/RtmpFX7Op9-package.R</span> from template.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Adding <span style="color: #0000BB;">cli</span> to <span style="color: #00BB00;">Imports</span> field in DESCRIPTION.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">☐</span> Refer to functions with `cli::fun()`.</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_zzz.html">use_zzz</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span>, open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="check-missing-function-in-_pkgdown-reference">Check missing function in <code>_pkgdown</code> reference<a class="anchor" aria-label="anchor" href="#check-missing-function-in-_pkgdown-reference"></a>
@@ -137,21 +112,13 @@ the <code>include/</code> directory of the packages you pass in
 <code>RcppArmadillo</code> by default). Packages that are not installed
 are skipped with a warning.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_clangd.html">use_clangd</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Package <span style="color: #0000BB;">RcppEigen</span> is not installed; skipping its</span></span>
-<span><span class="co">#&gt; include path.</span></span>
-<span><span class="co">#&gt; Warning: Package <span style="color: #0000BB;">RcppArmadillo</span> is not installed; skipping its</span></span>
-<span><span class="co">#&gt; include path.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/RtmpFX7Op9/.clangd</span>.</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_clangd.html">use_clangd</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>When <code>path</code> is a package root, the file also disables
 background indexing for the <code>R/</code> directory (which holds no
 C++ code) and adds <code>.clangd</code> to
 <code>.Rbuildignore</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_clangd.html">use_clangd</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span>, include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Rcpp"</span>, <span class="st">"BH"</span><span class="op">)</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Overwriting <span style="color: #0000BB;">/tmp/RtmpFX7Op9/.clangd</span>.</span></span>
-<span><span class="co">#&gt; Warning: Package <span style="color: #0000BB;">BH</span> is not installed; skipping its include path.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/RtmpFX7Op9/.clangd</span>.</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_clangd.html">use_clangd</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span>, include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Rcpp"</span>, <span class="st">"BH"</span><span class="op">)</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="configure-the-jarl-linter">Configure the jarl linter<a class="anchor" aria-label="anchor" href="#configure-the-jarl-linter"></a>
@@ -163,15 +130,7 @@ all agree. It enables the opt-in <code>TESTTHAT</code> group of rules,
 skips vendored files, and lints the code inside <code>@examples</code>
 and <code>@examplesIf</code> tags.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_jarl.html">use_jarl</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/RtmpFX7Op9/jarl.toml</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Read jarl's editor support</span></span>
-<span><span class="co">#&gt;   (<span style="color: #0000BB; font-style: italic;">&lt;https://jarl.etiennebacher.com/reference/config-file&gt;</span>) to learn how to</span></span>
-<span><span class="co">#&gt;   invoke jarl in your preferred editor.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Read jarl's continuous integration</span></span>
-<span><span class="co">#&gt;   (<span style="color: #0000BB; font-style: italic;">&lt;https://jarl.etiennebacher.com/howto/ci&gt;</span>) to learn about GHA workflows that</span></span>
-<span><span class="co">#&gt;   continuously run linting checks.</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_jarl.html">use_jarl</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><code>jarl</code> reads a single configuration file: the closest
 <code>jarl.toml</code> in the current directory or any of its parents,
 and finally the one in your user configuration directory. When
@@ -179,22 +138,7 @@ and finally the one in your user configuration directory. When
 added to <code>.Rbuildignore</code> so it stays out of the built
 tarball.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"jarl.toml"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">cli</span><span class="fu">::</span><span class="fu"><a href="https://cli.r-lib.org/reference/cli_code.html" class="external-link">cli_code</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # jarl configuration file</span></span>
-<span><span class="co">#&gt; # Reference: https://jarl.etiennebacher.com/reference/config-file</span></span>
-<span><span class="co">#&gt; [lint]</span></span>
-<span><span class="co">#&gt; # Rules enabled on top of jarl's default rule set. The `TESTTHAT` group is</span></span>
-<span><span class="co">#&gt; # opt-in, so it has to be requested explicitly.</span></span>
-<span><span class="co">#&gt; extend-select = ["TESTTHAT"]</span></span>
-<span><span class="co">#&gt; # Files or directories that jarl should not lint.</span></span>
-<span><span class="co">#&gt; exclude = ["R/vendor-*.R"]</span></span>
-<span><span class="co">#&gt; # Also lint the R code inside `@examples` and `@examplesIf` tags</span></span>
-<span><span class="co">#&gt; # (the default).</span></span>
-<span><span class="co">#&gt; check-roxygen = true</span></span>
-<span><span class="co">#&gt; # Rules that `jarl check --fix` is allowed to fix (all rules by default).</span></span>
-<span><span class="co">#&gt; # fixable = ["PERF"]</span></span>
-<span><span class="co">#&gt; # Rules that `jarl check --fix` must leave untouched.</span></span>
-<span><span class="co">#&gt; # unfixable = ["undesirable_function"]</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"jarl.toml"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">cli</span><span class="fu">::</span><span class="fu"><a href="https://cli.r-lib.org/reference/cli_code.html" class="external-link">cli_code</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Read the <a href="https://jarl.etiennebacher.com/reference/config-file" class="external-link">configuration
 reference</a> for options such as <code>select</code>,
 <code>ignore</code> and <code>per-file-ignores</code>, and the <a href="https://jarl.etiennebacher.com/howto/ci" class="external-link">continuous integration
@@ -299,24 +243,7 @@ directory, a <code>R/vendor-*.R</code> file, and updates relevant
 <span>  <span class="st">"43_use_vendor.R"</span>,</span>
 <span>  branch <span class="op">=</span> <span class="st">"main"</span>,</span>
 <span>  path <span class="op">=</span> <span class="va">dir</span></span>
-<span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Fetching repository information for <span style="font-style: italic;">WangLabCSU/rpkgkit</span>...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Vendor package uses MIT license.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created directory <span style="color: #0000BB;">/tmp/RtmpFX7Op9/inst/vendor/rpkgkit</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copied <span style="color: #0000BB;">LICENSE</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copied <span style="color: #0000BB;">LICENSE.md</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">inst/vendor/rpkgkit/README.md</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created <span style="color: #0000BB;">/tmp/RtmpFX7Op9/R/vendor-rpkgkit.R</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Added <span style="color: #0000BB;">rpkgkit</span> authors to <span style="color: #00BB00;">Authors@R</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Updated DESCRIPTION.</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">☐</span> <span style="color: #00BBBB;">Consider pasting the following statement into README.md</span></span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ## Acknowledgements</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; We would like to thank the following people and projects:</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; - The authors of the [rpkgkit](https://github.com/WangLabCSU/rpkgkit) package &amp;mdash; **Yuxi Yang** &amp;mdash; whose code is included (under MIT license) in files named `vendor-rpkgkit.*`.</span></span></code></pre></div>
+<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Only packages with a supported permissive license can be vendored.
 Review the acknowledgement text printed by the function and add it to
 your README when appropriate.</p>
@@ -333,8 +260,7 @@ your README when appropriate.</p>
 function <code>\()</code>. If these syntaxes need to be used in a
 package, the R package must require at least R version 4.1.0.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_r_v4.1.0.html">use_r_v4.1.0</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Adding <span style="color: #0000BB;">R</span> to <span style="color: #00BB00;">Depends</span> field in DESCRIPTION.</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_r_v4.1.0.html">use_r_v4.1.0</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="add-url-in-description">Add URL in <code>DESCRIPTION</code><a class="anchor" aria-label="anchor" href="#add-url-in-description"></a>
@@ -370,8 +296,7 @@ project.</p>
 <code><a href="../reference/add_global_gitgnore.html">add_global_gitgnore()</a></code> to add the corresponding global
 ignore-file templates to a package.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/add_global_rbuildignore.html">add_global_rbuildignore</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Added 38 pattern(s) to <span style="color: #0000BB;">.Rbuildignore</span>.</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/add_global_rbuildignore.html">add_global_rbuildignore</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/add_global_gitgnore.html">add_global_gitgnore</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -398,12 +323,7 @@ would exceed the highest version documented in <code>NEWS.md</code>, and
 the <code>version</code> field of <code>src/rust/Cargo.toml</code> is
 kept in sync when the package ships Rust code.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_workflow_version_update.html">use_workflow_version_update</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created workflow: <span style="color: #0000BB;">/tmp/RtmpFX7Op9/.github/workflows/version_update.yml</span></span></span>
-<span><span class="co">#&gt; → It triggers on push to <span style="color: #0000BB;">"main/master"</span> and via <span style="color: #00BB00;">workflow_dispatch</span>. Version bump</span></span>
-<span><span class="co">#&gt;   is inferred from commit messages or manual input.</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">☐</span> <span style="color: #00BBBB;">It is recommended to add a devel version badge to your </span><span style="color: #0000BB;">README.md</span><span style="color: #00BBBB;"> via</span></span></span>
-<span><span class="co">#&gt; `badger::badge_devel(color = "blue")`</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_workflow_version_update.html">use_workflow_version_update</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="run-r-cmd-check-on-packages-with-rust-code">Run <code>R CMD check</code> on packages with Rust code<a class="anchor" aria-label="anchor" href="#run-r-cmd-check-on-packages-with-rust-code"></a>
@@ -415,11 +335,7 @@ crates, which is what packages built on
 <code>usethis::use_github_action("check-standard")</code> for such
 packages.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_workflow_rust_compatible_check.html">use_workflow_rust_compatible_check</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created workflow: <span style="color: #0000BB;">/tmp/RtmpFX7Op9/.github/workflows/R-CMD-check.yaml</span></span></span>
-<span><span class="co">#&gt; → It triggers on push to <span style="color: #0000BB;">"main"</span> and on pull requests targeting <span style="color: #0000BB;">"main"</span>.</span></span>
-<span><span class="co">#&gt; → Rust crates are compiled with a pinned toolchain and the</span></span>
-<span><span class="co">#&gt;   <span style="color: #0000BB;">"x86_64-pc-windows-gnu"</span> target on Windows, so they link against Rtools.</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_workflow_rust_compatible_check.html">use_workflow_rust_compatible_check</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span></code></pre></div>
 <p>The difference lies in the toolchain. The <code>usethis</code>
 workflow only sets up R and leaves the runner default in place; on
 Windows that default is an MSVC toolchain, while R and Rtools are GNU
@@ -453,11 +369,7 @@ work is never overwritten. Push experimental changes to
 <code>test</code> and each push to <code>main</code> resets it
 again.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_workflow_test_branch.html">use_workflow_test_branch</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created workflow: <span style="color: #0000BB;">/tmp/RtmpFX7Op9/.github/workflows/sync_test_branch.yml</span></span></span>
-<span><span class="co">#&gt; → It runs after <span style="color: #0000BB;">"R-CMD-check.yaml"</span> succeeds for <span style="color: #0000BB;">"main/master"</span>, then syncs the</span></span>
-<span><span class="co">#&gt;   checked commit to <span style="color: #0000BB;">"test"</span>.</span></span>
-<span><span class="co">#&gt; → If <span style="color: #0000BB;">"test"</span> has unmerged work, the sync is skipped automatically.</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/use_workflow_test_branch.html">use_workflow_test_branch</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -472,13 +384,16 @@ ready-to-paste install command for the missing ones.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_sysdeps.html">check_sysdeps</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>With <code>deps = NULL</code> (the default), a built-in list of
-graphics and font libraries (<code>freetype</code>,
+graphics, font and solver libraries (<code>freetype</code>,
 <code>libjpeg</code>, <code>libpng</code>, <code>libtiff</code>,
 <code>libwebp</code>, <code>harfbuzz</code>, <code>fribidi</code>,
-<code>fontconfig</code>) is checked using the names that the detected
-package manager expects. Pass your own names in <code>deps</code>, and
-optionally set <code>manager</code> to check against a manager other
-than the detected one:</p>
+<code>fontconfig</code>, <code>glpk</code>) is checked using the names
+that the detected package manager expects (for example
+<code>libwebp-devel</code> and <code>glpk-devel</code> on rpm,
+<code>libwebp-dev</code> and <code>libglpk-dev</code> on dpkg). Pass
+your own names in <code>deps</code>, and optionally set
+<code>manager</code> to check against a manager other than the detected
+one:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/check_sysdeps.html">check_sysdeps</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"freetype-devel"</span>, <span class="st">"libwebp-devel"</span><span class="op">)</span>, manager <span class="op">=</span> <span class="st">"rpm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The result is returned invisibly as a named logical vector, so it can

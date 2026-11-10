@@ -19,9 +19,10 @@ check_sysdeps(deps = NULL, manager = NULL, verbose = TRUE)
   the naming convention of the package manager in use. Alternative names
   can be given as `"a|b"`: the dependency counts as installed if any
   alternative is installed, and the first one is used in the install
-  hint. If `NULL`, a built-in list of graphics and font related
-  dependencies is used. There is no built-in list for `"winget"`,
-  `"choco"` and `"scoop"`, so `deps` must be supplied for them.
+  hint. If `NULL`, a built-in list of graphics, font and GLPK
+  development libraries is used. There is no built-in list for
+  `"winget"`, `"choco"` and `"scoop"`, so `deps` must be supplied for
+  them.
 
 - manager:
 
@@ -51,13 +52,17 @@ if anything is missing, `"install_cmd"` (a suggested install command).
 
 # Fedora / RHEL / openSUSE
 if (nzchar(Sys.which("rpm"))) {
-  check_sysdeps(c("freetype-devel", "libwebp-devel"), manager = "rpm")
+  check_sysdeps(
+    c("freetype-devel", "libwebp-devel", "glpk-devel"),
+    manager = "rpm"
+  )
 }
 #> Package manager: rpm
 #> ✖ freetype-devel
 #> ✖ libwebp-devel
-#> ! Missing 2 dependencies: freetype-devel and libwebp-devel
-#> ℹ Try installing with: `sudo dnf install -y freetype-devel libwebp-devel`
+#> ✖ glpk-devel
+#> ! Missing 3 dependencies: freetype-devel, libwebp-devel, and glpk-devel
+#> ℹ Try installing with: `sudo dnf install -y freetype-devel libwebp-devel glpk-devel`
 
 # Debian / Ubuntu, with an alternative name for freetype
 if (nzchar(Sys.which("dpkg"))) {
@@ -91,6 +96,7 @@ if (length(available) > 0L) {
   attr(ok, "manager")
   ok[!ok]
 }
-#> named logical(0)
+#> libglpk-dev 
+#>       FALSE 
 # }
 ```

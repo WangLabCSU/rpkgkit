@@ -235,7 +235,7 @@
   counterpart is reported, and an end placed before the start is
   reported (an end later on the same line is accepted). An unclosed
   `# nocov start` is an error rather than a note, because
-  [`covr::package_coverage()`](http://covr.r-lib.org/reference/package_coverage.md)
+  [`covr::package_coverage()`](https://covr.r-lib.org/reference/package_coverage.html)
   aborts on such a range with a “range start but only range ends”
   message.
   [`package_unmatched_nocov_marker()`](https://wanglabcsu.github.io/rpkgkit/reference/detect_unmatched_nocov_marker.md)

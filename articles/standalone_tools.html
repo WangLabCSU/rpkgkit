@@ -67,7 +67,7 @@
             <h3 data-toc-skip class="subtitle">rpkgkit 0.1.23</h3>
                         <h4 data-toc-skip class="author">Yuxi Yang</h4>
             
-            <h4 data-toc-skip class="date">2026-11-06</h4>
+            <h4 data-toc-skip class="date">2026-11-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/WangLabCSU/rpkgkit/blob/main/vignettes/standalone_tools.Rmd" class="external-link"><code>vignettes/standalone_tools.Rmd</code></a></small>
       <div class="d-none name"><code>standalone_tools.Rmd</code></div>
@@ -269,7 +269,7 @@ supported repositories.</p>
 <span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"R"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">dir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/create_standalone.html">create_standalone</a></span><span class="op">(</span><span class="st">"foo"</span>, path <span class="op">=</span> <span class="va">dir</span>, open <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created standalone file: <span style="color: #0000BB;">/tmp/RtmpK00ZiL/R/standalone-foo.R</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Created standalone file: <span style="color: #0000BB;">/tmp/RtmpsXrV2K/R/standalone-foo.R</span></span></span></code></pre></div>
 <div class="section level3">
 <h3 id="validate-the-standalone-file-layout">Validate the standalone file layout<a class="anchor" aria-label="anchor" href="#validate-the-standalone-file-layout"></a>
 </h3>
@@ -302,14 +302,14 @@ run.</p>
 <code>last-updated</code> field:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/update_time_in_standalone.html">update_time_in_standalone</a></span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"standalone-foo.R"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Updated <span style="color: #00BB00;">last-updated</span> to <span style="color: #0000BB;">"2026-11-06"</span> in 1 file.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Updated <span style="color: #00BB00;">last-updated</span> to <span style="color: #0000BB;">"2026-11-10"</span> in 1 file.</span></span></code></pre></div>
 <p>Add a dated changelog entry to one or more standalone files:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/add_changelog_in_standalone.html">add_changelog_in_standalone</a></span><span class="op">(</span></span>
 <span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">dir</span>, <span class="st">"standalone-foo.R"</span><span class="op">)</span>,</span>
 <span>  <span class="st">"Added foo function"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Added changelog entry (2026-11-06) for <span style="color: #0000BB;">/tmp/RtmpK00ZiL/R/standalone-foo.R</span>.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Added changelog entry (2026-11-10) for <span style="color: #0000BB;">/tmp/RtmpsXrV2K/R/standalone-foo.R</span>.</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
