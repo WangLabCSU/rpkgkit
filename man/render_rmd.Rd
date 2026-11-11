@@ -21,7 +21,7 @@ The output file path from rmarkdown::render.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Render an R Markdown or R document to Markdown format
 }
 \examples{
-\donttest{
+\dontrun{
 rlang::check_installed("rmarkdown")
 tmp <- tempfile(fileext = ".Rmd")
 writeLines(c("---", "title: Test", "---", "", "Hello, world!"), tmp)

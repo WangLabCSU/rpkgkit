@@ -19,9 +19,8 @@ struct Hit {
 
 /// Locate path-like defaults in the arguments of exported functions.
 ///
-/// Rust rewrite of `rpkgkit:::scan_fn_arg_path()`. A top-level
-/// `name <- function(...)` definition is found with the tokenizer of
-/// [`crate::r_syntax`], its formals are split on top-level commas, and every
+/// A top-level `name <- function(...)` definition is found with the tokenizer of
+/// `crate::r_syntax`, its formals are split on top-level commas, and every
 /// formal whose name matches `arg_pattern` and whose default (as written in the
 /// source, whitespace collapsed) is not in `allow` is reported. `exports = NULL`
 /// together with an empty `export_patterns` means "check every top-level

@@ -7,8 +7,7 @@
 uat_find_targets_rs(text, min_length, marker)
 }
 \description{
-Rust rewrite of \code{rpkgkit:::.at_targets()} / \code{.at_call_info()}. The AST is
-replaced by the tokenizer of \code{\link[crate:r_syntax]{crate::r_syntax}}: a call is kept when it is
+The AST is replaced by the tokenizer of \code{crate::r_syntax}: a call is kept when it is
 the outermost call of a statement, carries no named element and holds more
 than \code{min_length} elements. Returns one list per call with \code{line1}, \code{line2},
 \code{col1}, \code{n}, \code{multiline} and \code{elements}, the latter being one integer vector

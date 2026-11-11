@@ -11,7 +11,7 @@
 #' @return The output file path from rmarkdown::render.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' rlang::check_installed("rmarkdown")
 #' tmp <- tempfile(fileext = ".Rmd")
 #' writeLines(c("---", "title: Test", "---", "", "Hello, world!"), tmp)

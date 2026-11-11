@@ -337,7 +337,7 @@ cli_kable <- function(
 
   # Named list: one element per column, optionally per row within the column.
   keep <- !is.na(nms) & nzchar(nms)
-  if (any(!keep)) {
+  if (!all(keep)) {
     fallback <- fmt[!keep]
     if (length(fallback) > 1L) {
       cli::cli_abort(

@@ -16,9 +16,7 @@ struct Hit {
 
 /// Locate unsupported `print()` / `cat()` calls in R source text.
 ///
-/// Rust rewrite of `rpkgkit:::find_print_cat_calls()` /
-/// `rpkgkit:::classify_print_cat()`. Instead of walking `getParseData()` the
-/// tokenizer of [`crate::r_syntax`] is used, so R's parser is not needed. Each
+/// Tokenizer of `crate::r_syntax` is used, so R's parser is not needed. Each
 /// hit is a list with `line1`, `col1`, `col2`, `text`, `type` and `kind`.
 /// @keywords internal
 #[extendr]

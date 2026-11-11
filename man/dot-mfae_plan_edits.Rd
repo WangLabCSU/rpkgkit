@@ -4,7 +4,7 @@
 \alias{.mfae_plan_edits}
 \title{Plan the insertions that make function arguments explicit}
 \usage{
-.mfae_plan_edits(exprs, skip_fns = NULL)
+.mfae_plan_edits(exprs, skip_fns = NULL, operators = MFAE_OPERATORS)
 }
 \description{
 Returns a list of insertions, each a list with \code{line}, \code{col} and

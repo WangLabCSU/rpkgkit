@@ -19,11 +19,13 @@
 #'
 #' @return Invisibly returns the result from the called flir function.
 #'
-#' @examplesIf rlang::is_installed("flir")
+#' @examples
+#' \dontrun{
 #' tmp <- tempfile(fileext = ".R")
 #' writeLines("a<-1+1", tmp)
 #' flir_fix(tmp)
 #' cat(readLines(tmp, warn = FALSE), sep = "\n")
+#' }
 #' @export
 flir_fix <- function(path = NULL, ...) {
   lifecycle::deprecate_stop("0.2.0", "flir_fix()")

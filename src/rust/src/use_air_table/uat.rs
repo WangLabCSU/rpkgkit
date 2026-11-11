@@ -25,8 +25,7 @@ struct Target {
 
 /// Locate the long, unnamed `c()` / `list()` calls of a source text.
 ///
-/// Rust rewrite of `rpkgkit:::.at_targets()` / `.at_call_info()`. The AST is
-/// replaced by the tokenizer of [`crate::r_syntax`]: a call is kept when it is
+/// The AST is replaced by the tokenizer of `crate::r_syntax`: a call is kept when it is
 /// the outermost call of a statement, carries no named element and holds more
 /// than `min_length` elements. Returns one list per call with `line1`, `line2`,
 /// `col1`, `n`, `multiline` and `elements`, the latter being one integer vector
@@ -306,7 +305,37 @@ fn uat_targets_from_list(targets: &List) -> Vec<Target> {
     out
 }
 
+/// Elements as `c(line1, col1, line2, col2)`, from either a data frame with
+/// those columns (the shape `getParseData()` gives) or a list of integer
+/// vectors (the shape `uat_find_targets_rs()` gives).
 fn uat_elements_from_list(elements: &List) -> Vec<Element> {
+    let field = |name: &str| {
+        uat_field(elements, name).and_then(|value| value.as_integer_vector())
+    };
+    let (line1, col1, line2, col2) = match (
+        field("line1"),
+        field("col1"),
+        field("line2"),
+        field("col2"),
+    ) {
+        (Some(l1), Some(c1), Some(l2), Some(c2)) => (l1, c1, l2, c2),
+        _ => return uat_elements_from_vectors(elements),
+    };
+    // A data frame comes in column-major: zip the four columns instead.
+    line1
+        .iter()
+        .zip(col1.iter())
+        .zip(line2.iter().zip(col2.iter()))
+        .map(|((l1, c1), (l2, c2))| Element {
+            line1: *l1,
+            col1: *c1,
+            line2: *l2,
+            col2: *c2,
+        })
+        .collect()
+}
+
+fn uat_elements_from_vectors(elements: &List) -> Vec<Element> {
     let mut out: Vec<Element> = Vec::new();
     for item in elements.values() {
         if let Some(values) = item.as_integer_vector() {
@@ -427,8 +456,13 @@ fn uat_join_flags_impl(
             }
             let chars: Vec<char> = lines[line_idx].chars().collect();
             let start = (elements[row[k]].col2.max(0) as usize).min(chars.len());
-            let trailing: String = chars[start..].iter().collect();
-            if !trailing.contains('#') {
+            // What follows the element is a separator and blanks, then maybe a
+            // comment. A `#` inside the element itself does not count.
+            let next = chars[start..]
+                .iter()
+                .skip_while(|c| c.is_whitespace() || **c == ',')
+                .next();
+            if next != Some(&'#') {
                 let idx: usize = (to - 1) as usize;
                 if idx < join.len() {
                     join[idx] = true;
@@ -460,12 +494,19 @@ fn uat_split_lines_impl(
     let prefix: String = chars[..((call_col1 - 1).max(0) as usize).min(len)]
         .iter()
         .collect();
+
     let open_start = ((call_col1 - 1).max(0) as usize).min(len);
-    let open_end = ((elements[0].col1 - 1).max(0) as usize)
-        .min(len)
-        .max(open_start);
-    let open: String = chars[open_start..open_end].iter().collect();
-    let open = open.trim_end();
+    let open_end = (((elements[0].col1 - 1).max(0)) as usize).max(open_start);
+    let mut open: String = chars[open_start..open_end.min(len)].iter().collect();
+    open = open.trim_end().to_string();
+    if !matches!(open.chars().last(), Some('(' | '[')) {
+        // The first element starts right after the bracket; fall back to the
+        // token's own span.
+        let bracket = chars[open_start..(open_start + 1).min(len)]
+            .iter()
+            .collect::<String>();
+        open.push_str(&bracket);
+    }
 
     let cells: Vec<String> = elements
         .iter()

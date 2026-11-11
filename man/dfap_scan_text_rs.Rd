@@ -7,9 +7,8 @@
 dfap_scan_text_rs(text, arg_pattern, exports, export_patterns, allow)
 }
 \description{
-Rust rewrite of \code{rpkgkit:::scan_fn_arg_path()}. A top-level
-\verb{name <- function(...)} definition is found with the tokenizer of
-\code{\link[crate:r_syntax]{crate::r_syntax}}, its formals are split on top-level commas, and every
+A top-level \verb{name <- function(...)} definition is found with the tokenizer of
+\code{crate::r_syntax}, its formals are split on top-level commas, and every
 formal whose name matches \code{arg_pattern} and whose default (as written in the
 source, whitespace collapsed) is not in \code{allow} is reported. \code{exports = NULL}
 together with an empty \code{export_patterns} means "check every top-level

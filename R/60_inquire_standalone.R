@@ -45,9 +45,7 @@ inquire_standalone <- function(owner, repo, ...) {
       }
     }
   )
-  `_links` <- NULL # suppress note
-  `%>%` <- dplyr::`%>%`
-  dplyr::bind_rows(standalone_response) %>%
-    dplyr::select(-`_links`) %>%
+  dplyr::bind_rows(standalone_response) |>
+    dplyr::select(-dplyr::contains("_links")) |>
     dplyr::distinct()
 }

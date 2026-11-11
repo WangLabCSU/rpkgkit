@@ -179,9 +179,15 @@ use_tidy_addin <- function(
     )
     switch(
       fn,
-      export = exports <- c(exports, args),
-      exportPattern = export_patterns <- c(export_patterns, args),
-      import = imports_all <- c(imports_all, args),
+      export = {
+        exports <- c(exports, args)
+      },
+      exportPattern = {
+        export_patterns <- c(export_patterns, args)
+      },
+      import = {
+        imports_all <- c(imports_all, args)
+      },
       importFrom = if (length(args) >= 2L) {
         imports_from <- rbind(
           imports_from,

@@ -58,24 +58,24 @@ test_that("assign_arg_names leaves overflow args unnamed", {
 })
 
 # ---------------------------------------------------------------------------
-# .mfae_operators -- constant verification
+# MFAE_OPERATORS -- constant verification
 # ---------------------------------------------------------------------------
 
 test_that("mfae_operators contains core operators (not control flow)", {
-  expect_true("+" %in% .mfae_operators)
-  expect_true("[" %in% .mfae_operators)
-  expect_true("$" %in% .mfae_operators)
-  expect_true("<-" %in% .mfae_operators)
-  expect_true("::" %in% .mfae_operators)
+  expect_true("+" %in% MFAE_OPERATORS)
+  expect_true("[" %in% MFAE_OPERATORS)
+  expect_true("$" %in% MFAE_OPERATORS)
+  expect_true("<-" %in% MFAE_OPERATORS)
+  expect_true("::" %in% MFAE_OPERATORS)
   # Control flow is excluded structurally (it never parses as a `name(...)`
   # call node), so it must not appear in the operator list
-  expect_false("if" %in% .mfae_operators)
-  expect_false("for" %in% .mfae_operators)
-  expect_false("while" %in% .mfae_operators)
-  expect_false("repeat" %in% .mfae_operators)
-  expect_false("function" %in% .mfae_operators)
-  expect_false("{" %in% .mfae_operators)
-  expect_false("(" %in% .mfae_operators)
+  expect_false("if" %in% MFAE_OPERATORS)
+  expect_false("for" %in% MFAE_OPERATORS)
+  expect_false("while" %in% MFAE_OPERATORS)
+  expect_false("repeat" %in% MFAE_OPERATORS)
+  expect_false("function" %in% MFAE_OPERATORS)
+  expect_false("{" %in% MFAE_OPERATORS)
+  expect_false("(" %in% MFAE_OPERATORS)
 })
 
 # ---------------------------------------------------------------------------

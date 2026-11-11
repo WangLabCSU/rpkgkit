@@ -112,8 +112,9 @@ detect_print_and_cat <- function(
 
   lines <- readLines(con = path, warn = FALSE)
   text <- paste(lines, collapse = "\n")
-  parse_safely(text = text, path = path)
+  parse_safely(text = text, path = path) # validate R code
 
+  # find position
   calls_info <- find_print_cat_calls(
     text = text,
     pattern_fn_names = pattern_fn_names,
@@ -128,8 +129,9 @@ detect_print_and_cat <- function(
     return(invisible(TRUE))
   }
 
+  original_lines <- lines
+  # if fix, `lines` will be modified
   if (fix) {
-    original_lines <- lines
     to_fix <- Filter(
       f = function(x) x$type == "call" && identical(x$kind, "message"),
       x = calls_info
@@ -150,7 +152,12 @@ detect_print_and_cat <- function(
         )
       }
       writeLines(text = lines, con = path)
-      n_lines <- length(unique(vapply(to_fix, `[[`, integer(1L), "line1")))
+      n_lines <- length(unique(vapply(
+        X = to_fix,
+        FUN = `[[`,
+        FUN.VALUE = integer(1L),
+        "line1"
+      )))
       if (verbose) {
         cli::cli_alert_success(
           "Fixed {n_lines} line{?s} in {.path {basename(path)}}."
@@ -159,18 +166,8 @@ detect_print_and_cat <- function(
     }
   }
 
-  report_lines <- if (fix) original_lines else lines
-  # highlight the whole file: a single source line is usually not parseable, and
-  # `cli::code_highlight()` silently returns unparseable input unchanged. It must
-  # also get one element per line, otherwise only the first line is highlighted.
-  hl_lines <- tryCatch(
-    cli::code_highlight(report_lines),
-    error = function(e) report_lines,
-    cli_parse_failure = function(cnd) report_lines
-  )
-  if (length(hl_lines) != length(report_lines)) {
-    hl_lines <- report_lines
-  }
+  # highlight the whole file
+  hl_lines <- cli::code_highlight(original_lines)
   for (info in calls_info) {
     caret_width <- nchar(x = info$text) + if (info$type == "call") 1L else 0L
     message(
@@ -181,6 +178,10 @@ detect_print_and_cat <- function(
         kind = info$kind %||% ""
       )
     )
+    caret <- paste0(
+      strrep(x = " ", times = info$col1 - 1L),
+      strrep(x = "^", times = caret_width)
+    )
     tag <- if (!is.null(info$kind)) paste0(" [", info$kind, "]") else ""
     message(
       hl_lines[[info$line1]],
@@ -190,7 +191,12 @@ detect_print_and_cat <- function(
     )
   }
 
-  reported_lines <- unique(vapply(calls_info, `[[`, integer(1L), "line1"))
+  reported_lines <- unique(vapply(
+    X = calls_info,
+    FUN = `[[`,
+    FUN.VALUE = integer(1L),
+    "line1"
+  ))
   if (verbose) {
     cli::cli_alert_danger(
       "Found {length(calls_info)} unsupported call{?s} on line{?s} {.val {reported_lines}}."
@@ -214,7 +220,8 @@ DEFAULT_PATTERN_FN_NAMES <- c(
   "^as\\.numeric$",
   "^as\\.factor$",
   "^toString$",
-  "^strrep$"
+  "^strrep$",
+  "^code_highlight$"
 )
 
 resolve_pattern_fn_names <- function(

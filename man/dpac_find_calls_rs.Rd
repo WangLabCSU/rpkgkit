@@ -7,9 +7,7 @@
 dpac_find_calls_rs(text, pattern_fn_names, include_s3, include_refs)
 }
 \description{
-Rust rewrite of \code{rpkgkit:::find_print_cat_calls()} /
-\code{rpkgkit:::classify_print_cat()}. Instead of walking \code{getParseData()} the
-tokenizer of \code{\link[crate:r_syntax]{crate::r_syntax}} is used, so R's parser is not needed. Each
+Tokenizer of \code{crate::r_syntax} is used, so R's parser is not needed. Each
 hit is a list with \code{line1}, \code{col1}, \code{col2}, \code{text}, \code{type} and \code{kind}.
 }
 \keyword{internal}

@@ -274,21 +274,3 @@ use_air_table <- function(
 .uat_rows <- function(n, ncol) {
   uat_rows_rs(as.integer(n), as.integer(ncol))
 }
-
-.uat_join_flags <- function(join, elements, ncol, lines) {
-  uat_join_flags_rs(
-    join = as.logical(join),
-    elements = .uat_elements_for_rust(elements),
-    ncol = as.integer(ncol),
-    lines = lines
-  )
-}
-
-.uat_split_lines <- function(line, call_col1, elements, ncol) {
-  uat_split_lines_rs(
-    line = line,
-    call_col1 = as.integer(call_col1),
-    elements = .uat_elements_for_rust(elements),
-    ncol = as.integer(ncol)
-  )
-}

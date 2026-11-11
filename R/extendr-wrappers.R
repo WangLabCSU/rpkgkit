@@ -54,9 +54,8 @@ cp_rewrite_line_rs <- function(line, direction) .Call(wrap__cp_rewrite_line_rs, 
 
 #' Locate path-like defaults in the arguments of exported functions.
 #'
-#' Rust rewrite of `rpkgkit:::scan_fn_arg_path()`. A top-level
-#' `name <- function(...)` definition is found with the tokenizer of
-#' [`crate::r_syntax`], its formals are split on top-level commas, and every
+#' A top-level `name <- function(...)` definition is found with the tokenizer of
+#' `crate::r_syntax`, its formals are split on top-level commas, and every
 #' formal whose name matches `arg_pattern` and whose default (as written in the
 #' source, whitespace collapsed) is not in `allow` is reported. `exports = NULL`
 #' together with an empty `export_patterns` means "check every top-level
@@ -86,9 +85,7 @@ dlgb_find_glue_strings_rs <- function(text) .Call(wrap__dlgb_find_glue_strings_r
 
 #' Locate unsupported `print()` / `cat()` calls in R source text.
 #'
-#' Rust rewrite of `rpkgkit:::find_print_cat_calls()` /
-#' `rpkgkit:::classify_print_cat()`. Instead of walking `getParseData()` the
-#' tokenizer of [`crate::r_syntax`] is used, so R's parser is not needed. Each
+#' Tokenizer of `crate::r_syntax` is used, so R's parser is not needed. Each
 #' hit is a list with `line1`, `col1`, `col2`, `text`, `type` and `kind`.
 #' @keywords internal
 dpac_find_calls_rs <- function(text, pattern_fn_names, include_s3, include_refs) .Call(wrap__dpac_find_calls_rs, text, pattern_fn_names, include_s3, include_refs)
@@ -235,8 +232,7 @@ rf_rename_text_rs <- function(text, old_names, new_names) .Call(wrap__rf_rename_
 
 #' Locate the long, unnamed `c()` / `list()` calls of a source text.
 #'
-#' Rust rewrite of `rpkgkit:::.at_targets()` / `.at_call_info()`. The AST is
-#' replaced by the tokenizer of [`crate::r_syntax`]: a call is kept when it is
+#' The AST is replaced by the tokenizer of `crate::r_syntax`: a call is kept when it is
 #' the outermost call of a statement, carries no named element and holds more
 #' than `min_length` elements. Returns one list per call with `line1`, `line2`,
 #' `col1`, `n`, `multiline` and `elements`, the latter being one integer vector

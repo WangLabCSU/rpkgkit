@@ -148,31 +148,6 @@ check_nocov_markers <- function(markers) {
   list(problems = dunm_check_markers_rs(markers))
 }
 
-# ---------------------------------------------------------------------------
-# Append one entry to the `problems` list of `check_nocov_markers()`.
-# ---------------------------------------------------------------------------
-append_nocov_problem <- function(
-  problems,
-  index,
-  reason,
-  reference = NA_integer_
-) {
-  c(
-    problems,
-    list(list(index = index, reason = reason, reference = reference))
-  )
-}
-
-# ---------------------------------------------------------------------------
-# Test whether marker `a` is located before marker `b`, comparing the line
-# first and then the column.
-# ---------------------------------------------------------------------------
-marker_comes_before <- function(a, b) {
-  if (a$line1 != b$line1) {
-    return(a$line1 < b$line1)
-  }
-  a$col1 < b$col1
-}
 
 # ---------------------------------------------------------------------------
 # Read a file and collect its markers together with the check result.
