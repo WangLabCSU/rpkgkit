@@ -50,4 +50,8 @@ jobs:
         with:
           extra-packages: any::rcmdcheck
 
+      # Some tests call the external `air` formatter; without it they fail here
+      - name: Install Air
+        uses: posit-dev/setup-air@v1
+
       - uses: r-lib/actions/check-r-package@v2
