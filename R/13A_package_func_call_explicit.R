@@ -1,3 +1,7 @@
+# Package-level orchestration: directory discovery, progress reporting and
+# summarising stay in R (they are all cli/file-system concerns), while every
+# file is rewritten by the Rust engine behind make_func_call_explicit().
+
 #' @describeIn make_func_call_explicit Processes all \code{.R} files in a
 #'   package's \code{R/} directory, adding explicit namespace qualifiers.
 #'
@@ -5,7 +9,10 @@
 package_func_call_explicit <- function(
   path = NULL,
   use_packages = current_packages(),
-  ignore_functions = imported_functions(),
+  ignore_functions = c(
+    imported_functions(path),
+    get_defined_fn(path)
+  ),
   ...
 ) {
   rlang::check_dots_empty()
@@ -24,31 +31,61 @@ package_func_call_explicit <- function(
     cli::cli_abort("No {.path R/} directory found in {.path {path}}.")
   }
   files <- list.files(path = r_dir, pattern = "\\.R$", full.names = TRUE)
-  if (length(files) == 0L) {
+  n <- length(files)
+  if (n == 0L) {
     cli::cli_alert_info("No {.code .R} files found in {.path {r_dir}}.")
     return(invisible(TRUE))
   }
+
   cli::cli_alert_info(
-    "Processing {length(files)} file{?s} with {.pkg {use_packages}}..."
+    "Processing {n} file{?s} with {.pkg {use_packages}}..."
   )
-  n_ok <- 0L
-  for (f in files) {
-    make_func_call_explicit(
-      path = f,
-      use_packages = use_packages,
-      ignore_functions = ignore_functions
+
+  # The package lookups are resolved once and shared by every file: reading the
+  # exports and datasets of each package is the expensive part.
+  context <- mfce_package_context(
+    use_packages = use_packages,
+    ignore_functions = ignore_functions
+  )
+
+  results <- vector("list", n)
+  cli::cli_progress_bar(
+    name = "Making function calls explicit",
+    total = n,
+    format = paste0(
+      "{cli::pb_spin} Rewriting package R files ",
+      "{cli::pb_current}/{cli::pb_total} | {cli::pb_percent}"
     )
-    n_ok <- n_ok + 1L
+  )
+
+  for (i in seq_along(files)) {
+    cli::cli_progress_update(status = basename(files[[i]]))
+    results[[i]] <- tryCatch(
+      mfce_process_file(files[[i]], context),
+      error = function(e) e
+    )
   }
-  n_fail <- length(files) - n_ok
+
+  cli::cli_progress_done()
+
+  failed <- vapply(results, inherits, logical(1L), what = "error")
+  n_fail <- sum(failed)
+  n_ok <- n - n_fail
+
+  mfce_warn_not_found(
+    unique(unlist(lapply(results[!failed], `[[`, "not_found")))
+  )
+
   if (n_fail == 0L) {
     cli::cli_alert_success("Successfully processed all {n_ok} file{?s}.")
-    invisible(TRUE)
-  } else {
-    cli_alert_danger_color <- add_colors_to_cli(cli::cli_alert_danger)
-    cli_alert_danger_color(
-      "Processed {.green {n_ok}} file{?s}, {.red {n_fail}} failed."
-    )
-    invisible(FALSE)
+    return(invisible(TRUE))
   }
+
+  cli::cli_alert_danger("Processed {n_ok} of {n} file{?s}, {n_fail} failed.")
+  for (i in which(failed)) {
+    cli::cli_alert_warning(
+      "{.file {basename(files[[i]])}}: {conditionMessage(results[[i]])}"
+    )
+  }
+  invisible(FALSE)
 }

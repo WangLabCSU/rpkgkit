@@ -183,6 +183,21 @@ It’s available in the `Addins` menu, and can be accessed by pressing
 If you want to use addins in Positron, you can use [Positron R
 Wizard](https://github.com/ntluong95/positron-r-wizard.git) extension.
 
+## Dependencies
+
+``` r
+pak::local_deps_tree()
+# local::. 0.2.0 [new][bld]
+# ├─cli 3.6.6 [new][bld][cmp]
+# ├─lifecycle 1.0.5 [new][bld]
+# │ ├─cli
+# │ └─rlang 1.3.0 [new][bld][cmp]
+# ├─rlang
+# └─rstudioapi 0.19.0 [new][bld]
+
+# Key:  [new] new | [bld] build | [cmp] compile
+```
+
 ## AI skills
 
 `rpkgkit` ships an agent skill that tells coding agents when to reach

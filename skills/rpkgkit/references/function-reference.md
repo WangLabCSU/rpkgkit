@@ -36,7 +36,7 @@ self-contained and `cli`-only unless the table says otherwise.
 
 | Function | File | Notes |
 |---|---|---|
-| `make_func_call_explicit(path = NULL, use_packages = current_packages(), ignore_functions = imported_functions(), ...)` | `13_make_func_call_explicit.R` | Adds `pkg::` to unqualified calls. |
+| `make_func_call_explicit(path = NULL, use_packages = current_packages(), ignore_functions = c(imported_functions(), get_defined_fn(path)), ...)` | `13_make_func_call_explicit.R` | Adds `pkg::` to unqualified calls. |
 | `make_func_arg_explicit(path = NULL, skip_functions = NULL, ...)` | `19_make_func_arg_explicit.R` | Inserts `arg =` using parse data; leaves all other text untouched. |
 | `detect_lost_glue_brace(path = NULL, verbose = TRUE, ...)` | `14_detect_lost_glue_brace.R` | Finds unbalanced `{}` inside `glue()`/`cli` expressions. |
 | `detect_print_and_cat(path = NULL, fix = FALSE, pattern_fn_names = DEFAULT_PATTERN_FN_NAMES, replace_default_pattern = FALSE, include_s3 = TRUE, include_refs = FALSE, verbose = TRUE, ...)` | `18_detect_print_and_cat.R` | Reports CRAN-unsafe `print()`/`cat()`; `fix = TRUE` rewrites them to `message()`. |
@@ -56,7 +56,7 @@ These share an Rd page with their single-file counterpart (`@rdname`/`@describeI
 
 | Function | File | Notes |
 |---|---|---|
-| `package_func_call_explicit(path = NULL, use_packages = current_packages(), ignore_functions = imported_functions(), ...)` | `13A_package_func_call_explicit.R` | Walks every `R/*.R` file. |
+| `package_func_call_explicit(path = NULL, use_packages = current_packages(), ignore_functions = c(imported_functions(), get_defined_fn(path)), ...)` | `13A_package_func_call_explicit.R` | Walks every `R/*.R` file. |
 | `package_func_arg_explicit(path = NULL, skip_functions = NULL, ...)` | `19A_package_func_arg_explicit.R` | Walks every `R/*.R` file. |
 | `package_lost_glue_brace(path = NULL, dirs = c("R", "tests/testthat"), test_included = lifecycle::deprecated(), ...)` | `14A_package_lost_glue_brace.R` | Multi-directory scan; reports file and line. |
 | `package_print_and_cat(path = NULL, dirs = c("R", "tests/testthat"), test_included = lifecycle::deprecated(), fix = FALSE, ...)` | `18A_package_print_and_cat.R` | Multi-directory scan, optional fix. |
