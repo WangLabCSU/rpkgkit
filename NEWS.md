@@ -23,7 +23,7 @@
 ## BREAKING CHANGES
 
 * The package requires R >= 4.2 and `cli` >= 3.0.0. Building from source also
-  requires Cargo (Rust's package manager), `rustc` >= 1.65.0 and `xz`, now
+  requires Cargo (Rust's package manager), `rustc` >= 1.77.0 and `xz`, now
   declared in `SystemRequirements`; the shared library is registered with
   `useDynLib(rpkgkit, .registration = TRUE)`.
 

@@ -3,7 +3,7 @@ name = 'rpkgkit'
 publish = false
 version = '0.2.0'
 edition = '2021'
-rust-version = '1.65'
+rust-version = '1.77'
 
 [lib]
 crate-type = [ 'rlib', 'staticlib' ]
@@ -16,6 +16,7 @@ path = 'document.rs'
 [dependencies]
 extendr-api = '0.9.0'
 regex = "1.13.1"
+extendr-ffi = "0.9.0"  
 
 [profile.release]
 lto = true

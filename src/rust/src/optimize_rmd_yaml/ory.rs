@@ -431,16 +431,27 @@ fn ory_unquote_edges(text: &str) -> String {
     value
 }
 
+/// Index of the last path separator, accepting both POSIX and Windows paths.
+///
+/// R's `normalizePath()` returns `\`-separated paths on Windows. `std::path` only
+/// splits on the host separator, which would also make Windows paths untestable
+/// on other platforms, so both separators are handled explicitly here.
+fn ory_path_sep(path: &str) -> Option<usize> {
+    path.rfind(|c| c == '/' || c == '\\')
+}
+
 fn ory_basename(path: &str) -> String {
-    match path.rfind('/') {
+    match ory_path_sep(path) {
         Some(pos) => path[pos + 1..].to_string(),
         None => path.to_string(),
     }
 }
 
 fn ory_dirname(path: &str) -> String {
-    match path.rfind('/') {
-        Some(0) => "/".to_string(),
+    match ory_path_sep(path) {
+        // A root or a Windows drive root keeps its trailing separator.
+        Some(0) => path[..1].to_string(),
+        Some(pos) if pos == 2 && path.as_bytes()[1] == b':' => path[..=pos].to_string(),
         Some(pos) => path[..pos].to_string(),
         None => ".".to_string(),
     }
@@ -1436,5 +1447,41 @@ mod tests {
         let value = ory_yaml_parse("output:\n  html_document:\n    toc: true\n");
         let text = ory_emit_yaml_impl(&value.unwrap());
         assert_eq!(text, ls(&["output:", "  html_document:", "    toc: true"]));
+    }
+
+    #[test]
+    fn path_helpers_accept_windows_separators() {
+        assert_eq!(ory_basename(r"C:\pkg\vignettes\intro.Rmd"), "intro.Rmd");
+        assert_eq!(
+            ory_dirname(r"C:\pkg\vignettes\intro.Rmd"),
+            r"C:\pkg\vignettes"
+        );
+        assert_eq!(ory_dirname(r"C:\intro.Rmd"), "C:\\");
+        assert_eq!(ory_file_path_sans_ext(r"C:\pkg\intro.Rmd"), "intro");
+        assert_eq!(ory_detect_type_impl(r"C:\pkg\README.Rmd"), "readme");
+        assert_eq!(ory_detect_type_impl(r"C:\pkg\intro.Rmd"), "vignette");
+
+        assert_eq!(ory_basename("/tmp/pkg/README.Rmd"), "README.Rmd");
+        assert_eq!(ory_dirname("/tmp/pkg/README.Rmd"), "/tmp/pkg");
+        assert_eq!(ory_dirname("/intro.Rmd"), "/");
+        assert_eq!(ory_dirname("intro.Rmd"), ".");
+    }
+
+    #[test]
+    fn windows_path_does_not_leak_into_title() {
+        let meta = Meta {
+            package: "testpkg".to_string(),
+            title: Some("A Test Package".to_string()),
+            version: "1.0.0".to_string(),
+            authors: Some("Jane Doe".to_string()),
+            date: None,
+            lang: "en-US".to_string(),
+        };
+        let path = r"C:\pkg\vignettes\intro.Rmd";
+        assert_eq!(ory_default_title_impl(path, "vignette", &meta), "Intro");
+
+        let built = ory_build_header_impl(&[], path, "vignette", &meta, "gfm", "auto", &[]);
+        assert_eq!(built[0], "title: \"Intro\"");
+        assert!(built.contains(&"  %\\VignetteIndexEntry{Intro}".to_string()));
     }
 }

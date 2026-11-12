@@ -129,6 +129,7 @@ name = "rpkgkit"
 version = "0.2.0"
 dependencies = [
  "extendr-api",
+ "extendr-ffi",
  "regex",
 ]
 

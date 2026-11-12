@@ -58,6 +58,7 @@ covr
 css
 dcf
 desc
+destructuring
 dev
 dieghernan
 dpkg
@@ -114,6 +115,7 @@ unlicense
 unmapped
 unmerged
 unparseable
+unresolvable
 usethis
 uv
 validator

@@ -122,6 +122,27 @@ dunm_check_markers_rs <- function(markers) .Call(wrap__dunm_check_markers_rs, ma
 #' @keywords internal
 dunm_format_marker_error_rs <- function(line_content, col1, col2) .Call(wrap__dunm_format_marker_error_rs, line_content, col1, col2)
 
+#' Trace the expression that produces a variable inside a function.
+#'
+#' Rust rewrite of the extraction half of `rpkgkit:::get_var_value()`: the
+#' definition environment is built from the formals of the function, its body
+#' is walked to record every assignment, and the target expression is resolved
+#' by substituting the known variables. The resolved expression is returned
+#' instead of its value, so that the final `eval()` runs in R and a failing
+#' evaluation keeps its original condition.
+#'
+#' Returns a list with `found` (whether `var_name` is a parameter with a
+#' default or is assigned in the body) and `expr` (the resolved expression,
+#' `NULL` when it was not found).
+#'
+#' @param var_name Name of the target variable.
+#' @param fmls Formals of the function, as returned by `formals()`.
+#' @param body Body of the function, as returned by `body()`.
+#' @param env Environment used to evaluate conditions and loop sequences.
+#'
+#' @keywords internal
+gvv_trace_rs <- function(var_name, fmls, body, env) .Call(wrap__gvv_trace_rs, var_name, fmls, body, env)
+
 #' Rewrite `text`, qualifying package calls and exported datasets.
 #'
 #' `fun_exports` / `fun_packages` are parallel vectors of namespace exports
@@ -276,5 +297,8 @@ uat_rows_rs <- function(n, ncol) .Call(wrap__uat_rows_rs, n, ncol)
 #' element would be swallowed by the comment.
 #' @keywords internal
 uat_join_flags_rs <- function(join, elements, ncol, lines) .Call(wrap__uat_join_flags_rs, join, elements, ncol, lines)
+
+#' @keywords internal
+unpack_assign_rs <- function(lhs, rhs, env) .Call(wrap__unpack_assign_rs, lhs, rhs, env)
 
 # nolint end

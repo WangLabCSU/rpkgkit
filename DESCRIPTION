@@ -56,4 +56,4 @@ Roxygen: list(markdown = TRUE)
 Config/roxygen2/version: 8.1.1
 Language: en-US
 Config/rextendr/version: 0.5.0
-SystemRequirements: Cargo (Rust's package manager), rustc >= 1.65.0, xz
+SystemRequirements: Cargo (Rust's package manager), rustc >= 1.77.0, xz

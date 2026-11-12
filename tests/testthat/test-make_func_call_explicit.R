@@ -162,14 +162,21 @@ test_that("make_func_call_explicit rewrites the file in place", {
 })
 
 test_that("make_func_call_explicit keeps the final-newline state", {
+  # `cat()` writes the platform newline (CRLF on Windows, LF elsewhere), so
+  # read raw bytes and compare against the EOL used by the current platform.
+  read_bytes <- function(path) {
+    rawToChar(readBin(path, what = "raw", n = 100L))
+  }
+  eol <- if (.Platform$OS.type == "windows") "\r\n" else "\n"
+
   with_newline <- withr::local_tempfile(fileext = ".R", lines = "filter(1)")
   make_func_call_explicit(path = with_newline, use_packages = "stats")
-  expect_equal(readChar(with_newline, nchars = 100L), "stats::filter(1)\n")
+  expect_equal(read_bytes(with_newline), paste0("stats::filter(1)", eol))
 
   without_newline <- withr::local_tempfile(fileext = ".R")
   cat("filter(1)", file = without_newline, sep = "")
   make_func_call_explicit(path = without_newline, use_packages = "stats")
-  expect_equal(readChar(without_newline, nchars = 100L), "stats::filter(1)")
+  expect_equal(read_bytes(without_newline), "stats::filter(1)")
 })
 
 test_that("make_func_call_explicit leaves unchanged files untouched", {

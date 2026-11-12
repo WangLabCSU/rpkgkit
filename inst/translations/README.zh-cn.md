@@ -11,6 +11,7 @@
 [![English](https://img.shields.io/badge/README-English-blue)](../../README.md)
 [![Español](https://img.shields.io/badge/README-Espa%C3%B1ol-blue)](README.es.md)
 [![简体中文](https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue)]()
+[![extendr](https://img.shields.io/badge/extendr-%5E0.9.0-276DC2)](https://extendr.github.io/extendr/extendr_api/)
 <!-- badges: end -->
 
 ## 概览
@@ -63,7 +64,7 @@ pak::pak("WangLabCSU/rpkgkit")
 
 ## 速查表
 
-下表列出所有导出函数及其最简调用方式。多数函数接受 `path = NULL`，表示“使用当前活动文件或当前包目录”。
+下表列出常用函数及其最简调用方式。多数函数接受 `path = NULL`，表示“使用当前活动文件或当前包目录”。
 
 ### 代码转换与检查
 
@@ -95,9 +96,7 @@ pak::pak("WangLabCSU/rpkgkit")
 | `check_pkgdown_reference()` | `check_pkgdown_reference()` | 检查所有导出函数是否都出现在 `_pkgdown.yml` 中 |
 | `check_sysdeps()` | `check_sysdeps(c("libpng-dev"))` | 检查系统库是否已安装 |
 | `check_air_installed()` | `check_air_installed()` | 检查 `air` 格式化工具是否在 `PATH` 中 |
-| `flir_fix()` | `flir_fix("R/foo.R")` | 使用 `flir` 修复 R 代码 |
 | `use_air_table()` | `use_air_table("R/foo.R", ncol = 3)` | 使用 `air` 将较长的 `c()` 和 `list()` 调用排版为对齐的表格 |
-| `air_format()` | `air_format("R/foo.R")` | 已弃用；使用 `air` 格式化 R 代码 |
 
 ### 管理 `NEWS.md`
 
@@ -133,8 +132,6 @@ pak::pak("WangLabCSU/rpkgkit")
 | `badge_to_readme()` | `badge_to_readme(badge)` | 将徽章插入 README 徽章区 |
 | `badge_translated_by_ai()` | `badge_translated_by_ai(lang = "zh-cn")` | 生成“AI 翻译”免责声明徽章 |
 | `use_multilanguage_readme()` | `use_multilanguage_readme("zh-cn")` | 创建多语言 README 文件及其徽章 |
-| `render_rmd()` | `render_rmd("README.Rmd")` | 将 `.Rmd` 或 `.R` 文件渲染为 Markdown |
-| `use_hexsticker()` | `use_hexsticker("man/figures/logo.png")` | 已弃用；在 README 标题处添加六边形贴纸 |
 
 ### 独立脚本
 
@@ -162,6 +159,21 @@ pak::pak("WangLabCSU/rpkgkit")
 
 如果想在 Positron 中使用 addin，可以试试 [Positron R Wizard](https://github.com/ntluong95/positron-r-wizard.git) 扩展。
 
+## 依赖项
+
+```r
+pak::local_deps_tree()
+# local::. 0.2.0 [new][bld]
+# ├─cli 3.6.6 [new][bld][cmp]
+# ├─lifecycle 1.0.5 [new][bld]
+# │ ├─cli
+# │ └─rlang 1.3.0 [new][bld][cmp]
+# ├─rlang
+# └─rstudioapi 0.19.0 [new][bld]
+
+# Key:  [new] new | [bld] build | [cmp] compile
+```
+
 ## AI 技能
 
 `rpkgkit` 附带一个 agent skill，告诉编码智能体何时应当使用 `rpkgkit` 以及如何调用它。它遵循 [Agent Skills](https://skills.sh) 规范，因此可用于 Claude Code、Codex、Cursor、Positron 以及其他兼容的智能体：
@@ -171,6 +183,12 @@ npx skills add WangLabCSU/rpkgkit --skill rpkgkit
 ```
 
 加上 `-g` 可将其安装到所有项目，加上 `-a <agent>` 可跳过智能体选择提示。技能源代码位于 [`skills/rpkgkit/`](https://github.com/WangLabCSU/rpkgkit/tree/main/skills/rpkgkit)。
+
+## 引用
+
+```r
+citation("rpkgkit")
+```
 
 ## 致谢
 
