@@ -167,7 +167,10 @@ detect_print_and_cat <- function(
   }
 
   # highlight the whole file
-  hl_lines <- cli::code_highlight(original_lines)
+  hl_lines <- cli::code_highlight(
+    original_lines,
+    code_theme = getOption("rpkgkit.code.highlight")
+  )
   for (info in calls_info) {
     caret_width <- nchar(x = info$text) + if (info$type == "call") 1L else 0L
     message(

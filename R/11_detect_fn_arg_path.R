@@ -156,7 +156,10 @@ report_fn_arg_hits <- function(file, lines, hits, root = NULL) {
   }
 
   hl_lines <- tryCatch(
-    cli::code_highlight(lines),
+    cli::code_highlight(
+      lines,
+      code_theme = getOption("rpkgkit.code.highlight")
+    ),
     error = function(e) lines,
     cli_parse_failure = function(cnd) lines
   )

@@ -6,7 +6,7 @@
 .Rproj
 ```
 docs
-.codebuddy/skills/mirai/SKILL.md
+.codebuddy/
 CRAN-SUBMISSION
 tmp*
 .Rproj.user
@@ -56,3 +56,6 @@ tests/testthat/testthat-problems.rds
 src/rust/vendor
 src/Makevars
 src/Makevars.win
+.mcp.json
+.claude/
+.vscode/mcp.json

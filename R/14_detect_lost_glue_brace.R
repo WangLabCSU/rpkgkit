@@ -73,7 +73,10 @@ detect_lost_glue_brace <- function(path = NULL, verbose = TRUE, ...) {
   # `cli::code_highlight()` silently returns unparseable input unchanged. It must
   # also get one element per line, otherwise only the first line is highlighted.
   hl_lines <- tryCatch(
-    cli::code_highlight(lines),
+    cli::code_highlight(
+      lines,
+      code_theme = getOption("rpkgkit.code.highlight")
+    ),
     error = function(e) lines,
     cli_parse_failure = function(cnd) lines
   )
@@ -87,7 +90,10 @@ detect_lost_glue_brace <- function(path = NULL, verbose = TRUE, ...) {
   # `cli::code_highlight()` silently returns unparseable input unchanged. It must
   # also get one element per line, otherwise only the first line is highlighted.
   hl_lines <- tryCatch(
-    cli::code_highlight(lines),
+    cli::code_highlight(
+      lines,
+      code_theme = getOption("rpkgkit.code.highlight")
+    ),
     error = function(e) lines,
     cli_parse_failure = function(cnd) lines
   )

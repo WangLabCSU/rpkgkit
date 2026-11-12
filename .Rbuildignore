@@ -29,6 +29,8 @@
 ^\.codebuddy$
 ^\.fresh$
 ^\.vscode$
+^AGENTS\.md$
+^\.mcp\.json$
 ^CRAN-SUBMISSION$
 ^tmp\.R$
 ^revdep$
@@ -60,6 +62,7 @@
 ^index\.qmd$
 ^testthat-problems\.rds$
 ^_problems/$
+^\.claude$
 
 # GitHub Actions development files (exclude from package build)
 ^inst/actions/.*/src/

@@ -151,7 +151,10 @@ mfce_has_final_newline <- function(path) {
 #'
 #' @return A character vector of function names.
 #' @examples
+#' \dontrun{
 #' get_defined_fn(".")
+#' }
+#' @keywords internal
 get_defined_fn <- function(path = NULL) {
   path <- path %||% "."
 

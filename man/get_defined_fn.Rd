@@ -23,5 +23,8 @@ character vector, never NULL, so it can be combined with
 }
 }
 \examples{
+\dontrun{
 get_defined_fn(".")
 }
+}
+\keyword{internal}

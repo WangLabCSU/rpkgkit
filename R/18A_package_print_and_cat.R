@@ -154,7 +154,10 @@ package_detect_print_and_cat <- function(
       "{.file {relative_path}}: {info$line1}:"
     )
     message(paste0(
-      cli::code_highlight(report_lines[[info$line1]]),
+      cli::code_highlight(
+        report_lines[[info$line1]],
+        code_theme = getOption("rpkgkit.code.highlight")
+      ),
       cli::col_grey(tag),
       "\n",
       cli::col_grey(caret)
