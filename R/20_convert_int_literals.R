@@ -83,6 +83,8 @@ convert_int_literals <- function(path = NULL, verbose = TRUE, ...) {
   text <- readLines(path, warn = FALSE)
   original <- paste(text, collapse = "\n")
 
+  parse_safely(text = original, path = path)
+
   result <- .cil_process_text(original)
 
   if (identical(result, original)) {

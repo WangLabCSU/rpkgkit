@@ -48,11 +48,22 @@ convert_func_syntax <- function(
   if (is.null(path) || !nzchar(path)) {
     cli::cli_abort(c("x" = "{.arg path} is required"))
   }
-
+  rlang::check_string(path)
   direction <- match_arg(direction, c("to_lambda", "to_explicit"), NULL)
+  if (!file.exists(path) || dir.exists(path)) {
+    cli::cli_abort("{.file {path}} does not exist or is a directory.")
+  }
+  if (!tolower(tools::file_ext(path)) %in% "r") {
+    cli::cli_abort(c(
+      "Only {.field .R} files are supported.",
+      "x" = "Got {.file {path}}."
+    ))
+  }
 
   text <- readLines(path, warn = FALSE)
   original <- paste(text, collapse = "\n")
+
+  parse_safely(text = original, path = path)
 
   result <- .cfs_transform_text(original, direction)
 

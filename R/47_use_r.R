@@ -68,8 +68,8 @@ use_r <- function(
     version <- features$version[[i]]
     uses <- sum(rows$count)
     n_used <- nrow(rows)
-    first_file <- rows$file[[1]]
-    first_line <- rows$line[[1]]
+    first_file <- rows$file[[1L]]
+    first_line <- rows$line[[1L]]
     cli::cli_li(
       "{.code {feature}} ({label}) requires R >= {version}; {uses} use{?s} in {n_used} file{?s}, first at {.file {first_file}}:{first_line}."
     )
