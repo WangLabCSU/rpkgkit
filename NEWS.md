@@ -2,6 +2,12 @@
 
 ## NEW FEATURES
 
+* New `use_r()` scans a package for base R functions and syntax that need a
+  recent R version, from `|>` and `\()` in 4.1.0 to `%notin%` and
+  `messageCondition()` in 4.6.0, and records the highest requirement in
+  `DESCRIPTION`. The recursive walk over the `.R` files and the token-level
+  detection run in Rust (`ur_scan_rs()`); names the package defines itself, such
+  as its own `%||%`, are reported but do not raise the requirement.
 * The source-code tooling is now backed by Rust through `extendr`: the
   scanning, rewriting and formatting internals of `optimize_rmd_yaml()`,
   `detect_fn_arg_path()`, `detect_lost_glue_brace()`, `rename_func()`,

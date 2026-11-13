@@ -21,7 +21,7 @@ License: MIT + file LICENSE
 URL: https://github.com/Exceret/rpkgkit
 BugReports: https://github.com/WangLabCSU/rpkgkit/issues
 Depends: 
-    R (>= 4.2)
+    R (>= 4.1.0)
 Imports: 
     cli (>= 3.0.0),
     lifecycle,

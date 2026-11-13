@@ -12,6 +12,7 @@
 [![Español](https://img.shields.io/badge/README-Espa%C3%B1ol-blue)](README.es.md)
 [![简体中文](https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue)]()
 [![extendr](https://img.shields.io/badge/extendr-%5E0.9.0-276DC2)](https://extendr.github.io/extendr/extendr_api/)
+[![MSRV](https://img.shields.io/badge/rustc-1.77.0%2B-orange)](https://github.com/WangLabCSU/rpkgkit/blob/main/src/rust/Cargo.toml)
 <!-- badges: end -->
 
 ## 概览

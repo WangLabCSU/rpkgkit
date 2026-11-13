@@ -13,6 +13,7 @@ mod optimize_rmd_yaml;
 mod r_syntax;
 mod rename_func;
 mod use_air_table;
+mod use_r;
 mod zeallot;
 
 // Macro to generate exports.
@@ -32,5 +33,6 @@ extendr_module! {
     use optimize_rmd_yaml;
     use rename_func;
     use use_air_table;
+    use use_r;
     use zeallot;
 }

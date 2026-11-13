@@ -298,6 +298,24 @@ uat_rows_rs <- function(n, ncol) .Call(wrap__uat_rows_rs, n, ncol)
 #' @keywords internal
 uat_join_flags_rs <- function(join, elements, ncol, lines) .Call(wrap__uat_join_flags_rs, join, elements, ncol, lines)
 
+#' Base-R features that need a recent R version in one source text.
+#'
+#' Returns one row per feature, with `feature`, `version`, `label`, `file`,
+#' `line`, `col`, `count`, `local`, `min_version` and `files`. `local` marks a
+#' name that the scanned sources define themselves; those hits do not raise
+#' `min_version`.
+#' @keywords internal
+ur_scan_text_rs <- function(text) .Call(wrap__ur_scan_text_rs, text)
+
+#' Recursively scan the `.R` files below `root` for base-R features that need a
+#' recent R version.
+#'
+#' `dirs` holds paths relative to `root`; missing directories are skipped. The
+#' returned `file` column is relative to `root`, and `min_version` is `""` when
+#' no feature (or only locally defined names) was found.
+#' @keywords internal
+ur_scan_rs <- function(root, dirs) .Call(wrap__ur_scan_rs, root, dirs)
+
 #' @keywords internal
 unpack_assign_rs <- function(lhs, rhs, env) .Call(wrap__unpack_assign_rs, lhs, rhs, env)
 

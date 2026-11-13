@@ -86,6 +86,7 @@ reference:
       - use_hexsticker
       - use_jarl
       - use_multilanguage_readme
+      - use_r
       - use_r_v4.1.0
       - use_url
       - use_vendor
@@ -118,3 +119,5 @@ reference:
       - get_positron_version
       - check_standalone
       - check_sysdeps
+      - "`%<-%`"
+      - get_var_value
