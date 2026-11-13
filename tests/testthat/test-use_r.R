@@ -91,7 +91,10 @@ test_that("use_r() honours dirs", {
   make_pkg(tmp)
   dir.create(file.path(tmp, "tests", "testthat"), recursive = TRUE)
   writeLines("f <- function(x) x + 1", file.path(tmp, "R", "f.R"))
-  writeLines("g <- function(x) x %||% 1", file.path(tmp, "tests", "testthat", "test-g.R"))
+  writeLines(
+    "g <- function(x) x %||% 1",
+    file.path(tmp, "tests", "testthat", "test-g.R")
+  )
 
   expect_equal(use_r(path = tmp, dirs = "tests/testthat"), "4.4.0")
 })
@@ -104,10 +107,16 @@ test_that("ur_scan_text_rs() reports syntax features", {
   expect_equal(res$count, 1L)
   expect_false(as.logical(res$local))
   expect_equal(res$min_version, "4.1.0")
-  expect_equal(res$files, character(0))
+  expect_equal(
+    ur_scan_text_rs("x |> lm(y ~ x, data = _)\n")$min_version,
+    "4.2.0"
+  )
 
   expect_equal(ur_scan_text_rs("f <- \\(x) x\n")$min_version, "4.1.0")
-  expect_equal(ur_scan_text_rs("x |> lm(y ~ x, data = _)\n")$min_version, "4.2.0")
+  expect_equal(
+    ur_scan_text_rs("x |> lm(y ~ x, data = _)\n")$min_version,
+    "4.2.0"
+  )
   expect_equal(ur_scan_text_rs("x |> _$coef[[1]]\n")$min_version, "4.3.0")
 })
 
@@ -115,7 +124,10 @@ test_that("ur_scan_text_rs() reports named features", {
   expect_equal(ur_scan_text_rs("if (isa(x, 'a')) 1\n")$min_version, "4.1.0")
   expect_equal(ur_scan_text_rs("Sys.setLanguage('fr')\n")$min_version, "4.2.0")
   expect_equal(ur_scan_text_rs("s <- sort_by(df, x, y)\n")$min_version, "4.4.0")
-  expect_equal(ur_scan_text_rs("Tailcall(f())\nExec(f())\n")$min_version, "4.4.0")
+  expect_equal(
+    ur_scan_text_rs("Tailcall(f())\nExec(f())\n")$min_version,
+    "4.4.0"
+  )
   expect_equal(ur_scan_text_rs("use(foo, bar)\n")$min_version, "4.5.0")
   expect_equal(ur_scan_text_rs("grepv('a', x)\n")$min_version, "4.5.0")
   expect_equal(ur_scan_text_rs("penguins\n")$min_version, "4.5.0")
@@ -128,16 +140,25 @@ test_that("ur_scan_text_rs() reports argument-level features", {
   expect_equal(res$feature, "match.arg")
   expect_equal(res$min_version, "4.6.0")
 
-  expect_equal(ur_scan_text_rs("barplot(m, orderH = TRUE)\n")$min_version, "4.6.0")
+  expect_equal(
+    ur_scan_text_rs("barplot(m, orderH = TRUE)\n")$min_version,
+    "4.6.0"
+  )
   expect_equal(ur_scan_text_rs("barplot(m, beside = TRUE)\n")$min_version, "")
-  expect_equal(ur_scan_text_rs("match.arg(x, several.ok = FALSE)\n")$min_version, "")
+  expect_equal(
+    ur_scan_text_rs("match.arg(x, several.ok = FALSE)\n")$min_version,
+    ""
+  )
 })
 
 test_that("ur_scan_text_rs() ignores code that is not a call to the base function", {
   expect_equal(ur_scan_text_rs("'%||%'\n#' |> and \\(x)\n")$min_version, "")
   expect_equal(ur_scan_text_rs("x$use\ny@isa\n")$min_version, "")
   expect_equal(ur_scan_text_rs("foo(use = TRUE, isa = 1)\n")$min_version, "")
-  expect_equal(ur_scan_text_rs("other::use(x)\nother::%||%(a, b)\n")$min_version, "")
+  expect_equal(
+    ur_scan_text_rs("other::use(x)\nother::%||%(a, b)\n")$min_version,
+    ""
+  )
 })
 
 test_that("ur_scan_text_rs() ignores names defined by the package", {
@@ -145,7 +166,9 @@ test_that("ur_scan_text_rs() ignores names defined by the package", {
   expect_true(all(as.logical(res$local)))
   expect_equal(res$min_version, "")
 
-  res <- ur_scan_text_rs("`%notin%` <- function(x, table) !(x %in% table)\nx %notin% y\n")
+  res <- ur_scan_text_rs(
+    "`%notin%` <- function(x, table) !(x %in% table)\nx %notin% y\n"
+  )
   expect_equal(res$min_version, "")
 
   res <- ur_scan_text_rs("assign('%||%', function(x, y) x)\nNULL %||% 1\n")

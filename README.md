@@ -134,6 +134,7 @@ It’s recommended to use following packages together with `rpkgkit`:
 |:---|:---|:---|
 | `use_zzz()` | `use_zzz()` | Create `R/<pkg>-package.R` from a template |
 | `use_r_v4.1.0()` | `use_r_v4.1.0()` | Add `R (>= 4.1.0)` to `Depends` |
+| `use_r()` | `use_r()` | Specify the minimum R version in `DESCRIPTION` |
 | `use_url()` | `use_url()` | Set `URL` from the git remote, plus an optional pkgdown URL |
 | `use_bugreports()` | `use_bugreports()` | Set `BugReports` from the git remote |
 | `use_vendor()` | `use_vendor("wurli/pedant", "R/utils.R")` | Vendor permissively licensed code from GitHub |

@@ -48,8 +48,14 @@ run_pkg_convert <- function(...) {
 expect_summary <- function(messages, n, updated) {
   expect_match(
     messages,
-    paste0("Processed ", n, " ", if (n == 1L) "file" else "files",
-           ", updated ", updated),
+    paste0(
+      "Processed ",
+      n,
+      " ",
+      if (n == 1L) "file" else "files",
+      ", updated ",
+      updated
+    ),
     fixed = TRUE
   )
 }
@@ -190,8 +196,14 @@ test_that("package_convert_pipe picks up .R and .r files", {
 
   res <- run_pkg_convert(root)
 
-  expect_equal(readLines(file.path(root, "R", "a.R"), warn = FALSE), "x |> identity()")
-  expect_equal(readLines(file.path(root, "R", "b.r"), warn = FALSE), "y |> identity()")
+  expect_equal(
+    readLines(file.path(root, "R", "a.R"), warn = FALSE),
+    "x |> identity()"
+  )
+  expect_equal(
+    readLines(file.path(root, "R", "b.r"), warn = FALSE),
+    "y |> identity()"
+  )
   expect_summary(res$messages, n = 2L, updated = 2L)
 })
 
@@ -244,7 +256,10 @@ test_that("package_convert_pipe skips missing directories", {
 
   res <- run_pkg_convert(root, dirs = c("R", "tests"))
 
-  expect_equal(readLines(file.path(root, "R", "a.R"), warn = FALSE), "x |> identity()")
+  expect_equal(
+    readLines(file.path(root, "R", "a.R"), warn = FALSE),
+    "x |> identity()"
+  )
   expect_summary(res$messages, n = 1L, updated = 1L)
 })
 
@@ -257,7 +272,10 @@ test_that("package_convert_pipe respects a custom `dirs` argument", {
 
   res <- run_pkg_convert(root, dirs = "extra")
 
-  expect_equal(readLines(file.path(extra, "b.R"), warn = FALSE), "y |> identity()")
+  expect_equal(
+    readLines(file.path(extra, "b.R"), warn = FALSE),
+    "y |> identity()"
+  )
   expect_equal(
     readLines(file.path(root, "R", "a.R"), warn = FALSE),
     "x %>% identity()"
@@ -273,7 +291,10 @@ test_that("package_convert_pipe respects recursive = FALSE", {
 
   res <- run_pkg_convert(root, recursive = FALSE)
 
-  expect_equal(readLines(file.path(root, "R", "top.R"), warn = FALSE), "x |> identity()")
+  expect_equal(
+    readLines(file.path(root, "R", "top.R"), warn = FALSE),
+    "x |> identity()"
+  )
   expect_equal(
     readLines(file.path(root, "R", "sub", "nested.R"), warn = FALSE),
     "y %>% identity()"
@@ -324,7 +345,10 @@ test_that("package_convert_pipe accepts a relative path", {
 
   expect_true(res$value)
   expect_summary(res$messages, n = 1L, updated = 1L)
-  expect_equal(readLines(file.path(root, "R", "a.R"), warn = FALSE), "x |> identity()")
+  expect_equal(
+    readLines(file.path(root, "R", "a.R"), warn = FALSE),
+    "x |> identity()"
+  )
 })
 
 test_that("package_convert_pipe defaults path to '.'", {

@@ -169,14 +169,14 @@ test_that(". and _ placeholders skip exactly one element", {
 })
 
 test_that("named missing arguments select elements by name", {
-  c(cyl =, wt =) %<-% mtcars
+  c(cyl = , wt = ) %<-% mtcars
 
   expect_equal(cyl, mtcars$cyl)
   expect_equal(wt, mtcars$wt)
 })
 
 test_that("named targets do not depend on the order of elements", {
-  c(x =, y =) %<-% list(y = 2, x = 1)
+  c(x = , y = ) %<-% list(y = 2, x = 1)
 
   expect_equal(x, 1)
   expect_equal(y, 2)
@@ -192,12 +192,12 @@ test_that("named targets must omit their right-hand side", {
 
 test_that("named targets fail clearly when names are absent or unknown", {
   expect_error(
-    c(a =) %<-% 1:2,
+    c(a = ) %<-% 1:2,
     "from an unnamed object",
     fixed = TRUE
   )
   expect_error(
-    c(nope =) %<-% mtcars,
+    c(nope = ) %<-% mtcars,
     "was not found",
     fixed = TRUE
   )

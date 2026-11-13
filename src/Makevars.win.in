@@ -3,7 +3,13 @@ TARGET = $(subst 64,x86_64,$(subst 32,i686,$(WIN)))-pc-windows-gnu
 TARGET_DIR = ./rust/target
 LIBDIR = $(TARGET_DIR)/$(TARGET)/@LIBDIR@
 STATLIB = $(LIBDIR)/librpkgkit.a
-PKG_LIBS = -L$(LIBDIR) -lrpkgkit -lws2_32 -ladvapi32 -luserenv -lbcrypt -lntdll
+# `synchronization` is required by recent Rust std releases on
+# `*-pc-windows-gnu`: `std::sys::sync` now uses `WaitOnAddress()` /
+# `WakeByAddress*()`, which live in the `synchronization` import library.
+# Without `-lsynchronization` the final gcc link fails with
+# "undefined reference to `WaitOnAddress'" (Rust only prints these libs
+# via `--print=native-static-libs`; it does not pass them to R's linker).
+PKG_LIBS = -L$(LIBDIR) -lrpkgkit -lws2_32 -ladvapi32 -luserenv -lbcrypt -lntdll -lsynchronization
 
 all: $(SHLIB) rust_clean
 
