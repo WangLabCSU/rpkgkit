@@ -1,5 +1,5 @@
 # ---
-# repo: Exceret/rpkgkit
+# repo: WangLabCSU/rpkgkit
 # file: standalone-cli_kable.R
 # last-updated: 2026-11-05
 # license: https://unlicense.org

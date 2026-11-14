@@ -31,6 +31,7 @@ Suggests:
     badger,
     desc,
     devtools,
+    dplyr,
     flir,
     grDevices,
     httr2,
