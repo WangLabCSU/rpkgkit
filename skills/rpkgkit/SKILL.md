@@ -128,7 +128,9 @@ rpkgkit::update_time_in_standalone()
 
 The header carries `last modified`, license, imports, dependency, description and a
 changelog block. `inquire_standalone(owner, repo)` lists candidates in a specific
-repository; `browse_standalone()` searches GitHub-wide (requires `gh`).
+repository; `browse_standalone()` searches GitHub-wide. Both crawl GitHub in Rust
+(no `gh` dependency) and accept `token =`, falling back to `GITHUB_PAT` /
+`GITHUB_TOKEN`.
 
 ## Workflow: console tables with cli
 

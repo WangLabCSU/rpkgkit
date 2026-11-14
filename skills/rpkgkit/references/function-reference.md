@@ -7,11 +7,11 @@ document, falling back to the working directory. Source files are under `R/`.
 
 | Function | File | Notes |
 |---|---|---|
-| `inquire_standalone(owner, repo, ...)` | `60_inquire_standalone.R` | Lists `standalone-*.R` under `R/` of a given GitHub repo. Requires `gh`. |
+| `inquire_standalone(owner, repo, ..., token = NULL)` | `60_inquire_standalone.R` | Lists `standalone-*.R` under `R/` of a given GitHub repo, adding `repo`, `description` and `usage` columns. Crawls in Rust; `token` defaults to `GITHUB_PAT` / `GITHUB_TOKEN`. |
 | `create_standalone(standalone_name = NULL, path = NULL, standalone_head = list(license = "https://unlicense.org", imports = NULL, dependency = NULL, description = "This file provides ..."), open = rlang::is_interactive(), ...)` | `61_create_standalone.R` | Writes `R/standalone-<name>.R` with the r-lib YAML header when inside a package. |
 | `update_time_in_standalone(path = NULL)` | `62_update_time_in_standalone.R` | Refreshes the `last modified` date; `path` may be a file or a directory. |
 | `add_changelog_in_standalone(path = NULL, description = NULL, date = NULL)` | `63_add_changelog_in_standalone.R` | Inserts or updates one changelog entry in the header block. |
-| `browse_standalone(per_page = 100L, limit = 200L, ...)` | `64_browse_standalone.R` | GitHub code search across repositories. Requires `gh`, `dplyr`. |
+| `browse_standalone(per_page = 100L, limit = 200L, ..., token = NULL)` | `64_browse_standalone.R` | GitHub code search across repositories. Crawls in Rust, no `gh` / `dplyr`; `limit = Inf` caps at the 1000-result API ceiling. |
 | `check_standalone(path = NULL, ...)` | `65_check_standalone.R` | Validates header fields, `@noRd`, `# nocov start/end`; reports in `devtools::check()` style. |
 
 ## Bundled standalone helpers

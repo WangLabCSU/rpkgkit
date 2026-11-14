@@ -50,7 +50,8 @@ modified file paths.
 \description{
 Converts bare integer literals to explicit integer form with an \code{L} suffix,
 e.g. \code{seq_len(10)} becomes \code{seq_len(10L)}. Strings and comments are left
-unchanged.
+unchanged, and a line can opt out with a \verb{# rpkgkit: not int} comment (see
+the section below).
 
 \code{\link[=convert_int_literals]{convert_int_literals()}} operates on one R file. When \code{path} is \code{NULL} and
 RStudio is available, it uses the currently active document.
@@ -75,6 +76,23 @@ and it is \strong{not}:
 \item adjacent to an identifier character (\verb{a-zA-Z0-9._}).
 }
 }
+\section{Opting a line out}{
+
+Adding \code{L} changes the type of a literal, so some expressions must keep
+their double literals (\code{2^31}, \code{2147483648}, \code{1e9 * 4}). Write a
+\verb{# rpkgkit: not int} comment on the line just above such a line, and every
+literal on that line is left untouched:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# rpkgkit: not int
+y <- 2^31
+}\if{html}{\out{</div>}}
+
+The marker covers the immediately following line only, so a block needs one
+marker per line. It is matched case-insensitively and tolerates extra
+spaces, but it has to be the only thing on its line: a trailing
+\code{x <- 1 # rpkgkit: not int} opts nothing out.
+}
+
 \examples{
 \dontrun{
 # --- Single file ---
@@ -83,6 +101,12 @@ writeLines("tmp <- seq_len(10)", temp)
 convert_int_literals(temp)
 readLines(temp)
 # "tmp <- seq_len(10L)"
+
+# --- Opting a line out ---
+writeLines(c("# rpkgkit: not int", "y <- 2^31"), temp)
+convert_int_literals(temp)
+readLines(temp)
+# "# rpkgkit: not int" "y <- 2^31"
 
 # --- Entire package ---
 tmp_pkg <- tempdir()

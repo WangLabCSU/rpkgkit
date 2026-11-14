@@ -36,6 +36,9 @@ cfs_transform_text_rs <- function(text, direction) .Call(wrap__cfs_transform_tex
 #' comments are copied verbatim; a literal is left alone when it already carries
 #' `L` / `l`, when it is a float, a scientific notation, a complex literal, or
 #' when it is glued to an identifier character.
+#'
+#' A line preceded by a `# rpkgkit: not int` comment is left unchanged, so a
+#' literal whose type has to stay double can be opted out line by line.
 #' @keywords internal
 cil_process_text_rs <- function(text) .Call(wrap__cil_process_text_rs, text)
 
@@ -318,5 +321,20 @@ ur_scan_rs <- function(root, dirs) .Call(wrap__ur_scan_rs, root, dirs)
 
 #' @keywords internal
 unpack_assign_rs <- function(lhs, rhs, env) .Call(wrap__unpack_assign_rs, lhs, rhs, env)
+
+#' Search GitHub for standalone files, at most `limit` of them.
+#'
+#' `per_page` is the page size of the underlying search (1 to 100), `limit` the
+#' number of rows to return and `token` an empty string for an unauthenticated
+#' client. Returns one named column per field of the search hit.
+#' @keywords internal
+browse_standalone_rs <- function(per_page, limit, token) .Call(wrap__browse_standalone_rs, per_page, limit, token)
+
+#' Crawl the standalone files of a GitHub repository.
+#'
+#' `repo_spec` is the `"owner/repo"` identifier and `token` an empty string for
+#' an unauthenticated client. Returns one named column per field of the listing.
+#' @keywords internal
+inquire_standalone_rs <- function(repo_spec, token) .Call(wrap__inquire_standalone_rs, repo_spec, token)
 
 # nolint end

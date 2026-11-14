@@ -3,7 +3,8 @@
 #' @description
 #' Converts bare integer literals to explicit integer form with an `L` suffix,
 #' e.g. `seq_len(10)` becomes `seq_len(10L)`. Strings and comments are left
-#' unchanged.
+#' unchanged, and a line can opt out with a `# rpkgkit: not int` comment (see
+#' the section below).
 #'
 #' [convert_int_literals()] operates on one R file. When `path` is `NULL` and
 #' RStudio is available, it uses the currently active document.
@@ -49,6 +50,22 @@
 #' - a complex literal (`10i`),
 #' - adjacent to an identifier character (`a-zA-Z0-9._`).
 #'
+#' @section Opting a line out:
+#' Adding `L` changes the type of a literal, so some expressions must keep
+#' their double literals (`2^31`, `2147483648`, `1e9 * 4`). Write a
+#' `# rpkgkit: not int` comment on the line just above such a line, and every
+#' literal on that line is left untouched:
+#'
+#' ```r
+#' # rpkgkit: not int
+#' y <- 2^31
+#' ```
+#'
+#' The marker covers the immediately following line only, so a block needs one
+#' marker per line. It is matched case-insensitively and tolerates extra
+#' spaces, but it has to be the only thing on its line: a trailing
+#' `x <- 1 # rpkgkit: not int` opts nothing out.
+#'
 #' @examples
 #' \dontrun{
 #' # --- Single file ---
@@ -57,6 +74,12 @@
 #' convert_int_literals(temp)
 #' readLines(temp)
 #' # "tmp <- seq_len(10L)"
+#'
+#' # --- Opting a line out ---
+#' writeLines(c("# rpkgkit: not int", "y <- 2^31"), temp)
+#' convert_int_literals(temp)
+#' readLines(temp)
+#' # "# rpkgkit: not int" "y <- 2^31"
 #'
 #' # --- Entire package ---
 #' tmp_pkg <- tempdir()
@@ -73,44 +96,63 @@ NULL
 #' @export
 convert_int_literals <- function(path = NULL, verbose = TRUE, ...) {
   rlang::check_dots_empty0(...)
+  rlang::check_bool(verbose)
 
   path <- path %||%
     if (rstudioapi::isAvailable()) rstudioapi::getActiveDocumentContext()$path
-  if (is.null(path) || !nzchar(path)) {
+  if (!rlang::is_string(path) || !nzchar(path)) {
     cli::cli_abort(c("x" = "{.arg path} is required"))
   }
 
+  .cil_convert_file(path, verbose = verbose)
+
+  invisible(path)
+}
+
+#' Internal: rewrite the integer literals of one file
+#'
+#' Reads `path` once, rewrites it and writes it back only when something
+#' changed, so already-converted files keep their modification time.
+#'
+#' @param path Character string; path to an R file.
+#' @param verbose Logical; report the outcome with `cli`.
+#'
+#' @return `TRUE` when the file was rewritten, `FALSE` otherwise.
+#'
+.cil_convert_file <- function(path, verbose = FALSE) {
   text <- readLines(path, warn = FALSE)
   original <- paste(text, collapse = "\n")
 
   parse_safely(text = original, path = path)
 
   result <- .cil_process_text(original)
+  changed <- !identical(result, original)
 
-  if (identical(result, original)) {
-    if (verbose) {
+  if (changed) {
+    writeLines(result, path)
+  }
+
+  if (verbose) {
+    if (changed) {
+      cli::cli_alert_success(
+        "Added explicit integer suffixes in {.file {path}}"
+      )
+    } else {
       cli::cli_alert_info(
         "No integer literals to convert in {.file {path}}"
       )
     }
-    return(invisible(path))
   }
 
-  writeLines(result, path)
-  if (verbose) {
-    cli::cli_alert_success(
-      "Added explicit integer suffixes in {.file {path}}"
-    )
-  }
-
-  invisible(path)
+  changed
 }
 
 
 #' Internal: character-level integer-literal rewrite (implemented in Rust)
 #'
 #' The character state machine (strings, raw strings, comments, hex/decimal
-#' literals and signed exponents) now lives in `cil_process_text_rs()`.
+#' literals, signed exponents and the `# rpkgkit: not int` opt-out) now lives in
+#' `cil_process_text_rs()`.
 #'
 #' @keywords internal
 .cil_process_text <- function(text) {

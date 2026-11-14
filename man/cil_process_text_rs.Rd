@@ -12,4 +12,8 @@ comments are copied verbatim; a literal is left alone when it already carries
 \code{L} / \code{l}, when it is a float, a scientific notation, a complex literal, or
 when it is glued to an identifier character.
 }
+\details{
+A line preceded by a \verb{# rpkgkit: not int} comment is left unchanged, so a
+literal whose type has to stay double can be opted out line by line.
+}
 \keyword{internal}

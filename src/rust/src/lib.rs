@@ -10,6 +10,7 @@ mod detect_unmatch_nocov_marker;
 mod get_var_value;
 mod make_func_call_explicit;
 mod optimize_rmd_yaml;
+mod r_standalone;
 mod r_syntax;
 mod rename_func;
 mod use_air_table;
@@ -35,4 +36,5 @@ extendr_module! {
     use use_air_table;
     use use_r;
     use zeallot;
+    use r_standalone;
 }

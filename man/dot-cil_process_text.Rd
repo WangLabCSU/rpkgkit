@@ -8,6 +8,7 @@
 }
 \description{
 The character state machine (strings, raw strings, comments, hex/decimal
-literals and signed exponents) now lives in \code{cil_process_text_rs()}.
+literals, signed exponents and the \verb{# rpkgkit: not int} opt-out) now lives in
+\code{cil_process_text_rs()}.
 }
 \keyword{internal}

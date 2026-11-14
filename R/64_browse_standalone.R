@@ -1,15 +1,17 @@
 #' @title Browse Standalone R Files Across GitHub
 #'
-#' @description Search GitHub for all `standalone-*.R` files and filter to only
-#'   include repositories that are R packages (contain a `DESCRIPTION` file in
-#'   their root directory). Results are returned as a tibble with file and
-#'   repository metadata.
+#' @description Search GitHub for all `standalone-*.R` files and return the file
+#'   and repository metadata of the matches as a tibble.
 #'
-#' @param per_page Number of items to return per page. If omitted,
-#'    will be substituted by max(.limit, 100) if .limit is set,
-#'    otherwise determined by the API (never greater than 100).
-#' @param limit Number of records to return. This can be used instead of manual pagination. By default it is NULL, which means that the defaults of the GitHub API are used. You can set it to a number to request more (or less) records, and also to Inf to request all records. Note, that if you request many records, then multiple GitHub API calls are used to get them, and this can take a potentially long time.
-#' @param ... pass to `gh::gh()`
+#' @param per_page Number of items to request per page, between 1 and 100.
+#'   Defaults to `100L`, the largest page GitHub serves.
+#' @param limit Number of records to return. Defaults to `200L`; use `Inf` to
+#'   request every record GitHub exposes. Each page of `per_page` records costs
+#'   one search request, so a large `limit` can take a while.
+#' @param ... No arguments.
+#' @param token A GitHub personal access token. When `NULL` (the default) the
+#'   token is read from the `GITHUB_PAT` or `GITHUB_TOKEN` environment variable;
+#'   without a token GitHub only allows 60 requests per hour.
 #'
 #' @return A tibble with columns:
 #' \describe{
@@ -24,19 +26,16 @@
 #'   \item{repo_description}{Character. Repository description from GitHub.}
 #' }
 #'
-#' @details This function uses the GitHub Code Search API
-#'   (\code{GET /search/code}) to find all files matching the pattern
-#'   \code{standalone-*.R} across all public repositories. It then checks each
-#'   unique repository for the presence of a \code{DESCRIPTION} file in the
-#'   repository root, confirming it is an R package. Only files from R package
-#'   repositories are returned.
+#' @details The crawl runs in Rust. It queries the GitHub Code Search API
+#'   (\code{GET /search/code}) with
+#'   \code{filename:standalone- language:R -filename:import-}, pages through the
+#'   results until \code{limit} rows are collected, drops the hits whose name does
+#'   not start with "standalone-" and removes duplicates. The search API ranks by
+#'   relevance and exposes at most 1,000 results, which covers the vast majority
+#'   of standalone files on GitHub.
 #'
-#'   GitHub Search API returns at most 1,000 results, which covers the vast
-#'   majority of standalone files on GitHub.
-#'
-#' @note Requires GitHub API authentication via the \code{gh} package.
-#'   Run \code{gh::gh_whoami()} to check your current authentication status.
-#'   Unauthenticated requests are subject to strict rate limits (60 requests/hour).
+#' @note Without a token GitHub applies strict rate limits (60 requests per
+#'   hour). Set \code{GITHUB_PAT} in \code{~/.Renviron} to lift them.
 #'
 #' @examples
 #' \dontrun{
@@ -44,65 +43,35 @@
 #' }
 #'
 #' @export
-browse_standalone <- function(per_page = 100L, limit = 200L, ...) {
-  rlang::check_installed(c("gh", "dplyr"))
+browse_standalone <- function(
+  per_page = 100L,
+  limit = 200L,
+  ...,
+  token = NULL
+) {
+  rlang::check_dots_empty()
+  rlang::check_installed("tibble")
+  # rpkgkit: not int
+  rlang::check_number_whole(per_page, min = 1, max = 100)
+  # rpkgkit: not int
+  rlang::check_number_whole(limit, min = 1, allow_infinite = TRUE)
 
-  `%>%` <- dplyr::`%>%`
-
-  # Step 1: Search for all standalone-*.R files via GitHub Code Search API
-  cli::cli_alert_info(
-    "Searching GitHub for standalone-*.R files"
+  cli::cli_progress_step(
+    "Searching GitHub for standalone-*.R files",
+    spinner = TRUE
   )
 
-  response <- gh::gh(
-    "/search/code",
-    q = "filename:standalone- language:R -filename:import-",
-    .per_page = per_page,
-    .limit = limit,
-    ...
-  )
-
-  # gh::gh with .limit returns the aggregated response for search endpoints;
-  # the items list may be inside $items or be the response itself
-  items <- if (is.list(response) && !is.null(response$items)) {
-    response$items
-  } else {
-    response
-  }
-
-  if (length(items) == 0L) {
-    warning("No standalone files found.")
-    return(dplyr::tibble(
-      repo = character(),
-      name = character(),
-      path = character(),
-      sha = character(),
-      url = character(),
-      html_url = character(),
-      git_url = character(),
-      repo_url = character(),
-      repo_description = character()
-    ))
-  }
-
-  # Step 2: Build a data frame from search results
-  items_list <- lapply(items, function(item) {
-    # Double-check: only keep files whose name starts with "standalone-"
-    if (!startsWith(item$name, "standalone-")) {
-      return(NULL)
-    }
-    list(
-      repo = item$repository$full_name %||% NA_character_,
-      name = item$name %||% NA_character_,
-      path = item$path %||% NA_character_,
-      sha = item$sha %||% NA_character_,
-      url = item$url %||% NA_character_,
-      html_url = item$html_url %||% NA_character_,
-      git_url = item$git_url %||% NA_character_,
-      repo_url = item$repository$html_url %||% NA_character_,
-      repo_description = item$repository$description %||% NA_character_
+  rows <- .standalone_tibble(
+    browse_standalone_rs(
+      per_page = as.integer(per_page),
+      limit = as.numeric(limit),
+      token = .standalone_token(token)
     )
-  })
+  )
 
-  dplyr::bind_rows(items_list)
+  cli::cli_progress_done()
+  if (nrow(rows) == 0L) {
+    warning("No standalone files found.")
+  }
+  rows
 }

@@ -309,18 +309,12 @@ fn uat_targets_from_list(targets: &List) -> Vec<Target> {
 /// those columns (the shape `getParseData()` gives) or a list of integer
 /// vectors (the shape `uat_find_targets_rs()` gives).
 fn uat_elements_from_list(elements: &List) -> Vec<Element> {
-    let field = |name: &str| {
-        uat_field(elements, name).and_then(|value| value.as_integer_vector())
-    };
-    let (line1, col1, line2, col2) = match (
-        field("line1"),
-        field("col1"),
-        field("line2"),
-        field("col2"),
-    ) {
-        (Some(l1), Some(c1), Some(l2), Some(c2)) => (l1, c1, l2, c2),
-        _ => return uat_elements_from_vectors(elements),
-    };
+    let field = |name: &str| uat_field(elements, name).and_then(|value| value.as_integer_vector());
+    let (line1, col1, line2, col2) =
+        match (field("line1"), field("col1"), field("line2"), field("col2")) {
+            (Some(l1), Some(c1), Some(l2), Some(c2)) => (l1, c1, l2, c2),
+            _ => return uat_elements_from_vectors(elements),
+        };
     // A data frame comes in column-major: zip the four columns instead.
     line1
         .iter()

@@ -104,7 +104,9 @@ fn ur_feature(name: &str) -> Option<&'static Feature> {
 }
 
 fn ur_version_key(version: &str) -> (u32, u32, u32) {
-    let mut parts = version.split('.').map(|part| part.parse::<u32>().unwrap_or(0));
+    let mut parts = version
+        .split('.')
+        .map(|part| part.parse::<u32>().unwrap_or(0));
     (
         parts.next().unwrap_or(0),
         parts.next().unwrap_or(0),
@@ -305,19 +307,15 @@ fn ur_has_named_arg(
     match value {
         None => true,
         Some(expected) => {
-            toks.len() >= 3 && toks[2].kind == Kind::Str && strip_name(toks[2].text(src)) == expected
+            toks.len() >= 3
+                && toks[2].kind == Kind::Str
+                && strip_name(toks[2].text(src)) == expected
         }
     }
 }
 
 /// `match.arg(several.ok = "all")` and `barplot(orderH = ...)` need R 4.6.0.
-fn ur_scan_arg_features(
-    tokens: &[Token],
-    src: &str,
-    k: usize,
-    file: &str,
-    hits: &mut Vec<Hit>,
-) {
+fn ur_scan_arg_features(tokens: &[Token], src: &str, k: usize, file: &str, hits: &mut Vec<Hit>) {
     let tok = &tokens[k];
     let name = tok.text(src);
     let (arg, value, label) = match name {
@@ -363,7 +361,8 @@ fn ur_scan_op(
         return;
     }
     if text == "\\" {
-        let is_lambda = matches!(next_sig(tokens, k + 1), Some(next) if tokens[next].is_op(src, "("));
+        let is_lambda =
+            matches!(next_sig(tokens, k + 1), Some(next) if tokens[next].is_op(src, "("));
         if is_lambda {
             ur_push(hits, "\\()", "4.1.0", "lambda shorthand", file, tok, false);
         }

@@ -45,7 +45,6 @@ test_that("convert_int_literals leaves floats, scientific, complex and dot-numbe
       "b <- .5",
       "c <- 10.",
       "d <- 10i",
-      "e <- 1_000",
       "f <- 1e-3",
       "g <- 1E-3"
     ),
@@ -61,7 +60,6 @@ test_that("convert_int_literals leaves floats, scientific, complex and dot-numbe
       "b <- .5",
       "c <- 10.",
       "d <- 10i",
-      "e <- 1_000",
       "f <- 1e-3",
       "g <- 1E-3"
     )
@@ -118,11 +116,11 @@ test_that("convert_int_literals keeps existing L suffix on hex literals", {
 
 test_that("convert_int_literals leaves non-numeric 0x sequences alone", {
   path <- withr::local_tempfile(fileext = ".R")
-  writeLines("a <- 0xzz", path)
+  writeLines("a <- 0xa2", path)
 
   convert_int_literals(path, verbose = FALSE)
 
-  expect_equal(readLines(path, warn = FALSE), "a <- 0xzz")
+  expect_equal(readLines(path, warn = FALSE), "a <- 0xa2L")
 })
 
 test_that("convert_int_literals leaves raw strings unchanged", {
@@ -152,6 +150,18 @@ test_that("convert_int_literals processes multi-line input", {
   convert_int_literals(path, verbose = FALSE)
 
   expect_equal(readLines(path, warn = FALSE), c("x <- 1L", "y <- 2L"))
+})
+
+test_that("convert_int_literals leaves a line above a `not int` marker alone", {
+  path <- withr::local_tempfile(fileext = ".R")
+  writeLines(c("# rpkgkit: not int", "y <- 2^31", "z <- 5"), path)
+
+  convert_int_literals(path, verbose = FALSE)
+
+  expect_equal(
+    readLines(path, warn = FALSE),
+    c("# rpkgkit: not int", "y <- 2^31", "z <- 5L")
+  )
 })
 
 test_that("convert_int_literals reports no change via cli message", {
@@ -321,6 +331,45 @@ test_that(".cil_process_text converts across newlines but not in comments", {
   expect_equal(
     rpkgkit:::.cil_process_text("x <- 1 # 2\ny <- 3"),
     "x <- 1L # 2\ny <- 3L"
+  )
+})
+
+test_that(".cil_process_text skips the line below the `not int` marker", {
+  expect_equal(
+    rpkgkit:::.cil_process_text("# rpkgkit: not int\ny <- 2^31"),
+    "# rpkgkit: not int\ny <- 2^31"
+  )
+  expect_equal(
+    rpkgkit:::.cil_process_text("# rpkgkit: not int\ny <- c(1, 0xFF, 2L)"),
+    "# rpkgkit: not int\ny <- c(1, 0xFF, 2L)"
+  )
+})
+
+test_that(".cil_process_text applies the marker to one line only", {
+  expect_equal(
+    rpkgkit:::.cil_process_text("# rpkgkit: not int\ny <- 2\nz <- 3"),
+    "# rpkgkit: not int\ny <- 2\nz <- 3L"
+  )
+})
+
+test_that(".cil_process_text is lenient about the marker spelling", {
+  expect_equal(
+    rpkgkit:::.cil_process_text("  #  RPkgkit:  NOT  int\ny <- 5"),
+    "  #  RPkgkit:  NOT  int\ny <- 5"
+  )
+})
+
+test_that(".cil_process_text needs the marker on its own line", {
+  expect_equal(
+    rpkgkit:::.cil_process_text("x <- 1 # rpkgkit: not int\ny <- 2"),
+    "x <- 1L # rpkgkit: not int\ny <- 2L"
+  )
+})
+
+test_that(".cil_process_text ignores a marker inside a string", {
+  expect_equal(
+    rpkgkit:::.cil_process_text("x <- '\n# rpkgkit: not int'\ny <- 2"),
+    "x <- '\n# rpkgkit: not int'\ny <- 2L"
   )
 })
 

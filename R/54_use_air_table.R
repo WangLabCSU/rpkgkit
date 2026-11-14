@@ -65,7 +65,9 @@ use_air_table <- function(
   ...
 ) {
   rlang::check_dots_empty()
+  # rpkgkit: not int
   rlang::check_number_whole(ncol, min = 1)
+  # rpkgkit: not int
   rlang::check_number_whole(min_length, min = 0)
   rlang::check_string(marker)
   check_air_installed()

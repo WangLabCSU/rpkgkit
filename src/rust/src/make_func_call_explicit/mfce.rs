@@ -45,9 +45,7 @@ const SKIP_NAMES: &[&str] = &[
 /// Tokens that make the identifier before them a non-candidate: a member
 /// access (`l$f`), an assignment target (`f <- 1`), a placeholder of a
 /// `for` loop, etc.
-const SKIP_AFTER: &[&str] = &[
-    "::", ":::", "$", "@", "=", "<-", "<<-", "->", "->>", "in",
-];
+const SKIP_AFTER: &[&str] = &["::", ":::", "$", "@", "=", "<-", "<<-", "->", "->>", "in"];
 
 /// What the identifier at the current token is used for.
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -110,7 +108,10 @@ fn mfce_in_formals(tokens: &[Token], src: &str, idx: usize) -> bool {
         Some(open) => open,
         None => return false,
     };
-    matches!(mfce_prev_text(tokens, src, open), Some("function") | Some("\\"))
+    matches!(
+        mfce_prev_text(tokens, src, open),
+        Some("function") | Some("\\")
+    )
 }
 
 /// `true` when token `idx` is an argument of a `data()` call.

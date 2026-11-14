@@ -2,6 +2,12 @@
 
 ## NEW FEATURES
 
+* `convert_int_literals()` and `package_convert_int_literals()` can now leave a
+  line alone: a `# rpkgkit: not int` comment on the line just above it keeps
+  every literal on that line as written, which matters for expressions with
+  double semantics such as `2^31` or `2147483648`. The marker covers exactly
+  the following line, is matched case-insensitively, and must be the only
+  thing on its line.
 * New `use_r()` scans a package for base R functions and syntax that need a
   recent R version, from `|>` and `\()` in 4.1.0 to `%notin%` and
   `messageCondition()` in 4.6.0, and records the highest requirement in
@@ -18,6 +24,16 @@
   `src/rust/src/` through the generated `R/extendr-wrappers.R`. The exported R
   functions keep their signatures, and file discovery, progress reporting and
   summary output stay in R; no export was added or removed.
+* `inquire_standalone()` and `browse_standalone()` now crawl GitHub in Rust
+  (`inquire_standalone_rs()` and `browse_standalone_rs()`) instead of going
+  through `gh`: pagination, result filtering, JSON parsing and the provenance
+  header of each standalone file are handled in `src/rust/src/r_standalone/`,
+  with the HTTP transport built on `ureq`. The R functions keep their
+  signatures and only validate arguments and turn the returned columns into a
+  tibble. `inquire_standalone()` also reports the documented `repo`,
+  `description` and `usage` columns. Both functions accept a `token` argument
+  and fall back to `GITHUB_PAT` / `GITHUB_TOKEN`; `gh` and `dplyr` leave
+  `Suggests`, `tibble` joins it.
 * Source builds now ship the usual `extendr` infrastructure: `configure`,
   `configure.win`, `cleanup`, `cleanup.win`, `src/Makevars.in`,
   `src/Makevars.win.in`, `src/entrypoint.c`, `tools/config.R` and
@@ -29,9 +45,12 @@
 ## BREAKING CHANGES
 
 * The package requires R >= 4.2 and `cli` >= 3.0.0. Building from source also
-  requires Cargo (Rust's package manager), `rustc` >= 1.77.0 and `xz`, now
+  requires Cargo (Rust's package manager), `rustc` >= 1.85.0 and `xz`, now
   declared in `SystemRequirements`; the shared library is registered with
-  `useDynLib(rpkgkit, .registration = TRUE)`.
+  `useDynLib(rpkgkit, .registration = TRUE)`. The minimum `rustc` rose from
+  1.77.0 to 1.85.0 because the GitHub crawler depends on `ureq` 3.
+* `inquire_standalone()` returns `repo`, `description` and `usage` in addition
+  to the contents API fields, which is what its documentation always described.
 
 ## DEFUNCT
 
@@ -40,6 +59,10 @@
 
 ## INTERNAL CHANGES
 
+* `convert_int_literals()` and `package_convert_int_literals()` share
+  `.cil_convert_file()`, which reads each file once and writes it back only
+  when a literal changed, instead of reading it two or three times; the Rust
+  scanner opts a line out through a byte range instead of a second pass.
 * `detect_lost_glue_brace()` and `detect_print_and_cat()` scan raw source text
   with the Rust tokenizer, which understands strings, comments and raw
   strings, instead of walking a `utils::getParseData()` parse table. A parse

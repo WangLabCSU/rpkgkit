@@ -45,7 +45,7 @@ test_that("package_convert_int_literals aborts when ... is not empty", {
 
   expect_error(
     package_convert_int_literals(root, extra = "foo"),
-    "unused argument"
+    "must be empty"
   )
   # the file must be left untouched when the check fails
   expect_equal(
@@ -194,6 +194,34 @@ test_that("package_convert_int_literals only reports files that changed", {
   changed <- package_convert_int_literals(root)
 
   expect_equal(changed, norm(file.path(root, "R", "changed.R")))
+})
+
+test_that("package_convert_int_literals honours the `# rpkgkit: not int` marker", {
+  root <- make_test_pkg()
+  writeLines(
+    c("# rpkgkit: not int", "y <- 2^31"),
+    file.path(root, "R", "opted_out.R")
+  )
+  writeLines("f <- function() 1", file.path(root, "R", "a.R"))
+
+  changed <- package_convert_int_literals(root)
+
+  expect_equal(
+    readLines(file.path(root, "R", "opted_out.R"), warn = FALSE),
+    c("# rpkgkit: not int", "y <- 2^31")
+  )
+  expect_equal(changed, norm(file.path(root, "R", "a.R")))
+})
+
+test_that("package_convert_int_literals does not rewrite unconverted files", {
+  root <- make_test_pkg()
+  untouched <- file.path(root, "R", "opted_out.R")
+  writeLines(c("# rpkgkit: not int", "y <- 2^31"), untouched)
+  before <- file.mtime(untouched)
+
+  package_convert_int_literals(root)
+
+  expect_equal(file.mtime(untouched), before)
 })
 
 test_that("package_convert_int_literals is idempotent", {
