@@ -1,0 +1,25 @@
+[package]
+name = 'rpkgkit'
+publish = false
+version = '0.2.0'
+edition = '2021'
+rust-version = '1.85'
+
+[lib]
+crate-type = [ 'rlib', 'staticlib' ]
+name = 'rpkgkit'
+
+[[bin]]
+name = 'document'
+path = 'document.rs'
+
+[dependencies]
+extendr-api = '0.9.0'
+regex = "1.13.1"
+extendr-ffi = "0.9.0"  
+serde_json = "1.0"
+ureq = { version = "3.5", default-features = false, features = [ "rustls" ] }
+
+[profile.release]
+lto = true
+codegen-units = 1

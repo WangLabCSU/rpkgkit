@@ -10,9 +10,11 @@ Codesize
 Convertion
 DeepWiki
 Español
+GLPK
 Github
 Homebrew
 Knitr
+MSRV
 MSVC
 MacOS
 Magrittr
@@ -30,6 +32,7 @@ Rtools
 SHA
 SPDX
 Tidyverse
+Tokenizer
 Unrecognised
 VignetteIndexEntry
 YYYY
@@ -38,6 +41,7 @@ addin
 addins
 al
 arg
+backtick
 behaviour
 blockquote
 callee
@@ -53,10 +57,14 @@ cov
 covr
 css
 dcf
+deduplicated
 desc
+destructuring
 dev
 dieghernan
+dpkg
 et
+extendr
 extensibility
 flavour
 flir
@@ -92,10 +100,13 @@ rlang
 rmarkdown
 roxygen
 rstudioapi
+rustc
 syntaxes
 testcoverage
 tibble
 tidyverse
+tokenized
+tokenizer
 toolchain
 uXXXX
 unanchored
@@ -105,6 +116,7 @@ unlicense
 unmapped
 unmerged
 unparseable
+unresolvable
 usethis
 uv
 validator

@@ -192,7 +192,7 @@ appropriate.
 
 Use the following helpers from the package root:
 
-## Use R 4.1.0 version
+## Specific R versions
 
 R 4.1.0 introduced the pipe (`|>`) and anonymous function `\()`. If these syntaxes need to be used in a package, the R package must require at least R version 4.1.0.
 
@@ -200,6 +200,14 @@ R 4.1.0 introduced the pipe (`|>`) and anonymous function `\()`. If these syntax
 #| label = "use_r_v4.1.0",
 #| eval = FALSE
 use_r_v4.1.0(path = dir)
+```
+
+Another function is `use_r()`, which sets the `R-Version` field in `DESCRIPTION` automatically.
+
+```{r}
+#| label = "use_r",
+#| eval = FALSE
+use_r(path = dir)
 ```
 
 ## Add URL in `DESCRIPTION`

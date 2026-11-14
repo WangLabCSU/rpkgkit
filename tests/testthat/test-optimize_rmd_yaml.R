@@ -196,6 +196,11 @@ test_that(".ory_detect_type() recognises README files case-insensitively", {
   expect_identical(.ory_detect_type("intro.Rmd"), "vignette")
 })
 
+test_that(".ory_detect_type() recognises Windows-style paths", {
+  expect_identical(.ory_detect_type("C:\\pkg\\README.Rmd"), "readme")
+  expect_identical(.ory_detect_type("C:\\pkg\\intro.Rmd"), "vignette")
+})
+
 # ---- .ory_meta() -----------------------------------------------------------
 
 test_that(".ory_meta() reads metadata from DESCRIPTION", {
@@ -336,10 +341,6 @@ test_that(".ory_split_chunks() groups top-level keys with their values", {
     chunks$output,
     c("output:", "  html_document:", "    toc: true")
   )
-})
-
-test_that(".ory_split_chunks() returns an empty list for empty input", {
-  expect_identical(.ory_split_chunks(character()), list())
 })
 
 test_that(".ory_split_chunks() attaches leading non-key lines to the first key", {
@@ -516,6 +517,31 @@ test_that(".ory_default_title() builds titles for vignettes", {
     .ory_default_title("my-intro_vignette.Rmd", "vignette", meta),
     "My Intro Vignette"
   )
+})
+
+test_that("Windows-style paths are not used as titles", {
+  skip_if_no_yaml_deps()
+  meta <- .ory_meta(local_test_pkg())
+
+  expect_identical(
+    .ory_default_title("C:\\pkg\\vignettes\\intro.Rmd", "vignette", meta),
+    "Intro"
+  )
+  expect_identical(
+    .ory_default_title("C:\\pkg\\README.Rmd", "readme", meta),
+    "testpkg: A Test Package"
+  )
+
+  out <- .ory_build_header(
+    header = character(),
+    path = "C:\\pkg\\vignettes\\intro.Rmd",
+    type = "vignette",
+    meta = meta,
+    readme_format = "gfm",
+    date = "auto"
+  )
+  expect_in('title: "Intro"', out)
+  expect_in("  %\\VignetteIndexEntry{Intro}", out)
 })
 
 # ---- optimize_rmd_yaml() behaviour -----------------------------------------

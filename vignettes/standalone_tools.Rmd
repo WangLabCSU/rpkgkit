@@ -237,7 +237,9 @@ list of options instead of a function frame.
 # Manage standalone files in a package
 
 Use `inquire_standalone()` to inspect standalone files in a GitHub repository
-and `browse_standalone()` to search supported repositories.
+and `browse_standalone()` to search them across GitHub. Both crawl the API from
+compiled Rust code, so `gh` is not needed, and both take a `token` argument
+(falling back to `GITHUB_PAT` or `GITHUB_TOKEN`) to lift the rate limit.
 
 ```{r}
 #| label = "inquire"

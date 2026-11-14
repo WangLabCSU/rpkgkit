@@ -35,6 +35,14 @@
   if (startup_message_allowed()) {
     .time_record$start <- Sys.time()
   }
+
+  theme <- getOption("rpkgkit.code.highlight")
+  if (is.null(theme) || !nzchar(theme)) {
+    options(
+      rpkgkit.code.highlight = "Tomorrow Night Bright"
+    )
+  }
+
   invisible()
 }
 

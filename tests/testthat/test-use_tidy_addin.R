@@ -68,7 +68,11 @@ test_that("use_tidy_addin returns the dcf path invisibly", {
     suppressMessages(use_tidy_addin("my_addin", "gadget", path = pkg))
   )
   expect_equal(
-    norm_path(suppressMessages(use_tidy_addin("my_addin", "gadget", path = pkg))),
+    norm_path(suppressMessages(use_tidy_addin(
+      "my_addin",
+      "gadget",
+      path = pkg
+    ))),
     norm_path(file.path(pkg, "inst", "rstudio", "addins.dcf"))
   )
 })

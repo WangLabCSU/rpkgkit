@@ -1,3 +1,7 @@
+# Package-level orchestration: directory discovery, progress reporting and
+# summarising stay in R (they are all cli/file-system concerns), while every
+# file is inspected by the Rust detector behind detect_lost_glue_brace().
+
 #' @rdname detect_lost_glue_brace
 #' @export
 package_lost_glue_brace <- function(

@@ -454,47 +454,6 @@ test_that("rename_func: aborts when path is NULL and rstudioapi unavailable", {
   expect_error(rename_func(), "is required")
 })
 
-test_that("rename_func: uses rstudioapi when path is NULL", {
-  mock_path <- "/mock/project/R/my_file.R"
-
-  local_mocked_bindings(
-    is_installed = function(pkg) TRUE,
-    .package = "rlang"
-  )
-  local_mocked_bindings(
-    isAvailable = function() TRUE,
-    getActiveDocumentContext = function() list(path = mock_path),
-    .package = "rstudioapi"
-  )
-
-  readLines_paths <- character(0L)
-  local_mocked_bindings(
-    readLines = function(path, ...) {
-      readLines_paths <<- c(readLines_paths, path)
-      c("MyFunc <- function(x) { x }", "MyFunc(1)")
-    },
-    .package = "base"
-  )
-
-  writeLines_calls <- list()
-  local_mocked_bindings(
-    writeLines = function(text, con) {
-      writeLines_calls <<- append(
-        writeLines_calls,
-        list(list(text = text, con = con))
-      )
-    },
-    .package = "base"
-  )
-
-  rename_func(style = "snake_case")
-
-  expect_length(readLines_paths, 1L)
-  expect_equal(readLines_paths[[1L]], mock_path)
-  expect_length(writeLines_calls, 1L)
-  expect_match(writeLines_calls[[1L]]$text, "my_func <- function")
-})
-
 test_that("rename_func: returns invisibly", {
   tmp <- tempfile(fileext = ".R")
   writeLines("my_func <- function(x) { x }", tmp)

@@ -104,7 +104,11 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
 #' \code{text}, describing an \code{argument = } prefix to insert at that source
 #' position.
 #' @keywords internal
-.mfae_plan_edits <- function(exprs, skip_fns = NULL) {
+.mfae_plan_edits <- function(
+  exprs,
+  skip_fns = NULL,
+  operators = MFAE_OPERATORS
+) {
   parse_data <- utils::getParseData(exprs)
   if (is.null(parse_data) || nrow(parse_data) == 0L) {
     return(list())
@@ -133,7 +137,7 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
     if (callee$name %in% skip_fns) {
       next
     }
-    if (callee$name %in% .mfae_operators || grepl("^%.*%$", callee$name)) {
+    if (callee$name %in% operators || grepl("^%.*%$", callee$name)) {
       next
     }
 
@@ -152,7 +156,13 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
     }
     # `g(...)` expands to an unknown number of arguments, so positional
     # matching is impossible — leave the whole call alone.
-    if (any(vapply(slots, function(s) isTRUE(s$dots), logical(1L)))) {
+    if (
+      any(vapply(
+        X = slots,
+        FUN = function(s) isTRUE(s$dots),
+        FUN.VALUE = logical(1L)
+      ))
+    ) {
       next
     }
 
@@ -379,7 +389,7 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
 
 #' Pipe operators that pass their left-hand side into the right-hand side call
 #' @keywords internal
-.mfae_pipes <- c("%>%", "%<>%", "%T>%", "|>")
+MFAE_PIPES <- c("%>%", "%<>%", "%T>%", "|>")
 
 #' Placeholder each pipe flavour understands
 #'
@@ -420,11 +430,11 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
 #' token. Comments are children of the pipe expression too, but they are not
 #' \code{expr} nodes and are skipped by the same filter.
 #' @keywords internal
-.mfae_pipe_rhs <- function(pd) {
+.mfae_pipe_rhs <- function(pd, pipes = MFAE_PIPES) {
   rhs <- logical(length(pd$token))
   op <- character(length(pd$token))
   op_rows <- which(
-    pd$token %in% c("SPECIAL", "PIPE") & pd$text %in% .mfae_pipes
+    pd$token %in% c("SPECIAL", "PIPE") & pd$text %in% pipes
   )
   for (op_row in op_rows) {
     kids <- .mfae_children(pd, pd$parent[[op_row]])
@@ -503,15 +513,15 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
 #' @keywords internal
 .mfae_char_index <- function(line, col) {
   chars <- strsplit(line, "", fixed = TRUE)[[1L]]
-  current <- 1
+  current <- 1L
   for (i in seq_along(chars)) {
     if (current >= col) {
       return(i)
     }
     current <- if (chars[[i]] == "\t") {
-      current + 8 - ((current - 1) %% 8)
+      current + 8L - ((current - 1L) %% 8L)
     } else {
-      current + 1
+      current + 1L
     }
   }
   length(chars) + 1L
@@ -525,7 +535,7 @@ make_func_arg_explicit <- function(path = NULL, skip_functions = NULL, ...) {
 #' \code{function}, \code{\{} and \code{(} never look like a
 #' \code{name(...)} call node in the parse data, so they need no entry here.
 #' @keywords internal
-.mfae_operators <- c(
+MFAE_OPERATORS <- c(
   "+",
   "-",
   "*",

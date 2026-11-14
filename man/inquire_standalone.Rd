@@ -4,7 +4,7 @@
 \alias{inquire_standalone}
 \title{Inquire Standalone Files from a GitHub Repository}
 \usage{
-inquire_standalone(owner, repo, ...)
+inquire_standalone(owner, repo, ..., token = NULL)
 }
 \arguments{
 \item{owner}{A character string specifying the repository owner's username.}
@@ -12,20 +12,36 @@ inquire_standalone(owner, repo, ...)
 \item{repo}{A character string specifying the repository name.}
 
 \item{...}{No arguments.}
+
+\item{token}{A GitHub personal access token. When \code{NULL} (the default) the
+token is read from the \code{GITHUB_PAT} or \code{GITHUB_TOKEN} environment variable;
+without a token GitHub only allows 60 requests per hour.}
 }
 \value{
-A tibble with three columns:
+A tibble with one row per standalone file:
 \describe{
-\item{\code{owner/repo}}{Character string, the repository identifier in "owner/repo" format.}
-\item{description}{Character string, the description extracted from the file's YAML header or roxygen documentation.}
-\item{usage}{Character string, the code to import the standalone file using \code{usethis::use_standalone()}.}
+\item{name, path, sha, size, url, html_url, git_url, download_url, type}{The
+fields of the GitHub contents API entry of the file.}
+\item{repo}{Character string, the repository identifier in "owner/repo"
+format.}
+\item{description}{Character string, the description extracted from the
+file's provenance header (the \verb{# ---} block written by
+\code{usethis::use_standalone()}) or from its roxygen documentation, \code{NA} when
+the file has neither.}
+\item{usage}{Character string, the code to import the standalone file using
+\code{usethis::use_standalone()}.}
 }
 }
 \description{
-Retrieve information about all standalone R files in the R/ directory of a GitHub repository. Standalone files are identified by the "standalone-" prefix in their filename.
+Retrieve information about all standalone R files in the R/
+directory of a GitHub repository. Standalone files are identified by the
+"standalone-" prefix in their filename.
 }
 \details{
-This function queries the GitHub API to list files in the R/ directory, filters for files starting with "standalone-", parses each file's YAML metadata (delimited by "# ---") and roxygen tags to extract descriptions, and generates usage code for importing each standalone file.
+The crawl runs in Rust. One request lists the \verb{R/} directory through
+the GitHub contents API; the listing is then filtered on the "standalone-"
+prefix, sorted by file name and deduplicated, and the provenance header of
+each remaining file is read with one download of its raw contents.
 }
 \examples{
 \dontrun{

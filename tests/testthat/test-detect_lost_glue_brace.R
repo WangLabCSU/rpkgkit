@@ -407,43 +407,30 @@ test_that("format_brace_error handles highlight at start of line", {
 
 test_that("find_glue_cli_strings returns empty list for no target calls", {
   text <- "x <- 1\ny <- x + 2\nprint(y)"
-  exprs <- parse(text = text, keep.source = TRUE)
-  pd <- utils::getParseData(exprs)
-  expect_length(find_glue_cli_strings(pd), 0L)
+  expect_length(find_glue_cli_strings(text), 0L)
 })
 
 test_that("find_glue_cli_strings finds strings in glue::glue call", {
-  text <- 'glue::glue("Hello {name}")'
-  exprs <- parse(text = text, keep.source = TRUE)
-  pd <- utils::getParseData(exprs)
-  res <- find_glue_cli_strings(pd)
+  res <- find_glue_cli_strings('glue::glue("Hello {name}")')
   expect_length(res, 1L)
   expect_equal(res[[1L]]$content, "Hello {name}")
   expect_true(res[[1L]]$line1 >= 1L)
 })
 
 test_that("find_glue_cli_strings finds strings in cli_* call", {
-  text <- 'cli::cli_alert_info("Value is {x}")'
-  exprs <- parse(text = text, keep.source = TRUE)
-  pd <- utils::getParseData(exprs)
-  res <- find_glue_cli_strings(pd)
+  res <- find_glue_cli_strings('cli::cli_alert_info("Value is {x}")')
   expect_length(res, 1L)
   expect_equal(res[[1L]]$content, "Value is {x}")
 })
 
 test_that("find_glue_cli_strings finds strings in glue_data call", {
-  text <- 'glue_data(.x, "Lost brace {name")'
-  exprs <- parse(text = text, keep.source = TRUE)
-  pd <- utils::getParseData(exprs)
-  res <- find_glue_cli_strings(pd)
+  res <- find_glue_cli_strings('glue_data(.x, "Lost brace {name")')
   expect_length(res, 1L)
 })
 
 test_that("find_glue_cli_strings handles nested function calls", {
   text <- 'bar <- cli::col_red(cli::cli_alert_warning("{.val x}}"))'
-  exprs <- parse(text = text, keep.source = TRUE)
-  pd <- utils::getParseData(exprs)
-  res <- find_glue_cli_strings(pd)
+  res <- find_glue_cli_strings(text)
   expect_length(res, 1L)
   expect_equal(res[[1L]]$content, "{.val x}}")
 })
@@ -453,9 +440,7 @@ test_that("find_glue_cli_strings deduplicates strings", {
     'glue::glue("{a}")',
     'glue::glue("{a}")'
   )
-  exprs <- parse(text = paste(text, collapse = "\n"), keep.source = TRUE)
-  pd <- utils::getParseData(exprs)
-  res <- find_glue_cli_strings(pd)
+  res <- find_glue_cli_strings(text)
   # Two separate calls, each with "{a}" — should be 2 items (different line1/col1)
   expect_length(res, 2L)
 })

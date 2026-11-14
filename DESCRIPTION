@@ -1,6 +1,6 @@
 Package: rpkgkit
 Title: Create and Maintain R Packages
-Version: 0.1.24
+Version: 0.2.0
 Authors@R: c(
     person("Yuxi", "Yang", , "15364051195@163.com", role = c("aut", "cre")),
     person("Jacob", "Scott", role = c("ctb", "cph"),
@@ -23,7 +23,7 @@ BugReports: https://github.com/WangLabCSU/rpkgkit/issues
 Depends: 
     R (>= 4.1.0)
 Imports: 
-    cli,
+    cli (>= 3.0.0),
     lifecycle,
     rlang (>= 1.0.0),
     rstudioapi
@@ -33,7 +33,6 @@ Suggests:
     devtools,
     dplyr,
     flir,
-    gh,
     grDevices,
     httr2,
     knitr,
@@ -42,6 +41,7 @@ Suggests:
     spelling,
     stats,
     testthat (>= 3.0.0),
+    tibble,
     usethis,
     withr,
     yaml
@@ -53,5 +53,7 @@ Copyright: Jacob Scott, Christopher T. Kenny, and Sebastian Lammers (for
     the pkgdev code included in R/vendor-pkgdev.R);  and  (for the pedant code included in R/vendor-pedant.R); Diego Hernangómez (for the pkgdev code included in R/vendor-pkgdev.R)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-Config/roxygen2/version: 8.1.0
+Config/roxygen2/version: 8.1.1
 Language: en-US
+Config/rextendr/version: 0.5.0
+SystemRequirements: Cargo (Rust's package manager), rustc >= 1.85.0, xz

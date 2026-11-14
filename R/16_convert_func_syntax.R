@@ -48,11 +48,22 @@ convert_func_syntax <- function(
   if (is.null(path) || !nzchar(path)) {
     cli::cli_abort(c("x" = "{.arg path} is required"))
   }
-
+  rlang::check_string(path)
   direction <- match_arg(direction, c("to_lambda", "to_explicit"), NULL)
+  if (!file.exists(path) || dir.exists(path)) {
+    cli::cli_abort("{.file {path}} does not exist or is a directory.")
+  }
+  if (!tolower(tools::file_ext(path)) %in% "r") {
+    cli::cli_abort(c(
+      "Only {.field .R} files are supported.",
+      "x" = "Got {.file {path}}."
+    ))
+  }
 
   text <- readLines(path, warn = FALSE)
   original <- paste(text, collapse = "\n")
+
+  parse_safely(text = original, path = path)
 
   result <- .cfs_transform_text(original, direction)
 
@@ -76,14 +87,7 @@ convert_func_syntax <- function(
 #'
 #' @keywords internal
 .cfs_transform_text <- function(text, direction) {
-  repeat {
-    new_text <- .cfs_process_text_once(text, direction)
-    if (identical(new_text, text)) {
-      break
-    }
-    text <- new_text
-  }
-  text
+  cfs_transform_text_rs(text, direction)
 }
 
 
@@ -91,96 +95,7 @@ convert_func_syntax <- function(
 #'
 #' @keywords internal
 .cfs_process_text_once <- function(text, direction) {
-  chars <- strsplit(text, NULL)[[1L]]
-  nc <- length(chars)
-
-  result <- character()
-  i <- 1L
-  in_string <- FALSE
-  string_char <- NA_character_
-  in_comment <- FALSE
-
-  while (i <= nc) {
-    ch <- chars[i]
-
-    # ---- Track string state ----
-    if (!in_comment && !in_string && ch %in% c("'", '"')) {
-      in_string <- TRUE
-      string_char <- ch
-      result <- c(result, ch)
-      i <- i + 1L
-      next
-    }
-    if (in_string) {
-      if (ch == "\\" && i < nc) {
-        result <- c(result, ch, chars[i + 1L])
-        i <- i + 2L
-        next
-      }
-      if (ch == string_char) {
-        in_string <- FALSE
-      }
-      result <- c(result, ch)
-      i <- i + 1L
-      next
-    }
-
-    # ---- Track comment state ----
-    if (!in_comment && ch == "#") {
-      in_comment <- TRUE
-      result <- c(result, ch)
-      i <- i + 1L
-      next
-    }
-    if (in_comment) {
-      result <- c(result, ch)
-      if (ch == "\n") {
-        in_comment <- FALSE
-      }
-      i <- i + 1L
-      next
-    }
-
-    # ---- Outside strings and comments: match function definitions ----
-    if (direction == "to_lambda") {
-      # Match the "function" keyword at a word boundary
-      if (
-        i + 7L <= nc &&
-          substr(text, i, i + 7L) == "function" &&
-          (i == 1L || !grepl("[a-zA-Z0-9._]", chars[i - 1L]))
-      ) {
-        # Skip optional whitespace / newlines before the opening paren
-        j <- i + 8L
-        while (j <= nc && chars[j] %in% c(" ", "\t", "\n", "\r")) {
-          j <- j + 1L
-        }
-        if (j <= nc && chars[j] == "(") {
-          close <- .cfs_find_matching_paren(chars, j)
-          if (!is.na(close)) {
-            result <- c(result, "\\", chars[j:close])
-            i <- close + 1L
-            next
-          }
-        }
-      }
-    } else {
-      # Match "\\(" — the R 4.1+ lambda syntax
-      if (ch == "\\" && i < nc && chars[i + 1L] == "(") {
-        close <- .cfs_find_matching_paren(chars, i + 1L)
-        if (!is.na(close)) {
-          result <- c(result, "function", chars[(i + 1L):close])
-          i <- close + 1L
-          next
-        }
-      }
-    }
-
-    # No match: emit the character unchanged
-    result <- c(result, ch)
-    i <- i + 1L
-  }
-
-  paste(result, collapse = "")
+  cfs_process_text_once_rs(text, direction)
 }
 
 
@@ -188,15 +103,8 @@ convert_func_syntax <- function(
 #'
 #' @keywords internal
 .cfs_find_matching_paren <- function(chars, open_pos) {
-  depth <- 0L
-  for (i in open_pos:length(chars)) {
-    if (chars[i] == "(") {
-      depth <- depth + 1L
-    }
-    if (chars[i] == ")") {
-      depth <- depth - 1L
-      if (depth == 0L) return(i)
-    }
-  }
-  NA_integer_
+  cfs_find_matching_paren_rs(
+    text = paste0(chars, collapse = ""),
+    open_pos = as.integer(open_pos)
+  )
 }

@@ -48,8 +48,12 @@ test_that("processes a single R file", {
   )
 
   expect_message(
-    package_func_call_explicit(pkg, use_packages = "dplyr"),
+    package_func_call_explicit(pkg, use_packages = "stats"),
     "Successfully processed all 1 file"
+  )
+  expect_equal(
+    readLines(file.path(pkg, "R", "foo.R")),
+    "stats::filter(mpg > 20)"
   )
 })
 
@@ -57,42 +61,43 @@ test_that("processes multiple R files", {
   pkg <- withr::local_tempdir()
   dir.create(file.path(pkg, "R"), recursive = TRUE)
   writeLines("filter(mpg > 20)", file.path(pkg, "R", "foo.R"))
-  writeLines("select(df, a, b)", file.path(pkg, "R", "bar.R"))
+  writeLines("median(df, a, b)", file.path(pkg, "R", "bar.R"))
   writeLines(
     c("Package: testpkg", "Version: 0.0.1"),
     file.path(pkg, "DESCRIPTION")
   )
 
   expect_message(
-    package_func_call_explicit(pkg, use_packages = "dplyr"),
+    package_func_call_explicit(pkg, use_packages = "stats"),
     "Successfully processed all 2 files"
+  )
+  expect_equal(
+    readLines(file.path(pkg, "R", "bar.R")),
+    "stats::median(df, a, b)"
   )
 })
 
-test_that("passes use_packages and ignore_functions to make_func_call_explicit", {
+test_that("shares one package context between files", {
   pkg <- withr::local_tempdir()
   dir.create(file.path(pkg, "R"), recursive = TRUE)
   writeLines("filter(mpg > 20)", file.path(pkg, "R", "foo.R"))
+  writeLines("median(x)", file.path(pkg, "R", "bar.R"))
   writeLines(
     c("Package: testpkg", "Version: 0.0.1"),
     file.path(pkg, "DESCRIPTION")
   )
 
-  called_with <- list()
+  context_calls <- 0L
   local_mocked_bindings(
-    make_func_call_explicit = function(
-      path,
-      use_packages,
-      ignore_functions,
-      ...
-    ) {
-      called_with <<- append(
-        called_with,
-        list(list(
-          path = path,
-          use_packages = use_packages,
-          ignore_functions = ignore_functions
-        ))
+    mfce_package_context = function(use_packages, ignore_functions) {
+      context_calls <<- context_calls + 1L
+      list(
+        use_packages = use_packages,
+        ignore_functions = ignore_functions,
+        fun_exports = c("filter", "median"),
+        fun_packages = c("stats", "stats"),
+        data_exports = character(),
+        data_packages = character()
       )
     },
     .package = "rpkgkit"
@@ -100,14 +105,66 @@ test_that("passes use_packages and ignore_functions to make_func_call_explicit",
 
   package_func_call_explicit(
     pkg,
-    use_packages = c("dplyr", "tidyr"),
+    use_packages = c("stats", "utils"),
     ignore_functions = c("library", "require")
   )
 
-  expect_length(called_with, 1L)
-  expect_match(called_with[[1L]]$path, "foo\\.R$")
-  expect_equal(called_with[[1L]]$use_packages, c("dplyr", "tidyr"))
-  expect_equal(called_with[[1L]]$ignore_functions, c("library", "require"))
+  expect_equal(context_calls, 1L)
+  expect_equal(
+    readLines(file.path(pkg, "R", "foo.R")),
+    "stats::filter(mpg > 20)"
+  )
+})
+
+test_that("processes every file of a package", {
+  pkg <- withr::local_tempdir()
+  dir.create(file.path(pkg, "R"), recursive = TRUE)
+  writeLines("filter(mpg > 20)", file.path(pkg, "R", "foo.R"))
+  writeLines("median(x)", file.path(pkg, "R", "bar.R"))
+  writeLines(
+    c("Package: testpkg", "Version: 0.0.1"),
+    file.path(pkg, "DESCRIPTION")
+  )
+
+  paths <- character()
+  local_mocked_bindings(
+    mfce_process_file = function(path, context) {
+      paths <<- c(paths, basename(path))
+      list(changed = TRUE, not_found = character())
+    },
+    .package = "rpkgkit"
+  )
+
+  package_func_call_explicit(pkg, use_packages = "stats")
+
+  expect_setequal(paths, c("foo.R", "bar.R"))
+})
+
+test_that("keeps going when one file fails", {
+  pkg <- withr::local_tempdir()
+  dir.create(file.path(pkg, "R"), recursive = TRUE)
+  writeLines("filter(mpg > 20)", file.path(pkg, "R", "foo.R"))
+  writeLines("median(x)", file.path(pkg, "R", "bar.R"))
+  writeLines(
+    c("Package: testpkg", "Version: 0.0.1"),
+    file.path(pkg, "DESCRIPTION")
+  )
+
+  local_mocked_bindings(
+    mfce_process_file = function(path, context) {
+      if (basename(path) == "bar.R") {
+        stop("boom", call. = FALSE)
+      }
+      list(changed = TRUE, not_found = character())
+    },
+    .package = "rpkgkit"
+  )
+
+  expect_message(
+    result <- package_func_call_explicit(pkg, use_packages = "stats"),
+    "1 failed"
+  )
+  expect_false(result)
 })
 
 test_that("returns invisibly when files are processed successfully", {
@@ -119,5 +176,5 @@ test_that("returns invisibly when files are processed successfully", {
     file.path(pkg, "DESCRIPTION")
   )
 
-  expect_invisible(package_func_call_explicit(pkg, use_packages = "dplyr"))
+  expect_invisible(package_func_call_explicit(pkg, use_packages = "stats"))
 })

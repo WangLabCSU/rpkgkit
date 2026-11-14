@@ -1,3 +1,6 @@
+# ? This function was no longer maintained.
+# nocov start
+
 #' Fix R code or package using flir
 #'
 #' @description
@@ -16,13 +19,17 @@
 #'
 #' @return Invisibly returns the result from the called flir function.
 #'
-#' @examplesIf rlang::is_installed("flir")
+#' @examples
+#' \dontrun{
 #' tmp <- tempfile(fileext = ".R")
 #' writeLines("a<-1+1", tmp)
 #' flir_fix(tmp)
 #' cat(readLines(tmp, warn = FALSE), sep = "\n")
+#' }
 #' @export
 flir_fix <- function(path = NULL, ...) {
+  lifecycle::deprecate_stop("0.2.0", "flir_fix()")
+
   rlang::check_installed("flir")
   path <- path %||% rstudioapi::getActiveDocumentContext()$path
 
@@ -36,3 +43,5 @@ flir_fix <- function(path = NULL, ...) {
     flir::fix_dir(path = path, ...)
   }
 }
+
+# nocov end

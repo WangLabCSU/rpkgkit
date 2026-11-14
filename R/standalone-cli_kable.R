@@ -1,5 +1,5 @@
 # ---
-# repo: Exceret/rpkgkit
+# repo: WangLabCSU/rpkgkit
 # file: standalone-cli_kable.R
 # last-updated: 2026-11-05
 # license: https://unlicense.org
@@ -87,7 +87,7 @@ cli_kable <- function(
     !is.numeric(padding) ||
       length(padding) != 1L ||
       is.na(padding) ||
-      padding < 0
+      padding < 0L
   ) {
     cli::cli_abort(
       "`padding` must be a single non-negative number."
@@ -157,7 +157,7 @@ cli_kable <- function(
     FUN = function(j) {
       max(cli::ansi_nchar(x = c(head_txt[j], val_txt[, j]), type = "width"))
     },
-    FUN.VALUE = integer(1)
+    FUN.VALUE = integer(1L)
   )
   # `kable()` pads every column by `padding` and keeps it at least 3 characters
   # wide, so that the `:---` alignment rule stays valid.
@@ -192,7 +192,7 @@ cli_kable <- function(
       }
       build(cells)
     },
-    FUN.VALUE = character(1)
+    FUN.VALUE = character(1L)
   )
 
   lines <- c(head_line, if (isTRUE(rule)) rule_line, body_lines)
@@ -229,7 +229,7 @@ cli_kable <- function(
     FUN = function(col) {
       if (is.numeric(col)) "right" else "left"
     },
-    FUN.VALUE = character(1)
+    FUN.VALUE = character(1L)
   )
   if (is.null(align)) {
     return(unname(auto))
@@ -271,7 +271,7 @@ cli_kable <- function(
       FUN = function(el) {
         is.character(el) && length(el) == 1L && is.null(names(el))
       },
-      FUN.VALUE = logical(1)
+      FUN.VALUE = logical(1L)
     )
     if (!all(scalar)) {
       cli::cli_abort(
@@ -337,7 +337,7 @@ cli_kable <- function(
 
   # Named list: one element per column, optionally per row within the column.
   keep <- !is.na(nms) & nzchar(nms)
-  if (any(!keep)) {
+  if (!all(keep)) {
     fallback <- fmt[!keep]
     if (length(fallback) > 1L) {
       cli::cli_abort(
@@ -475,7 +475,7 @@ cli_kable <- function(
   rendered <- vapply(
     X = uniq,
     FUN = .ck_style1,
-    FUN.VALUE = character(1),
+    FUN.VALUE = character(1L),
     txt = sentinel
   )
   at <- regexpr(sentinel, rendered, fixed = TRUE)
