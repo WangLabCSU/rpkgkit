@@ -18,3 +18,4 @@
 Reads \code{path} once, rewrites it and writes it back only when something
 changed, so already-converted files keep their modification time.
 }
+\keyword{internal}

@@ -118,6 +118,7 @@ convert_int_literals <- function(path = NULL, verbose = TRUE, ...) {
 #' @param verbose Logical; report the outcome with `cli`.
 #'
 #' @return `TRUE` when the file was rewritten, `FALSE` otherwise.
+#' @keywords internal
 #'
 .cil_convert_file <- function(path, verbose = FALSE) {
   text <- readLines(path, warn = FALSE)

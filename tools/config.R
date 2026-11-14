@@ -70,6 +70,65 @@ cfg <- if (is_debug) "debug" else "release"
   ""
 )
 
+# macOS: crates such as `ring` (rustls' crypto backend) compile C and assembly
+# sources at build time. Without an explicit deployment target those objects
+# inherit the SDK default (e.g. 26.5 with Xcode 26), which can be newer than the
+# minimum macOS version R itself links against (e.g. 26.0). ld then warns for
+# every object and `R CMD check` reports a WARNING, so pin the cargo build to
+# the minimum macOS version R records for itself.
+#
+# This is resolved here instead of inside the Makevars because `R CMD check`
+# treats GNU make functions in Makefiles as non-portable extensions.
+.detect_macosx_min <- function(
+  lib = file.path(R.home("lib"), "libR.dylib"),
+  otool = Sys.which("otool")
+) {
+  if (!file.exists(lib) || !nzchar(otool)) {
+    return("")
+  }
+
+  out <- suppressWarnings(
+    system2(otool, c("-l", shQuote(lib)), stdout = TRUE, stderr = FALSE)
+  )
+  if (!length(out)) {
+    return("")
+  }
+
+  # old binaries carry LC_VERSION_MIN_MACOSX, current ones LC_BUILD_VERSION
+  field_after <- function(cmd, field) {
+    start <- grep(cmd, out, fixed = TRUE)
+    if (!length(start)) {
+      return("")
+    }
+    hit <- grep(
+      sprintf("^ *%s ", field),
+      out[start[1]:length(out)],
+      value = TRUE
+    )
+    if (!length(hit)) {
+      return("")
+    }
+    trimws(sub(sprintf("^ *%s ", field), "", hit[1]))
+  }
+
+  min <- field_after("LC_BUILD_VERSION", "minos")
+  if (!nzchar(min)) {
+    min <- field_after("LC_VERSION_MIN_MACOSX", "version")
+  }
+
+  if (grepl("^[0-9]+(\\.[0-9]+)*$", min)) min else ""
+}
+
+.macosx_min <- .detect_macosx_min()
+
+# used to replace @MACOSX_ENV@
+.macosx_env <- if (nzchar(.macosx_min)) {
+  message("Pinning MACOSX_DEPLOYMENT_TARGET to ", .macosx_min, ".")
+  paste0("export MACOSX_DEPLOYMENT_TARGET=", .macosx_min, " && ")
+} else {
+  ""
+}
+
 # read in the Makevars.in file checking
 is_windows <- .Platform[["OS.type"]] == "windows"
 
@@ -102,6 +161,7 @@ new_txt <- gsub("@CRAN_FLAGS@", .cran_flags, mv_txt) |>
   gsub("@CLEAN_TARGET@", .clean_targets, x = _) |>
   gsub("@LIBDIR@", .libdir, x = _) |>
   gsub("@TARGET@", .target, x = _) |>
+  gsub("@MACOSX_ENV@", .macosx_env, x = _) |>
   gsub("@PANIC_EXPORTS@", .panic_exports, x = _)
 
 message("Writing `", mv_ofp, "`.")
