@@ -42,10 +42,11 @@ Invisibly returns \code{TRUE} if all expressions are balanced,
 }
 \description{
 Check whether \verb{\{} and \verb{\}} are balanced in all \code{glue()} / \code{glue_data()}
-and \verb{cli_*()} string arguments within R source files. Each file is parsed
-into an AST, then every string literal passed to a target function is checked
-with a stack-based brace matcher. Any mismatch is reported with its line
-number and a visual caret (\verb{^^^^}) marker under the problematic region.
+and \verb{cli_*()} string arguments within R source files. Each file is scanned
+by a Rust tokenizer that understands strings, comments and raw strings, then
+every string literal passed to a target function is checked with a
+stack-based brace matcher. Any mismatch is reported with its line number and
+a visual caret (\verb{^^^^}) marker under the problematic region.
 }
 \section{Single file vs package scope}{
 

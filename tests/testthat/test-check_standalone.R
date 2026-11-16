@@ -234,7 +234,11 @@ test_that(".cs_header ignores comment-only lines inside the header", {
 # ==============================================================================
 
 test_that(".cs_header errors on missing required slots", {
-  res <- cs_quiet(rpkgkit:::.cs_header(c("# ---", "# repo: owner/repo", "# ---")))
+  res <- cs_quiet(rpkgkit:::.cs_header(c(
+    "# ---",
+    "# repo: owner/repo",
+    "# ---"
+  )))
   expect_equal(res$error, 3L)
 })
 

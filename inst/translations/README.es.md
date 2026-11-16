@@ -11,6 +11,8 @@
 [![English](https://img.shields.io/badge/README-English-blue)](../../README.md)
 [![Español](https://img.shields.io/badge/README-Espa%C3%B1ol-blue)]()
 [![简体中文](https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue)](README.zh-cn.md)
+[![extendr](https://img.shields.io/badge/extendr-%5E0.9.0-276DC2)](https://extendr.github.io/extendr/extendr_api/)
+[![MSRV](https://img.shields.io/badge/rustc-1.77.0%2B-orange)](https://github.com/WangLabCSU/rpkgkit/blob/main/src/rust/Cargo.toml)
 <!-- badges: end -->
 
 ## Resumen
@@ -63,7 +65,7 @@ Se recomienda usar los siguientes paquetes junto con `rpkgkit`:
 
 ## Hoja de referencia
 
-Todas las funciones exportadas con una llamada mínima. La mayoría acepta `path = NULL`, que significa «usar el archivo activo o el directorio del paquete actual».
+Las funciones más habituales con su llamada mínima. La mayoría acepta `path = NULL`, que significa «usar el archivo activo o el directorio del paquete actual».
 
 ### Conversión y revisión de código
 
@@ -95,9 +97,7 @@ Todas las funciones exportadas con una llamada mínima. La mayoría acepta `path
 | `check_pkgdown_reference()` | `check_pkgdown_reference()` | Comprobar que cada función exportada aparece en `_pkgdown.yml` |
 | `check_sysdeps()` | `check_sysdeps(c("libpng-dev"))` | Comprobar si las librerías del sistema están instaladas |
 | `check_air_installed()` | `check_air_installed()` | Comprobar que el formateador `air` está en el `PATH` |
-| `flir_fix()` | `flir_fix("R/foo.R")` | Corregir código R con `flir` |
 | `use_air_table()` | `use_air_table("R/foo.R", ncol = 3)` | Maquetar llamadas largas a `c()` y `list()` como tablas alineadas con `air` |
-| `air_format()` | `air_format("R/foo.R")` | Obsoleta; formatear código R con `air` |
 
 ### Gestionar `NEWS.md`
 
@@ -133,8 +133,6 @@ Todas las funciones exportadas con una llamada mínima. La mayoría acepta `path
 | `badge_to_readme()` | `badge_to_readme(badge)` | Insertar una insignia en el bloque de insignias del README |
 | `badge_translated_by_ai()` | `badge_translated_by_ai(lang = "zh-cn")` | Generar una insignia de aviso de traducción por IA |
 | `use_multilanguage_readme()` | `use_multilanguage_readme("zh-cn")` | Crear archivos README traducidos y sus insignias |
-| `render_rmd()` | `render_rmd("README.Rmd")` | Renderizar un archivo `.Rmd` o `.R` a Markdown |
-| `use_hexsticker()` | `use_hexsticker("man/figures/logo.png")` | Obsoleta; añadir un hex sticker al título del README |
 
 ### Archivos independientes
 
@@ -162,6 +160,21 @@ A partir de la v0.1.23, `rpkgkit` incluye un addin que se puede usar en RStudio.
 
 Si quieres usar addins en Positron, puedes usar la extensión [Positron R Wizard](https://github.com/ntluong95/positron-r-wizard.git).
 
+## Dependencias
+
+```r
+pak::local_deps_tree()
+# local::. 0.2.0 [new][bld]
+# ├─cli 3.6.6 [new][bld][cmp]
+# ├─lifecycle 1.0.5 [new][bld]
+# │ ├─cli
+# │ └─rlang 1.3.0 [new][bld][cmp]
+# ├─rlang
+# └─rstudioapi 0.19.0 [new][bld]
+
+# Key:  [new] new | [bld] build | [cmp] compile
+```
+
 ## Habilidades de IA
 
 `rpkgkit` incluye una skill para agentes que indica a los agentes de programación cuándo deben usar `rpkgkit` y cómo llamarlo. Sigue el formato [Agent Skills](https://skills.sh), por lo que funciona con Claude Code, Codex, Cursor, Positron y otros agentes compatibles:
@@ -171,6 +184,12 @@ npx skills add WangLabCSU/rpkgkit --skill rpkgkit
 ```
 
 Añade `-g` para instalarla en todos los proyectos y `-a <agente>` para omitir la pregunta del agente. El código fuente de la skill está en [`skills/rpkgkit/`](https://github.com/WangLabCSU/rpkgkit/tree/main/skills/rpkgkit).
+
+## Cita
+
+```r
+citation("rpkgkit")
+```
 
 ## Agradecimientos
 

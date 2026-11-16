@@ -7,7 +7,7 @@
 rename_func(
   path = NULL,
   style = c("snake_case", "camelCase", "PascalCase", "google"),
-  num_to_word = c(`for` = 4, to = 2),
+  num_to_word = c(`for` = 4L, to = 2L),
   ...
 )
 }

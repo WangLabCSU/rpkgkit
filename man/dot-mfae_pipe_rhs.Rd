@@ -4,7 +4,7 @@
 \alias{.mfae_pipe_rhs}
 \title{Locate the right-hand side of every pipe expression}
 \usage{
-.mfae_pipe_rhs(pd)
+.mfae_pipe_rhs(pd, pipes = MFAE_PIPES)
 }
 \description{
 Returns a logical vector \code{rhs} that is \code{TRUE} at the row of every

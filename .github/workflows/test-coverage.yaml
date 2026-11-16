@@ -25,6 +25,10 @@ jobs:
           extra-packages: any::covr, any::xml2
           needs: coverage
 
+      # Some tests call the external `air` formatter; without it they fail here
+      - name: Install Air
+        uses: posit-dev/setup-air@v1
+
       - name: Test coverage
         run: |
           cov <- covr::package_coverage(

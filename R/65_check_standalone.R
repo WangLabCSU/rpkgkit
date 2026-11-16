@@ -358,14 +358,14 @@ check_standalone <- function(path = NULL, ...) {
 
 .cs_report <- function(elapsed, results_by_type) {
   cli::cat_line()
-  cli::cat_line("Duration: ", format(round(as.numeric(elapsed), 2)), "s")
+  cli::cat_line("Duration: ", format(round(as.numeric(elapsed), 2L)), "s")
   cli::cat_line()
 
   final_line_paint <- function(value = integer(), name = character()) {
     t <- cli_symbol$tick
     x <- cli_symbol$cross
 
-    if (value == 0) {
+    if (value == 0L) {
       return(cli::col_green(paste(value, name, t)))
     }
     label <- if (value == 1L) {

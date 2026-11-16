@@ -112,11 +112,11 @@ detect_print_and_cat <- function(
 
   lines <- readLines(con = path, warn = FALSE)
   text <- paste(lines, collapse = "\n")
-  exprs <- parse_safely(text = text, path = path)
-  parse_data <- utils::getParseData(exprs)
+  parse_safely(text = text, path = path) # validate R code
 
+  # find position
   calls_info <- find_print_cat_calls(
-    parse_data = parse_data,
+    text = text,
     pattern_fn_names = pattern_fn_names,
     include_s3 = include_s3,
     include_refs = include_refs
@@ -129,8 +129,9 @@ detect_print_and_cat <- function(
     return(invisible(TRUE))
   }
 
+  original_lines <- lines
+  # if fix, `lines` will be modified
   if (fix) {
-    original_lines <- lines
     to_fix <- Filter(
       f = function(x) x$type == "call" && identical(x$kind, "message"),
       x = calls_info
@@ -151,7 +152,12 @@ detect_print_and_cat <- function(
         )
       }
       writeLines(text = lines, con = path)
-      n_lines <- length(unique(vapply(to_fix, `[[`, integer(1L), "line1")))
+      n_lines <- length(unique(vapply(
+        X = to_fix,
+        FUN = `[[`,
+        FUN.VALUE = integer(1L),
+        "line1"
+      )))
       if (verbose) {
         cli::cli_alert_success(
           "Fixed {n_lines} line{?s} in {.path {basename(path)}}."
@@ -160,20 +166,21 @@ detect_print_and_cat <- function(
     }
   }
 
-  report_lines <- if (fix) original_lines else lines
-  # highlight the whole file: a single source line is usually not parseable, and
-  # `cli::code_highlight()` silently returns unparseable input unchanged. It must
-  # also get one element per line, otherwise only the first line is highlighted.
-  hl_lines <- tryCatch(
-    cli::code_highlight(report_lines),
-    error = function(e) report_lines,
-    cli_parse_failure = function(cnd) report_lines
+  # highlight the whole file
+  hl_lines <- cli::code_highlight(
+    original_lines,
+    code_theme = getOption("rpkgkit.code.highlight")
   )
-  if (length(hl_lines) != length(report_lines)) {
-    hl_lines <- report_lines
-  }
   for (info in calls_info) {
     caret_width <- nchar(x = info$text) + if (info$type == "call") 1L else 0L
+    message(
+      dpac_format_call_error_rs(
+        line_content = hl_lines[[info$line1]],
+        col1 = as.integer(info$col1),
+        width = as.integer(caret_width),
+        kind = info$kind %||% ""
+      )
+    )
     caret <- paste0(
       strrep(x = " ", times = info$col1 - 1L),
       strrep(x = "^", times = caret_width)
@@ -187,7 +194,12 @@ detect_print_and_cat <- function(
     )
   }
 
-  reported_lines <- unique(vapply(calls_info, `[[`, integer(1L), "line1"))
+  reported_lines <- unique(vapply(
+    X = calls_info,
+    FUN = `[[`,
+    FUN.VALUE = integer(1L),
+    "line1"
+  ))
   if (verbose) {
     cli::cli_alert_danger(
       "Found {length(calls_info)} unsupported call{?s} on line{?s} {.val {reported_lines}}."
@@ -211,7 +223,8 @@ DEFAULT_PATTERN_FN_NAMES <- c(
   "^as\\.numeric$",
   "^as\\.factor$",
   "^toString$",
-  "^strrep$"
+  "^strrep$",
+  "^code_highlight$"
 )
 
 resolve_pattern_fn_names <- function(
@@ -235,7 +248,7 @@ resolve_pattern_fn_names <- function(
         error = function(e) FALSE
       )
     },
-    logical(1)
+    logical(1L)
   )
 
   if (any(invalid)) {
@@ -252,97 +265,28 @@ resolve_pattern_fn_names <- function(
 }
 
 replace_fn_at <- function(line, col1, col2, new = "message") {
-  paste0(substr(line, 1L, col1 - 1L), new, substr(line, col2 + 1L, nchar(line)))
+  dpac_replace_fn_at_rs(
+    line = line,
+    col1 = as.integer(col1),
+    col2 = as.integer(col2),
+    new = new
+  )
 }
 
-get_children <- function(parse_data, id) {
-  parse_data[parse_data$parent == id, , drop = FALSE]
-}
-
-is_stringy_expr <- function(parse_data, expr_id, pattern_fn_names) {
-  kids <- get_children(parse_data, expr_id)
-  if (nrow(kids) == 0L) {
-    return(FALSE)
-  }
-  if (any(kids$token == "STR_CONST")) {
-    return(TRUE)
-  }
-  fns <- kids$text[kids$token == "SYMBOL_FUNCTION_CALL"]
-  nested_ids <- kids$id[kids$token == "expr"]
-  for (nid in nested_ids) {
-    nkids <- get_children(parse_data, nid)
-    fns <- c(fns, nkids$text[nkids$token == "SYMBOL_FUNCTION_CALL"])
-  }
-  any(vapply(
-    pattern_fn_names,
-    function(pattern) any(grepl(pattern = pattern, x = fns)),
-    logical(1L)
-  ))
-}
-
-classify_print_cat <- function(parse_data, func_row, pattern_fn_names) {
-  function_expr <- parse_data[parse_data$id == func_row$parent, , drop = FALSE]
-  children <- get_children(parse_data, function_expr$parent)
-  fn <- func_row$text
-
-  if (identical(fn, "cat")) {
-    has_file <- any(children$token == "SYMBOL_SUB" & children$text == "file")
-    return(if (has_file) "file-write" else "message")
-  }
-
-  expr_ids <- children$id[children$token == "expr"]
-  if (length(expr_ids) < 2L) {
-    return("empty")
-  }
-  if (is_stringy_expr(parse_data, expr_ids[[2L]], pattern_fn_names)) {
-    "message"
-  } else {
-    "s3-print"
-  }
-}
-
+# The token-level detection and classification now live in Rust. Its tokenizer
+# understands strings, raw strings, comments and extraction operators, so no
+# parse data is needed any more. `text` is the full source text (or a character
+# vector of lines).
 find_print_cat_calls <- function(
-  parse_data,
-  pattern_fn_names,
+  text,
+  pattern_fn_names = DEFAULT_PATTERN_FN_NAMES,
   include_s3 = TRUE,
   include_refs = FALSE
 ) {
-  direct <- parse_data[
-    parse_data$token == "SYMBOL_FUNCTION_CALL" &
-      parse_data$text %in% c("print", "cat"),
-  ]
-  out <- list()
-  for (i in seq_len(nrow(direct))) {
-    kind <- classify_print_cat(parse_data, direct[i, ], pattern_fn_names)
-    if (identical(kind, "s3-print") && !include_s3) {
-      next
-    }
-    if (identical(kind, "file-write")) {
-      next
-    }
-    out[[length(out) + 1L]] <- list(
-      line1 = direct$line1[[i]],
-      col1 = direct$col1[[i]],
-      col2 = direct$col2[[i]],
-      text = direct$text[[i]],
-      type = "call",
-      kind = kind
-    )
-  }
-  if (include_refs) {
-    refs <- parse_data[
-      parse_data$token == "SYMBOL" & parse_data$text %in% c("print", "cat"),
-    ]
-    for (i in seq_len(nrow(refs))) {
-      out[[length(out) + 1L]] <- list(
-        line1 = refs$line1[[i]],
-        col1 = refs$col1[[i]],
-        col2 = refs$col2[[i]],
-        text = refs$text[[i]],
-        type = "ref",
-        kind = "ref"
-      )
-    }
-  }
-  out
+  dpac_find_calls_rs(
+    text = paste(text, collapse = "\n"),
+    pattern_fn_names = pattern_fn_names,
+    include_s3 = include_s3,
+    include_refs = include_refs
+  )
 }

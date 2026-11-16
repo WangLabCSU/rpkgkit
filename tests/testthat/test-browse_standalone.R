@@ -1,290 +1,187 @@
-# Test: browse_standalone ------------------------------------------------------
+# Test: browse_standalone -------------------------------------------------------
+#
+# The crawl runs in Rust (`browse_standalone_rs()`): these tests cover the R
+# interface, i.e. argument validation, the arguments handed to the crawler, the
+# empty-result warning and the conversion of the returned columns into a tibble.
 
-# Helper: create a mock GitHub Code Search API response
-mock_search_response <- function(items_list) {
+# Helper: the named columns that `browse_standalone_rs()` returns.
+search_columns <- function(
+  repos,
+  descriptions = rep(NA_character_, length(repos))
+) {
+  count <- length(repos)
   list(
-    total_count = length(items_list),
-    incomplete_results = FALSE,
-    items = items_list
+    repo = repos,
+    name = rep("standalone-utils.R", count),
+    path = rep("R/standalone-utils.R", count),
+    sha = rep("abc123", count),
+    url = rep(
+      "https://api.github.com/repos/owner/repo/contents/R/standalone-utils.R",
+      count
+    ),
+    html_url = rep(
+      "https://github.com/owner/repo/blob/main/R/standalone-utils.R",
+      count
+    ),
+    git_url = rep(
+      "https://api.github.com/repos/owner/repo/git/blobs/abc123",
+      count
+    ),
+    repo_url = if (count == 0L) {
+      character()
+    } else {
+      paste0("https://github.com/", repos)
+    },
+    repo_description = as.character(descriptions)
   )
 }
 
-# Helper: create a single search result item, mimicking GitHub API format
-mock_search_item <- function(
-  repo,
-  name,
-  path = file.path("R", name),
-  repo_desc = NULL
-) {
-  list(
-    name = name,
-    path = path,
-    sha = "abc123",
-    url = paste0("https://api.github.com/repos/", repo, "/contents/", path),
-    html_url = paste0("https://github.com/", repo, "/blob/main/", path),
-    git_url = paste0(
-      "https://api.github.com/repos/",
-      repo,
-      "/git/blobs/abc123"
-    ),
-    repository = list(
-      full_name = repo,
-      html_url = paste0("https://github.com/", repo),
-      description = repo_desc
+# ==============================================================================
+# Argument validation
+# ==============================================================================
+
+test_that("browse_standalone rejects arguments in `...`", {
+  expect_error(
+    browse_standalone(not_an_argument = TRUE),
+    "must be empty"
+  )
+})
+
+test_that("browse_standalone validates per_page", {
+  expect_error(browse_standalone(per_page = 0), "must be")
+  expect_error(browse_standalone(per_page = 101), "must be")
+  expect_error(browse_standalone(per_page = "100"), "must be")
+})
+
+test_that("browse_standalone validates limit", {
+  expect_error(browse_standalone(limit = 0), "must be")
+  expect_error(browse_standalone(limit = -1), "must be")
+})
+
+test_that("browse_standalone reports a crawler failure", {
+  local_mocked_bindings(
+    browse_standalone_rs = function(per_page, limit, token) {
+      rlang::abort("GitHub returned HTTP 403")
+    }
+  )
+
+  expect_error(browse_standalone(), "HTTP 403")
+})
+
+# ==============================================================================
+# Arguments handed to the crawler
+# ==============================================================================
+
+test_that("browse_standalone forwards per_page, limit and token", {
+  seen <- NULL
+  local_mocked_bindings(
+    browse_standalone_rs = function(per_page, limit, token) {
+      seen <<- list(per_page = per_page, limit = limit, token = token)
+      search_columns("owner/repo")
+    }
+  )
+  withr::local_envvar(GITHUB_PAT = "pat-token")
+
+  suppressMessages(browse_standalone(per_page = 50L, limit = 20L))
+
+  expect_identical(seen$per_page, 50L)
+  expect_identical(seen$limit, 20)
+  expect_identical(seen$token, "pat-token")
+})
+
+test_that("browse_standalone turns limit = Inf into a finite request", {
+  seen <- NULL
+  local_mocked_bindings(
+    browse_standalone_rs = function(per_page, limit, token) {
+      seen <<- limit
+      search_columns("owner/repo")
+    }
+  )
+
+  suppressMessages(browse_standalone(limit = Inf))
+
+  expect_true(is.infinite(seen))
+})
+
+test_that("browse_standalone prefers an explicit token", {
+  seen <- NULL
+  local_mocked_bindings(
+    browse_standalone_rs = function(per_page, limit, token) {
+      seen <<- token
+      search_columns("owner/repo")
+    }
+  )
+  withr::local_envvar(GITHUB_PAT = "pat-token")
+
+  suppressMessages(browse_standalone(token = "explicit"))
+
+  expect_identical(seen, "explicit")
+})
+
+# ==============================================================================
+# Output shape
+# ==============================================================================
+
+test_that("browse_standalone returns the documented columns", {
+  local_mocked_bindings(
+    browse_standalone_rs = function(per_page, limit, token) {
+      search_columns(c("owner/repo", "other/repo2"), c("An R package", NA))
+    }
+  )
+
+  result <- suppressMessages(browse_standalone())
+
+  expect_s3_class(result, "tbl_df")
+  expect_equal(nrow(result), 2L)
+  expect_named(
+    result,
+    c(
+      "repo",
+      "name",
+      "path",
+      "sha",
+      "url",
+      "html_url",
+      "git_url",
+      "repo_url",
+      "repo_description"
     )
   )
-}
-
-# ==============================================================================
-# Error handling: dots validation
-# ==============================================================================
-
-test_that("browse_standalone calls check_dots_empty0", {
-  dots_checked <- FALSE
-
-  local_mocked_bindings(
-    check_dots_empty0 = function(...) {
-      dots_checked <<- TRUE
-      invisible()
-    },
-    .package = "rlang"
-  )
-
-  local_mocked_bindings(
-    check_installed = function(pkg, ...) invisible(),
-    .package = "rlang"
-  )
-
-  local_mocked_bindings(
-    gh = function(...) mock_search_response(list()),
-    .package = "gh"
-  )
-
-  browse_standalone()
-  expect_true(dots_checked)
 })
 
-# ==============================================================================
-# Error handling: package installation checks
-# ==============================================================================
-
-test_that("browse_standalone errors when gh is not installed", {
+test_that("browse_standalone keeps a missing repository description as NA", {
   local_mocked_bindings(
-    check_installed = function(pkg, ...) {
-      if ("gh" %in% pkg) {
-        rlang::abort("gh is not installed")
-      }
-      invisible()
-    },
-    .package = "rlang"
+    browse_standalone_rs = function(per_page, limit, token) {
+      search_columns(c("owner/repo", "other/repo2"), c("An R package", NA))
+    }
   )
 
-  expect_error(browse_standalone(), "gh is not installed")
+  result <- suppressMessages(browse_standalone())
+
+  expect_equal(result$repo_description, c("An R package", NA_character_))
 })
 
-test_that("browse_standalone errors when dplyr is not installed", {
+test_that("browse_standalone warns and returns a zero-row tibble on no match", {
   local_mocked_bindings(
-    check_installed = function(pkg, ...) {
-      if ("dplyr" %in% pkg) {
-        rlang::abort("dplyr is not installed")
-      }
-      invisible()
-    },
-    .package = "rlang"
-  )
-
-  expect_error(browse_standalone(), "dplyr is not installed")
-})
-
-# ==============================================================================
-# Empty / no-results cases
-# ==============================================================================
-
-test_that("browse_standalone returns empty tibble when no standalone files exist", {
-  local_mocked_bindings(
-    check_installed = function(pkg, ...) invisible(),
-    .package = "rlang"
-  )
-
-  local_mocked_bindings(
-    gh = function(...) mock_search_response(list()),
-    .package = "gh"
-  )
-
-  result <- browse_standalone()
-  expect_s3_class(result, "tbl_df")
-  expect_equal(nrow(result), 0L)
-
-  expected_cols <- c(
-    "repo",
-    "name",
-    "path",
-    "sha",
-    "url",
-    "html_url",
-    "git_url",
-    "repo_url",
-    "repo_description"
-  )
-  expect_setequal(names(result), expected_cols)
-})
-
-# ==============================================================================
-# Results parsing: single item
-# ==============================================================================
-
-test_that("browse_standalone parses a single result into expected columns", {
-  local_mocked_bindings(
-    check_installed = function(pkg, ...) invisible(),
-    .package = "rlang"
-  )
-
-  local_mocked_bindings(
-    gh = function(...) {
-      mock_search_response(list(
-        mock_search_item("owner/repo1", "standalone-utils.R")
-      ))
-    },
-    .package = "gh"
-  )
-
-  result <- browse_standalone()
-  expect_equal(nrow(result), 1L)
-  expect_equal(result$repo, "owner/repo1")
-  expect_equal(result$name, "standalone-utils.R")
-  expect_equal(result$path, "R/standalone-utils.R")
-  expect_equal(result$sha, "abc123")
-  expect_match(result$url, "owner/repo1")
-  expect_match(result$html_url, "owner/repo1")
-  expect_match(result$git_url, "owner/repo1")
-  expect_match(result$repo_url, "owner/repo1")
-})
-
-# ==============================================================================
-# Results parsing: multiple items
-# ==============================================================================
-
-test_that("browse_standalone parses multiple results", {
-  local_mocked_bindings(
-    check_installed = function(pkg, ...) invisible(),
-    .package = "rlang"
-  )
-
-  local_mocked_bindings(
-    gh = function(...) {
-      mock_search_response(list(
-        mock_search_item("owner/repo1", "standalone-utils.R"),
-        mock_search_item("owner/repo2", "standalone-helpers.R"),
-        mock_search_item("owner/repo3", "standalone-parsers.R")
-      ))
-    },
-    .package = "gh"
-  )
-
-  result <- browse_standalone()
-  expect_equal(nrow(result), 3L)
-  expect_equal(result$repo, c("owner/repo1", "owner/repo2", "owner/repo3"))
-})
-
-# ==============================================================================
-# Filtering: non-standalone filenames are excluded
-# ==============================================================================
-
-test_that("browse_standalone filters out files not starting with standalone-", {
-  local_mocked_bindings(
-    check_installed = function(pkg, ...) invisible(),
-    .package = "rlang"
-  )
-
-  local_mocked_bindings(
-    gh = function(...) {
-      mock_search_response(list(
-        mock_search_item("owner/repo1", "standalone-utils.R"),
-        mock_search_item("owner/repo1", "other-file.R"), # should be filtered
-        mock_search_item("owner/repo2", "standalone-parsers.R"),
-        mock_search_item("owner/repo2", "import-helper.R") # should be filtered
-      ))
-    },
-    .package = "gh"
-  )
-
-  result <- browse_standalone()
-  expect_equal(nrow(result), 2L)
-  expect_equal(result$name, c("standalone-utils.R", "standalone-parsers.R"))
-})
-
-# ==============================================================================
-# NULL repo_description → NA
-# ==============================================================================
-
-test_that("browse_standalone converts NULL repo_description to NA", {
-  local_mocked_bindings(
-    check_installed = function(pkg, ...) invisible(),
-    .package = "rlang"
-  )
-
-  # item with description = NULL
-  item_no_desc <- mock_search_item("owner/repo1", "standalone-utils.R")
-  # item with description provided
-  item_with_desc <- mock_search_item(
-    "owner/repo2",
-    "standalone-helpers.R",
-    repo_desc = "An R package"
-  )
-
-  local_mocked_bindings(
-    gh = function(...) mock_search_response(list(item_no_desc, item_with_desc)),
-    .package = "gh"
-  )
-
-  result <- browse_standalone()
-  expect_true(is.na(result$repo_description[1L]))
-  expect_equal(result$repo_description[2L], "An R package")
-})
-
-# ==============================================================================
-# Warning on empty results
-# ==============================================================================
-
-test_that("browse_standalone warns when no result items are returned", {
-  local_mocked_bindings(
-    check_installed = function(pkg, ...) invisible(),
-    .package = "rlang"
-  )
-
-  local_mocked_bindings(
-    gh = function(...) mock_search_response(list()),
-    .package = "gh"
+    browse_standalone_rs = function(per_page, limit, token) {
+      search_columns(character())
+    }
   )
 
   expect_warning(
-    browse_standalone(),
+    result <- suppressMessages(browse_standalone()),
     "No standalone files found"
   )
+  expect_s3_class(result, "tbl_df")
+  expect_equal(nrow(result), 0L)
 })
 
-# ==============================================================================
-# Response without $items field (gh edge case)
-# ==============================================================================
-
-test_that("browse_standalone handles response without $items field", {
+test_that("browse_standalone announces the search", {
   local_mocked_bindings(
-    check_installed = function(pkg, ...) invisible(),
-    .package = "rlang"
+    browse_standalone_rs = function(per_page, limit, token) {
+      search_columns("owner/repo")
+    }
   )
 
-  # gh::gh with some endpoints may return the list directly
-  local_mocked_bindings(
-    gh = function(...) {
-      list(
-        mock_search_item("owner/repo1", "standalone-utils.R")
-      )
-    },
-    .package = "gh"
-  )
-
-  result <- browse_standalone()
-  expect_equal(nrow(result), 1L)
-  expect_equal(result$name, "standalone-utils.R")
-  expect_equal(result$repo, "owner/repo1")
+  expect_message(browse_standalone(), "standalone")
 })

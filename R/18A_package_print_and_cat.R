@@ -102,9 +102,10 @@ package_detect_print_and_cat <- function(
   ...
 ) {
   lines <- readLines(con = path, warn = FALSE)
-  exprs <- parse_safely(text = paste(lines, collapse = "\n"), path = path)
+  text <- paste(lines, collapse = "\n")
+  parse_safely(text = text, path = path)
   calls_info <- find_print_cat_calls(
-    parse_data = utils::getParseData(exprs),
+    text = text,
     pattern_fn_names = resolve_pattern_fn_names(
       pattern_fn_names,
       replace_default_pattern
@@ -153,7 +154,10 @@ package_detect_print_and_cat <- function(
       "{.file {relative_path}}: {info$line1}:"
     )
     message(paste0(
-      cli::code_highlight(report_lines[[info$line1]]),
+      cli::code_highlight(
+        report_lines[[info$line1]],
+        code_theme = getOption("rpkgkit.code.highlight")
+      ),
       cli::col_grey(tag),
       "\n",
       cli::col_grey(caret)

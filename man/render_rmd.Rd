@@ -2,7 +2,7 @@
 % Please edit documentation in R/72_render_rmd.R
 \name{render_rmd}
 \alias{render_rmd}
-\title{Render an R Markdown or R document to Markdown format}
+\title{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Render an R Markdown or R document to Markdown format}
 \usage{
 render_rmd(path = NULL, output_format = "md_document", ...)
 }
@@ -18,10 +18,10 @@ uses the currently active document in RStudio.}
 The output file path from rmarkdown::render.
 }
 \description{
-Render an R Markdown or R document to Markdown format
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Render an R Markdown or R document to Markdown format
 }
 \examples{
-\donttest{
+\dontrun{
 rlang::check_installed("rmarkdown")
 tmp <- tempfile(fileext = ".Rmd")
 writeLines(c("---", "title: Test", "---", "", "Hello, world!"), tmp)

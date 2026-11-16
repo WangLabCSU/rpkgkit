@@ -9,14 +9,14 @@
 package_func_call_explicit(
   path = NULL,
   use_packages = current_packages(),
-  ignore_functions = imported_functions(),
+  ignore_functions = c(imported_functions(path), get_defined_fn(path)),
   ...
 )
 
 make_func_call_explicit(
   path = NULL,
   use_packages = current_packages(),
-  ignore_functions = imported_functions(),
+  ignore_functions = c(imported_functions(), get_defined_fn(path)),
   ...
 )
 }
@@ -27,26 +27,39 @@ If \code{NULL} and RStudio is available, the currently active document path is u
 \item{use_packages}{A character vector of package names to process. Defaults to
 \code{current_packages()}.}
 
-\item{ignore_functions}{A character vector of function names to ignore. Defaults to
-\code{imported_functions()}.}
+\item{ignore_functions}{A character vector of function names to ignore.
+Defaults to \code{c(imported_functions(), get_defined_fn(path))}: the functions
+imported into \code{NAMESPACE} plus those defined in the target package, or in
+the target file when \code{path} is not a package root. Pass \code{character()} to
+ignore nothing.}
 
 \item{...}{Additional arguments. Currently unused and must be empty.}
 }
 \value{
-Invisible \code{NULL}. This function is called for its side effect of modifying the
-specified file in place.
+Invisibly \code{TRUE} when the file was read successfully; the file is modified in
+place as a side effect.
 }
 \description{
 Add double colons (\code{::}) to function calls from specified packages to make
 package dependencies explicit in R code.
-
-This function uses code adapted from the \href{https://github.com/wurli/pedant}{pedant}
-package by Jacob Scott et al., licensed under MIT.
 }
 \details{
 This function reads the specified R file, identifies function calls from the
 specified packages, and adds explicit namespace qualifiers (\code{::}) to those
-calls. The modified code is written back to the original file.
+calls. Exported datasets from the same packages are qualified as well (e.g.
+\code{penguins} becomes \code{palmerpenguins::penguins}). The modified code is written
+back to the original file.
+
+The file is tokenized in Rust, following R's lexical rules for strings, raw
+strings, comments and backtick names. A name is qualified only when it is
+actually a call or a dataset, so \code{pkg::fun}, \code{obj$fun}, \code{obj@fun}, function
+definitions (\verb{fun <- function(...)}), formal arguments and the identifiers
+passed to \code{data()} are left untouched. In particular, \code{l$select + 1} is not
+rewritten even when \code{dplyr::select} is in \code{use_packages}.
+
+This function replaces the \code{add_double_colons()} engine adapted from the
+\href{https://github.com/wurli/pedant}{pedant} package by Jacob Scott et al.,
+licensed under MIT.
 }
 \section{Functions}{
 \itemize{

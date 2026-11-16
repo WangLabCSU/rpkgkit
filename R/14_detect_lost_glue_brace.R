@@ -2,10 +2,11 @@
 #'
 #' @description
 #' Check whether `{` and `}` are balanced in all `glue()` / `glue_data()`
-#' and `cli_*()` string arguments within R source files. Each file is parsed
-#' into an AST, then every string literal passed to a target function is checked
-#' with a stack-based brace matcher. Any mismatch is reported with its line
-#' number and a visual caret (`^^^^`) marker under the problematic region.
+#' and `cli_*()` string arguments within R source files. Each file is scanned
+#' by a Rust tokenizer that understands strings, comments and raw strings, then
+#' every string literal passed to a target function is checked with a
+#' stack-based brace matcher. Any mismatch is reported with its line number and
+#' a visual caret (`^^^^`) marker under the problematic region.
 #'
 #' @section Single file vs package scope:
 #' \describe{
@@ -57,10 +58,9 @@ detect_lost_glue_brace <- function(path = NULL, verbose = TRUE, ...) {
   }
   lines <- readLines(path, warn = FALSE)
   text <- paste(lines, collapse = "\n")
-  exprs <- parse_safely(text, path)
-  parse_data <- utils::getParseData(exprs)
+  parse_safely(text, path)
 
-  strings_info <- find_glue_cli_strings(parse_data)
+  strings_info <- find_glue_cli_strings(text)
 
   if (length(strings_info) == 0L) {
     if (verbose) {
@@ -69,13 +69,31 @@ detect_lost_glue_brace <- function(path = NULL, verbose = TRUE, ...) {
     return(invisible(TRUE))
   }
 
+  # highlight the whole file: a single source line is usually not parseable, and
+  # `cli::code_highlight()` silently returns unparseable input unchanged. It must
+  # also get one element per line, otherwise only the first line is highlighted.
+  hl_lines <- tryCatch(
+    cli::code_highlight(
+      lines,
+      code_theme = getOption("rpkgkit.code.highlight")
+    ),
+    error = function(e) lines,
+    cli_parse_failure = function(cnd) lines
+  )
+  if (length(hl_lines) != length(lines)) {
+    hl_lines <- lines
+  }
+
   error_lines <- integer()
 
   # highlight the whole file: a single source line is usually not parseable, and
   # `cli::code_highlight()` silently returns unparseable input unchanged. It must
   # also get one element per line, otherwise only the first line is highlighted.
   hl_lines <- tryCatch(
-    cli::code_highlight(lines),
+    cli::code_highlight(
+      lines,
+      code_theme = getOption("rpkgkit.code.highlight")
+    ),
     error = function(e) lines,
     cli_parse_failure = function(cnd) lines
   )
@@ -121,6 +139,10 @@ detect_lost_glue_brace <- function(path = NULL, verbose = TRUE, ...) {
 
 # ---------------------------------------------------------------------------
 # Helper: parse source text safely
+#
+# This is the only remaining R-side guard: it keeps the previous behaviour of
+# reporting unparseable files instead of silently scanning them. The actual
+# inspection of glue/cli strings is done in Rust.
 # ---------------------------------------------------------------------------
 parse_safely <- function(text, path) {
   tryCatch(
@@ -135,155 +157,33 @@ parse_safely <- function(text, path) {
 }
 
 # ---------------------------------------------------------------------------
-# Find all string literals inside glue / cli function calls
+# Helper: find all string literals inside glue / cli function calls
 #
-# Walks the AST parse data recursively: for each SYMBOL_FUNCTION_CALL whose
-# name starts with "glue", "glue_data", or "cli_", we climb up to the
-# enclosing call expression and recursively collect every descendant
-# STR_CONST token.
+# `text` is the full source text (or a character vector of lines). The Rust
+# tokenizer walks the source once, tracks the call stack, and returns every
+# string literal whose enclosing call chain contains a target function.
 # ---------------------------------------------------------------------------
-find_glue_cli_strings <- function(parse_data) {
-  target_calls <- parse_data[
-    parse_data$token == "SYMBOL_FUNCTION_CALL" &
-      grepl("^(glue|glue_data|cli_)", parse_data$text),
-  ]
-
-  if (nrow(target_calls) == 0L) {
-    return(list())
-  }
-
-  parent_map <- stats::setNames(parse_data$parent, parse_data$id)
-
-  # Recursively collect STR_CONST tokens under a given node
-  collect_str_descendants <- function(node_id) {
-    children <- parse_data[parse_data$parent == node_id, ]
-    result <- list()
-    for (j in seq_len(nrow(children))) {
-      if (children$token[j] == "STR_CONST") {
-        result <- c(
-          result,
-          list(list(
-            id = children$id[j],
-            line1 = children$line1[j],
-            col1 = children$col1[j],
-            text = children$text[j]
-          ))
-        )
-      }
-      result <- c(result, collect_str_descendants(children$id[j]))
-    }
-    result
-  }
-
-  str_list <- list()
-  seen_ids <- integer()
-
-  for (k in seq_len(nrow(target_calls))) {
-    # SYMBOL_FUNCTION_CALL's parent is the function-ref sub-expression
-    # (e.g. "glue::glue" as a whole); its grandparent is the actual call
-    # expression that contains both the function reference and arguments.
-    func_ref_parent <- target_calls$parent[k]
-    call_expr_id <- parent_map[[as.character(func_ref_parent)]]
-    if (is.na(call_expr_id) || call_expr_id <= 0L) {
-      next
-    }
-
-    desc_strs <- collect_str_descendants(call_expr_id)
-    for (s in desc_strs) {
-      if (!(s$id %in% seen_ids)) {
-        s$content <- substr(s$text, 2L, nchar(s$text) - 1L)
-        str_list <- c(str_list, list(s))
-        seen_ids <- c(seen_ids, s$id)
-      }
-    }
-  }
-
-  str_list
+find_glue_cli_strings <- function(text) {
+  dlgb_find_glue_strings_rs(paste(text, collapse = "\n"))
 }
 
 # ---------------------------------------------------------------------------
-# Check brace balance with a stack-based scan
-#
-# Scans the string character by character. Every `{` pushes its position,
-# every `}` pops (if the stack is non-empty) or is recorded as extra.
-#
-# Returns a list:
-#   $balanced        - logical
-#   $unmatched_opens - integer vector of positions of unmatched `{`
-#   $unmatched_closes- integer vector of positions of unmatched `}`
-#   $hl_start        - content position where the highlight region begins
-#   $hl_end          - content position where the highlight region ends
+# Helper: check brace balance with a stack-based scan (implemented in Rust)
 # ---------------------------------------------------------------------------
 check_brace_balance <- function(s) {
-  stack <- integer() # positions of pending `{`
-  extra_closes <- integer() # positions of unmatched `}`
-
-  chars <- strsplit(s, NULL)[[1L]]
-
-  for (i in seq_along(chars)) {
-    if (chars[i] == "{") {
-      stack <- c(stack, i)
-    } else if (chars[i] == "}") {
-      if (length(stack) > 0L) {
-        stack <- stack[-length(stack)]
-      } else {
-        extra_closes <- c(extra_closes, i)
-      }
-    }
-  }
-
-  balanced <- length(stack) == 0L && length(extra_closes) == 0L
-
-  # Determine the highlight region
-  if (balanced) {
-    hl_start <- hl_end <- NA_integer_
-  } else if (length(stack) > 0L && length(extra_closes) > 0L) {
-    # Both missing and extra braces: highlight from the first unmatched `{`
-    # to the first extra `}` that follows it.
-    first_open <- min(stack)
-    first_extra_close <- extra_closes[extra_closes > first_open][1L]
-    if (is.na(first_extra_close)) {
-      first_extra_close <- max(extra_closes)
-    }
-    hl_start <- first_open
-    hl_end <- first_extra_close
-  } else if (length(stack) > 0L) {
-    # Only missing closing braces: highlight from the first unmatched `{`
-    # to the end of the string.
-    hl_start <- min(stack)
-    hl_end <- nchar(s)
-  } else {
-    # Only extra closing braces: highlight from the immediately preceding
-    # `{` to the first extra `}` — the broken cli/glue expression fragment.
-    first_extra <- extra_closes[1L]
-    prev_brace <- find_nearest_open_before(s, first_extra)
-    hl_start <- if (is.na(prev_brace)) first_extra else prev_brace
-    hl_end <- first_extra
-  }
-
-  list(
-    balanced = balanced,
-    unmatched_opens = stack,
-    unmatched_closes = extra_closes,
-    hl_start = hl_start,
-    hl_end = hl_end
-  )
+  dlgb_check_brace_balance_rs(s)
 }
 
 # ---------------------------------------------------------------------------
-# Walk backward from position `pos` to find the nearest `{` in string `s`.
-# Returns NA_integer_ if none is found.
+# Helper: nearest `{` before a position (implemented in Rust)
 # ---------------------------------------------------------------------------
 find_nearest_open_before <- function(s, pos) {
-  chars <- strsplit(s, NULL)[[1L]]
-  for (i in seq(pos - 1L, 1L)) {
-    if (chars[i] == "{") return(i)
-  }
-  NA_integer_
+  out <- dlgb_find_nearest_open_before_rs(s, as.integer(pos))
+  if (out < 0L) NA_integer_ else out
 }
 
 # ---------------------------------------------------------------------------
-# Format a visual error message for a brace mismatch
+# Helper: format a visual error message for a brace mismatch
 #
 # Produces output like:
 #
@@ -300,21 +200,10 @@ format_brace_error <- function(
   col_offset,
   result
 ) {
-  hl_start <- result$hl_start
-  hl_end <- result$hl_end
-
-  # Map highlight region (1-indexed within str_content) to line columns.
-  # col_offset is the column of the opening quote `"` or `'`.
-  #   str_content[1]  -> line column col_offset + 1
-  #   str_content[i]  -> line column col_offset + i
-  line_hl_start <- col_offset + hl_start
-  line_hl_end <- col_offset + hl_end
-
-  # Build the caret line
-  caret_line <- paste0(
-    strrep(" ", line_hl_start - 1L),
-    strrep("^", line_hl_end - line_hl_start + 1L)
+  dlgb_format_brace_error_rs(
+    line_content = line_content,
+    hl_start = as.integer(result$hl_start),
+    hl_end = as.integer(result$hl_end),
+    col_offset = as.integer(col_offset)
   )
-
-  paste0(line_content, "\n", caret_line)
 }

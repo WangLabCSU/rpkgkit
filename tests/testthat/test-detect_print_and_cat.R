@@ -262,21 +262,17 @@ test_that("pattern_fn_names rejects invalid regular expressions", {
 # ---------------------------------------------------------------------------
 
 test_that("find_print_cat_calls returns empty list for empty parse data", {
-  expect_length(find_print_cat_calls(data.frame()), 0L)
+  expect_length(find_print_cat_calls(""), 0L)
 })
 
 test_that("find_print_cat_calls returns empty list when no target calls", {
   text <- "x <- 1\ny <- x + 2\nmessage(y)"
-  exprs <- parse(text = text, keep.source = TRUE)
-  pd <- utils::getParseData(exprs)
-  expect_length(find_print_cat_calls(pd), 0L)
+  expect_length(find_print_cat_calls(text), 0L)
 })
 
 test_that("find_print_cat_calls finds print() call", {
   text <- 'print("hello")'
-  exprs <- parse(text = text, keep.source = TRUE)
-  pd <- utils::getParseData(exprs)
-  res <- find_print_cat_calls(pd)
+  res <- find_print_cat_calls(text)
   expect_length(res, 1L)
   expect_equal(res[[1L]]$text, "print")
   expect_equal(res[[1L]]$line1, 1L)
@@ -284,27 +280,21 @@ test_that("find_print_cat_calls finds print() call", {
 
 test_that("find_print_cat_calls finds cat() call", {
   text <- 'cat("world\\n")'
-  exprs <- parse(text = text, keep.source = TRUE)
-  pd <- utils::getParseData(exprs)
-  res <- find_print_cat_calls(pd)
+  res <- find_print_cat_calls(text)
   expect_length(res, 1L)
   expect_equal(res[[1L]]$text, "cat")
 })
 
 test_that("find_print_cat_calls finds both print and cat", {
   text <- 'print("a")\ncat("b\\n")'
-  exprs <- parse(text = text, keep.source = TRUE)
-  pd <- utils::getParseData(exprs)
-  res <- find_print_cat_calls(pd)
+  res <- find_print_cat_calls(text)
   expect_length(res, 2L)
   expect_setequal(vapply(res, `[[`, character(1L), "text"), c("print", "cat"))
 })
 
 test_that("find_print_cat_calls ignores sprintf and print.myclass", {
   text <- 'sprintf("hello %s", name)\nprint.myclass(x)'
-  exprs <- parse(text = text, keep.source = TRUE)
-  pd <- utils::getParseData(exprs)
-  expect_length(find_print_cat_calls(pd), 0L)
+  expect_length(find_print_cat_calls(text), 0L)
 })
 
 # ---------------------------------------------------------------------------

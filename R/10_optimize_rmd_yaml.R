@@ -136,7 +136,7 @@ optimize_rmd_yaml <- function(
 }
 
 .ory_detect_type <- function(path) {
-  if (tolower(basename(path)) == "readme.rmd") "readme" else "vignette"
+  ory_detect_type_rs(path)
 }
 
 # Metadata from DESCRIPTION
@@ -202,176 +202,49 @@ optimize_rmd_yaml <- function(
 
 # Split an Rmd into YAML header lines and body lines
 .ory_read_rmd <- function(path) {
-  lines <- readLines(path, encoding = "UTF-8", warn = FALSE)
-  header <- character()
-  body <- lines
-  if (length(lines) && grepl("^---\\s*$", lines[1L])) {
-    end <- grep("^(---|\\.\\.\\.)\\s*$", lines)
-    end <- end[end > 1L]
-    if (length(end)) {
-      e <- end[1L]
-      header <- if (e > 2L) lines[2L:(e - 1L)] else character()
-      body <- if (e < length(lines)) {
-        lines[(e + 1L):length(lines)]
-      } else {
-        character()
-      }
-      if (length(body) && !nzchar(trimws(body[1L]))) body <- body[-1L]
-    }
-  }
-  list(header = header, body = body, raw = lines)
+  ory_read_rmd_rs(readLines(path, encoding = "UTF-8", warn = FALSE))
 }
 
 # Split the header into top-level key chunks, keeping the original text
 .ory_split_chunks <- function(h) {
-  if (!length(h)) {
-    return(list())
-  }
-  key_re <- "^[A-Za-z_][A-Za-z0-9_.-]*\\s*:"
-  is_key <- grepl(key_re, h)
-  if (!any(is_key)) {
-    return(list())
-  }
-  grp <- cumsum(is_key)
-  grp[grp == 0L] <- 1L
-  keys <- sub("^([A-Za-z_][A-Za-z0-9_.-]*)\\s*:.*$", "\\1", h[is_key])
-  chunks <- split(h, grp)
-  names(chunks) <- keys
-  chunks
+  ory_split_chunks_rs(h)
 }
 
 # Double-quoted YAML scalar
 .ory_yq <- function(x) {
-  x <- gsub("\\\\", "\\\\\\\\", x)
-  x <- gsub("\"", "\\\\\"", x)
-  paste0("\"", x, "\"")
+  ory_yq_rs(x)
 }
 
 # Serialize an R list to YAML lines (logicals as true/false)
 .ory_emit_yaml <- function(x) {
-  txt <- yaml::as.yaml(
-    x,
-    indent = 2L,
-    handlers = list(logical = function(v) {
-      r <- ifelse(v, "true", "false")
-      class(r) <- "verbatim"
-      r
-    })
-  )
-  strsplit(txt, "\n", fixed = TRUE)[[1L]]
+  ory_emit_yaml_rs(x)
 }
 
 # Enriched default options for each output format we manage
 .ory_format_defaults <- function(fmt) {
-  switch(
-    fmt,
-    "rmarkdown::html_vignette" = ,
-    "html_vignette" = list(
-      toc = TRUE,
-      toc_depth = 3L,
-      number_sections = TRUE,
-      fig_caption = TRUE,
-      df_print = "kable"
-    ),
-    "html_document" = list(
-      toc = TRUE,
-      toc_float = TRUE,
-      theme = "cosmo",
-      df_print = "paged"
-    ),
-    "github_document" = list(html_preview = FALSE),
-    "md_document" = list(variant = "gfm"),
-    NULL
-  )
+  ory_format_defaults_rs(fmt)
 }
 
 # Deep merge: values in `over` (user) win; missing keys are filled from `base`
 .ory_merge_list <- function(over, base) {
-  for (n in names(base)) {
-    if (!n %in% names(over)) {
-      over[n] <- list(base[[n]])
-    } else if (is.list(over[[n]]) && is.list(base[[n]])) {
-      over[[n]] <- .ory_merge_list(over[[n]], base[[n]])
-    }
-  }
-  over
+  ory_merge_list_rs(over, base)
 }
 
 # Default output block (used when output is missing or still the usethis default)
 .ory_default_output <- function(type, readme_format) {
-  fmt <- if (type == "vignette") {
-    "rmarkdown::html_vignette"
-  } else {
-    c(
-      gfm = "md_document",
-      github_document = "github_document",
-      html = "html_document"
-    )[[readme_format]]
-  }
-  out <- list()
-  out[[fmt]] <- .ory_format_defaults(fmt)
-  .ory_emit_yaml(list(output = out))
+  ory_default_output_rs(type, readme_format)
 }
 
 # Compare the existing output block with the usethis default and merge user
 # changes. Returns: NULL  -> still the usethis default, use enriched default
 #                   lines -> the (possibly merged) block to keep
 .ory_optimize_output <- function(chunk, type) {
-  if (any(grepl("!expr", chunk, fixed = TRUE))) {
-    return(chunk)
-  }
-  parsed <- tryCatch(
-    yaml::yaml.load(paste(chunk, collapse = "\n")),
-    error = function(e) NULL
-  )
-  out <- if (is.list(parsed)) parsed[["output"]] else NULL
-
-  usethis_default <- if (type == "vignette") {
-    c("rmarkdown::html_vignette", "html_vignette")
-  } else {
-    c("html_document", "github_document", "md_document")
-  }
-
-  # Bare scalar: default -> enrich; another format (pdf_document...) -> keep
-  if (is.character(out) && length(out) == 1L) {
-    return(if (out %in% usethis_default) NULL else chunk)
-  }
-  if (!is.list(out) || is.null(names(out)) || !all(nzchar(names(out)))) {
-    return(chunk)
-  }
-
-  merged <- out
-  for (nm in names(out)) {
-    def <- .ory_format_defaults(nm)
-    if (is.null(def)) {
-      next
-    } # unmanaged format: untouched
-    cur <- out[[nm]]
-    if (is.null(cur) || identical(cur, "default")) {
-      merged[nm] <- list(def)
-    } else if (is.list(cur)) {
-      merged[nm] <- list(.ory_merge_list(cur, def)) # user options win
-    }
-  }
-  if (identical(merged, out)) {
-    return(chunk)
-  } # nothing to add: keep text
-  .ory_emit_yaml(list(output = merged))
+  ory_optimize_output_rs(chunk, type)
 }
 
 # Default title when the file has none (or only the usethis placeholder)
 .ory_default_title <- function(path, type, meta) {
-  if (type == "readme") {
-    if (is.na(meta$title)) {
-      return(meta$package)
-    }
-    return(paste0(meta$package, ": ", meta$title))
-  }
-  base <- tools::file_path_sans_ext(basename(path))
-  if (identical(base, meta$package)) {
-    return(paste("Introduction to", meta$package))
-  }
-  tools::toTitleCase(gsub("[-_.]+", " ", base))
+  ory_default_title_rs(path, type, meta)
 }
 
 # Build the new YAML header (lines without the --- fences)
@@ -384,129 +257,13 @@ optimize_rmd_yaml <- function(
   date,
   extra = list()
 ) {
-  chunks <- .ory_split_chunks(header)
-  has <- function(k) k %in% names(chunks)
-  val <- function(k) trimws(sub("^[^:]+:\\s*", "", chunks[[k]][1L]))
-  unq <- function(x) gsub("^[\"']|[\"']$", "", x)
-  keep_or <- function(k, new) if (has(k)) chunks[[k]] else new
-
-  managed <- c(
-    "title",
-    "subtitle",
-    "author",
-    "date",
-    "lang",
-    "output",
-    "bibliography",
-    "link-citations",
-    "vignette"
+  ory_build_header_rs(
+    header = header,
+    path = path,
+    type_ = type,
+    meta = meta,
+    readme_format = readme_format,
+    date = date,
+    extra = extra
   )
-
-  # -- title: missing, "Untitled" or equal to the file name = usethis default
-  base <- tools::file_path_sans_ext(basename(path))
-  old_title <- if (has("title")) unq(val("title")) else NA_character_
-  title_is_default <- !has("title") || old_title %in% c("", "Untitled", base)
-  title_txt <- if (title_is_default) {
-    .ory_default_title(path, type, meta)
-  } else {
-    old_title
-  }
-
-  # -- output: compare with usethis default, merge user changes
-  out_lines <- if (has("output")) {
-    .ory_optimize_output(chunks[["output"]], type)
-  } else {
-    NULL
-  }
-  if (is.null(out_lines)) {
-    out_lines <- .ory_default_output(type, readme_format)
-  }
-
-  # -- bibliography: add automatically when a .bib sits next to the file
-  bib <- list.files(dirname(path), pattern = "\\.bib$")
-  bib_new <- if (!has("bibliography") && length(bib)) {
-    c(paste0("bibliography: ", bib[1L]), "link-citations: true")
-  }
-
-  # -- vignette block: sync IndexEntry only if it still holds the default
-  vig <- NULL
-  if (type == "vignette") {
-    if (!has("vignette")) {
-      vig <- c(
-        "vignette: >",
-        paste0("  %\\VignetteIndexEntry{", title_txt, "}"),
-        "  %\\VignetteEngine{knitr::rmarkdown}",
-        "  %\\VignetteEncoding{UTF-8}"
-      )
-    } else {
-      vig <- chunks[["vignette"]]
-      i <- grep("VignetteIndexEntry", vig, fixed = TRUE)
-      if (length(i) == 1L && i > 1L) {
-        entry <- sub(".*VignetteIndexEntry\\{([^}]*)\\}.*", "\\1", vig[i])
-        if (title_is_default && entry %in% c("", "Untitled", old_title)) {
-          indent <- sub("^(\\s*).*$", "\\1", vig[i])
-          vig[i] <- paste0(indent, "%\\VignetteIndexEntry{", title_txt, "}")
-        }
-      }
-    }
-  }
-
-  out <- list(
-    title = if (title_is_default) {
-      paste0("title: ", .ory_yq(title_txt))
-    } else {
-      chunks[["title"]]
-    },
-    subtitle = if (type == "vignette") {
-      keep_or(
-        "subtitle",
-        paste0("subtitle: ", .ory_yq(paste(meta$package, meta$version)))
-      )
-    },
-    author = keep_or(
-      "author",
-      if (!is.null(meta$authors)) {
-        paste0("author: ", .ory_yq(meta$authors))
-      }
-    ),
-    date = keep_or(
-      "date",
-      switch(
-        date,
-        auto = "date: \"`r Sys.Date()`\"",
-        desc = if (!is.na(meta$date)) {
-          paste0("date: ", .ory_yq(meta$date))
-        } else {
-          "date: \"`r Sys.Date()`\""
-        },
-        none = NULL
-      )
-    ),
-    lang = keep_or("lang", paste0("lang: ", meta$lang)),
-    output = out_lines,
-    bibliography = if (has("bibliography")) {
-      chunks[["bibliography"]]
-    } else {
-      bib_new[1L]
-    },
-    `link-citations` = if (has("link-citations")) {
-      chunks[["link-citations"]]
-    } else {
-      bib_new[2L]
-    },
-    vignette = vig
-  )
-
-  # Custom extra fields: only added when the key is absent from the header.
-  # A key that is also generated by default replaces the generated value.
-  for (k in names(extra)) {
-    if (has(k)) {
-      next
-    }
-    out[k] <- list(.ory_emit_yaml(extra[k]))
-  }
-
-  # Any other user field (params, knit, css, ...) is kept as written
-  others <- chunks[setdiff(names(chunks), managed)]
-  unlist(c(Filter(Negate(is.null), out), others), use.names = FALSE)
 }
