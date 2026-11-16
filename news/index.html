@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.24</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,6 +38,48 @@
       <small>Source: <a href="https://github.com/WangLabCSU/rpkgkit/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="rpkgkit-020-2026-12-01">rpkgkit 0.2.0 (2026-12-01)<a class="anchor" aria-label="anchor" href="#rpkgkit-020-2026-12-01"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-2-0">NEW FEATURES<a class="anchor" aria-label="anchor" href="#new-features-0-2-0"></a></h3>
+<ul><li>
+<code><a href="../reference/convert_int_literals.html">convert_int_literals()</a></code> and <code><a href="../reference/convert_int_literals.html">package_convert_int_literals()</a></code> can now leave a line alone: a <code># rpkgkit: not int</code> comment on the line just above it keeps every literal on that line as written, which matters for expressions with double semantics such as <code>2^31</code> or <code>2147483648</code>. The marker covers exactly the following line, is matched case-insensitively, and must be the only thing on its line.</li>
+<li>New <code><a href="../reference/use_r.html">use_r()</a></code> scans a package for base R functions and syntax that need a recent R version, from <code>|&gt;</code> and <code>\()</code> in 4.1.0 to <code>%notin%</code> and <code><a href="https://rdrr.io/r/base/conditions.html" class="external-link">messageCondition()</a></code> in 4.6.0, and records the highest requirement in <code>DESCRIPTION</code>. The recursive walk over the <code>.R</code> files and the token-level detection run in Rust (<code><a href="../reference/ur_scan_rs.html">ur_scan_rs()</a></code>); names the package defines itself, such as its own <code>%||%</code>, are reported but do not raise the requirement.</li>
+<li>The source-code tooling is now backed by Rust through <code>extendr</code>: the scanning, rewriting and formatting internals of <code><a href="../reference/optimize_rmd_yaml.html">optimize_rmd_yaml()</a></code>, <code><a href="../reference/detect_fn_arg_path.html">detect_fn_arg_path()</a></code>, <code><a href="../reference/detect_lost_glue_brace.html">detect_lost_glue_brace()</a></code>, <code><a href="../reference/rename_func.html">rename_func()</a></code>, <code><a href="../reference/convert_func_syntax.html">convert_func_syntax()</a></code>, <code><a href="../reference/detect_print_and_cat.html">detect_print_and_cat()</a></code>, <code><a href="../reference/convert_int_literals.html">convert_int_literals()</a></code>, <code><a href="../reference/convert_pipe.html">convert_pipe()</a></code>, <code><a href="../reference/detect_unmatched_nocov_marker.html">detect_unmatched_nocov_marker()</a></code> and <code><a href="../reference/use_air_table.html">use_air_table()</a></code>, together with their <code>package_*()</code> counterparts, delegate to compiled <code>*_rs()</code> helpers in <code>src/rust/src/</code> through the generated <code>R/extendr-wrappers.R</code>. The exported R functions keep their signatures, and file discovery, progress reporting and summary output stay in R; no export was added or removed.</li>
+<li>
+<code><a href="../reference/inquire_standalone.html">inquire_standalone()</a></code> and <code><a href="../reference/browse_standalone.html">browse_standalone()</a></code> now crawl GitHub in Rust (<code><a href="../reference/inquire_standalone_rs.html">inquire_standalone_rs()</a></code> and <code><a href="../reference/browse_standalone_rs.html">browse_standalone_rs()</a></code>) instead of going through <code>gh</code>: pagination, result filtering, JSON parsing and the provenance header of each standalone file are handled in <code>src/rust/src/r_standalone/</code>, with the HTTP transport built on <code>ureq</code>. The R functions keep their signatures and only validate arguments and turn the returned columns into a tibble. <code><a href="../reference/inquire_standalone.html">inquire_standalone()</a></code> also reports the documented <code>repo</code>, <code>description</code> and <code>usage</code> columns. Both functions accept a <code>token</code> argument and fall back to <code>GITHUB_PAT</code> / <code>GITHUB_TOKEN</code>; <code>gh</code> and <code>dplyr</code> leave <code>Suggests</code>, <code>tibble</code> joins it.</li>
+<li>Source builds now ship the usual <code>extendr</code> infrastructure: <code>configure</code>, <code>configure.win</code>, <code>cleanup</code>, <code>cleanup.win</code>, <code>src/Makevars.in</code>, <code>src/Makevars.win.in</code>, <code>src/entrypoint.c</code>, <code>tools/config.R</code> and <code>tools/msrv.R</code> (which checks Cargo/rustc against the declared MSRV). The crate depends on <code>extendr-api</code> 0.9.0 and <code>regex</code>; <code>src/rust/vendor.tar.xz</code> and <code>src/rust/vendor-config.toml</code> allow offline builds on CRAN, and <code>src/rust/deny.toml</code> configures dependency auditing.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="breaking-changes-0-2-0">BREAKING CHANGES<a class="anchor" aria-label="anchor" href="#breaking-changes-0-2-0"></a></h3>
+<ul><li>The package requires R &gt;= 4.2 and <code>cli</code> &gt;= 3.0.0. Building from source also requires Cargo (Rust’s package manager), <code>rustc</code> &gt;= 1.85.0 and <code>xz</code>, now declared in <code>SystemRequirements</code>; the shared library is registered with <code>useDynLib(rpkgkit, .registration = TRUE)</code>. The minimum <code>rustc</code> rose from 1.77.0 to 1.85.0 because the GitHub crawler depends on <code>ureq</code> 3.</li>
+<li>
+<code><a href="../reference/inquire_standalone.html">inquire_standalone()</a></code> returns <code>repo</code>, <code>description</code> and <code>usage</code> in addition to the contents API fields, which is what its documentation always described.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="defunct-0-2-0">DEFUNCT<a class="anchor" aria-label="anchor" href="#defunct-0-2-0"></a></h3>
+<ul><li>
+<code><a href="../reference/render_rmd.html">render_rmd()</a></code> now aborts with <code><a href="https://lifecycle.r-lib.org/reference/deprecate_soft.html" class="external-link">lifecycle::deprecate_stop()</a></code> instead of rendering, and its test file was removed.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="internal-changes-0-2-0">INTERNAL CHANGES<a class="anchor" aria-label="anchor" href="#internal-changes-0-2-0"></a></h3>
+<ul><li>
+<code><a href="../reference/convert_int_literals.html">convert_int_literals()</a></code> and <code><a href="../reference/convert_int_literals.html">package_convert_int_literals()</a></code> share <code><a href="../reference/dot-cil_convert_file.html">.cil_convert_file()</a></code>, which reads each file once and writes it back only when a literal changed, instead of reading it two or three times; the Rust scanner opts a line out through a byte range instead of a second pass.</li>
+<li>
+<code><a href="../reference/detect_lost_glue_brace.html">detect_lost_glue_brace()</a></code> and <code><a href="../reference/detect_print_and_cat.html">detect_print_and_cat()</a></code> scan raw source text with the Rust tokenizer, which understands strings, comments and raw strings, instead of walking a <code><a href="https://rdrr.io/r/utils/getParseData.html" class="external-link">utils::getParseData()</a></code> parse table. A parse is still run as a guard that rejects unparseable files.</li>
+<li>
+<code><a href="../reference/use_air_table.html">use_air_table()</a></code> moved from <code>R/54_use_air_table_.R</code> to <code>R/54_use_air_table.R</code>; its internal helpers were renamed from <code>.at_*</code> to <code>.uat_*</code> and now delegate to Rust, while the two <code>air format</code> runs remain in
+<ol start="18" style="list-style-type: upper-alpha"><li></li>
+</ol></li>
+<li>The <code>R-CMD-check</code> workflow installs a Rust toolchain on Windows, macOS and Ubuntu (release and devel), uses the <code>x86_64-pc-windows-gnu</code> target on Windows and no longer runs the <code>oldrel-1</code> to <code>oldrel-4</code> jobs. Generated <code>Makevars</code>, the vendored crate directory and Rust build output are ignored by Git and excluded from the source tarball; the VS Code settings point rust-analyzer at the crate and drop machine-specific R paths.</li>
+<li>Tests of the migrated helpers now exercise the text-based Rust interface.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-0-2-0">DOCUMENTATION<a class="anchor" aria-label="anchor" href="#documentation-0-2-0"></a></h3>
+<ul><li>The README gained an <code>extendr</code> badge and a “Citation” section, and no longer lists <code><a href="../reference/flir_fix.html">flir_fix()</a></code>, <code><a href="../reference/air_format.html">air_format()</a></code>, <code><a href="../reference/render_rmd.html">render_rmd()</a></code> or <code><a href="../reference/use_hexsticker.html">use_hexsticker()</a></code> in its function tables.</li>
+<li>The <code><a href="../reference/detect_lost_glue_brace.html">detect_lost_glue_brace()</a></code> help page describes the Rust tokenizer, the old <code>.at_*</code> helper pages were replaced by <code>man/*_rs.Rd</code> pages for the generated wrappers, and <code>man/use_air_table.Rd</code> points at the renamed source file.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.24" id="rpkgkit-0124-2026-11-08">rpkgkit 0.1.24 (2026-11-08)<a class="anchor" aria-label="anchor" href="#rpkgkit-0124-2026-11-08"></a></h2>
 <div class="section level3">
@@ -313,7 +355,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-0-1-7">NEW FEATURES<a class="anchor" aria-label="anchor" href="#new-features-0-1-7"></a></h3>
-<ul><li>Added <code><a href="../reference/use_r_v4.1.0.html">use_r_v4.1.0()</a></code>
+<ul><li>Added <code><a href="../reference/use_r.html">use_r_v4.1.0()</a></code>
 </li>
 </ul></div>
 </div>

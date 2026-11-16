@@ -2,7 +2,8 @@
 
 Converts bare integer literals to explicit integer form with an `L`
 suffix, e.g. `seq_len(10)` becomes `seq_len(10L)`. Strings and comments
-are left unchanged.
+are left unchanged, and a line can opt out with a `# rpkgkit: not int`
+comment (see the section below).
 
 `convert_int_literals()` operates on one R file. When `path` is `NULL`
 and RStudio is available, it uses the currently active document.
@@ -92,6 +93,21 @@ and it is **not**:
 
 - adjacent to an identifier character (`a-zA-Z0-9._`).
 
+## Opting a line out
+
+Adding `L` changes the type of a literal, so some expressions must keep
+their double literals (`2^31`, `2147483648`, `1e9 * 4`). Write a
+`# rpkgkit: not int` comment on the line just above such a line, and
+every literal on that line is left untouched:
+
+    # rpkgkit: not int
+    y <- 2^31
+
+The marker covers the immediately following line only, so a block needs
+one marker per line. It is matched case-insensitively and tolerates
+extra spaces, but it has to be the only thing on its line: a trailing
+`x <- 1 # rpkgkit: not int` opts nothing out.
+
 ## Examples
 
 ``` r
@@ -102,6 +118,12 @@ writeLines("tmp <- seq_len(10)", temp)
 convert_int_literals(temp)
 readLines(temp)
 # "tmp <- seq_len(10L)"
+
+# --- Opting a line out ---
+writeLines(c("# rpkgkit: not int", "y <- 2^31"), temp)
+convert_int_literals(temp)
+readLines(temp)
+# "# rpkgkit: not int" "y <- 2^31"
 
 # --- Entire package ---
 tmp_pkg <- tempdir()

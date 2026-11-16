@@ -2,10 +2,11 @@
 
 Check whether `{` and `}` are balanced in all `glue()` / `glue_data()`
 and `cli_*()` string arguments within R source files. Each file is
-parsed into an AST, then every string literal passed to a target
-function is checked with a stack-based brace matcher. Any mismatch is
-reported with its line number and a visual caret (`^^^^`) marker under
-the problematic region.
+scanned by a Rust tokenizer that understands strings, comments and raw
+strings, then every string literal passed to a target function is
+checked with a stack-based brace matcher. Any mismatch is reported with
+its line number and a visual caret (`^^^^`) marker under the problematic
+region.
 
 ## Usage
 

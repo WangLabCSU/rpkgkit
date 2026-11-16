@@ -1,6 +1,6 @@
-# Render an R Markdown or R document to Markdown format
+# **\[deprecated\]** Render an R Markdown or R document to Markdown format
 
-Render an R Markdown or R document to Markdown format
+**\[deprecated\]** Render an R Markdown or R document to Markdown format
 
 ## Usage
 
@@ -30,18 +30,10 @@ The output file path from rmarkdown::render.
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # \dontrun{
 rlang::check_installed("rmarkdown")
 tmp <- tempfile(fileext = ".Rmd")
 writeLines(c("---", "title: Test", "---", "", "Hello, world!"), tmp)
 render_rmd(path = tmp)
-#> 
-#> 
-#> processing file: file1aa540bfdc46.Rmd
-#> 1/1
-#> output file: file1aa540bfdc46.knit.md
-#> /opt/hostedtoolcache/pandoc/3.8.3/x64/pandoc +RTS -K512m -RTS file1aa540bfdc46.knit.md --to markdown_strict-yaml_metadata_block --from markdown+autolink_bare_uris+tex_math_single_backslash --output file1aa540bfdc46.md 
-#> 
-#> Output created: file1aa540bfdc46.md
-# }
+} # }
 ```

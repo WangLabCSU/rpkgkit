@@ -7,7 +7,7 @@ a GitHub repository. Standalone files are identified by the
 ## Usage
 
 ``` r
-inquire_standalone(owner, repo, ...)
+inquire_standalone(owner, repo, ..., token = NULL)
 ```
 
 ## Arguments
@@ -24,18 +24,30 @@ inquire_standalone(owner, repo, ...)
 
   No arguments.
 
+- token:
+
+  A GitHub personal access token. When `NULL` (the default) the token is
+  read from the `GITHUB_PAT` or `GITHUB_TOKEN` environment variable;
+  without a token GitHub only allows 60 requests per hour.
+
 ## Value
 
-A tibble with three columns:
+A tibble with one row per standalone file:
 
-- `owner/repo`:
+- name, path, sha, size, url, html_url, git_url, download_url, type:
+
+  The fields of the GitHub contents API entry of the file.
+
+- repo:
 
   Character string, the repository identifier in "owner/repo" format.
 
 - description:
 
-  Character string, the description extracted from the file's YAML
-  header or roxygen documentation.
+  Character string, the description extracted from the file's provenance
+  header (the `# ---` block written by
+  [`usethis::use_standalone()`](https://usethis.r-lib.org/reference/use_standalone.html))
+  or from its roxygen documentation, `NA` when the file has neither.
 
 - usage:
 
@@ -44,10 +56,10 @@ A tibble with three columns:
 
 ## Details
 
-This function queries the GitHub API to list files in the R/ directory,
-filters for files starting with "standalone-", parses each file's YAML
-metadata (delimited by "# —") and roxygen tags to extract descriptions,
-and generates usage code for importing each standalone file.
+The crawl runs in Rust. One request lists the `R/` directory through the
+GitHub contents API; the listing is then filtered on the "standalone-"
+prefix, sorted by file name and deduplicated, and the provenance header
+of each remaining file is read with one download of its raw contents.
 
 ## Examples
 

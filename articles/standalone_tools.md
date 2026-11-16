@@ -209,7 +209,9 @@ Use
 [`inquire_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/inquire_standalone.md)
 to inspect standalone files in a GitHub repository and
 [`browse_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/browse_standalone.md)
-to search supported repositories.
+to search them across GitHub. Both crawl the API from compiled Rust
+code, so `gh` is not needed, and both take a `token` argument (falling
+back to `GITHUB_PAT` or `GITHUB_TOKEN`) to lift the rate limit.
 
 ``` r
 
@@ -232,11 +234,11 @@ Create a local standalone file with a standard metadata header:
 ``` r
 
 library(rpkgkit)
-#> ✔ rpkgkit v0.1.24 loaded [2 ms]
+#> ✔ rpkgkit v0.2.0 loaded [2 ms]
 dir <- file.path(tempdir(), "R")
 dir.create(dir, recursive = TRUE)
 create_standalone("foo", path = dir, open = FALSE)
-#> ✔ Created standalone file: /tmp/RtmpsXrV2K/R/standalone-foo.R
+#> ✔ Created standalone file: /tmp/RtmpnKqgxP/R/standalone-foo.R
 ```
 
 ### Validate the standalone file layout
@@ -275,7 +277,7 @@ After editing standalone files, refresh their `last-updated` field:
 ``` r
 
 update_time_in_standalone(path = file.path(dir, "standalone-foo.R"))
-#> ✔ Updated last-updated to "2026-11-10" in 1 file.
+#> ✔ Updated last-updated to "2026-11-16" in 1 file.
 ```
 
 Add a dated changelog entry to one or more standalone files:
@@ -286,5 +288,5 @@ add_changelog_in_standalone(
   path = file.path(dir, "standalone-foo.R"),
   "Added foo function"
 )
-#> ✔ Added changelog entry (2026-11-10) for /tmp/RtmpsXrV2K/R/standalone-foo.R.
+#> ✔ Added changelog entry (2026-11-16) for /tmp/RtmpnKqgxP/R/standalone-foo.R.
 ```

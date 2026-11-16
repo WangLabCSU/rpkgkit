@@ -11,7 +11,7 @@ functions within the file are also updated.
 rename_func(
   path = NULL,
   style = c("snake_case", "camelCase", "PascalCase", "google"),
-  num_to_word = c(`for` = 4, to = 2),
+  num_to_word = c(`for` = 4L, to = 2L),
   ...
 )
 ```
@@ -78,17 +78,17 @@ digit run (for example `scale_x_log10()`) is left untouched.
 temp <- tempfile(fileext = ".R")
 writeLines("foo_bar <- function(){message('foo_bar')}", temp)
 rename_func(temp, style = "camelCase")
-#> ✔ Renamed 1 function to "camelCase" style in /tmp/RtmpWnqw2p/file1aa52b53c4b8.R
+#> ✔ Renamed 1 function to "camelCase" style in /tmp/RtmpHfHDVQ/file211e36a96884.R
 readLines(temp)
 #> [1] "fooBar <- function(){message('fooBar')}"
 rename_func(temp, style = "snake_case")
-#> ✔ Renamed 1 function to "snake_case" style in /tmp/RtmpWnqw2p/file1aa52b53c4b8.R
+#> ✔ Renamed 1 function to "snake_case" style in /tmp/RtmpHfHDVQ/file211e36a96884.R
 readLines(temp)
 #> [1] "foo_bar <- function(){message('foo_bar')}"
 
 writeLines("list2env <- function(x) x", temp)
 rename_func(temp, style = "snake_case")
-#> ✔ Renamed 1 function to "snake_case" style in /tmp/RtmpWnqw2p/file1aa52b53c4b8.R
+#> ✔ Renamed 1 function to "snake_case" style in /tmp/RtmpHfHDVQ/file211e36a96884.R
 readLines(temp)
 #> [1] "list_to_env <- function(x) x"
 # "list_to_env <- function(x) x"

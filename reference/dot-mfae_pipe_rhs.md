@@ -10,5 +10,5 @@ Comments are children of the pipe expression too, but they are not
 ## Usage
 
 ``` r
-.mfae_pipe_rhs(pd)
+.mfae_pipe_rhs(pd, pipes = MFAE_PIPES)
 ```

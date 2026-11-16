@@ -132,11 +132,15 @@ writeLines('print("hello")', tmp)
 detect_print_and_cat(tmp)
 #> print("hello") [message]
 #> ^^^^^^
+#> print("hello") [message]
+#> ^^^^^^
 #> ✖ Found 1 unsupported call on line 1.
 
 # --- With auto-fix ---
 detect_print_and_cat(tmp, fix = TRUE)
-#> ✔ Fixed 1 line in file1aa542b60766.R.
+#> ✔ Fixed 1 line in file211e7bb761dd.R.
+#> print("hello") [message]
+#> ^^^^^^
 #> print("hello") [message]
 #> ^^^^^^
 #> ✖ Found 1 unsupported call on line 1.

@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">rpkgkit</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.24</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -282,21 +282,9 @@
 </td>
 </tr>
 <tr>
-<td align="left"><code><a href="reference/flir_fix.html">flir_fix()</a></code></td>
-<td align="left"><code>flir_fix("R/foo.R")</code></td>
-<td align="left">Fix R code with <code>flir</code>
-</td>
-</tr>
-<tr>
 <td align="left"><code><a href="reference/use_air_table.html">use_air_table()</a></code></td>
 <td align="left"><code>use_air_table("R/foo.R", ncol = 3)</code></td>
 <td align="left">Lay out long <code><a href="https://rdrr.io/r/base/c.html" class="external-link">c()</a></code> and <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> calls as aligned tables with <code>air</code>
-</td>
-</tr>
-<tr>
-<td align="left"><code><a href="reference/air_format.html">air_format()</a></code></td>
-<td align="left"><code>air_format("R/foo.R")</code></td>
-<td align="left">Deprecated; format R code with <code>air</code>
 </td>
 </tr>
 </tbody>
@@ -357,9 +345,15 @@
 <td align="left">Create <code>R/&lt;pkg&gt;-package.R</code> from a template</td>
 </tr>
 <tr>
-<td align="left"><code><a href="reference/use_r_v4.1.0.html">use_r_v4.1.0()</a></code></td>
-<td align="left"><code><a href="reference/use_r_v4.1.0.html">use_r_v4.1.0()</a></code></td>
+<td align="left"><code><a href="reference/use_r.html">use_r_v4.1.0()</a></code></td>
+<td align="left"><code><a href="reference/use_r.html">use_r_v4.1.0()</a></code></td>
 <td align="left">Add <code>R (&gt;= 4.1.0)</code> to <code>Depends</code>
+</td>
+</tr>
+<tr>
+<td align="left"><code><a href="reference/use_r.html">use_r()</a></code></td>
+<td align="left"><code><a href="reference/use_r.html">use_r()</a></code></td>
+<td align="left">Specify the minimum R version in <code>DESCRIPTION</code>
 </td>
 </tr>
 <tr>
@@ -455,16 +449,6 @@
 <td align="left"><code><a href="reference/use_multilanguage_readme.html">use_multilanguage_readme()</a></code></td>
 <td align="left"><code>use_multilanguage_readme("zh-cn")</code></td>
 <td align="left">Create translated README files and their badges</td>
-</tr>
-<tr>
-<td align="left"><code><a href="reference/render_rmd.html">render_rmd()</a></code></td>
-<td align="left"><code>render_rmd("README.Rmd")</code></td>
-<td align="left">Render an <code>.Rmd</code> or <code>.R</code> file to Markdown</td>
-</tr>
-<tr>
-<td align="left"><code><a href="reference/use_hexsticker.html">use_hexsticker()</a></code></td>
-<td align="left"><code>use_hexsticker("man/figures/logo.png")</code></td>
-<td align="left">Deprecated; add a hex sticker to the README title</td>
 </tr>
 </tbody>
 </table>
@@ -564,11 +548,47 @@
 <p>If you want to use addins in Positron, you can use <a href="https://github.com/ntluong95/positron-r-wizard.git" class="external-link">Positron R Wizard</a> extension.</p>
 </div>
 <div class="section level2">
+<h2 id="dependencies">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies"></a>
+</h2>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/local_deps.html" class="external-link">local_deps_tree</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co"># local::. 0.2.0 [new][bld]</span></span>
+<span><span class="co"># ├─cli 3.6.6 [new][bld][cmp]</span></span>
+<span><span class="co"># ├─lifecycle 1.0.5 [new][bld]</span></span>
+<span><span class="co"># │ ├─cli</span></span>
+<span><span class="co"># │ └─rlang 1.3.0 [new][bld][cmp]</span></span>
+<span><span class="co"># ├─rlang</span></span>
+<span><span class="co"># └─rstudioapi 0.19.0 [new][bld]</span></span>
+<span></span>
+<span><span class="co"># Key:  [new] new | [bld] build | [cmp] compile</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="ai-skills">AI skills<a class="anchor" aria-label="anchor" href="#ai-skills"></a>
 </h2>
 <p><code>rpkgkit</code> ships an agent skill that tells coding agents when to reach for <code>rpkgkit</code> and how to call it. It follows the <a href="https://skills.sh" class="external-link">Agent Skills</a> layout, so it works with Claude Code, Codex, Cursor, Positron, and other compatible agents:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">npx</span> skills add WangLabCSU/rpkgkit <span class="at">--skill</span> rpkgkit</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="ex">npx</span> skills add WangLabCSU/rpkgkit <span class="at">--skill</span> rpkgkit</span></code></pre></div>
 <p>Add <code>-g</code> to install it for every project, and <code>-a &lt;agent&gt;</code> to skip the agent prompt. The skill source lives in <a href="https://github.com/WangLabCSU/rpkgkit/tree/main/skills/rpkgkit" class="external-link"><code>skills/rpkgkit/</code></a>.</p>
+</div>
+<div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h2>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"rpkgkit"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; To cite rpkgkit in publications use:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Yang Y (2026). _rpkgkit: Create and Maintain R Packages_. R package version 0.2.0, &lt;https://wanglabcsu.github.io/rpkgkit/&gt;.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   @Manual{,</span></span>
+<span><span class="co">#&gt;     title = {rpkgkit: Create and Maintain R Packages},</span></span>
+<span><span class="co">#&gt;     author = {Yuxi Yang},</span></span>
+<span><span class="co">#&gt;     year = {2026},</span></span>
+<span><span class="co">#&gt;     note = {R package version 0.2.0},</span></span>
+<span><span class="co">#&gt;     url = {https://wanglabcsu.github.io/rpkgkit/},</span></span>
+<span><span class="co">#&gt;   }</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Corresponding repository: https://github.com/WangLabCSU/rpkgkit</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
@@ -634,6 +654,8 @@
 <li><a href="https://cran.r-project.org/package=rpkgkit" class="external-link"><img src="https://tinyverse.netlify.app/badge/rpkgkit" alt="Dependencies"></a></li>
 <li><a href="inst/translations/README.zh-cn.html"><img src="https://img.shields.io/badge/README-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue" alt="简体中文"></a></li>
 <li><a href="inst/translations/README.es.html"><img src="https://img.shields.io/badge/README-Espa%C3%B1ol-blue" alt="Español"></a></li>
+<li><a href="https://extendr.github.io/extendr/extendr_api/" class="external-link"><img src="https://img.shields.io/badge/extendr-%5E0.9.0-276DC2" alt="extendr"></a></li>
+<li><a href="https://github.com/WangLabCSU/rpkgkit/blob/main/src/rust/Cargo.toml" class="external-link"><img src="https://img.shields.io/badge/rustc-1.77.0%2B-orange" alt="MSRV"></a></li>
 </ul>
 </div>
 

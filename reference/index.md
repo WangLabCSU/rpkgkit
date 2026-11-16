@@ -97,7 +97,10 @@ The following functions help you to create and maintain an R package.
   : Rename Function Definitions in an R File
 
 - [`render_rmd()`](https://wanglabcsu.github.io/rpkgkit/reference/render_rmd.md)
-  : Render an R Markdown or R document to Markdown format
+  **\[deprecated\]** :
+
+  **\[deprecated\]** Render an R Markdown or R document to Markdown
+  format
 
 - [`update_time_in_standalone()`](https://wanglabcsu.github.io/rpkgkit/reference/update_time_in_standalone.md)
   : Update the last-updated field in standalone R files
@@ -126,10 +129,10 @@ The following functions help you to create and maintain an R package.
 - [`use_multilanguage_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/use_multilanguage_readme.md)
   : Create Multilingual README Files
 
-- [`use_r_v4.1.0()`](https://wanglabcsu.github.io/rpkgkit/reference/use_r_v4.1.0.md)
-  :
+- [`use_r_v4.1.0()`](https://wanglabcsu.github.io/rpkgkit/reference/use_r.md)
+  [`use_r()`](https://wanglabcsu.github.io/rpkgkit/reference/use_r.md) :
 
-  Add a minimum `R` version dependency to a package
+  Set the minimum `R` version a package needs
 
 - [`use_url()`](https://wanglabcsu.github.io/rpkgkit/reference/use_url.md)
   :
@@ -193,3 +196,9 @@ The following functions help you to create and maintain an R package.
 
 - [`check_sysdeps()`](https://wanglabcsu.github.io/rpkgkit/reference/check_sysdeps.md)
   : Check whether system development dependencies are installed
+
+- [`` `%<-%` ``](https://wanglabcsu.github.io/rpkgkit/reference/grapes-set-grapes.md)
+  : Unpack values into multiple variables
+
+- [`get_var_value()`](https://wanglabcsu.github.io/rpkgkit/reference/get_var_value.md)
+  : Trace and compute the value of a variable defined inside a function

@@ -163,7 +163,7 @@ your README when appropriate.
 
 Use the following helpers from the package root:
 
-### Use R 4.1.0 version
+### Specific R versions
 
 R 4.1.0 introduced the pipe (`|>`) and anonymous function `\()`. If
 these syntaxes need to be used in a package, the R package must require
@@ -172,6 +172,15 @@ at least R version 4.1.0.
 ``` r
 
 use_r_v4.1.0(path = dir)
+```
+
+Another function is
+[`use_r()`](https://wanglabcsu.github.io/rpkgkit/reference/use_r.md),
+which sets the `R-Version` field in `DESCRIPTION` automatically.
+
+``` r
+
+use_r(path = dir)
 ```
 
 ### Add URL in `DESCRIPTION`

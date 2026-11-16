@@ -104,9 +104,7 @@ It’s recommended to use following packages together with `rpkgkit`:
 | [`check_pkgdown_reference()`](https://wanglabcsu.github.io/rpkgkit/reference/check_pkgdown_reference.md) | [`check_pkgdown_reference()`](https://wanglabcsu.github.io/rpkgkit/reference/check_pkgdown_reference.md) | Check that every export appears in `_pkgdown.yml` |
 | [`check_sysdeps()`](https://wanglabcsu.github.io/rpkgkit/reference/check_sysdeps.md) | `check_sysdeps(c("libpng-dev"))` | Check whether system libraries are installed |
 | [`check_air_installed()`](https://wanglabcsu.github.io/rpkgkit/reference/check_air_installed.md) | [`check_air_installed()`](https://wanglabcsu.github.io/rpkgkit/reference/check_air_installed.md) | Check that the `air` formatter is on the `PATH` |
-| [`flir_fix()`](https://wanglabcsu.github.io/rpkgkit/reference/flir_fix.md) | `flir_fix("R/foo.R")` | Fix R code with `flir` |
 | [`use_air_table()`](https://wanglabcsu.github.io/rpkgkit/reference/use_air_table.md) | `use_air_table("R/foo.R", ncol = 3)` | Lay out long [`c()`](https://rdrr.io/r/base/c.html) and [`list()`](https://rdrr.io/r/base/list.html) calls as aligned tables with `air` |
-| [`air_format()`](https://wanglabcsu.github.io/rpkgkit/reference/air_format.md) | `air_format("R/foo.R")` | Deprecated; format R code with `air` |
 
 ### Manage `NEWS.md`
 
@@ -121,7 +119,8 @@ It’s recommended to use following packages together with `rpkgkit`:
 | Function | Quick usage | Purpose |
 |:---|:---|:---|
 | [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md) | [`use_zzz()`](https://wanglabcsu.github.io/rpkgkit/reference/use_zzz.md) | Create `R/<pkg>-package.R` from a template |
-| [`use_r_v4.1.0()`](https://wanglabcsu.github.io/rpkgkit/reference/use_r_v4.1.0.md) | [`use_r_v4.1.0()`](https://wanglabcsu.github.io/rpkgkit/reference/use_r_v4.1.0.md) | Add `R (>= 4.1.0)` to `Depends` |
+| [`use_r_v4.1.0()`](https://wanglabcsu.github.io/rpkgkit/reference/use_r.md) | [`use_r_v4.1.0()`](https://wanglabcsu.github.io/rpkgkit/reference/use_r.md) | Add `R (>= 4.1.0)` to `Depends` |
+| [`use_r()`](https://wanglabcsu.github.io/rpkgkit/reference/use_r.md) | [`use_r()`](https://wanglabcsu.github.io/rpkgkit/reference/use_r.md) | Specify the minimum R version in `DESCRIPTION` |
 | [`use_url()`](https://wanglabcsu.github.io/rpkgkit/reference/use_url.md) | [`use_url()`](https://wanglabcsu.github.io/rpkgkit/reference/use_url.md) | Set `URL` from the git remote, plus an optional pkgdown URL |
 | [`use_bugreports()`](https://wanglabcsu.github.io/rpkgkit/reference/use_bugreports.md) | [`use_bugreports()`](https://wanglabcsu.github.io/rpkgkit/reference/use_bugreports.md) | Set `BugReports` from the git remote |
 | [`use_vendor()`](https://wanglabcsu.github.io/rpkgkit/reference/use_vendor.md) | `use_vendor("wurli/pedant", "R/utils.R")` | Vendor permissively licensed code from GitHub |
@@ -142,8 +141,6 @@ It’s recommended to use following packages together with `rpkgkit`:
 | [`badge_to_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/badge_to_readme.md) | `badge_to_readme(badge)` | Insert a badge into the README badges block |
 | [`badge_translated_by_ai()`](https://wanglabcsu.github.io/rpkgkit/reference/badge_translated_by_ai.md) | `badge_translated_by_ai(lang = "zh-cn")` | Generate an AI-translation disclaimer badge |
 | [`use_multilanguage_readme()`](https://wanglabcsu.github.io/rpkgkit/reference/use_multilanguage_readme.md) | `use_multilanguage_readme("zh-cn")` | Create translated README files and their badges |
-| [`render_rmd()`](https://wanglabcsu.github.io/rpkgkit/reference/render_rmd.md) | `render_rmd("README.Rmd")` | Render an `.Rmd` or `.R` file to Markdown |
-| [`use_hexsticker()`](https://wanglabcsu.github.io/rpkgkit/reference/use_hexsticker.md) | `use_hexsticker("man/figures/logo.png")` | Deprecated; add a hex sticker to the README title |
 
 ### Standalone files
 
@@ -174,6 +171,22 @@ It’s available in the `Addins` menu, and can be accessed by pressing
 If you want to use addins in Positron, you can use [Positron R
 Wizard](https://github.com/ntluong95/positron-r-wizard.git) extension.
 
+## Dependencies
+
+``` r
+
+pak::local_deps_tree()
+# local::. 0.2.0 [new][bld]
+# ├─cli 3.6.6 [new][bld][cmp]
+# ├─lifecycle 1.0.5 [new][bld]
+# │ ├─cli
+# │ └─rlang 1.3.0 [new][bld][cmp]
+# ├─rlang
+# └─rstudioapi 0.19.0 [new][bld]
+
+# Key:  [new] new | [bld] build | [cmp] compile
+```
+
 ## AI skills
 
 `rpkgkit` ships an agent skill that tells coding agents when to reach
@@ -188,6 +201,28 @@ npx skills add WangLabCSU/rpkgkit --skill rpkgkit
 Add `-g` to install it for every project, and `-a <agent>` to skip the
 agent prompt. The skill source lives in
 [`skills/rpkgkit/`](https://github.com/WangLabCSU/rpkgkit/tree/main/skills/rpkgkit).
+
+## Citation
+
+``` r
+
+citation("rpkgkit")
+#> To cite rpkgkit in publications use:
+#> 
+#>   Yang Y (2026). _rpkgkit: Create and Maintain R Packages_. R package version 0.2.0, <https://wanglabcsu.github.io/rpkgkit/>.
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Manual{,
+#>     title = {rpkgkit: Create and Maintain R Packages},
+#>     author = {Yuxi Yang},
+#>     year = {2026},
+#>     note = {R package version 0.2.0},
+#>     url = {https://wanglabcsu.github.io/rpkgkit/},
+#>   }
+#> 
+#> Corresponding repository: https://github.com/WangLabCSU/rpkgkit
+```
 
 ## Acknowledgements
 
