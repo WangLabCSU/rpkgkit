@@ -200,7 +200,7 @@
 - The package is now spell-checked: `spelling` was added to `Suggests`
   together with `Language: en-US`, `inst/WORDLIST` holds the accepted
   words, and `tests/spelling.R` runs
-  [`spelling::spell_check_test()`](https://docs.ropensci.org/spelling//reference/spell_check_package.html).
+  [`spelling::spell_check_test()`](https://docs.ropensci.org/spelling/reference/spell_check_package.html).
 - The `standalone_tools` vignette gained a “Print data frames as
   kable-style tables” section covering `cli_kable()` and the named
   formats that highlight a part of the table, and the package skill

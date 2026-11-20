@@ -96,10 +96,10 @@ otherwise.
 file <- tempfile(fileext = ".R")
 writeLines('read_it <- function(path = "~/data.csv", n = 1) NULL', file)
 detect_fn_arg_path(file)
-#> /tmp/RtmpHfHDVQ/file211e6b7f0c3e.R:1:21 read_it(): `path` defaults to
+#> /tmp/RtmphLetMC/file210256a99d1b.R:1:21 read_it(): `path` defaults to
 #> "~/data.csv"
 #> read_it <- function(path = "~/data.csv", n = 1) NULL
 #>                     ^^^^^^^^^^^^^^^^^^^
-#> ✖ Found 1 argument with a default path in /tmp/RtmpHfHDVQ/file211e6b7f0c3e.R
+#> ✖ Found 1 argument with a default path in /tmp/RtmphLetMC/file210256a99d1b.R
 # }
 ```

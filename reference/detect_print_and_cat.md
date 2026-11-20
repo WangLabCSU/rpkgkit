@@ -138,7 +138,7 @@ detect_print_and_cat(tmp)
 
 # --- With auto-fix ---
 detect_print_and_cat(tmp, fix = TRUE)
-#> ✔ Fixed 1 line in file211e7bb761dd.R.
+#> ✔ Fixed 1 line in file2102688d6084.R.
 #> print("hello") [message]
 #> ^^^^^^
 #> print("hello") [message]
