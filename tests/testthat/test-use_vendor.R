@@ -91,6 +91,52 @@ test_that("vendor_desc_license aborts on AGPL-3", {
 })
 
 # ---------------------------------------------------------------------------
+# vendor_local_dev_license()
+# ---------------------------------------------------------------------------
+
+test_that("vendor_local_dev_license returns FALSE without license metadata", {
+  tmp <- withr::local_tempdir()
+  expect_false(rpkgkit:::vendor_local_dev_license(tmp))
+})
+
+test_that("vendor_local_dev_license detects GPL-3 in DESCRIPTION", {
+  tmp <- withr::local_tempdir()
+  desc_path <- file.path(tmp, "DESCRIPTION")
+
+  for (license in c("GPL-3", "GPL (>= 3)", "GPL-3 + file LICENSE")) {
+    writeLines(
+      c("Package: localpkg", paste("License:", license)),
+      desc_path
+    )
+    expect_true(
+      rpkgkit:::vendor_local_dev_license(tmp),
+      info = paste("License:", license)
+    )
+  }
+})
+
+test_that("vendor_local_dev_license detects GPL-3 in a LICENSE file", {
+  tmp <- withr::local_tempdir()
+  writeLines(
+    c("GNU GENERAL PUBLIC LICENSE", "Version 3, 29 June 2007"),
+    file.path(tmp, "LICENSE.md")
+  )
+
+  expect_true(rpkgkit:::vendor_local_dev_license(tmp))
+})
+
+test_that("vendor_local_dev_license rejects non-GPL-3 licenses", {
+  tmp <- withr::local_tempdir()
+  writeLines(
+    c("Package: localpkg", "License: GPL-2"),
+    file.path(tmp, "DESCRIPTION")
+  )
+  writeLines("MIT License", file.path(tmp, "LICENSE"))
+
+  expect_false(rpkgkit:::vendor_local_dev_license(tmp))
+})
+
+# ---------------------------------------------------------------------------
 # vendor_desc_authors()
 # ---------------------------------------------------------------------------
 
@@ -1035,4 +1081,44 @@ test_that("use_vendor routes R, C++ and Rust files to their directories", {
     "body of src/lib.rs",
     readLines(rs_target, warn = FALSE)
   )))
+})
+
+test_that("use_vendor permits GPL-3 vendors in GPL-3 projects", {
+  tmp <- withr::local_tempdir()
+  dir.create(file.path(tmp, "R"))
+  writeLines(
+    c(
+      "Package: mypkg",
+      "Title: My Package",
+      "Version: 1.0.0",
+      "License: GPL-3",
+      "Authors@R: c(person(given = \"Original\", family = \"Author\", role = c(\"aut\", \"cre\")))"
+    ),
+    file.path(tmp, "DESCRIPTION")
+  )
+
+  local_mocked_bindings(
+    request = function(url) list(url = url),
+    req_error = function(req, ...) req,
+    req_perform = function(req) req,
+    resp_status = function(resp) 200L,
+    resp_body_string = function(resp) {
+      if (grepl("DESCRIPTION$", resp$url)) {
+        paste0(
+          "Package: vendorpkg\n",
+          "Version: 0.1.0\n",
+          "License: GPL-3\n",
+          "Authors@R: c(person(given = \"Jane\", family = \"Doe\", ",
+          "role = c(\"aut\", \"cre\")))\n"
+        )
+      } else {
+        "GNU GENERAL PUBLIC LICENSE\nVersion 3, 29 June 2007"
+      }
+    },
+    .package = "httr2"
+  )
+
+  suppressMessages(use_vendor("owner/vendorpkg", path = tmp))
+
+  expect_true(file.exists(file.path(tmp, "R", "vendor-vendorpkg.R")))
 })

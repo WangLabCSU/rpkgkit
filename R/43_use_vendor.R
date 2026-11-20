@@ -60,7 +60,14 @@ use_vendor <- function(
 
   desc_vendor <- desc::description$new(text = desc_info)
 
-  license_spdx <- vendor_desc_license(desc = desc_vendor)
+  permissive_license <- PERMISSIVE_LICENSE
+  if (vendor_local_dev_license(path = path)) {
+    permissive_license <- c(permissive_license, "GPL-3")
+  }
+  license_spdx <- vendor_desc_license(
+    desc = desc_vendor,
+    permissive = permissive_license
+  )
   author_info <- vendor_desc_authors(desc = desc_vendor)
 
   # -- Create inst/vendor/pkg/ with LICENSE files and README --
@@ -185,6 +192,58 @@ PERMISSIVE_LICENSE <- c(
   "CC0-1.0",
   "CC0"
 )
+
+#' Helper: detect whether the local development package uses GPL-3
+#' @keywords internal
+vendor_local_dev_license <- function(path = NULL) {
+  path <- path %||% "."
+
+  is_gpl3 <- function(x) {
+    if (length(x) == 0L || is.na(x)) {
+      return(FALSE)
+    }
+    grepl(
+      paste0(
+        "(?i)\\bGPL\\s*(?:-\\s*|\\(>=\\s*)?3(?:\\.0)?\\b|",
+        "\\bGNU\\s+GENERAL\\s+PUBLIC\\s+LICENSE\\s+Version\\s+3\\b"
+      ),
+      x,
+      perl = TRUE
+    )
+  }
+
+  desc_path <- file.path(path, "DESCRIPTION")
+  if (file.exists(desc_path)) {
+    desc <- tryCatch(read.dcf(desc_path), error = function(e) NULL)
+    if (
+      !is.null(desc) &&
+        "License" %in% colnames(desc) &&
+        is_gpl3(desc[1L, "License"])
+    ) {
+      return(TRUE)
+    }
+  }
+
+  license_paths <- file.path(
+    path,
+    c(
+      "LICENSE", "LICENCE", "LICENSE.md", "LICENCE.md",
+      "LICENSE.txt", "LICENCE.txt"
+    )
+  )
+  license_paths <- license_paths[file.exists(license_paths)]
+  for (license_path in license_paths) {
+    license <- tryCatch(
+      paste(readLines(license_path, warn = FALSE), collapse = "\n"),
+      error = function(e) ""
+    )
+    if (is_gpl3(license)) {
+      return(TRUE)
+    }
+  }
+
+  FALSE
+}
 
 #' Helper: read license SPDX from the vendor's DESCRIPTION License field
 #' @keywords internal
